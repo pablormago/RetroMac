@@ -1,0 +1,16 @@
+PODS:
+  - Commands (0.6.0)
+
+DEPENDENCIES:
+  - Commands (~> 0.6.0)
+
+SPEC REPOS:
+  trunk:
+    - Commands
+
+SPEC CHECKSUMS:
+  Commands: d617aca4118b0f289144e9e93fb03847d9c48a61
+
+PODFILE CHECKSUM: a398b237c5d710478c86212255e5a1ab94aa5ff9
+
+COCOAPODS: 1.11.2

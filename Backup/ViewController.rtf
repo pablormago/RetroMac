@@ -1,0 +1,958 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fnil\fcharset0 Menlo-Bold;\f2\fnil\fcharset0 HelveticaNeue;
+}
+{\colortbl;\red255\green255\blue255;\red93\green108\blue121;\red255\green255\blue255;\red0\green0\blue0;
+\red155\green35\blue147;\red15\green104\blue160;\red196\green26\blue22;\red57\green0\blue160;\red28\green0\blue207;
+\red11\green79\blue121;\red108\green54\blue169;\red28\green70\blue74;\red50\green109\blue116;\red93\green108\blue121;
+\red93\green108\blue121;}
+{\*\expandedcolortbl;;\csgenericrgb\c36526\c42188\c47515;\csgenericrgb\c100000\c100000\c100000;\csgenericrgb\c0\c0\c0\c85000;
+\csgenericrgb\c60759\c13753\c57628;\csgenericrgb\c5882\c40784\c62745;\csgenericrgb\c77000\c10200\c8600;\csgenericrgb\c22454\c0\c62803;\csgenericrgb\c11000\c0\c81000;
+\csgenericrgb\c4314\c30980\c47451;\csgenericrgb\c42190\c21278\c66379;\csgenericrgb\c10981\c27276\c28869;\csgenericrgb\c19418\c42935\c45455;\csgenericrgb\c36526\c42188\c47515\c35000;
+\csgenericrgb\c36526\c42188\c47515\c50000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh16580\viewkind0
+\deftab593
+\pard\tx593\pardeftab593\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 //\cf4 \
+\cf2 //  ViewController.swift\cf4 \
+\cf2 //  RetroMac\cf4 \
+\cf2 //\cf4 \
+\cf2 //  Created by Pablo Jimenez on 01/12/2021.\cf4 \
+\cf2 //  Copyright \'a9 2021 pmg. All rights reserved.\cf4 \
+\cf2 //\cf4 \
+\
+\
+
+\f1\b \cf5 import
+\f0\b0 \cf4  Cocoa\
+
+\f1\b \cf5 import
+\f0\b0 \cf4  Commands\
+\
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 rutaApp\cf4  = \cf7 ""\cf4 \
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 rompath\cf4  = \cf7 ""\cf4 \
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 systemextensions\cf4   = [\cf8 String\cf4 ]()\
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 comandoaejecutar\cf4  = \cf7 ""\cf4 \
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 ventana\cf4  = \cf7 ""\cf4 \
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 botonactual\cf4  = \cf9 2\cf4 \
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 cuentaboton\cf4  = \cf9 2\cf4 \
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 abiertaLista\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 anchura\cf4  = \cf8 Float\cf4 ()\
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 altura\cf4  = \cf8 Float\cf4 ()\
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 tieneRoms\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 sistemasTengo\cf4  = [\cf8 String\cf4 ]()\
+\
+
+\f1\b \cf5 class
+\f0\b0 \cf4  \cf10 ViewController\cf4 : \cf8 NSViewController\cf4  \{\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 sistema\cf4  = \cf7 ""\cf4 \
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 comandoexe\cf4  = \cf7 ""\cf4 \
+    \
+\cf2 //    override var acceptsFirstResponder: Bool \{ return true \}\cf4 \
+\cf2 //    override func becomeFirstResponder() -> Bool \{ return true \}\cf4 \
+\cf2 //    override func resignFirstResponder() -> Bool \{ return true \}\cf4 \
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 keyIsDown1\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+    \
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 anchuraPantall\cf4  = \cf9 0\cf4 \
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 cuantosSistemas\cf4  = \cf9 0\cf4 \
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 ancho\cf4  = \cf8 CGFloat\cf4 ()\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 alto\cf4  = \cf8 CGFloat\cf4 ()\
+    \
+    
+\f1\b \cf5 @IBOutlet
+\f0\b0 \cf4  
+\f1\b \cf5 weak
+\f0\b0 \cf4  
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 mainBackImage\cf4 : \cf8 NSImageView\cf4 !\
+    
+\f1\b \cf5 @IBOutlet
+\f0\b0 \cf4  
+\f1\b \cf5 weak
+\f0\b0 \cf4  
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 tog1\cf4 : \cf8 NSSwitch\cf4 !\
+    
+\f1\b \cf5 @IBOutlet
+\f0\b0 \cf4  
+\f1\b \cf5 weak
+\f0\b0 \cf4  
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 onOff\cf4 : \cf8 NSTextField\cf4 !\
+    
+\f1\b \cf5 @IBOutlet
+\f0\b0 \cf4  
+\f1\b \cf5 weak
+\f0\b0 \cf4  
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 settingsButton\cf4 : \cf8 NSButton\cf4 !\
+    
+\f1\b \cf5 @IBOutlet
+\f0\b0 \cf4  
+\f1\b \cf5 weak
+\f0\b0 \cf4  
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 Splash\cf4 : \cf8 NSImageView\cf4 !\
+    \
+    
+\f1\b \cf5 @IBOutlet
+\f0\b0 \cf4  
+\f1\b \cf5 weak
+\f0\b0 \cf4  
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 rutaRomsLabel\cf4 : \cf8 NSTextField\cf4 !\
+    
+\f1\b \cf5 @IBOutlet
+\f0\b0 \cf4  
+\f1\b \cf5 weak
+\f0\b0 \cf4  
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 scrollMain\cf4 : \cf8 NSScrollView\cf4 !\
+    
+\f1\b \cf5 @IBOutlet
+\f0\b0 \cf4  
+\f1\b \cf5 weak
+\f0\b0 \cf4  
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 myImage\cf4 : \cf8 NSImageView\cf4 !\
+    
+\f1\b \cf5 @IBAction
+\f0\b0 \cf4  
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 openSettings\cf4 (
+\f1\b \cf5 _
+\f0\b0 \cf4  sender: \cf8 NSButton\cf4 )  \{\
+        \
+        \
+        
+\f1\b \cf5 if
+\f0\b0 \cf4  
+\f1\b \cf5 let
+\f0\b0 \cf4  controller = 
+\f1\b \cf5 self
+\f0\b0 \cf4 .\cf11 storyboard\cf4 ?.\cf11 instantiateController\cf4 (withIdentifier: \cf7 "ListaView"\cf4 ) 
+\f1\b \cf5 as
+\f0\b0 \cf4 ? \cf12 ViewController\cf4  \{\
+            controller.\cf11 dismiss\cf4 (
+\f1\b \cf5 self
+\f0\b0 \cf4 )\
+            \cf13 ventana\cf4  = \cf7 "Principal"\cf4 \
+            \cf13 cuentaboton\cf4  = \cf9 2\cf4 \
+        \}\
+        \
+        \cf2 //Funci\'f3n para abrir ventana de ajustes\cf4 \
+        \
+    \}\
+    \
+    \
+    
+\f1\b \cf5 @IBAction
+\f0\b0 \cf4  
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 switchToggle\cf4 (
+\f1\b \cf5 _
+\f0\b0 \cf4  sender: \cf8 NSSwitch\cf4 ) \{\
+        \
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  state = sender.\cf11 state\cf4 \
+        
+\f1\b \cf5 if
+\f0\b0 \cf4  state.\cf11 rawValue\cf4  \cf11 ==\cf4  \cf9 1\cf4  \{\
+            \cf13 onOff\cf4 .\cf11 stringValue\cf4  = \cf7 "ON"\cf4 \
+        \}\
+        
+\f1\b \cf5 else
+\f0\b0 \cf4  \{\
+            \cf13 onOff\cf4 .\cf11 stringValue\cf4  = \cf7 "OFF"\cf4 \
+            \cf2 //Cerrar App\cf4 \
+            \cf8 NSApplication\cf4 .\cf11 shared\cf4 .\cf11 terminate\cf4 (
+\f1\b \cf5 self
+\f0\b0 \cf4 )\
+        \}\
+    \}\
+    \
+    \
+    
+\f1\b \cf5 override
+\f0\b0 \cf4  
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 viewDidAppear\cf4 () \{\
+        \cf13 scrollMain\cf4 .\cf11 isHidden\cf4  = 
+\f1\b \cf5 true
+\f0\b0 \cf4 \
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  pathLogo = \cf8 Bundle\cf4 .\cf11 main\cf4 .\cf11 url\cf4 (forResource: \cf7 "logo"\cf4 , withExtension: \cf7 "jpeg"\cf4 )\
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  imagen = \cf8 NSImage\cf4 (contentsOf: pathLogo!)!\
+        \cf13 myImage\cf4 .\cf11 image\cf4  = imagen\
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  mirect = \cf8 NSRect\cf4 (x: \cf9 0\cf4 , y: \cf9 0\cf4 , width: \cf13 ancho\cf4 , height: \cf13 alto\cf4 )\
+        
+\f1\b \cf5 self
+\f0\b0 \cf4 .\cf11 view\cf4 .\cf11 window\cf4 ?.\cf11 setFrame\cf4 (mirect, display: 
+\f1\b \cf5 true
+\f0\b0 \cf4 )\
+        \cf13 cuentaboton\cf4  = \cf13 botonactual\cf4 \
+        \cf11 print\cf4 (\cf7 "DID APPEAR"\cf4 )\
+        \
+        
+\f1\b \cf5 if
+\f0\b0 \cf4  
+\f1\b \cf5 let
+\f0\b0 \cf4  screen = \cf8 NSScreen\cf4 .\cf11 main\cf4  \{\
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  rect = screen.\cf11 frame\cf4 \
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  width = rect.\cf11 size\cf4 .\cf11 width\cf4 \
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  mitadPantalla = \cf8 Int\cf4  (width \cf11 /\cf4  \cf9 2\cf4 )\
+            \
+            \cf2 //let trozoamover = (560 * cuantos) - 280\cf4 \
+            \
+            \cf13 anchuraPantall\cf4  = \cf8 Int\cf4 (width)\
+            \
+            \cf2 //print(scrollMain.contentView.bounds.origin.x)\cf4 \
+            
+\f1\b \cf5 if
+\f0\b0 \cf4  \cf13 abiertaLista\cf4  \cf11 ==\cf4  
+\f1\b \cf5 false
+\f0\b0 \cf4  \{\
+                \cf2 //scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))\cf4 \
+                \cf13 scrollMain\cf4 .\cf11 isHidden\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+            \}
+\f1\b \cf5 else
+\f0\b0 \cf4  \{\
+                \
+                \cf11 print\cf4 (\cf7 "entro"\cf4 )\
+                \cf13 cuentaboton\cf4  = \cf13 botonactual\cf4 \
+                
+\f1\b \cf5 let
+\f0\b0 \cf4  trozoamover = (\cf9 560\cf4  \cf11 *\cf4  \cf13 botonactual\cf4 ) \cf11 -\cf4  \cf9 280\cf4 \
+                
+\f1\b \cf5 let
+\f0\b0 \cf4  cachito = trozoamover \cf11 -\cf4  mitadPantalla\
+                \cf11 print\cf4 (\cf13 botonactual\cf4 )\
+                \cf13 scrollMain\cf4 .\cf11 contentView\cf4 .\cf11 scroll\cf4 (to: \cf8 CGPoint\cf4 (x: cachito, y: \cf9 0\cf4 ))\
+                \cf13 scrollMain\cf4 .\cf11 isHidden\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+            \}\
+            \cf13 cuentaboton\cf4  = (\cf8 Int\cf4  (\cf13 anchuraPantall\cf4  \cf11 /\cf4  \cf9 560\cf4 ))\
+            \cf2 //let button = self.view.viewWithTag(Int(cuentaboton)) as? NSButton\cf4 \
+            \cf2 //button!.isHighlighted = true\cf4 \
+            \cf2 //button?.highlight(true)\cf4 \
+        \}\
+        \
+        \cf14 ///
+\f2 \cf2 TECLAS
+\f0 \cf4 \
+        \
+        \cf2 // *** /FullScreen ***\cf4 \
+    \}\
+    \
+    \
+    
+\f1\b \cf5 override
+\f0\b0 \cf4  
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 viewDidLoad\cf4 () \{\
+        
+\f1\b \cf5 super
+\f0\b0 \cf4 .\cf11 viewDidLoad\cf4 ()\
+        \cf11 print\cf4 (\cf7 "DID LOAD"\cf4 )\
+        \cf13 rutaRomsLabel\cf4 .\cf11 stringValue\cf4  = \cf13 rompath\cf4 \
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  Xemu = \cf7 "/users/Shared/Xemu"\cf4 \
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  myGroup = \cf8 DispatchGroup\cf4 ()\
+        myGroup.\cf11 enter\cf4 ()\
+        \cf14 ///
+\f2 \cf2 / Do your task
+\f0 \cf4 \
+        
+\f1\b \cf5 var
+\f0\b0 \cf4  isDir:\cf8 ObjCBool\cf4  = 
+\f1\b \cf5 true
+\f0\b0 \cf4 \
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  theProjectPath = Xemu\
+        
+\f1\b \cf5 if
+\f0\b0 \cf4  \cf11 !\cf8 FileManager\cf4 .\cf11 default\cf4 .\cf11 fileExists\cf4 (atPath: theProjectPath, isDirectory: &isDir) \{\
+            \cf13 copiarBase\cf4 ()\
+        \} 
+\f1\b \cf5 else
+\f0\b0 \cf4  \{\
+            \cf11 print\cf4 (\cf7 "Existe"\cf4 )\
+        \}\
+        myGroup.\cf11 leave\cf4 () 
+\f2 \cf2 //// When your task completes
+\f0 \cf4 \
+        myGroup.\cf11 notify\cf4 (queue: \cf8 DispatchQueue\cf4 .\cf11 main\cf4 ) \{\
+        \}\
+        \cf13 rutaApp\cf4  = \cf8 Bundle\cf4 .\cf11 main\cf4 .\cf11 bundlePath\cf4 .\cf11 replacingOccurrences\cf4 (of: \cf7 "/RetroMac.app"\cf4 , with: \cf7 ""\cf4 )\
+        \cf11 print\cf4 (\cf13 rutaApp\cf4 )\
+        \cf13 onOff\cf4 .\cf11 stringValue\cf4  = \cf7 "ON"\cf4 \
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  totalSistemas = \cf13 cuentaSistemas\cf4 ()\
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  totalAnchuraMenu = ((totalSistemas\cf11 +\cf9 1\cf4 ) \cf11 *\cf4  \cf9 560\cf4 )\
+        \cf2 //Parsear Sistemas\cf4 \
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  pathXMLinterno = \cf8 Bundle\cf4 .\cf11 main\cf4 .\cf11 url\cf4 (forResource: \cf7 "es_systems_mac"\cf4 , withExtension: \cf7 "cfg"\cf4 )\
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  documentView = \cf8 NSView\cf4 (frame: \cf8 NSRect\cf4 (x: \cf9 0\cf4 ,y: \cf9 0\cf4 ,width: totalAnchuraMenu,height: \cf9 178\cf4 ))\
+        
+\f1\b \cf5 if
+\f0\b0 \cf4  
+\f1\b \cf5 let
+\f0\b0 \cf4  pathXMLinterno = pathXMLinterno, 
+\f1\b \cf5 let
+\f0\b0 \cf4  data = 
+\f1\b \cf5 try
+\f0\b0 \cf4 ? \cf8 Data\cf4 (contentsOf: pathXMLinterno 
+\f1\b \cf5 as
+\f0\b0 \cf4  \cf8 URL\cf4 )\
+        \{\
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  parser = \cf12 BookParser\cf4 (data: data)\
+            
+\f1\b \cf5 var
+\f0\b0 \cf4  counter = \cf9 0\cf4 \
+            
+\f1\b \cf5 for
+\f0\b0 \cf4  book 
+\f1\b \cf5 in
+\f0\b0 \cf4  parser.\cf13 books\cf4 \
+                \
+            \{\
+                
+\f1\b \cf5 let
+\f0\b0 \cf4  offset = \cf8 CGFloat\cf4 (counter \cf11 *\cf4  \cf9 560\cf4 )\
+                
+\f1\b \cf5 let
+\f0\b0 \cf4  button = \cf12 ButtonConsolas\cf4 (frame: \cf8 NSRect\cf4 (x: offset, y: \cf9 0\cf4 , width: \cf9 560\cf4 , height: \cf9 178\cf4  ))\
+                button.\cf11 tag\cf4  = counter\cf11 +\cf9 1\cf4 \
+                button.\cf11 title\cf4  = book.\cf13 name\cf4 \
+                
+\f1\b \cf5 let
+\f0\b0 \cf4  home = \cf8 Bundle\cf4 .\cf11 main\cf4 .\cf11 bundlePath\cf4 \
+                
+\f1\b \cf5 let
+\f0\b0 \cf4  imagen2 = \cf8 NSImage\cf4 (byReferencingFile: home \cf11 +\cf4   \cf7 "/Contents/Resources/themes/default/logos/"\cf4  \cf11 +\cf4  book.\cf13 name\cf4  \cf11 +\cf4  \cf7 ".png"\cf4 )!\
+                button.\cf11 imageScaling\cf4  = .\cf11 scaleProportionallyDown\cf4 \
+                
+\f1\b \cf5 let
+\f0\b0 \cf4  path =  home \cf11 +\cf4   \cf7 "/Contents/Resources/themes/default/logos/"\cf4  \cf11 +\cf4  book.\cf13 name\cf4  \cf11 +\cf4  \cf7 ".png"\cf4 \
+                
+\f1\b \cf5 let
+\f0\b0 \cf4  fileDoesExist = \cf8 FileManager\cf4 .\cf11 default\cf4 .\cf11 fileExists\cf4 (atPath: path)\
+                
+\f1\b \cf5 if
+\f0\b0 \cf4  fileDoesExist \{\
+                    button.\cf11 image\cf4  = imagen2\
+                \}\
+                button.\cf13 Sistema\cf4  = book.\cf13 name\cf4 \
+                button.\cf13 Comando\cf4  = book.\cf13 comando\cf4 \
+                button.\cf13 RomsPath\cf4  = book.\cf13 path\cf4 \
+                button.\cf13 Extensiones\cf4  = book.\cf13 extensiones\cf4 \
+                button.\cf13 Platform\cf4  = book.\cf13 platform\cf4 \
+                button.\cf13 Theme\cf4  = book.\cf13 theme\cf4 \
+                button.\cf13 Fullname\cf4  = book.\cf13 fullname\cf4 \
+                button.\cf11 target\cf4  = 
+\f1\b \cf5 self
+\f0\b0 \cf4 \
+                button.\cf11 action\cf4  = 
+\f1\b \cf5 #selector
+\f0\b0 \cf4 (\cf12 ViewController\cf4 .\cf13 selecionSistema\cf4 )\
+                button.\cf11 isBordered\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+                \cf2 //button.layer?.backgroundColor = NSColor.red.cgColor\cf4 \
+                \cf2 //var miruta = rutaApp + book.path\cf4 \
+                \cf2 //var isDir:ObjCBool = true\cf4 \
+                \
+    \cf14 ///\cf4  
+\f2 \cf2 COMPROBAMOS SI TIENE ROMS 
+\f0 \cf15 **********************
+\f2 \cf2 *
+\f0 \cf4 \
+                \
+                \
+                
+\f1\b \cf5 for
+\f0\b0 \cf4  sistema 
+\f1\b \cf5 in
+\f0\b0 \cf4  \cf13 sistemasTengo\cf4  \{\
+                    \
+                    
+\f1\b \cf5 if
+\f0\b0 \cf4  sistema \cf11 ==\cf4  book.\cf13 name\cf4 \{\
+                        documentView.\cf11 addSubview\cf4 (button)\
+                        counter \cf11 +=\cf4  \cf9 1\cf4 \
+                        
+\f1\b \cf5 break
+\f0\b0 \cf4 \
+                    \}\
+                    \
+                \}\
+                \
+    \cf14 ///\cf4  
+\f2 \cf2 COMPROBAMOS SI TIENE ROMS 
+\f0 \cf15 **********************
+\f2 \cf2 *
+\f0 \cf4 \
+\
+                \cf13 scrollMain\cf4 .\cf11 documentView\cf4  = documentView\
+                \
+            \}\
+            \
+            \cf13 cuantosSistemas\cf4  = counter\
+            \cf13 ventana\cf4  = \cf7 "Principal"\cf4 \
+            \cf13 onOff\cf4 .\cf11 stringValue\cf4  = \cf13 rutaApp\cf4 \
+        \}\
+        
+\f1\b \cf5 if
+\f0\b0 \cf4  
+\f1\b \cf5 let
+\f0\b0 \cf4  screen = \cf8 NSScreen\cf4 .\cf11 main\cf4  \{\
+            \
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  rect = screen.\cf11 frame\cf4 \
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  width = rect.\cf11 size\cf4 .\cf11 width\cf4 \
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  height = rect.\cf11 size\cf4 .\cf11 height\cf4 \
+            \cf13 ancho\cf4  = width\
+            \cf13 alto\cf4  = height\
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  mitadPantalla = \cf8 Int\cf4  (width \cf11 /\cf4  \cf9 2\cf4 )\
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  cuantos = \cf8 Int\cf4  (width \cf11 /\cf4  \cf9 560\cf4 )\
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  trozoamover = (\cf9 560\cf4  \cf11 *\cf4  cuantos) \cf11 -\cf4  \cf9 280\cf4 \
+            
+\f1\b \cf5 let
+\f0\b0 \cf4  cachito = trozoamover \cf11 -\cf4  mitadPantalla\
+            \cf13 anchuraPantall\cf4  = \cf8 Int\cf4 (width)\
+            \
+            \cf2 //print(scrollMain.contentView.bounds.origin.x)\cf4 \
+            
+\f1\b \cf5 if
+\f0\b0 \cf4  \cf13 abiertaLista\cf4  \cf11 ==\cf4  
+\f1\b \cf5 false
+\f0\b0 \cf4  \{\
+                \cf13 scrollMain\cf4 .\cf11 contentView\cf4 .\cf11 scroll\cf4 (to: \cf8 CGPoint\cf4 (x: cachito, y: \cf9 0\cf4 ))\
+                \cf13 scrollMain\cf4 .\cf11 isHidden\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+            \}
+\f1\b \cf5 else
+\f0\b0 \cf4  \{\
+                \cf13 cuentaboton\cf4  = \cf13 botonactual\cf4 \
+                \cf13 scrollMain\cf4 .\cf11 contentView\cf4 .\cf11 scroll\cf4 (to: \cf8 CGPoint\cf4 (x: cachito, y: \cf9 0\cf4 ))\
+                \cf13 scrollMain\cf4 .\cf11 isHidden\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+            \}\
+            \cf13 cuentaboton\cf4  = (\cf8 Int\cf4  (\cf13 anchuraPantall\cf4  \cf11 /\cf4  \cf9 560\cf4 ))\
+            \cf2 //let button = self.view.viewWithTag(Int(cuentaboton)) as? NSButton\cf4 \
+            \cf2 //button!.isHighlighted = true\cf4 \
+            \cf2 //button?.highlight(true)\cf4 \
+        \}\
+        \
+    \}\
+    \cf2 //Termina viewDidLoad\cf4 \
+    \
+    \cf2 //PRUEBA TECLAS\cf4 \
+    \
+    \
+    \
+    \
+    \
+    \cf2 //TECLAS\cf4 \
+    \cf2 //    override func keyDown(with event: NSEvent) \{\cf4 \
+    \cf2 //        if keyIsDown == true \{\cf4 \
+    \cf2 //            return\cf4 \
+    \cf2 //        \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //        if ventana == "Principal" \{\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //            if event.keyCode == 36  \{\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                let button = self.view.viewWithTag(Int(cuentaboton)) as? ButtonConsolas\cf4 \
+    \cf2 //                print (button!.Comando! )\cf4 \
+    \cf2 //                print (button!.Sistema! )\cf4 \
+    \cf2 //                rompath = rutaApp + button!.RomsPath!\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                systemextensions = button!.Extensiones!.components(separatedBy: " ")\cf4 \
+    \cf2 //                comandoaejecutar = rutaApp\cf4 \
+    \cf2 //                comandoaejecutar = comandoaejecutar + button!.Comando!.replacingOccurrences(of: "%CORE%", with: rutaApp)\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ListaViewController \{\cf4 \
+    \cf2 //                    self.view.window?.contentViewController = controller\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //            \}\cf4 \
+    \cf2 //             else if event.keyCode == 124  \{\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                if Int(cuentaboton) < cuantosSistemas\{\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                    scrollMain.contentView.animator().scroll(to: CGPoint(x: (scrollMain.contentView.bounds.origin.x + 560), y: 0))\cf4 \
+    \cf2 //                    //cuentaboton += 1\cf4 \
+    \cf2 //                    let button = self.view.viewWithTag(Int(cuentaboton + 1)) as? NSButton\cf4 \
+    \cf2 //                    button!.isHighlighted = true\cf4 \
+    \cf2 //                    //button?.highlight(true)\cf4 \
+    \cf2 //                    if abiertaLista == false \{\cf4 \
+    \cf2 //                        cuentaboton += 1\cf4 \
+    \cf2 //                    \}else \{\cf4 \
+    \cf2 //                        cuentaboton = cuentaboton + 0.5\cf4 \
+    \cf2 //                    \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                    print(cuentaboton)\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //            \}\cf4 \
+    \cf2 //            else if event.keyCode == 123 \{\cf4 \
+    \cf2 //                if cuentaboton > 1 \{\cf4 \
+    \cf2 //                    //cuentaboton -= 1\cf4 \
+    \cf2 //                    scrollMain.contentView.animator().scroll(to: CGPoint(x: (scrollMain.contentView.bounds.origin.x - 560), y: 0))\cf4 \
+    \cf2 //                    let button = self.view.viewWithTag(Int(cuentaboton - 1)) as? NSButton\cf4 \
+    \cf2 //                    button!.isHighlighted = true\cf4 \
+    \cf2 //                    button?.highlight(true)\cf4 \
+    \cf2 //                    if abiertaLista == false \{\cf4 \
+    \cf2 //                        cuentaboton -= 1\cf4 \
+    \cf2 //                    \}else \{\cf4 \
+    \cf2 //                        cuentaboton = cuentaboton - 0.5\cf4 \
+    \cf2 //                    \}\cf4 \
+    \cf2 //                    print(cuentaboton)\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                \}\cf4 \
+    \cf2 //            \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //        \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //     \}\cf4 \
+    \
+    \cf2 //    override func keyUp(with event: NSEvent) \{\cf4 \
+    \cf2 //        keyIsDown = false\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //    \}\cf4 \
+    \
+    
+\f1\b \cf5 override
+\f0\b0 \cf4  
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 viewWillAppear\cf4 () \{\
+        
+\f1\b \cf5 super
+\f0\b0 \cf4 .\cf11 viewWillAppear\cf4 ()\
+        \
+        \
+    \}\
+    \
+    
+\f1\b \cf5 override
+\f0\b0 \cf4  
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 keyDown\cf4 (with event: \cf8 NSEvent\cf4 ) \{\
+\
+        
+\f1\b \cf5 if
+\f0\b0 \cf4  \cf13 keyIsDown1\cf4  \cf11 ==\cf4  
+\f1\b \cf5 true
+\f0\b0 \cf4  \{\
+            
+\f1\b \cf5 return
+\f0\b0 \cf4 \
+        \}\
+        \cf13 keyIsDown1\cf4  = 
+\f1\b \cf5 true
+\f0\b0 \cf4 \
+            
+\f1\b \cf5 if
+\f0\b0 \cf4  event.\cf11 keyCode\cf4  \cf11 ==\cf4  \cf9 36\cf4    \{\
+                \cf11 print\cf4 (\cf7 "ENTER"\cf4 )\
+            \}\
+            
+\f1\b \cf5 if
+\f0\b0 \cf4  event.\cf11 keyCode\cf4  \cf11 ==\cf4  \cf9 124\cf4   \{\
+                \cf11 print\cf4 (\cf7 "L"\cf4 )\
+            \}\
+            
+\f1\b \cf5 if
+\f0\b0 \cf4  event.\cf11 keyCode\cf4  \cf11 ==\cf4  \cf9 123\cf4  \{\
+                \cf11 print\cf4 (\cf7 "R"\cf4 )\
+            \}\
+\
+\
+        \}\
+    \
+        \
+    
+\f1\b \cf5 override
+\f0\b0 \cf4  
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 keyUp\cf4 (with event: \cf8 NSEvent\cf4 ) \{\
+        \cf13 keyIsDown1\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+    \}\
+    \
+    
+\f1\b \cf5 @objc
+\f0\b0 \cf4  
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 selecionSistema\cf4 (
+\f1\b \cf5 _
+\f0\b0 \cf4  sender: \cf12 ButtonConsolas\cf4 ) \{\
+        \
+        \
+        \cf11 print\cf4  (sender.\cf13 Comando\cf4 ! )\
+        \cf11 print\cf4  (sender.\cf13 Sistema\cf4 ! )\
+        \cf13 rompath\cf4  = \cf13 rutaApp\cf4  \cf11 +\cf4  sender.\cf13 RomsPath\cf4 !\
+        \cf13 systemextensions\cf4  = sender.\cf13 Extensiones\cf4 !.\cf11 components\cf4 (separatedBy: \cf7 " "\cf4 )\
+        \cf13 comandoaejecutar\cf4  = \cf13 rutaApp\cf4 \
+        \cf13 comandoaejecutar\cf4  = \cf13 comandoaejecutar\cf4  \cf11 +\cf4  sender.\cf13 Comando\cf4 !.\cf11 replacingOccurrences\cf4 (of: \cf7 "%CORE%"\cf4 , with: \cf13 rutaApp\cf4 )\
+        \cf13 botonactual\cf4  = sender.\cf11 tag\cf4 \
+        \cf11 print\cf4 (\cf13 botonactual\cf4 )\
+        
+\f1\b \cf5 if
+\f0\b0 \cf4  
+\f1\b \cf5 let
+\f0\b0 \cf4  controller = 
+\f1\b \cf5 self
+\f0\b0 \cf4 .\cf11 storyboard\cf4 ?.\cf11 instantiateController\cf4 (withIdentifier: \cf7 "ListaView"\cf4 ) 
+\f1\b \cf5 as
+\f0\b0 \cf4 ? \cf12 ListaViewController\cf4  \{\
+            \cf13 ventana\cf4  = \cf7 "Lista"\cf4 \
+            
+\f1\b \cf5 self
+\f0\b0 \cf4 .\cf11 view\cf4 .\cf11 window\cf4 ?.\cf11 contentViewController\cf4  = controller\
+        \}\
+    \}\
+    \
+    \
+    \
+    \
+    
+\f1\b \cf5 override
+\f0\b0 \cf4  
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 representedObject\cf4 : 
+\f1\b \cf5 Any
+\f0\b0 \cf4 ? \{\
+        
+\f1\b \cf5 didSet
+\f0\b0 \cf4  \{\
+            \cf2 // Update the view, if already loaded.\cf4 \
+        \}\
+    \}\
+\}\
+\cf14 ///\cf4  
+\f2 \cf2 FINAL DE LA CLASE
+\f0 \cf4 \
+\
+
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 cuentaSistemas\cf4 () -> \cf8 NSInteger\cf4  \{\
+    \cf11 print\cf4 (\cf7 "ENTRO A CONTAR"\cf4 )\
+    
+\f1\b \cf5 let
+\f0\b0 \cf4  pathXMLinterno = \cf8 Bundle\cf4 .\cf11 main\cf4 .\cf11 url\cf4 (forResource: \cf7 "es_systems_mac"\cf4 , withExtension: \cf7 "cfg"\cf4 )\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  counter = \cf9 0\cf4 \
+    \cf13 tieneRoms\cf4  = 
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+    
+\f1\b \cf5 if
+\f0\b0 \cf4  
+\f1\b \cf5 let
+\f0\b0 \cf4  pathXMLinterno = pathXMLinterno, 
+\f1\b \cf5 let
+\f0\b0 \cf4  data = 
+\f1\b \cf5 try
+\f0\b0 \cf4 ? \cf8 Data\cf4 (contentsOf: pathXMLinterno 
+\f1\b \cf5 as
+\f0\b0 \cf4  \cf8 URL\cf4 )\
+        \
+    \{\
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  parser = \cf12 BookParser\cf4 (data: data)\
+        
+\f1\b \cf5 for
+\f0\b0 \cf4  book 
+\f1\b \cf5 in
+\f0\b0 \cf4  parser.\cf13 books\cf4 \
+        \{\
+            
+\f1\b \cf5 var
+\f0\b0 \cf4  miruta = \cf13 rutaApp\cf4  \cf11 +\cf4  book.\cf13 path\cf4 \
+            
+\f1\b \cf5 var
+\f0\b0 \cf4  encuentra =  
+\f1\b \cf5 false
+\f0\b0 \cf4 \
+            
+\f1\b \cf5 var
+\f0\b0 \cf4  isDir:\cf8 ObjCBool\cf4  = 
+\f1\b \cf5 true
+\f0\b0 \cf4 \
+            
+\f1\b \cf5 if
+\f0\b0 \cf4  \cf8 FileManager\cf4 .\cf11 default\cf4 .\cf11 fileExists\cf4 (atPath: miruta, isDirectory: &isDir) \{\
+                \cf2 //para cada book.extensiones\cf4 \
+                
+\f1\b \cf5 var
+\f0\b0 \cf4  extensionescuenta = [\cf8 String\cf4 ]()\
+                extensionescuenta = book.\cf13 extensiones\cf4 .\cf11 components\cf4 (separatedBy: \cf7 " "\cf4 )\
+                
+\f1\b \cf5 for
+\f0\b0 \cf4  extensiones 
+\f1\b \cf5 in
+\f0\b0 \cf4  extensionescuenta \{\
+                    \
+                    
+\f1\b \cf5 let
+\f0\b0 \cf4  fileManager = \cf8 FileManager\cf4 .\cf11 default\cf4 \
+                    
+\f1\b \cf5 let
+\f0\b0 \cf4  enumerator: \cf8 FileManager\cf4 .\cf8 DirectoryEnumerator\cf4  = fileManager.\cf11 enumerator\cf4 (atPath: miruta 
+\f1\b \cf5 as
+\f0\b0 \cf4  \cf8 String\cf4 )!\
+                    
+\f1\b \cf5 while
+\f0\b0 \cf4  
+\f1\b \cf5 let
+\f0\b0 \cf4  element = enumerator.\cf11 nextObject\cf4 () 
+\f1\b \cf5 as
+\f0\b0 \cf4 ? \cf8 String\cf4  \{\
+                        
+\f1\b \cf5 if
+\f0\b0 \cf4  element.\cf11 hasSuffix\cf4 (extensiones) \{ \cf2 // checks the extension\cf4 \
+                            \
+                            encuentra=
+\f1\b \cf5 true
+\f0\b0 \cf4 \
+                            
+\f1\b \cf5 break
+\f0\b0 \cf4 \
+                        \}\
+                    \}\
+                    
+\f1\b \cf5 if
+\f0\b0 \cf4  encuentra \cf11 ==\cf4  
+\f1\b \cf5 true
+\f0\b0 \cf4  \{\
+                        
+\f1\b \cf5 break
+\f0\b0 \cf4 \
+                    \}\
+                    \cf2 //FIN - CARGAR FICHEROS RECURSIVO\cf4 \
+                    \
+                \}\
+                \
+                \cf2 //                if juegos.count > 0 \{\cf4 \
+                \cf2 //                    let indexSet = NSIndexSet(index: 0)\cf4 \
+                \cf2 //                    juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)\cf4 \
+                \cf2 //                \}\cf4 \
+                
+\f1\b \cf5 if
+\f0\b0 \cf4  encuentra \cf11 ==\cf4  
+\f1\b \cf5 true
+\f0\b0 \cf4  \{\
+                    \cf13 sistemasTengo\cf4 .\cf11 append\cf4 (book.\cf13 name\cf4 )\
+                    counter \cf11 +=\cf4  \cf9 1\cf4 \
+                \}\
+                \
+            \}\
+            \
+        \}\
+    \}\
+    \cf11 print\cf4 (counter)\
+    
+\f1\b \cf5 return
+\f0\b0 \cf4  counter\
+\}\
+
+\f1\b \cf5 fileprivate
+\f0\b0 \cf4  
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 directoryExistsAtPath\cf4 (
+\f1\b \cf5 _
+\f0\b0 \cf4  path: \cf8 String\cf4 ) -> \cf8 Bool\cf4  \{\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  isdirectory : \cf8 ObjCBool\cf4  = 
+\f1\b \cf5 true
+\f0\b0 \cf4 \
+    
+\f1\b \cf5 let
+\f0\b0 \cf4  exists = \cf8 FileManager\cf4 .\cf11 default\cf4 .\cf11 fileExists\cf4 (atPath: path, isDirectory:  &isdirectory)\
+    
+\f1\b \cf5 return
+\f0\b0 \cf4  exists \cf11 &&\cf4  isdirectory.\cf11 boolValue\cf4 \
+\}\
+\
+
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf6 copiarBase\cf4 ()\{\
+    
+\f1\b \cf5 let
+\f0\b0 \cf4  home = \cf8 Bundle\cf4 .\cf11 main\cf4 .\cf11 bundlePath\cf4 \
+    \cf2 //let Xemu = "cp -r " + APPpathStr +  "/BaseMac/Shared/Xemu  /Users/Shared/Xemu"\cf4 \
+    
+\f1\b \cf5 let
+\f0\b0 \cf4  baseXemu =  \cf7 "cp -r "\cf4  \cf11 +\cf4  home \cf11 +\cf4   \cf7 "/Contents/Resources/Base/Shared/Xemu /Users/Shared/Xemu"\cf4 \
+    
+\f1\b \cf5 let
+\f0\b0 \cf4  baseRetro = \cf7 "cp -r "\cf4  \cf11 +\cf4  home \cf11 +\cf4   \cf7 "/Contents/Resources/Base/Documents/Retroarch  ~/Documents"\cf4 \
+    
+\f1\b \cf5 let
+\f0\b0 \cf4  baseAppSupport = \cf7 "cp -r "\cf4  \cf11 +\cf4  home \cf11 +\cf4   \cf7 "/Contents/Resources/Base/ApplicationSupport/ ~/'Library/Application Support'"\cf4 \
+    \cf12 Commands\cf4 .\cf13 Bash\cf4 .\cf13 system\cf4 (\cf7 "\cf4 \\(baseXemu)\cf7 "\cf4 )\
+    \cf12 Commands\cf4 .\cf13 Bash\cf4 .\cf13 system\cf4 (\cf7 "\cf4 \\(baseRetro)\cf7 "\cf4 )\
+    \cf12 Commands\cf4 .\cf13 Bash\cf4 .\cf13 system\cf4 (\cf7 "\cf4 \\(baseAppSupport)\cf7 "\cf4 )\
+    \
+\}\
+\
+\
+\
+\
+\
+\
+
+\f1\b \cf5 class
+\f0\b0 \cf4  \cf10 ButtonConsolas\cf4 : \cf8 NSButton\cf4  \{\
+    \
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 Sistema\cf4 : \cf8 String\cf4 ?\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 Fullname\cf4 : \cf8 String\cf4 ?\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 Comando\cf4 : \cf8 String\cf4 ?\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 RomsPath\cf4 : \cf8 String\cf4 ?\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 Platform\cf4 : \cf8 String\cf4 ?\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 Extensiones\cf4 : \cf8 String\cf4 ?\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 Theme\cf4 : \cf8 String\cf4 ?\
+    
+\f1\b \cf5 var
+\f0\b0 \cf4  \cf6 id\cf4 : \cf8 Int\cf4 ?\
+    \
+    \
+    
+\f1\b \cf5 override
+\f0\b0 \cf4  
+\f1\b \cf5 init
+\f0\b0 \cf4 (frame: \cf8 CGRect\cf4 ) \{\
+        
+\f1\b \cf5 super
+\f0\b0 \cf4 .\cf8 init\cf4 (frame: frame)\
+        \
+    \}\
+    \
+    
+\f1\b \cf5 required
+\f0\b0 \cf4  
+\f1\b \cf5 init
+\f0\b0 \cf4 (coder aDecoder: \cf8 NSCoder\cf4 ) \{\
+        \cf11 fatalError\cf4 (\cf7 "This class does not support NSCoding"\cf4 )\
+    \}\
+\}\
+}

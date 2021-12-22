@@ -1,0 +1,640 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		077767D8D57DC393C824189D09123FB7 /* CommandsTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406390A7DD1EE56998C9BFFF4514EF6B /* CommandsTask.swift */; };
+		1093C6928432924E761D652DE55A7898 /* CommandsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F3B092F1D7360DC1CEA6B0DC33D4BB1 /* CommandsRequest.swift */; };
+		461A40FB9820E0212AC040917DDA9053 /* Pods-RetroMac-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4775A6DEC49BB21290172ABEC179B9D5 /* Pods-RetroMac-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B3C8E88283F6B4F49346BCFE0AE4181 /* CommandsAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B637C42B30BAB2661F3A236B293984 /* CommandsAlias.swift */; };
+		4C4E2EEBA969749FD301D5C56F631765 /* Pods-RetroMac-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 308BF7EA7D991BF38631E6AF2F4C51F2 /* Pods-RetroMac-dummy.m */; };
+		5ADA7FE345A8B2196427724B0FCB013D /* Commands.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54B6CD40853212C5AA4762612005C3C /* Commands.swift */; };
+		764E9EC0E3A9BDF84D5423BAE09CF3B8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1430F003D39D9906881A6AC724B7931 /* Cocoa.framework */; };
+		935F6D7C33F480AAA8A87A0F0E8A73B5 /* CommandsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150A660A83399156C07EC6AE1375690F /* CommandsResponse.swift */; };
+		98F5154B0B4B2E326D3317EFB89BEB2C /* Commands-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 19BA05F6EAB7CD2C0795F4CF26154372 /* Commands-dummy.m */; };
+		A38F8B0BCAF6EEC527A66A48326C75CB /* CommandsENV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7695898318CA27FD8A488286B88B79C /* CommandsENV.swift */; };
+		A8588DF752B08339CC8FDF66EBC0AFFB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1430F003D39D9906881A6AC724B7931 /* Cocoa.framework */; };
+		A9EEA05BD90BCB1BCE3FFB38B46953D0 /* CommandsArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = A746D02439E73C28DAC2F310584E6BBA /* CommandsArguments.swift */; };
+		BE5682483C50C6ED8FF82CF44719E0C6 /* CommandsDashcTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D40CAE7F53576ED77CC97792F15E255 /* CommandsDashcTransformer.swift */; };
+		C63BDAD4940B64A27F39D267A6D7F2A0 /* Commands-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E0731DE386AD09174589CF828948085A /* Commands-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F93F630EF45A7F09C2FB4FDF92D41BA8 /* CommandsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA44788DCFCA4FC6F3C5FBAFC32C5F3A /* CommandsResult.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		657BD9BD07F2A16F4AFDF8A5C0A7A95D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 541C0C5BD059F1A80ECDB5C3F4CAA31C;
+			remoteInfo = Commands;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0009177022CA165081CD392139BAB436 /* Commands.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Commands.release.xcconfig; sourceTree = "<group>"; };
+		0F3B092F1D7360DC1CEA6B0DC33D4BB1 /* CommandsRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CommandsRequest.swift; path = Sources/Commands/CommandsRequest.swift; sourceTree = "<group>"; };
+		150A660A83399156C07EC6AE1375690F /* CommandsResponse.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CommandsResponse.swift; path = Sources/Commands/CommandsResponse.swift; sourceTree = "<group>"; };
+		19BA05F6EAB7CD2C0795F4CF26154372 /* Commands-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Commands-dummy.m"; sourceTree = "<group>"; };
+		1B676EDE084A6CF260B2C648790DB8D9 /* Commands-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Commands-Info.plist"; sourceTree = "<group>"; };
+		2331A3CF9C28C7B9C23E6C9B6BBADCA8 /* Commands */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Commands; path = Commands.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		238FE7D59CB25707906B6F269EC77D24 /* Pods-RetroMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-RetroMac.debug.xcconfig"; sourceTree = "<group>"; };
+		2D40CAE7F53576ED77CC97792F15E255 /* CommandsDashcTransformer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CommandsDashcTransformer.swift; path = Sources/Commands/CommandsDashcTransformer.swift; sourceTree = "<group>"; };
+		308BF7EA7D991BF38631E6AF2F4C51F2 /* Pods-RetroMac-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-RetroMac-dummy.m"; sourceTree = "<group>"; };
+		357BF1B928D92AB454D38FC0C0CA6535 /* Pods-RetroMac */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-RetroMac"; path = Pods_RetroMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E4EB63CD08CDFA6A2C36FD08328C702 /* Commands-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Commands-prefix.pch"; sourceTree = "<group>"; };
+		406390A7DD1EE56998C9BFFF4514EF6B /* CommandsTask.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CommandsTask.swift; path = Sources/Commands/CommandsTask.swift; sourceTree = "<group>"; };
+		4775A6DEC49BB21290172ABEC179B9D5 /* Pods-RetroMac-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-RetroMac-umbrella.h"; sourceTree = "<group>"; };
+		4EF0336657A5BFF246206A6A13F2BC2A /* Pods-RetroMac-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-RetroMac-frameworks.sh"; sourceTree = "<group>"; };
+		6BF86BC20245416FA9D2DC486C4247FB /* Pods-RetroMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-RetroMac.release.xcconfig"; sourceTree = "<group>"; };
+		75EC94396475B81E1D487ED44C78B732 /* Commands.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Commands.modulemap; sourceTree = "<group>"; };
+		7F7F151CA0D0ED631597E8F5F9F37CD6 /* Pods-RetroMac.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-RetroMac.modulemap"; sourceTree = "<group>"; };
+		802425940D0791C7FFEBE9C01B3DEEA5 /* Pods-RetroMac-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-RetroMac-acknowledgements.plist"; sourceTree = "<group>"; };
+		8E54794BD90A43A3065168117DC26BB3 /* Pods-RetroMac-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-RetroMac-acknowledgements.markdown"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A746D02439E73C28DAC2F310584E6BBA /* CommandsArguments.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CommandsArguments.swift; path = Sources/Commands/CommandsArguments.swift; sourceTree = "<group>"; };
+		AA44788DCFCA4FC6F3C5FBAFC32C5F3A /* CommandsResult.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CommandsResult.swift; path = Sources/Commands/CommandsResult.swift; sourceTree = "<group>"; };
+		B3B637C42B30BAB2661F3A236B293984 /* CommandsAlias.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CommandsAlias.swift; path = Sources/Commands/CommandsAlias.swift; sourceTree = "<group>"; };
+		B7695898318CA27FD8A488286B88B79C /* CommandsENV.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CommandsENV.swift; path = Sources/Commands/CommandsENV.swift; sourceTree = "<group>"; };
+		B851DF4A287EA519B892A1A98B9608E1 /* Pods-RetroMac-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-RetroMac-Info.plist"; sourceTree = "<group>"; };
+		C1430F003D39D9906881A6AC724B7931 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		D54B6CD40853212C5AA4762612005C3C /* Commands.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Commands.swift; path = Sources/Commands/Commands.swift; sourceTree = "<group>"; };
+		E0731DE386AD09174589CF828948085A /* Commands-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Commands-umbrella.h"; sourceTree = "<group>"; };
+		F726590A4A1877E83E342A5E42890577 /* Commands.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Commands.debug.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		511FD8F9792A808310AB146F199E055C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				764E9EC0E3A9BDF84D5423BAE09CF3B8 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E6482807A419C79FEAF5C23A9DDB77DE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8588DF752B08339CC8FDF66EBC0AFFB /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0469F47D0A0100453D6B2B5A4B50747F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				587F0A4133533BC5CCE1311E247A5033 /* Commands */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		0F08B556C847776A06E0851F15975D24 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				75EC94396475B81E1D487ED44C78B732 /* Commands.modulemap */,
+				19BA05F6EAB7CD2C0795F4CF26154372 /* Commands-dummy.m */,
+				1B676EDE084A6CF260B2C648790DB8D9 /* Commands-Info.plist */,
+				3E4EB63CD08CDFA6A2C36FD08328C702 /* Commands-prefix.pch */,
+				E0731DE386AD09174589CF828948085A /* Commands-umbrella.h */,
+				F726590A4A1877E83E342A5E42890577 /* Commands.debug.xcconfig */,
+				0009177022CA165081CD392139BAB436 /* Commands.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Commands";
+			sourceTree = "<group>";
+		};
+		4BF4DACD40DC0A3344787CC7C4959531 /* Pods-RetroMac */ = {
+			isa = PBXGroup;
+			children = (
+				7F7F151CA0D0ED631597E8F5F9F37CD6 /* Pods-RetroMac.modulemap */,
+				8E54794BD90A43A3065168117DC26BB3 /* Pods-RetroMac-acknowledgements.markdown */,
+				802425940D0791C7FFEBE9C01B3DEEA5 /* Pods-RetroMac-acknowledgements.plist */,
+				308BF7EA7D991BF38631E6AF2F4C51F2 /* Pods-RetroMac-dummy.m */,
+				4EF0336657A5BFF246206A6A13F2BC2A /* Pods-RetroMac-frameworks.sh */,
+				B851DF4A287EA519B892A1A98B9608E1 /* Pods-RetroMac-Info.plist */,
+				4775A6DEC49BB21290172ABEC179B9D5 /* Pods-RetroMac-umbrella.h */,
+				238FE7D59CB25707906B6F269EC77D24 /* Pods-RetroMac.debug.xcconfig */,
+				6BF86BC20245416FA9D2DC486C4247FB /* Pods-RetroMac.release.xcconfig */,
+			);
+			name = "Pods-RetroMac";
+			path = "Target Support Files/Pods-RetroMac";
+			sourceTree = "<group>";
+		};
+		587F0A4133533BC5CCE1311E247A5033 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				D54B6CD40853212C5AA4762612005C3C /* Commands.swift */,
+				B3B637C42B30BAB2661F3A236B293984 /* CommandsAlias.swift */,
+				A746D02439E73C28DAC2F310584E6BBA /* CommandsArguments.swift */,
+				2D40CAE7F53576ED77CC97792F15E255 /* CommandsDashcTransformer.swift */,
+				B7695898318CA27FD8A488286B88B79C /* CommandsENV.swift */,
+				0F3B092F1D7360DC1CEA6B0DC33D4BB1 /* CommandsRequest.swift */,
+				150A660A83399156C07EC6AE1375690F /* CommandsResponse.swift */,
+				AA44788DCFCA4FC6F3C5FBAFC32C5F3A /* CommandsResult.swift */,
+				406390A7DD1EE56998C9BFFF4514EF6B /* CommandsTask.swift */,
+				0F08B556C847776A06E0851F15975D24 /* Support Files */,
+			);
+			name = Commands;
+			path = Commands;
+			sourceTree = "<group>";
+		};
+		940D502B770C4171E7C1F4C308AF15D9 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				4BF4DACD40DC0A3344787CC7C4959531 /* Pods-RetroMac */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		9840FDCB006C7C5396C3C4AB140E3868 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2331A3CF9C28C7B9C23E6C9B6BBADCA8 /* Commands */,
+				357BF1B928D92AB454D38FC0C0CA6535 /* Pods-RetroMac */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				E0A1E60606E0BF6E2E10F1F01350DFE8 /* Frameworks */,
+				0469F47D0A0100453D6B2B5A4B50747F /* Pods */,
+				9840FDCB006C7C5396C3C4AB140E3868 /* Products */,
+				940D502B770C4171E7C1F4C308AF15D9 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		E0A1E60606E0BF6E2E10F1F01350DFE8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E2A8756CA1FF5258A0344D53C5C60EC1 /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E2A8756CA1FF5258A0344D53C5C60EC1 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				C1430F003D39D9906881A6AC724B7931 /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		37055F0D408220F0DC0798F5F101048C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				461A40FB9820E0212AC040917DDA9053 /* Pods-RetroMac-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C9575A5AEB9D8185C6D4CAD6FB2580F9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C63BDAD4940B64A27F39D267A6D7F2A0 /* Commands-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		541C0C5BD059F1A80ECDB5C3F4CAA31C /* Commands */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 62281DAF164C577BC88D93C999284804 /* Build configuration list for PBXNativeTarget "Commands" */;
+			buildPhases = (
+				C9575A5AEB9D8185C6D4CAD6FB2580F9 /* Headers */,
+				423CDB78F0C235CA1AAAE5A4E73A5A11 /* Sources */,
+				E6482807A419C79FEAF5C23A9DDB77DE /* Frameworks */,
+				FA1A38FD55E9871C47DB74E27A6DF598 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Commands;
+			productName = Commands;
+			productReference = 2331A3CF9C28C7B9C23E6C9B6BBADCA8 /* Commands */;
+			productType = "com.apple.product-type.framework";
+		};
+		E13234C3A3B5B516275F490F151803DA /* Pods-RetroMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EF7F7917F3B154A62CFC60295FD1F7A /* Build configuration list for PBXNativeTarget "Pods-RetroMac" */;
+			buildPhases = (
+				37055F0D408220F0DC0798F5F101048C /* Headers */,
+				E81C30EABD80C3C798D1158AFEADA673 /* Sources */,
+				511FD8F9792A808310AB146F199E055C /* Frameworks */,
+				FD51E50BD3D0E3B01CF726D7322A5F97 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FE92BC04FED486093590BA9FD481558F /* PBXTargetDependency */,
+			);
+			name = "Pods-RetroMac";
+			productName = Pods_RetroMac;
+			productReference = 357BF1B928D92AB454D38FC0C0CA6535 /* Pods-RetroMac */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 9840FDCB006C7C5396C3C4AB140E3868 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				541C0C5BD059F1A80ECDB5C3F4CAA31C /* Commands */,
+				E13234C3A3B5B516275F490F151803DA /* Pods-RetroMac */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FA1A38FD55E9871C47DB74E27A6DF598 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD51E50BD3D0E3B01CF726D7322A5F97 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		423CDB78F0C235CA1AAAE5A4E73A5A11 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5ADA7FE345A8B2196427724B0FCB013D /* Commands.swift in Sources */,
+				98F5154B0B4B2E326D3317EFB89BEB2C /* Commands-dummy.m in Sources */,
+				4B3C8E88283F6B4F49346BCFE0AE4181 /* CommandsAlias.swift in Sources */,
+				A9EEA05BD90BCB1BCE3FFB38B46953D0 /* CommandsArguments.swift in Sources */,
+				BE5682483C50C6ED8FF82CF44719E0C6 /* CommandsDashcTransformer.swift in Sources */,
+				A38F8B0BCAF6EEC527A66A48326C75CB /* CommandsENV.swift in Sources */,
+				1093C6928432924E761D652DE55A7898 /* CommandsRequest.swift in Sources */,
+				935F6D7C33F480AAA8A87A0F0E8A73B5 /* CommandsResponse.swift in Sources */,
+				F93F630EF45A7F09C2FB4FDF92D41BA8 /* CommandsResult.swift in Sources */,
+				077767D8D57DC393C824189D09123FB7 /* CommandsTask.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E81C30EABD80C3C798D1158AFEADA673 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C4E2EEBA969749FD301D5C56F631765 /* Pods-RetroMac-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FE92BC04FED486093590BA9FD481558F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Commands;
+			target = 541C0C5BD059F1A80ECDB5C3F4CAA31C /* Commands */;
+			targetProxy = 657BD9BD07F2A16F4AFDF8A5C0A7A95D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0AE172D8F2A4843BFACAD21A0ED26541 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		1F31715214046D7AD0E357ADF6B1485C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0009177022CA165081CD392139BAB436 /* Commands.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Commands/Commands-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Commands/Commands-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = "Target Support Files/Commands/Commands.modulemap";
+				PRODUCT_MODULE_NAME = Commands;
+				PRODUCT_NAME = Commands;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.3;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		42A04BC574116A829114C5AC8933665E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 238FE7D59CB25707906B6F269EC77D24 /* Pods-RetroMac.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-RetroMac/Pods-RetroMac-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MODULEMAP_FILE = "Target Support Files/Pods-RetroMac/Pods-RetroMac.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		808E544862838153672EA12FCC127D9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		9A19693AF85C7DB41BE5BC0DADFA7A4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6BF86BC20245416FA9D2DC486C4247FB /* Pods-RetroMac.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-RetroMac/Pods-RetroMac-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MODULEMAP_FILE = "Target Support Files/Pods-RetroMac/Pods-RetroMac.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		A187D23DDC7FCC62FCBAF2C0B871D935 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F726590A4A1877E83E342A5E42890577 /* Commands.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Commands/Commands-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Commands/Commands-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = "Target Support Files/Commands/Commands.modulemap";
+				PRODUCT_MODULE_NAME = Commands;
+				PRODUCT_NAME = Commands;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.3;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				808E544862838153672EA12FCC127D9A /* Debug */,
+				0AE172D8F2A4843BFACAD21A0ED26541 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		62281DAF164C577BC88D93C999284804 /* Build configuration list for PBXNativeTarget "Commands" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A187D23DDC7FCC62FCBAF2C0B871D935 /* Debug */,
+				1F31715214046D7AD0E357ADF6B1485C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6EF7F7917F3B154A62CFC60295FD1F7A /* Build configuration list for PBXNativeTarget "Pods-RetroMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42A04BC574116A829114C5AC8933665E /* Debug */,
+				9A19693AF85C7DB41BE5BC0DADFA7A4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}

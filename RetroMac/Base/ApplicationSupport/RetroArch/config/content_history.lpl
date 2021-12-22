@@ -1,0 +1,123 @@
+{
+  "version": "1.5",
+  "default_core_path": "",
+  "default_core_name": "",
+  "label_display_mode": 0,
+  "right_thumbnail_mode": 0,
+  "left_thumbnail_mode": 0,
+  "sort_mode": 2,
+  "items": [
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/nes/Adventure Island 3 (USA).7z",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/nestopia_libretro.dylib",
+      "core_name": "Nestopia",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/nes/1943 - The Battle of Midway (USA).7z",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/nestopia_libretro.dylib",
+      "core_name": "Nestopia",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/wii/New Super Mario Bros Wii [SMNE01].wbfs",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/dolphin_libretro.dylib",
+      "core_name": "dolphin-emu",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/gamecube/Crazy Taxi.iso",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/dolphin_libretro.dylib",
+      "core_name": "dolphin-emu",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/psp/GTA chinatown wars.cso",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/ppsspp_libretro.dylib",
+      "core_name": "PPSSPP",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/psx/Ace Combat 2.chd",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/pcsx_rearmed_libretro.dylib",
+      "core_name": "Sony - PlayStation (PCSX ReARMed)",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/psx/Ace Combat 2.chd",
+      "label": "",
+      "core_path": "/Users/pablojimenez/Library/Application Support/RetroArch/cores/pcsx_rearmed_libretro.dylib",
+      "core_name": "Sony - PlayStation (PCSX ReARMed)",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/scummvm/Maniac_Mansion_2/tentacle.scummvm",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/scummvm_libretro.dylib",
+      "core_name": "scummvm",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/scummvm/Maniac_Mansion_1/maniac-v2-es.scummvm",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/scummvm_libretro.dylib",
+      "core_name": "scummvm",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/x68000/Cube Runner (1990)(SPS).zip",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/px68k_libretro.dylib",
+      "core_name": "PX68K",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/ES/Debug/roms/zxspectrum/Batman - The Caped Crusader Part 1.7z",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/fuse_libretro.dylib",
+      "core_name": "fuse",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/roms/dreamcast/Crazy Taxi.chd",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/flycast_libretro.dylib",
+      "core_name": "Flycast",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/roms/nes/Batman - The Video Game (USA).7z",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/nestopia_libretro.dylib",
+      "core_name": "Nestopia",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/Users/pablojimenez/roms/neogeo/mslug.zip",
+      "label": "",
+      "core_path": "/Users/pablojimenez/ES/Debug/Emuladores/cores/fbneo_libretro.dylib",
+      "core_name": "FinalBurn Neo",
+      "crc32": "",
+      "db_name": ""
+    }
+  ]
+}

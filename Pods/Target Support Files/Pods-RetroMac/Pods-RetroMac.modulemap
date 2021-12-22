@@ -1,0 +1,6 @@
+framework module Pods_RetroMac {
+  umbrella header "Pods-RetroMac-umbrella.h"
+
+  export *
+  module * { export * }
+}

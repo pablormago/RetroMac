@@ -1,0 +1,217 @@
+Invalid language identifier (wxID=0)
+
+PCSX2 Nightly - macos-20211121 Compiled on Nov 21 2021
+Savestate version: 0x9a290000
+
+Host Machine Init:
+	Operating System =  Darwin 19.6.0 x86_64
+	Physical RAM     =  8192 MB
+	CPU name         =  Intel(R) Core(TM) i5-8210Y CPU @ 1.60GHz
+	Vendor/Model     =  GenuineIntel (stepping 09)
+	CPU speed        =  1.607 ghz (4 logical threads)
+	x86PType         =  Standard OEM
+	x86Flags         =  bfebfbff 7ffafbbf
+	x86EFlags        =  2c100800
+
+x86 Features Detected:
+	SSE2.. SSE3.. SSSE3.. SSE4.1.. SSE4.2.. AVX.. AVX2.. FMA
+	Pcsx2 was compiled as 64-bits.
+
+Invalid language identifier (wxID=0)
+Installing POSIX SIGSEGV handler...
+Reserving memory for recompilers...
+HLE Host: Set 'host:' root path to: /
+
+SDL audio driver configuration is invalid!
+It will be replaced by pulseaudio!
+Patches: No CRC found, using 00000000 instead.
+isoFile open ok: /Users/pablojimenez/ES/Debug/roms/ps2/PES 2013 - Pro Evolution Soccer (USA).iso
+	Image type  = DVD
+ * CDVD Disk Open: DVD, Single layer or unknown:
+ * * Track 1: Data (Mode 1) (1039696 sectors)
+Current Renderer: OpenGL
+Using threaded OpenGL engine
+Created a OpenGL context
+GL_VENDOR: Intel Inc.
+GL_RENDERER: Intel(R) UHD Graphics 617
+GL_VERSION: 4.1 INTEL-14.7.8
+GL_SHADING_LANGUAGE_VERSION: 4.10
+INFO: GL_ARB_copy_image is NOT SUPPORTED
+INFO: GL_ARB_clip_control is NOT SUPPORTED
+The OpenGL renderer is inefficient on Intel GPUs due to an inefficient driver.
+Check out the link below for further information.
+https://github.com/PCSX2/pcsx2/wiki/OpenGL-and-Intel-GPUs-All-you-need-to-know
+GL_KHR_debug is not supported!  Will stub functions
+GL_ARB_texture_barrier is not supported! Blending emulation will not be supported
+DSA is not supported. Expect slower performance
+INFO: GL_ARB_sparse_texture is NOT SUPPORTED
+INFO: GL_ARB_sparse_texture2 is NOT SUPPORTED
+INFO: GL_ARB_gpu_shader5 is available
+INFO: GL_ARB_shader_image_load_store is NOT SUPPORTED
+INFO: GL_ARB_shading_language_420pack is NOT SUPPORTED
+INFO: GL_ARB_clear_texture is NOT SUPPORTED
+INFO: GL_ARB_buffer_storage is NOT SUPPORTED
+INFO: GL_ARB_direct_state_access is NOT SUPPORTED
+INFO: GL_ARB_texture_barrier is NOT SUPPORTED
+
+[GameDB] 10731 games on record (loaded in 411ms)
+No extenstion supported to get available memory. Use default value !
+Available VRAM/RAM:3840MB for textures
+GS Lookup CRC:00000000
+48000 SampleRate: 
+GS Lookup CRC:00000000
+SDL audio driver configuration is invalid!
+It will be replaced by pulseaudio!
+Request SDL audio driver: pulseaudio
+Opened SDL audio driver: coreaudio
+McdSlot 0 [File]: /Users/pablojimenez/Library/Application Support/PCSX2/memcards/Mcd001.ps2
+McdSlot 1 [File]: /Users/pablojimenez/Library/Application Support/PCSX2/memcards/Mcd002.ps2
+EE/iR5900-32 Recompiler Reset
+	Bios Found: Europe  v01.60(04/10/2001)  Console
+	BIOS r module not found, skipping...
+	BIOS r module not found, skipping...
+	BIOS e module not found, skipping...
+# Initialize memory (rev:3.63, ctm:196Mhz, cpuclk:147Mhz detected)
+# Total accessable memory size: 32 MB (B:2:8:0) (363:2:7c30)
+# TLB spad=0 kernel=1:12 default=13:30 extended=31:38
+# Initialize Start.
+# Initialize GS ...
+# Initialize INTC ...
+# Initialize TIMER ...
+# Initialize DMAC ...
+# Initialize VU1 ...
+# Initialize VIF1 ...
+# Initialize GIF ...
+# Initialize VU0 ...
+# Initialize VIF0 ...
+# Initialize IPU ...
+# Initialize FPU ...
+# Initialize User Memory ...
+
+PlayStation 2 ======== Hard reset boot
+ ROMGEN=2001-1004, IOP info (CPUID=1f, CACH_CONFIG=0, 2MB, IOP mode)
+ <20011004-175839,ROMconf,PS20160EC20011004.bin:11520>
+# Initialize Scratch Pad ...
+# Initialize Done.
+
+EE DECI2 Manager version 0.06 Jul  4 2001 16:03:45
+  CPUID=2e20, BoardID=0, ROMGEN=2001-1004, 32M
+
+Patches: No CRC found, using 00000000 instead.
+(SYSTEM.CNF) Detected PS2 Disc = cdrom0:\SLUS_219.55;1
+(SYSTEM.CNF) Software version = 1.00
+(SYSTEM.CNF) Disc region type = NTSC
+found 0 symbols
+ELF (cdrom0:\SLUS_219.55;1) Game CRC = 0x94A99538, EntryPoint = 0x00100008
+(SYSTEM.CNF) Detected PS2 Disc = cdrom0:\SLUS_219.55;1
+(SYSTEM.CNF) Software version = 1.00
+(SYSTEM.CNF) Disc region type = NTSC
+
+IOP Realtime Kernel Ver.0.9.1
+    Copyright 1999 (C) Sony Computer Entertainment Inc. 
+Reboot service module.(99/11/10)
+cdvd driver module version 0.1.1 (C)SCEI
+Load File service.(99/11/05)
+Multi Threaded Fileio module.(99/11/15) 
+iop heap service (99/11/03)
+loadelf: fname cdrom0:¥SLUS_219.55;1 secname all
+loadelf version 3.30
+Input ELF format filename = cdrom0:¥SLUS_219.55;1
+0 00100000 00329a80 ...................................................
+Loaded, cdrom0:¥SLUS_219.55;1
+start address 0x100008
+gp address 00000000
+# Restart Without Memory Clear.
+# Initialize GS ...
+# Initialize INTC ...
+# Initialize TIMER ...
+# Initialize DMAC ...
+# Initialize VU1 ...
+# Initialize VIF1 ...
+# Initialize GIF ...
+# Initialize VU0 ...
+# Initialize VIF0 ...
+# Initialize IPU ...
+# Initialize FPU ...
+# Initialize Scratch Pad ...
+# Restart Without Memory Clear Done.
+Elf entry point @ 0x00100008 about to get recompiled. Load patches first.
+[GameDB] Searching for 'slus-21955' in GameDB
+[GameDB] Found 'slus-21955' in GameDB
+[GameDB] Searching for patch with CRC '94a99538'
+[GameDB] No CRC-specific patch or default patch found
+[GameDB] Searching for 'slus-21955' in GameDB
+[GameDB] Found 'slus-21955' in GameDB
+[GameDB] Searching for patch with CRC '94a99538'
+[GameDB] No CRC-specific patch or default patch found
+GS Lookup CRC:94A99538
+GS Lookup CRC:94A99538
+sce_fileio: unrecognized code ff
+Get Reboot Request From EE
+ROM directory not found
+
+PlayStation 2 ======== Update rebooting..
+
+PlayStation 2 ======== Update reboot complete
+cdvdman Init
+
+IOP Realtime Kernel Ver. 2.2
+    Copyright 1999-2002 (C) Sony Computer Entertainment Inc. 
+Reboot service module.(99/11/10)
+Load File service.(99/11/05)
+Multi Threaded Fileio module.(99/11/15) 
+iop heap service (99/11/03)
+(UpdateVSyncRate) Mode Changed to NTSC.
+	... with user configured refresh rate: 59.94 Hz
+cdvd driver module version 0.1.1 (C)SCEI
+loadmodule: fname cdrom0:¥IOP¥SIO2MAN.IRX;1 args 0 arg 
+loadmodule: id 25, ret 0
+loadmodule: fname cdrom0:¥IOP¥MTAPMAN.IRX;1 args 0 arg 
+loadmodule: id 26, ret 0
+loadmodule: fname cdrom0:¥IOP¥PADMAN.IRX;1 args 0 arg 
+loadmodule: id 27, ret 0
+loadmodule: fname cdrom0:¥IOP¥MCMAN.IRX;1 args 0 arg 
+loadmodule: id 28, ret 2
+loadmodule: fname cdrom0:¥IOP¥MCSERV.IRX;1 args 0 arg 
+loadmodule: id 29, ret 2
+loadmodule: fname cdrom0:¥IOP¥LIBSD.IRX;1 args 0 arg 
+loadmodule: id 30, ret 0
+loadmodule: fname cdrom0:¥IOP¥SDRDRV.IRX;1 args 0 arg 
+SDR driver version 4.0.1 (C) SCEI
+ Exit rsd_main 
+loadmodule: id 31, ret 2
+loadmodule: fname cdrom0:¥IOP¥CRI_ADXI.IRX;1 args 30 arg thpri=39
+CRI ADX Driver Ver.9.44(Feb 28 2005 19:25:04)
+CRI ADX Driver : sceSdInit Call = 0
+CRI ADX Driver : Main Thread Priority = 39
+CRI ADX Driver : PSM Thread Priority  = 39
+CRI ADX Driver : DTX Thread Priority  = 48
+CRI ADX Driver : SPU CORE Number = 1
+loadmodule: id 32, ret 2
+loadmodule: fname cdrom0:¥IOP¥USBD.IRX;1 args 7 arg dev=10
+USB Driver (Version 1.6.0)
+loadmodule: id 33, ret 2
+loadmodule: fname cdrom0:¥IOP¥USBKEYBD.IRX;1 args 0 arg dev=10
+loadmodule: id 34, ret 0
+loadmodule: fname cdrom0:¥IOP¥CDVDSTM.IRX;1 args 0 arg dev=10
+loadmodule: id 35, ret 2
+DVCI: "¥0_SOUND.AFS" found.
+DVCI: "¥E_SOUND.AFS" found.
+DVCI: "¥F_SOUND.AFS" found.
+DVCI: "¥B_SOUND.AFS" found.
+DVCI: "¥M_SOUND.AFS" found.
+DVCI: "¥0_TEXT.AFS" found.
+DVCI: "¥U_TEXT.AFS" found.
+DVCI: "¥F_TEXT.AFS" found.
+DVCI: "¥B_TEXT.AFS" found.
+DVCI: "¥M_TEXT.AFS" found.
+DVCI: "¥OVER.AFS" found.
+DVCI: Total 11 files.
+PS2RNA: sceSifAllocIopHeap(99904) ret=0x000c1400
+PS2RNA: sceSifAllocIopHeap(2256) ret=0x000d9b00
+PS2RNA: sceSifAllocIopHeap(6208) ret=0x000da400
+loadmodule: fname cdrom0:¥IOP¥AUDIO.IRX;1 args 0 arg dev=10
+loadmodule: id 36, ret 0
+Stream Buffer 1Bank 32768byte 5banks 163840byte used
+Delete 72 Shaders, 65 Programs, 1 Pipelines
+(GameDB) Unloading...
