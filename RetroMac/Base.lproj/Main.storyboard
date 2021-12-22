@@ -727,7 +727,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </view>
                                     </subviews>
-                                    <color key="backgroundColor" name="quaternaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
                                 </clipView>
                                 <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="XaY-wx-941">
@@ -767,7 +767,7 @@
                                     <action selector="switchToggle:" target="XfG-lQ-9wD" id="YQq-Al-UeC"/>
                                 </connections>
                             </switch>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iwn-fC-rF1">
+                            <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iwn-fC-rF1">
                                 <rect key="frame" x="830" y="4" width="1014" height="57"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <textFieldCell key="cell" enabled="NO" title="Label" id="Kb4-dS-7ur">
@@ -776,10 +776,6 @@
                                     <color key="backgroundColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vef-3a-DNo" customClass="ScrollingTextView" customModule="RetroMac" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="57" width="1920" height="96"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            </customView>
                         </subviews>
                     </view>
                     <connections>
@@ -787,7 +783,6 @@
                         <outlet property="onOff" destination="3ts-4A-8EX" id="tNX-Kb-4sR"/>
                         <outlet property="rutaRomsLabel" destination="iwn-fC-rF1" id="Ltf-XX-1Ck"/>
                         <outlet property="scrollMain" destination="puU-Kb-vPb" id="5g6-cJ-Gr0"/>
-                        <outlet property="scrollerText" destination="Vef-3a-DNo" id="llm-Wo-duo"/>
                         <outlet property="settingsButton" destination="RZ7-ht-Mgg" id="DeM-G4-lKY"/>
                         <outlet property="tog1" destination="tgm-uz-J4P" id="zeF-0C-0wT"/>
                         <segue destination="fL4-9U-n43" kind="show" id="LeI-Id-sQd"/>
@@ -821,7 +816,7 @@
                                             <tableColumns>
                                                 <tableColumn identifier="Games" width="1000" minWidth="40" maxWidth="1000" id="fgP-MJ-Xas">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Games">
-                                                        <font key="font" metaFont="label" size="11"/>
+                                                        <font key="font" metaFont="menu" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>

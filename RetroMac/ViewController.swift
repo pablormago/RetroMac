@@ -66,7 +66,7 @@ class ViewController: NSViewController {
         
         let state = sender.state
         if state.rawValue == 1 {
-            onOff.stringValue = "ON"
+            onOff.stringValue = "EXIT"
         }
         else {
             onOff.stringValue = "OFF"
