@@ -773,9 +773,9 @@
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="right" id="pDC-UQ-yOd"/>
                                         </imageView>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aa3-Pb-0Sk">
-                                            <rect key="frame" x="231" y="29" width="182" height="45"/>
+                                            <rect key="frame" x="242" y="29" width="175" height="45"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Navegación" id="hB2-uh-jUU">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Navegacion" id="hB2-uh-jUU">
                                                 <font key="font" size="28" name="GB18030Bitmap"/>
                                                 <color key="textColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
