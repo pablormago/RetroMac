@@ -21,6 +21,7 @@
 		279FBD6F277375AA00CD5586 /* entrar.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD6C277375AA00CD5586 /* entrar.png */; };
 		279FBD70277375AA00CD5586 /* borrar.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD6D277375AA00CD5586 /* borrar.png */; };
 		279FBD71277375AA00CD5586 /* sp_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD6E277375AA00CD5586 /* sp_bar.png */; };
+		279FBD7927739DAC00CD5586 /* icons.icns in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD7827739DAC00CD5586 /* icons.icns */; };
 		27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E6675F275A29B300B50AD6 /* parserSystems.swift */; };
 		27E7A2F92768A9CF0087C67A /* Pods_RetroMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D47C28B3EAAA7D35AF784A /* Pods_RetroMac.framework */; };
 		27E7A2FA2768A9CF0087C67A /* Pods_RetroMac.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0D47C28B3EAAA7D35AF784A /* Pods_RetroMac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -66,6 +67,7 @@
 		279FBD6C277375AA00CD5586 /* entrar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = entrar.png; sourceTree = "<group>"; };
 		279FBD6D277375AA00CD5586 /* borrar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = borrar.png; sourceTree = "<group>"; };
 		279FBD6E277375AA00CD5586 /* sp_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sp_bar.png; sourceTree = "<group>"; };
+		279FBD7827739DAC00CD5586 /* icons.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icons.icns; path = ../../icons.icns; sourceTree = "<group>"; };
 		27E6675F275A29B300B50AD6 /* parserSystems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parserSystems.swift; sourceTree = "<group>"; };
 		27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = es_systems_mac.cfg; sourceTree = "<group>"; };
 		27E7A3022768B4B90087C67A /* logo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = logo.jpeg; path = ../../../Downloads/logo.jpeg; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				27E7A30627691F740087C67A /* Base */,
 				27E7A3022768B4B90087C67A /* logo.jpeg */,
 				278980232757DCC000414985 /* Info.plist */,
+				279FBD7827739DAC00CD5586 /* icons.icns */,
 				27E7A30A276B54240087C67A /* NoVideo.mp4 */,
 				274FEB13277331E5007CE357 /* ViewController.swift */,
 				278980242757DCC000414985 /* RetroMac.entitlements */,
@@ -247,6 +250,7 @@
 				2789801F2757DCC000414985 /* Assets.xcassets in Resources */,
 				279FBD59277350C900CD5586 /* lefft.png in Resources */,
 				278980222757DCC000414985 /* Main.storyboard in Resources */,
+				279FBD7927739DAC00CD5586 /* icons.icns in Resources */,
 				279FBD6F277375AA00CD5586 /* entrar.png in Resources */,
 				279FBD57277350C900CD5586 /* up.png in Resources */,
 				27E7A3032768B4B90087C67A /* logo.jpeg in Resources */,

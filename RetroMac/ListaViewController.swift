@@ -97,8 +97,23 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         //        //CARGAR IMAGENES Y VIDEOS
         let miFila = juegosTableView.selectedRow
+        let miDesc = String(juegosXml[miFila][2])
+        let miMap = String(juegosXml[miFila][3])
+        let miManual = String(juegosXml[miFila][4])
+        let miNews = String(juegosXml[miFila][5])
+        let miTittleShot = String(juegosXml[miFila][6])
+        let miFanArt = String(juegosXml[miFila][7])
+        let miThumbNail = String(juegosXml[miFila][8])
         let miImagen = String(juegosXml[miFila][9])
         let miVideo = String(juegosXml[miFila][10])
+        let miMarquee = String(juegosXml[miFila][11])
+        let miRelaseDate = String(juegosXml[miFila][12])
+        let miDeveloper = String(juegosXml[miFila][13])
+        let miPublisher = String(juegosXml[miFila][14])
+        let miGenre = String(juegosXml[miFila][15])
+        let miLang = String(juegosXml[miFila][16])
+        let miPlayers = String(juegosXml[miFila][17])
+        let miRating = String(juegosXml[miFila][18])
         if miImagen != nil && miImagen != "" {
             let imagenURL = URL(fileURLWithPath: miImagen)
             imageSelected(path: imagenURL)
