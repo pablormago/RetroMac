@@ -18,7 +18,7 @@
 		279FBD57277350C900CD5586 /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD53277350C800CD5586 /* up.png */; };
 		279FBD58277350C900CD5586 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD54277350C800CD5586 /* right.png */; };
 		279FBD59277350C900CD5586 /* lefft.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD55277350C900CD5586 /* lefft.png */; };
-		279FBD6F277375AA00CD5586 /* key_intro.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD6C277375AA00CD5586 /* key_intro.png */; };
+		279FBD6F277375AA00CD5586 /* entrar.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD6C277375AA00CD5586 /* entrar.png */; };
 		279FBD70277375AA00CD5586 /* borrar.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD6D277375AA00CD5586 /* borrar.png */; };
 		279FBD71277375AA00CD5586 /* sp_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD6E277375AA00CD5586 /* sp_bar.png */; };
 		27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E6675F275A29B300B50AD6 /* parserSystems.swift */; };
@@ -63,7 +63,7 @@
 		279FBD53277350C800CD5586 /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up.png; sourceTree = "<group>"; };
 		279FBD54277350C800CD5586 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
 		279FBD55277350C900CD5586 /* lefft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lefft.png; sourceTree = "<group>"; };
-		279FBD6C277375AA00CD5586 /* key_intro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = key_intro.png; sourceTree = "<group>"; };
+		279FBD6C277375AA00CD5586 /* entrar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = entrar.png; sourceTree = "<group>"; };
 		279FBD6D277375AA00CD5586 /* borrar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = borrar.png; sourceTree = "<group>"; };
 		279FBD6E277375AA00CD5586 /* sp_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sp_bar.png; sourceTree = "<group>"; };
 		27E6675F275A29B300B50AD6 /* parserSystems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parserSystems.swift; sourceTree = "<group>"; };
@@ -151,7 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				279FBD6D277375AA00CD5586 /* borrar.png */,
-				279FBD6C277375AA00CD5586 /* key_intro.png */,
+				279FBD6C277375AA00CD5586 /* entrar.png */,
 				279FBD6E277375AA00CD5586 /* sp_bar.png */,
 				279FBD52277350C700CD5586 /* down.png */,
 				279FBD55277350C900CD5586 /* lefft.png */,
@@ -247,7 +247,7 @@
 				2789801F2757DCC000414985 /* Assets.xcassets in Resources */,
 				279FBD59277350C900CD5586 /* lefft.png in Resources */,
 				278980222757DCC000414985 /* Main.storyboard in Resources */,
-				279FBD6F277375AA00CD5586 /* key_intro.png in Resources */,
+				279FBD6F277375AA00CD5586 /* entrar.png in Resources */,
 				279FBD57277350C900CD5586 /* up.png in Resources */,
 				27E7A3032768B4B90087C67A /* logo.jpeg in Resources */,
 				279FBD70277375AA00CD5586 /* borrar.png in Resources */,

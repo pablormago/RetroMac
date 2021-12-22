@@ -775,7 +775,7 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aa3-Pb-0Sk">
                                             <rect key="frame" x="242" y="29" width="175" height="45"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Navegacion" id="hB2-uh-jUU">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Navegación" id="hB2-uh-jUU">
                                                 <font key="font" size="28" name="GB18030Bitmap"/>
                                                 <color key="textColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -973,21 +973,35 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ITk-nu-iNd">
                                             <rect key="frame" x="242" y="29" width="175" height="45"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Navegacion" id="ipG-0x-kZo">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Navegación" id="ipG-0x-kZo">
                                                 <font key="font" size="28" name="GB18030Bitmap"/>
                                                 <color key="textColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T9G-a4-NUG">
-                                            <rect key="frame" x="436" y="26" width="213" height="51"/>
+                                            <rect key="frame" x="431" y="28" width="94" height="51"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="key" id="MN1-7o-cIx"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="entrar" id="MN1-7o-cIx"/>
+                                        </imageView>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nsy-My-KJW">
+                                            <rect key="frame" x="771" y="28" width="94" height="51"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="borrar" id="32C-bC-D4w"/>
                                         </imageView>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Jv-98-fnv">
-                                            <rect key="frame" x="669" y="29" width="362" height="45"/>
+                                            <rect key="frame" x="539" y="29" width="226" height="45"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Seleccionar Sistema" id="Ovi-PI-isc">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Lanzar Juego" id="Ovi-PI-isc">
+                                                <font key="font" size="28" name="GB18030Bitmap"/>
+                                                <color key="textColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="riY-mV-IMM">
+                                            <rect key="frame" x="875" y="29" width="117" height="45"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Volver" id="9wd-Bu-aEG">
                                                 <font key="font" size="28" name="GB18030Bitmap"/>
                                                 <color key="textColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1015,8 +1029,9 @@
     </scenes>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>
+        <image name="borrar" width="540" height="345"/>
         <image name="down" width="95" height="94"/>
-        <image name="key" width="256" height="256"/>
+        <image name="entrar" width="621" height="347"/>
         <image name="lefft" width="94" height="95"/>
         <image name="right" width="94" height="95"/>
         <image name="sp_bar" width="1838" height="408"/>
