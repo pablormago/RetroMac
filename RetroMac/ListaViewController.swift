@@ -27,9 +27,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         print("LISTA LOAD")
-        //view.wantsLayer = true
+        view.wantsLayer = true
         // change the background color of the layer
-        //view.layer?.backgroundColor = CGColor(red: 73/255, green: 74/255, blue: 77/255, alpha: 1)
+        view.layer?.backgroundColor = CGColor(red: 73/255, green: 74/255, blue: 77/255, alpha: 1)
         // Do view setup here.
         
         
