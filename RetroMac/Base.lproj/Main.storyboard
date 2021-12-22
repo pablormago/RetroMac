@@ -739,6 +739,44 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
+                            <box fixedFrame="YES" boxType="custom" title="Info" translatesAutoresizingMaskIntoConstraints="NO" id="fpi-oe-VtW">
+                                <rect key="frame" x="0.0" y="0.0" width="1920" height="110"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" ambiguous="YES" id="328-UM-Kxn">
+                                    <rect key="frame" x="1" y="1" width="1918" height="108"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="3ts-4A-8EX">
+                                            <rect key="frame" x="59" y="26" width="49" height="42"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                            <textFieldCell key="cell" title="Label" id="FFu-mF-aL5">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" tag="-1" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="tgm-uz-J4P">
+                                            <rect key="frame" x="18" y="40" width="42" height="24"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                            <connections>
+                                                <action selector="switchToggle:" target="XfG-lQ-9wD" id="YQq-Al-UeC"/>
+                                            </connections>
+                                        </switch>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I8g-Mx-DqV">
+                                            <rect key="frame" x="121" y="29" width="48" height="48"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="lefft" id="EhK-Lk-0xJ"/>
+                                        </imageView>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gNu-fd-edK">
+                                            <rect key="frame" x="177" y="29" width="48" height="48"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="right" id="pDC-UQ-yOd"/>
+                                        </imageView>
+                                    </subviews>
+                                </view>
+                                <color key="fillColor" red="0.57919406890000003" green="0.1280144453" blue="0.57268613580000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="titleFont" size="16" name="GB18030Bitmap"/>
+                            </box>
                             <button hidden="YES" autoresizesSubviews="NO" verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RZ7-ht-Mgg">
                                 <rect key="frame" x="1839" y="4" width="61" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -751,22 +789,6 @@
                                     <action selector="openSettings:" target="XfG-lQ-9wD" id="neP-t6-h7x"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="3ts-4A-8EX">
-                                <rect key="frame" x="59" y="4" width="765" height="37"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <textFieldCell key="cell" title="Label" id="FFu-mF-aL5">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" tag="-1" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="tgm-uz-J4P">
-                                <rect key="frame" x="18" y="18" width="42" height="24"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <connections>
-                                    <action selector="switchToggle:" target="XfG-lQ-9wD" id="YQq-Al-UeC"/>
-                                </connections>
-                            </switch>
                             <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iwn-fC-rF1">
                                 <rect key="frame" x="830" y="4" width="1014" height="57"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
@@ -816,7 +838,7 @@
                                             <tableColumns>
                                                 <tableColumn identifier="Games" width="1000" minWidth="40" maxWidth="1000" id="fgP-MJ-Xas">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Games">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="message" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -916,5 +938,7 @@
     </scenes>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>
+        <image name="lefft" width="94" height="95"/>
+        <image name="right" width="94" height="95"/>
     </resources>
 </document>

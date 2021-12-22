@@ -14,6 +14,10 @@
 		2789801D2757DCBE00414985 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801C2757DCBE00414985 /* ViewController.swift */; };
 		2789801F2757DCC000414985 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2789801E2757DCC000414985 /* Assets.xcassets */; };
 		278980222757DCC000414985 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 278980202757DCC000414985 /* Main.storyboard */; };
+		279FBD56277350C900CD5586 /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD52277350C700CD5586 /* down.png */; };
+		279FBD57277350C900CD5586 /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD53277350C800CD5586 /* up.png */; };
+		279FBD58277350C900CD5586 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD54277350C800CD5586 /* right.png */; };
+		279FBD59277350C900CD5586 /* lefft.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD55277350C900CD5586 /* lefft.png */; };
 		27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E6675F275A29B300B50AD6 /* parserSystems.swift */; };
 		27E7A2F92768A9CF0087C67A /* Pods_RetroMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D47C28B3EAAA7D35AF784A /* Pods_RetroMac.framework */; };
 		27E7A2FA2768A9CF0087C67A /* Pods_RetroMac.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0D47C28B3EAAA7D35AF784A /* Pods_RetroMac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -52,6 +56,10 @@
 		278980212757DCC000414985 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		278980232757DCC000414985 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		278980242757DCC000414985 /* RetroMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RetroMac.entitlements; sourceTree = "<group>"; };
+		279FBD52277350C700CD5586 /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
+		279FBD53277350C800CD5586 /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up.png; sourceTree = "<group>"; };
+		279FBD54277350C800CD5586 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
+		279FBD55277350C900CD5586 /* lefft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lefft.png; sourceTree = "<group>"; };
 		27E6675F275A29B300B50AD6 /* parserSystems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parserSystems.swift; sourceTree = "<group>"; };
 		27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = es_systems_mac.cfg; sourceTree = "<group>"; };
 		27E7A3022768B4B90087C67A /* logo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = logo.jpeg; path = ../../../Downloads/logo.jpeg; sourceTree = "<group>"; };
@@ -111,6 +119,7 @@
 		278980192757DCBE00414985 /* RetroMac */ = {
 			isa = PBXGroup;
 			children = (
+				279FBD51277350A700CD5586 /* Arrows */,
 				2789801A2757DCBE00414985 /* AppDelegate.swift */,
 				27DB1AE3275F489C000FB85D /* ViewControllers */,
 				27E6675F275A29B300B50AD6 /* parserSystems.swift */,
@@ -130,6 +139,17 @@
 				27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */,
 			);
 			path = RetroMac;
+			sourceTree = "<group>";
+		};
+		279FBD51277350A700CD5586 /* Arrows */ = {
+			isa = PBXGroup;
+			children = (
+				279FBD52277350C700CD5586 /* down.png */,
+				279FBD55277350C900CD5586 /* lefft.png */,
+				279FBD54277350C800CD5586 /* right.png */,
+				279FBD53277350C800CD5586 /* up.png */,
+			);
+			path = Arrows;
 			sourceTree = "<group>";
 		};
 		27DB1AE3275F489C000FB85D /* ViewControllers */ = {
@@ -209,11 +229,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				279FBD58277350C900CD5586 /* right.png in Resources */,
 				27E7A30B276B57810087C67A /* NoVideo.mp4 in Resources */,
 				27E7A3052768E9BB0087C67A /* themes in Resources */,
 				27E7A30727691F740087C67A /* Base in Resources */,
+				279FBD56277350C900CD5586 /* down.png in Resources */,
 				2789801F2757DCC000414985 /* Assets.xcassets in Resources */,
+				279FBD59277350C900CD5586 /* lefft.png in Resources */,
 				278980222757DCC000414985 /* Main.storyboard in Resources */,
+				279FBD57277350C900CD5586 /* up.png in Resources */,
 				27E7A3032768B4B90087C67A /* logo.jpeg in Resources */,
 				27E7A2FF2768B40C0087C67A /* es_systems_mac.cfg in Resources */,
 			);
