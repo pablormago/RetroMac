@@ -66,10 +66,10 @@ class ViewController: NSViewController {
         
         let state = sender.state
         if state.rawValue == 1 {
-            onOff.stringValue = "EXIT"
+            onOff.stringValue = "SALIR"
         }
         else {
-            onOff.stringValue = "OFF"
+            onOff.stringValue = "SALIR"
             //Cerrar App
             NSApplication.shared.terminate(self)
         }
@@ -153,7 +153,7 @@ class ViewController: NSViewController {
         }
         rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
         //print(rutaApp)
-        onOff.stringValue = "ON"
+        onOff.stringValue = "SALIR"
         let totalSistemas = cuentaSistemas()
         let totalAnchuraMenu = ((totalSistemas+1) * 560)
         //Parsear Sistemas
