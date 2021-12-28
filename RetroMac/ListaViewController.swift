@@ -13,6 +13,7 @@ import AVFoundation
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
+    @IBOutlet weak var scrollerDesc: ScrollingTextView!
     @IBOutlet weak var sistemaLabel: NSTextField!
     @IBOutlet weak var snapPlayer: AVPlayerView!
     @IBOutlet weak var backButton: NSButton!
@@ -20,6 +21,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     @IBOutlet weak var snapShot: NSImageView!
     var juegos = [String]()
     var juegosXml = [[String]]()
+    
     var keyIsDown = false
     var playingVideo = false
     
@@ -34,18 +36,18 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         
         //Cargar nombres de archivos en carpeta dentro de la tabla SIN GAMELIST
-//        for extensiones in systemextensions {
-//
-//
-//            let fileManager = FileManager.default
-//            let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
-//            while let element = enumerator.nextObject() as? String {
-//                if element.hasSuffix(extensiones) { // checks the extension
-//                    juegos.append(element)
-//                }
-//            }
-//            juegos.sort()
-//        }
+        //        for extensiones in systemextensions {
+        //
+        //
+        //            let fileManager = FileManager.default
+        //            let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
+        //            while let element = enumerator.nextObject() as? String {
+        //                if element.hasSuffix(extensiones) { // checks the extension
+        //                    juegos.append(element)
+        //                }
+        //            }
+        //            juegos.sort()
+        //        }
         /// FIN JUEGOS SIN GAMELIST
         
         ///Juegos GAMELIST
@@ -114,6 +116,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let miLang = String(juegosXml[miFila][16])
         let miPlayers = String(juegosXml[miFila][17])
         let miRating = String(juegosXml[miFila][18])
+        
+        scrollerDesc.font = NSFont(name: "Arial", size: 20)
+        scrollerDesc.delay = 1
+        scrollerDesc.speed = 2
+        scrollerDesc.setup(string: miDesc.replacingOccurrences(of: "\n", with: " "))
+        
         if miImagen != nil && miImagen != "" {
             let imagenURL = URL(fileURLWithPath: miImagen)
             imageSelected(path: imagenURL)
@@ -184,6 +192,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             if playingVideo == true {
                 snapPlayer.player?.pause()
             }
+            print(comando)
             Commands.Bash.system("\(comando)")
             comando=""
             
@@ -195,7 +204,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             print("ENTER")
             
         }
-        if event.keyCode == 51  {
+        if event.keyCode == 51 && abiertaLista == true {
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
                 self.view.window?.contentViewController = controller
                 abiertaLista = true
@@ -204,11 +213,61 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             }
             print("Backspace")
         }
-        if event.keyCode == 124  {
-            print("Derecha")
+        if event.keyCode == 124 && abiertaLista == true {
+            if botonactual < cuantosSistemas {
+                print("Derecha")
+                if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                    //self.view.window?.contentViewController = controller
+                    abiertaLista = true
+                    ventana = "Principal"
+                    cuentaboton = botonactual
+                    botonactual += 1
+                    juegosXml = []
+                    let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                    sistemaActual = button?.Fullname! ?? ""
+                    //print(sistemaActual)
+                    
+                    controller.selecionSistema(button!)
+                    
+                    self.viewDidLoad()
+                    self.viewDidAppear()
+                    juegosTableView.reloadData()
+                    if juegosXml.count > 0 {
+                        let indexSet = NSIndexSet(index: 0)
+                        juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                    }
+                    
+                }
+            }
+            
+            
         }
-        if event.keyCode == 123 {
-            print("Izquierda")
+        if event.keyCode == 123 && abiertaLista == true {
+            if botonactual > 1 {
+                print("Izquierda")
+                if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                    //self.view.window?.contentViewController = controller
+                    abiertaLista = true
+                    ventana = "Principal"
+                    cuentaboton = botonactual
+                    botonactual -= 1
+                    juegosXml = []
+                    let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                    sistemaActual = button?.Fullname! ?? ""
+                    //print(sistemaActual)
+                    
+                    controller.selecionSistema(button!)
+                    
+                    self.viewDidLoad()
+                    self.viewDidAppear()
+                    juegosTableView.reloadData()
+                    if juegosXml.count > 0 {
+                        let indexSet = NSIndexSet(index: 0)
+                        juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                    }
+                }
+            }
+            
         }
         
         
@@ -277,17 +336,51 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 let miRating = String(game.rating)
                 
                 datosJuego = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating ]
-                
+                print(miJuego)
                 juegosXml.append(datosJuego)
                 
                 
             }
-            print("Total: \(juegosXml.count) Juegos en XML")
-            juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
-            sistemaLabel.stringValue = sistemaActual
+            
         }else{
             print("ERROR GARGANDO gamelist.xml en: \(String(describing: pathXMLinterno2))")
         }
+        print("Nuevos: ")
+        for extensiones in systemextensions {
+            
+            
+            let fileManager = FileManager.default
+            let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
+            while let element = enumerator.nextObject() as? String {
+                if element.hasSuffix(extensiones) { // checks the extension
+                    
+                    var rutacompleta = rompath + "/" + element
+                    var encuentra = false
+                    for juego in juegosXml {
+                        if juego[0] == rutacompleta {
+                            
+                            encuentra = true
+                            break
+                        }else {
+                            encuentra = false
+                        }
+                    }
+                    
+                    if encuentra == false {
+                        print(rutacompleta)
+                        var datosJuegoNoXml = [String]()
+                        datosJuegoNoXml = [rutacompleta , String(element), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" ]
+                        juegosXml.append(datosJuegoNoXml)
+                    }
+                    
+                }
+            }
+            
+        }
+        print("Total: \(juegosXml.count) Juegos en XML")
+        juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
+        sistemaLabel.stringValue = sistemaActual
+        
     }
     
     func siRutaRelativa(ruta: String) -> String {

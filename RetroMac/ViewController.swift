@@ -15,8 +15,8 @@ var rompath = ""
 var systemextensions  = [String]()
 var comandoaejecutar = ""
 var ventana = ""
-var botonactual = 2
-var cuentaboton = 2
+var botonactual = Int()
+var cuentaboton = Int()
 var abiertaLista = false
 var anchura = Float()
 var altura = Float()
@@ -26,12 +26,14 @@ var cuenta = CGFloat()
 var sistemaActual = String()
 var ancho = CGFloat()
 var alto = CGFloat()
+var cuantosSistemas = 0
+var JuegosTotales = [[[String]]]()
 
 class ViewController: NSViewController {
     var sistema = ""
     var comandoexe = ""
     var anchuraPantall = 0
-    var cuantosSistemas = 0
+    
     
     var keyIsDown = false
     var cuentaDec = CGFloat()
@@ -90,12 +92,10 @@ class ViewController: NSViewController {
             self.keyDown(with: aEvent)
             return aEvent
         }
-        //        if !self.view.window!.isZoomed{
-        //            self.view.window?.zoom(self)
-        //        }
+        
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
         self.view.window?.setFrame(mirect, display: true)
-        cuentaboton = botonactual
+        
         print("DID APPEAR")
         
         
@@ -111,14 +111,14 @@ class ViewController: NSViewController {
             }else {
                 
                 //print("entro")
-                cuentaboton = botonactual
+                //cuentaboton = botonactual
                 let trozoamover = (560 * botonactual) - 280
                 let cachito = trozoamover - mitadPantalla
                 //print(botonactual)
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 scrollMain.isHidden = false
             }
-            cuentaboton = (Int (anchuraPantall / 560))
+            //cuentaboton = (Int (anchuraPantall / 560))
             //let button = self.view.viewWithTag(Int(cuentaboton)) as? NSButton
             //button!.isHighlighted = true
             //button?.highlight(true)
@@ -135,6 +135,8 @@ class ViewController: NSViewController {
         //print("DID LOAD")
         cuenta = 0
         //scrollerText.setup(string: "ESTO ES UNA PRUEBA ESTO ES UNA PRUEBAESTO ES UNA PRUEBAESTO ES UNA PRUEBA")
+        
+        
         
         rutaRomsLabel.stringValue = rompath
         let Xemu = "/users/Shared/Xemu"
@@ -228,7 +230,9 @@ class ViewController: NSViewController {
             let trozoamover = (560 * cuantos) - 280
             let cachito = trozoamover - mitadPantalla
             anchuraPantall = Int(width)
-            
+            cuentaboton = (Int (anchuraPantall / 560))
+            print("EL BOTON")
+            print(cuentaboton)
             //print(scrollMain.contentView.bounds.origin.x)
             if abiertaLista == false {
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
@@ -239,7 +243,7 @@ class ViewController: NSViewController {
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 scrollMain.isHidden = false
             }
-            cuentaboton = (Int (anchuraPantall / 560))
+            
             //let button = self.view.viewWithTag(Int(cuentaboton)) as? NSButton
             //button!.isHighlighted = true
             //button?.highlight(true)
@@ -284,8 +288,9 @@ class ViewController: NSViewController {
                             //print(botonactual)
                             scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                             scrollMain.isHidden = false
-                        
-                        cuentaboton = (Int (anchuraPantall / 560))
+                        print ("CUENTABOTON: \(cuentaboton)")
+                        print ("BOTONACTUAL: \(botonactual)")
+                        //cuentaboton = (Int (anchuraPantall / 560))
                         //let button = self.view.viewWithTag(Int(cuentaboton)) as? NSButton
                         //button!.isHighlighted = true
                         //button?.highlight(true)
@@ -316,10 +321,12 @@ class ViewController: NSViewController {
                         scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                         scrollMain.isHidden = false
                         
-                        cuentaboton = (Int (anchuraPantall / 560))
+                        //cuentaboton = (Int (anchuraPantall / 560))
                         //let button = self.view.viewWithTag(Int(cuentaboton)) as? NSButton
                         //button!.isHighlighted = true
                         //button?.highlight(true)
+                        print ("CUENTABOTON: \(cuentaboton)")
+                        print ("BOTONACTUAL: \(botonactual)")
                     }
                
                 }
@@ -327,7 +334,7 @@ class ViewController: NSViewController {
             }
             
         }
-        if abiertaLista == true {
+        else if abiertaLista == true {
             
             
             if event.keyCode == 49  {
@@ -435,7 +442,7 @@ class ViewController: NSViewController {
     
     @objc func selecionSistema(_ sender: ButtonConsolas) {
         
-        sistemaActual = sender.Fullname! ?? ""
+        sistemaActual = sender.Fullname! 
         //print (sender.Comando! )
         //print (sender.Sistema! )
         rompath = rutaApp + sender.RomsPath!
@@ -444,6 +451,7 @@ class ViewController: NSViewController {
         comandoaejecutar = comandoaejecutar + sender.Comando!.replacingOccurrences(of: "%CORE%", with: rutaApp)
         botonactual = sender.tag
         //crearGameList(ruta: rompath)
+        print(sistemaActual)
         if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ListaViewController {
             abiertaLista = true
             self.view.window?.contentViewController = controller
@@ -687,6 +695,11 @@ func buscaImage (juego: String) -> String {
     
 }
 
+func loadEverything(){
+
+    
+    
+}
 
 
 

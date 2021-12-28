@@ -10,6 +10,7 @@
 		271417972762516C009CA02D /* ListaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271417962762516C009CA02D /* ListaViewController.swift */; };
 		274FEB14277331E6007CE357 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FEB13277331E5007CE357 /* ViewController.swift */; };
 		274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FEB152773321C007CE357 /* ScrollingTextView.swift */; };
+		27670274277A39FC00E43E7D /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27670273277A39FB00E43E7D /* SplashViewController.swift */; };
 		2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801A2757DCBE00414985 /* AppDelegate.swift */; };
 		2789801D2757DCBE00414985 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801C2757DCBE00414985 /* ViewController.swift */; };
 		2789801F2757DCC000414985 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2789801E2757DCC000414985 /* Assets.xcassets */; };
@@ -53,6 +54,7 @@
 		271417962762516C009CA02D /* ListaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaViewController.swift; sourceTree = "<group>"; };
 		274FEB13277331E5007CE357 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		274FEB152773321C007CE357 /* ScrollingTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollingTextView.swift; sourceTree = "<group>"; };
+		27670273277A39FB00E43E7D /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		278980172757DCBE00414985 /* RetroMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RetroMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2789801A2757DCBE00414985 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2789801C2757DCBE00414985 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				271417962762516C009CA02D /* ListaViewController.swift */,
 				2789801E2757DCC000414985 /* Assets.xcassets */,
 				278980202757DCC000414985 /* Main.storyboard */,
+				27670273277A39FB00E43E7D /* SplashViewController.swift */,
 				27E7A30627691F740087C67A /* Base */,
 				27E7A3022768B4B90087C67A /* logo.jpeg */,
 				278980232757DCC000414985 /* Info.plist */,
@@ -315,6 +318,7 @@
 				27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */,
 				27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */,
 				2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */,
+				27670274277A39FC00E43E7D /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

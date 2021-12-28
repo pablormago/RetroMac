@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="Ol3-dR-T18">
     <dependencies>
         <plugIn identifier="com.apple.AVKitIBPlugin" version="15705"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
@@ -248,6 +248,7 @@
                         <outlet property="settingsButton" destination="RZ7-ht-Mgg" id="DeM-G4-lKY"/>
                         <outlet property="tog1" destination="tgm-uz-J4P" id="zeF-0C-0wT"/>
                         <segue destination="fL4-9U-n43" kind="show" identifier="main" id="LeI-Id-sQd"/>
+                        <segue destination="Ol3-dR-T18" kind="show" id="lwP-Yy-gxj"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -332,17 +333,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dSH-4W-sxG">
-                                <rect key="frame" x="33" y="13" width="72" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <buttonCell key="cell" type="push" title="Atrás" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jqJ-y8-3Dg">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="backFunc:" target="fL4-9U-n43" id="aaK-6t-480"/>
-                                </connections>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cDy-fA-o2i">
                                 <rect key="frame" x="-2" y="949" width="1924" height="111"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
@@ -424,16 +414,32 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dSH-4W-sxG">
+                                            <rect key="frame" x="26" y="35" width="72" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Atrás" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jqJ-y8-3Dg">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="backFunc:" target="fL4-9U-n43" id="aaK-6t-480"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                                 <color key="fillColor" red="0.48896628619999999" green="0.1073794439" blue="0.482855916" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <font key="titleFont" size="16" name="GB18030Bitmap"/>
                             </box>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zox-re-ViV" customClass="ScrollingTextView" customModule="RetroMac" customModuleProvider="target">
+                                <rect key="frame" x="39" y="110" width="1336" height="76"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </customView>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="backButton" destination="dSH-4W-sxG" id="cXX-bM-BrK"/>
                         <outlet property="juegosTableView" destination="TtI-VK-hG3" id="cHy-k2-X50"/>
+                        <outlet property="scrollerDesc" destination="zox-re-ViV" id="bCz-Q6-dEb"/>
                         <outlet property="sistemaLabel" destination="cDy-fA-o2i" id="evr-iD-PWb"/>
                         <outlet property="snapPlayer" destination="7VG-VF-6w3" id="5vd-YM-9DP"/>
                         <outlet property="snapShot" destination="0Hq-Dl-Zc4" id="gSb-Yz-utJ"/>
@@ -442,6 +448,28 @@
                 <customObject id="12X-ig-E9G" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1980" y="1506"/>
+        </scene>
+        <!--Splash-->
+        <scene sceneID="stV-HG-0Ue">
+            <objects>
+                <viewController title="Splash" storyboardIdentifier="Splash" showSeguePresentationStyle="single" id="Ol3-dR-T18" customClass="SplashViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="GyW-9W-dMk">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="aML-Tt-72s">
+                                <rect key="frame" x="175" y="121" width="100" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="myProgress" destination="aML-Tt-72s" id="wV5-9I-M9t"/>
+                    </connections>
+                </viewController>
+                <customObject id="Wb1-I8-uxg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-609" y="1674"/>
         </scene>
     </scenes>
     <resources>

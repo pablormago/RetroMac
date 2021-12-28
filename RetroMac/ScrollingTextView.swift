@@ -10,13 +10,13 @@ open class ScrollingTextView: NSView {
     open var font: NSFont?
 
     /// Scrolling text color
-    open var textColor: NSColor = .blue
+    open var textColor: NSColor = .white
 
     /// Determines if the text should be delayed before starting scroll
     open var isDelayed: Bool = true
 
     /// Spacing between the tail and head of the scrolling text
-    open var spacing: CGFloat = 100
+    open var spacing: CGFloat = 20
     
     /// Length of the scrolling text view
     open var length: CGFloat = 0 {
