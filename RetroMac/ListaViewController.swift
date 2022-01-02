@@ -11,6 +11,7 @@ import Commands
 import AVKit
 import AVFoundation
 
+
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
     @IBOutlet weak var scrollerDesc: ScrollingTextView!
@@ -21,7 +22,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     @IBOutlet weak var snapShot: NSImageView!
     var juegos = [String]()
     var juegosXml = [[String]]()
-    
+    var feed: JSON?
     var keyIsDown = false
     var playingVideo = false
     
@@ -202,6 +203,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             juegosTableView.selectRowIndexes(indexSet2 as IndexSet, byExtendingSelection: false)
             
             print("ENTER")
+            buscaJuego()
             
         }
         if event.keyCode == 51 && abiertaLista == true {
@@ -473,4 +475,68 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
         }catch {}
     }
+    
+    func buscaJuego(){
+        print("Escrapeo")
+        let numero = (juegosTableView.selectedRow)
+        var nombre = juegosXml[numero][1].addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        nombre = nombre.replacingOccurrences(of: ".", with: "")
+        var miId = String()
+        let datasource = "https://www.screenscraper.fr/api2/jeuRecherche.php?devid=" + userDev + "&devpassword=" + userpass + "&softname=RetroMac&output=json&ssid=pablormago&sspassword=23051980Pablo&systemeid=3&recherche=\(nombre)"
+        print(datasource)
+        
+        guard let url = URL(string: datasource) else {
+            
+            return
+            
+        }
+        guard let data = try? String(contentsOf: url) else {
+            
+            return
+        }
+        
+        let newFeed = JSON(parseJSON: data)
+        feed = newFeed
+        var encontrada = false
+        for (index,subJson):(String, JSON) in feed! {
+            
+            if index == "response" {
+                for (node, object):(String, JSON) in subJson {
+                    
+                    if node == "jeux" {
+                       
+                        for (tercero, subsubJson) in object{
+                            
+                            for (cuarto, cuartoJson) in subsubJson {
+                               
+                                if cuarto == "id" {
+                                    encontrada = true
+                                    miId = cuartoJson.stringValue
+                                    break
+                                }
+                                if encontrada == true{break}
+                                
+                            }
+                            if encontrada == true{break}
+                        }
+                    }
+                    
+                }
+              }
+        }
+        
+        if miId != ""{
+            print("ID: \(miId)")
+        }
+        
+        
+    }
+    
+    func scrapearJuego (juego: String){
+        var json: JSON?
+    }
+    
 }
+
+
+

@@ -10,7 +10,7 @@
 		271417972762516C009CA02D /* ListaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271417962762516C009CA02D /* ListaViewController.swift */; };
 		274FEB14277331E6007CE357 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FEB13277331E5007CE357 /* ViewController.swift */; };
 		274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FEB152773321C007CE357 /* ScrollingTextView.swift */; };
-		27670274277A39FC00E43E7D /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27670273277A39FB00E43E7D /* SplashViewController.swift */; };
+		27670276277E127900E43E7D /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27670275277E127900E43E7D /* ConfigViewController.swift */; };
 		2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801A2757DCBE00414985 /* AppDelegate.swift */; };
 		2789801D2757DCBE00414985 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801C2757DCBE00414985 /* ViewController.swift */; };
 		2789801F2757DCC000414985 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2789801E2757DCC000414985 /* Assets.xcassets */; };
@@ -23,9 +23,8 @@
 		279FBD70277375AA00CD5586 /* borrar.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD6D277375AA00CD5586 /* borrar.png */; };
 		279FBD71277375AA00CD5586 /* sp_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD6E277375AA00CD5586 /* sp_bar.png */; };
 		279FBD7927739DAC00CD5586 /* icons.icns in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD7827739DAC00CD5586 /* icons.icns */; };
+		27B58953277EF3F6006DBAB9 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */; };
 		27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E6675F275A29B300B50AD6 /* parserSystems.swift */; };
-		27E7A2F92768A9CF0087C67A /* Pods_RetroMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D47C28B3EAAA7D35AF784A /* Pods_RetroMac.framework */; };
-		27E7A2FA2768A9CF0087C67A /* Pods_RetroMac.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0D47C28B3EAAA7D35AF784A /* Pods_RetroMac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		27E7A2FF2768B40C0087C67A /* es_systems_mac.cfg in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */; };
 		27E7A3032768B4B90087C67A /* logo.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A3022768B4B90087C67A /* logo.jpeg */; };
 		27E7A3052768E9BB0087C67A /* themes in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A3042768E9BA0087C67A /* themes */; };
@@ -43,7 +42,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				27E7A2FA2768A9CF0087C67A /* Pods_RetroMac.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -54,7 +52,7 @@
 		271417962762516C009CA02D /* ListaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaViewController.swift; sourceTree = "<group>"; };
 		274FEB13277331E5007CE357 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		274FEB152773321C007CE357 /* ScrollingTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollingTextView.swift; sourceTree = "<group>"; };
-		27670273277A39FB00E43E7D /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		27670275277E127900E43E7D /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		278980172757DCBE00414985 /* RetroMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RetroMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2789801A2757DCBE00414985 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2789801C2757DCBE00414985 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +68,7 @@
 		279FBD6D277375AA00CD5586 /* borrar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = borrar.png; sourceTree = "<group>"; };
 		279FBD6E277375AA00CD5586 /* sp_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sp_bar.png; sourceTree = "<group>"; };
 		279FBD7827739DAC00CD5586 /* icons.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icons.icns; path = ../../icons.icns; sourceTree = "<group>"; };
+		27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = "../../../Downloads/SwiftyJSON-master/Source/SwiftyJSON/SwiftyJSON.swift"; sourceTree = "<group>"; };
 		27E6675F275A29B300B50AD6 /* parserSystems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parserSystems.swift; sourceTree = "<group>"; };
 		27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = es_systems_mac.cfg; sourceTree = "<group>"; };
 		27E7A3022768B4B90087C67A /* logo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = logo.jpeg; path = ../../../Downloads/logo.jpeg; sourceTree = "<group>"; };
@@ -81,7 +80,6 @@
 		27E7A30E276BB44D0087C67A /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		3664690054A650E22D9452DE /* Pods-RetroMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetroMac.debug.xcconfig"; path = "Target Support Files/Pods-RetroMac/Pods-RetroMac.debug.xcconfig"; sourceTree = "<group>"; };
 		38605995764ED1091BD68F2B /* Pods-RetroMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetroMac.release.xcconfig"; path = "Target Support Files/Pods-RetroMac/Pods-RetroMac.release.xcconfig"; sourceTree = "<group>"; };
-		F0D47C28B3EAAA7D35AF784A /* Pods_RetroMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RetroMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +89,6 @@
 			files = (
 				27E7A30F276BB44D0087C67A /* AVKit.framework in Frameworks */,
 				27E7A30D276BB42D0087C67A /* AVFoundation.framework in Frameworks */,
-				27E7A2F92768A9CF0087C67A /* Pods_RetroMac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,7 +100,6 @@
 			children = (
 				27E7A30E276BB44D0087C67A /* AVKit.framework */,
 				27E7A30C276BB42D0087C67A /* AVFoundation.framework */,
-				F0D47C28B3EAAA7D35AF784A /* Pods_RetroMac.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -138,7 +134,8 @@
 				271417962762516C009CA02D /* ListaViewController.swift */,
 				2789801E2757DCC000414985 /* Assets.xcassets */,
 				278980202757DCC000414985 /* Main.storyboard */,
-				27670273277A39FB00E43E7D /* SplashViewController.swift */,
+				27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */,
+				27670275277E127900E43E7D /* ConfigViewController.swift */,
 				27E7A30627691F740087C67A /* Base */,
 				27E7A3022768B4B90087C67A /* logo.jpeg */,
 				278980232757DCC000414985 /* Info.plist */,
@@ -313,12 +310,13 @@
 			files = (
 				274FEB14277331E6007CE357 /* ViewController.swift in Sources */,
 				271417972762516C009CA02D /* ListaViewController.swift in Sources */,
+				27670276277E127900E43E7D /* ConfigViewController.swift in Sources */,
 				274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */,
 				2789801D2757DCBE00414985 /* ViewController.swift in Sources */,
 				27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */,
+				27B58953277EF3F6006DBAB9 /* SwiftyJSON.swift in Sources */,
 				27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */,
 				2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */,
-				27670274277A39FC00E43E7D /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

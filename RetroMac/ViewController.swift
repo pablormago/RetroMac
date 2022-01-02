@@ -28,6 +28,9 @@ var ancho = CGFloat()
 var alto = CGFloat()
 var cuantosSistemas = 0
 var JuegosTotales = [[[String]]]()
+var userDev = "pablormago"
+var userpass = "YEb7khyiOvI"
+var app = "RetroMac"
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -50,16 +53,25 @@ class ViewController: NSViewController {
     @IBOutlet weak var rutaRomsLabel: NSTextField!
     @IBOutlet weak var scrollMain: NSScrollView!
     @IBOutlet weak var myImage: NSImageView!
+    lazy var sheetViewController: NSViewController = {
+        return self.storyboard!.instantiateController(withIdentifier: "ConfigView")
+        as! NSViewController
+    }()
+    
     @IBAction func openSettings(_ sender: NSButton)  {
         
         
-        if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ViewController {
-            controller.dismiss(self)
-            ventana = "Principal"
-            
-        }
+//        if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ViewController {
+//            controller.dismiss(self)
+//            ventana = "Principal"
+//
+//        }
+        
+        self.presentAsSheet(sheetViewController)
         
         //Función para abrir ventana de ajustes
+        
+        
         
     }
     
@@ -76,6 +88,10 @@ class ViewController: NSViewController {
             NSApplication.shared.terminate(self)
         }
     }
+    
+    
+    
+    
     
     
     override func viewDidAppear() {
@@ -131,11 +147,14 @@ class ViewController: NSViewController {
     
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         //print("DID LOAD")
         cuenta = 0
         //scrollerText.setup(string: "ESTO ES UNA PRUEBA ESTO ES UNA PRUEBAESTO ES UNA PRUEBAESTO ES UNA PRUEBA")
         
+        //view.window?.isOpaque = false
+        //view.window?.backgroundColor = NSColor (red: 1, green: 0.5, blue: 0.5, alpha: 0.5)
         
         
         rutaRomsLabel.stringValue = rompath
@@ -695,11 +714,7 @@ func buscaImage (juego: String) -> String {
     
 }
 
-func loadEverything(){
 
-    
-    
-}
 
 
 
