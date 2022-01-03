@@ -14,6 +14,14 @@ import AVFoundation
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
+    
+    
+    
+    
+    
+    
+    @IBOutlet weak var pdfImage: NSButton!
+    @IBOutlet weak var infoLabel: NSTextField!
     @IBOutlet weak var scrollerDesc: ScrollingTextView!
     @IBOutlet weak var sistemaLabel: NSTextField!
     @IBOutlet weak var snapPlayer: AVPlayerView!
@@ -22,7 +30,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     @IBOutlet weak var snapShot: NSImageView!
     var juegos = [String]()
     var juegosXml = [[String]]()
-    var feed: JSON?
+    
     var keyIsDown = false
     var playingVideo = false
     
@@ -69,6 +77,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
         
         juegosTableView.doubleAction = #selector(onItemClicked)
+        pdfImage.action = #selector(abrirPdf)
+        pdfImage.isEnabled = false
         
         ///Nombres cargados
         
@@ -95,6 +105,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     func tableViewSelectionDidChange(_ notification: Notification) {
         
         guard juegosTableView.selectedRow != -1 else {return}
+        infoLabel.stringValue = "INFO"
         let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
         imageSelected(path: pathLogo!  )
         
@@ -139,6 +150,11 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             let player2 = AVPlayer(url: videoURL)
             snapPlayer.player = player2
             snapPlayer.player?.play()
+        }
+        if miManual == "" {
+            pdfImage.isEnabled = false
+        }else {
+            pdfImage.isEnabled = true
         }
         abiertaLista = true
     }
@@ -203,10 +219,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             juegosTableView.selectRowIndexes(indexSet2 as IndexSet, byExtendingSelection: false)
             
             print("ENTER")
-            buscaJuego()
+            
+            
+            
             
         }
-        if event.keyCode == 51 && abiertaLista == true {
+        else if event.keyCode == 51 && abiertaLista == true {
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
                 self.view.window?.contentViewController = controller
                 abiertaLista = true
@@ -214,63 +232,73 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 cuentaboton = botonactual
             }
             print("Backspace")
+        }else if event.keyCode == 53 && abiertaLista == true {
+            infoLabel.stringValue = "Escrapeando Juego..."
+            DispatchQueue.global(qos: .utility).async { [unowned self] in
+                self.buscaJuego()
+             }
+        }else if event.keyCode == 49 && abiertaLista == true {
+            
         }
-        if event.keyCode == 124 && abiertaLista == true {
-            if botonactual < cuantosSistemas {
-                print("Derecha")
-                if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-                    //self.view.window?.contentViewController = controller
-                    abiertaLista = true
-                    ventana = "Principal"
-                    cuentaboton = botonactual
-                    botonactual += 1
-                    juegosXml = []
-                    let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                    sistemaActual = button?.Fullname! ?? ""
-                    //print(sistemaActual)
-                    
-                    controller.selecionSistema(button!)
-                    
-                    self.viewDidLoad()
-                    self.viewDidAppear()
-                    juegosTableView.reloadData()
-                    if juegosXml.count > 0 {
-                        let indexSet = NSIndexSet(index: 0)
-                        juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+        
+                if event.keyCode == 124 && abiertaLista == true {
+                    if botonactual < cuantosSistemas {
+                        print("Derecha")
+                        if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                            //self.view.window?.contentViewController = controller
+                            abiertaLista = true
+                            ventana = "Principal"
+                            cuentaboton = botonactual
+                            botonactual += 1
+                            juegosXml = []
+                            let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                            sistemaActual = button?.Fullname! ?? ""
+                            nombresistemaactual = button!.Sistema ?? ""
+                            //print(sistemaActual)
+        
+                            controller.selecionSistema(button!)
+        
+                            self.viewDidLoad()
+                            self.viewDidAppear()
+                            juegosTableView.reloadData()
+                            if juegosXml.count > 0 {
+                                let indexSet = NSIndexSet(index: 0)
+                                juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                            }
+        
+                        }
                     }
-                    
+        
+        
                 }
-            }
-            
-            
-        }
-        if event.keyCode == 123 && abiertaLista == true {
-            if botonactual > 1 {
-                print("Izquierda")
-                if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-                    //self.view.window?.contentViewController = controller
-                    abiertaLista = true
-                    ventana = "Principal"
-                    cuentaboton = botonactual
-                    botonactual -= 1
-                    juegosXml = []
-                    let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                    sistemaActual = button?.Fullname! ?? ""
-                    //print(sistemaActual)
-                    
-                    controller.selecionSistema(button!)
-                    
-                    self.viewDidLoad()
-                    self.viewDidAppear()
-                    juegosTableView.reloadData()
-                    if juegosXml.count > 0 {
-                        let indexSet = NSIndexSet(index: 0)
-                        juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                if event.keyCode == 123 && abiertaLista == true {
+                    if botonactual > 1 {
+                        print("Izquierda")
+                        if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                            //self.view.window?.contentViewController = controller
+                            abiertaLista = true
+                            ventana = "Principal"
+                            cuentaboton = botonactual
+                            botonactual -= 1
+                            juegosXml = []
+                            let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                            sistemaActual = button?.Fullname! ?? ""
+                            nombresistemaactual = button!.Sistema ?? ""
+                            //print(sistemaActual)
+        
+                            controller.selecionSistema(button!)
+        
+                            self.viewDidLoad()
+                            self.viewDidAppear()
+                            juegosTableView.reloadData()
+                            if juegosXml.count > 0 {
+                                let indexSet = NSIndexSet(index: 0)
+                                juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                            }
+                        }
                     }
+        
                 }
-            }
-            
-        }
         
         
         
@@ -290,6 +318,13 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             ventana = "Principal"
             cuentaboton = botonactual
         }
+    }
+    
+    @objc private func abrirPdf(){
+        print("PDF")
+        let miFila = juegosTableView.selectedRow
+        let miManual = String(juegosXml[miFila][4])
+        NSWorkspace.shared.openFile(miManual)
     }
     
     @objc private func onItemClicked() {
@@ -477,65 +512,353 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     func buscaJuego(){
-        print("Escrapeo")
+        print("Escrapeo - 1")
+        
+        //mkdir -p foo
+        var rutaacrear = rompath + "/media"
+        var comando = "mkdir -p \(rutaacrear)"
+        Commands.Bash.system("\(comando)")
+        var misystemid = String()
+        for sistema in systemsIds {
+            
+            if sistema[0] == nombresistemaactual {
+                misystemid = sistema[1]
+                break
+            }
+        }
+        
+        let defaults = UserDefaults.standard
+        let SSUser = defaults.string(forKey: "SSUser") ?? ""
+        let SSPassword = defaults.string(forKey: "SSPassword") ?? ""
         let numero = (juegosTableView.selectedRow)
         var nombre = juegosXml[numero][1].addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        var nombreplano = juegosXml[numero][1].replacingOccurrences(of: " ", with: "")
         nombre = nombre.replacingOccurrences(of: ".", with: "")
         var miId = String()
-        let datasource = "https://www.screenscraper.fr/api2/jeuRecherche.php?devid=" + userDev + "&devpassword=" + userpass + "&softname=RetroMac&output=json&ssid=pablormago&sspassword=23051980Pablo&systemeid=3&recherche=\(nombre)"
+        var idSistema = String()
+        let datasource = "https://www.screenscraper.fr/api2/jeuRecherche.php?devid=" + userDev + "&devpassword=" + userpass + "&softname=RetroMac&output=json&ssid=\(SSUser)&sspassword=\(SSPassword)&systemeid=\(misystemid)&recherche=\(nombre)"
         print(datasource)
-        
-        guard let url = URL(string: datasource) else {
+        DispatchQueue.global(qos: .background).async {
+            // do your job here
+            guard let url = URL(string: datasource) else {
+                
+                return
+                
+            }
+            guard let data = try? String(contentsOf: url) else {
+                
+                return
+            }
             
-            return
             
-        }
-        guard let data = try? String(contentsOf: url) else {
-            
-            return
-        }
-        
-        let newFeed = JSON(parseJSON: data)
-        feed = newFeed
-        var encontrada = false
-        for (index,subJson):(String, JSON) in feed! {
-            
-            if index == "response" {
-                for (node, object):(String, JSON) in subJson {
-                    
-                    if node == "jeux" {
-                       
-                        for (tercero, subsubJson) in object{
+            var feed: JSON?
+            let newFeed = JSON(parseJSON: data)
+            feed = newFeed
+            var encontrada = false
+            for (index,subJson):(String, JSON) in feed! {
+                
+                if index == "response" {
+                    for (node, object):(String, JSON) in subJson {
+                        
+                        if node == "jeux" {
                             
-                            for (cuarto, cuartoJson) in subsubJson {
-                               
-                                if cuarto == "id" {
-                                    encontrada = true
-                                    miId = cuartoJson.stringValue
-                                    break
+                            for (tercero, subsubJson) in object{
+                                
+                                for (cuarto, cuartoJson) in subsubJson {
+                                    
+                                    for (quinto, quintoJon):(String, JSON) in cuartoJson {
+                                        //print(cuarto + "->" + quinto + "->" + quintoJon.stringValue)
+                                        
+                                        if cuarto == "systeme" && quinto == "id" {
+                                            idSistema = quintoJon.stringValue
+                                            //print(quintoJon)
+                                        }
+                                    }
+                                    if cuarto == "id" {
+                                        
+                                        miId = cuartoJson.stringValue
+                                        encontrada = true
+                                        
+                                        
+                                    }
+                                    if encontrada == true{break}
+                                    
                                 }
                                 if encontrada == true{break}
-                                
                             }
-                            if encontrada == true{break}
                         }
+                        
+                    }
+                }
+            }
+            
+            if miId != ""{
+                print("ID: \(miId)")
+                DispatchQueue.main.async {
+                    print(idSistema)
+                    if idSistema != "" {
+                        self.scrapearJuego(juego: miId, sistema: idSistema, nombrejuego: nombreplano, filajuego: numero)
+                        //self.juegosTableView.reloadData()
+                    } else {
+                        self.scrapearJuego(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numero)
+                        //self.juegosTableView.reloadData()
                     }
                     
                 }
-              }
+                
+            }else{
+                print("Juego no encontrado")
+            }
+            //            DispatchQueue.main.async {
+            //                // update ui here
+            //            }
         }
         
-        if miId != ""{
-            print("ID: \(miId)")
-        }
         
         
     }
     
-    func scrapearJuego (juego: String){
-        var json: JSON?
+    func scrapearJuego (juego: String, sistema: String, nombrejuego: String, filajuego: Int){
+        print("Escrapeo - 2")
+        var mifeed: JSON?
+        let defaults = UserDefaults.standard
+        let SSuser = defaults.string(forKey: "SSUser") ?? ""
+        let SSPassword = defaults.string(forKey: "SSPassword") ?? ""
+        let datasource = "https://www.screenscraper.fr/api2/jeuInfos.php?devid=\(userDev)&devpassword=\(userpass)&softname=RetroMac&output=json&ssid=\(SSuser)&sspassword=\(SSPassword)&gameid=\(juego)"
+        
+        var descJuego = ""
+        var playersJuego = ""
+        var generoJuego = ""
+        var desarroladorJuego = ""
+        var screenshotJuego = ""
+        var videoJuego = ""
+        var manualJuego = ""
+        var fanartJuego = ""
+        var fechaJuego = ""
+        var editorJuego = ""
+        var tittleshotJuego = ""
+        var marqueeJuego = ""
+        
+        DispatchQueue.global(qos: .background).async {
+            // do your job here
+            guard let url = URL(string: datasource) else {
+                
+                return
+                
+            }
+            
+            guard let data = try? String(contentsOf: url) else {
+                
+                return
+            }
+            let newFeed = JSON(parseJSON: data)
+            mifeed = newFeed
+            
+            for (index,subJson):(String, JSON) in mifeed! {
+                if index == "response" {
+                    for (index2,subJson2):(String, JSON) in subJson{
+                        if index2 == "jeu" {
+                            for (index3, sJson):(String, JSON) in subJson2 {
+                                //print(index3 + "-> \(sJson)")
+                                for (index4, sJson2):(String, JSON) in sJson{
+                                    //print (index3 + "-> \(index4) ->\(sJson2)")
+                                    if index3 == "developpeur" && index4 == "text" {
+                                        desarroladorJuego = sJson2.stringValue
+                                        print("Desarrrolador: " + desarroladorJuego)
+                                    }
+                                    if index3 == "joueurs" && index4 == "text" {
+                                        playersJuego = sJson2.stringValue
+                                        print("Jugadores: " + playersJuego)
+                                    }
+                                    if index3 == "editeur" && index4 == "text" {
+                                        editorJuego = sJson2.stringValue
+                                        print("Editor: " + editorJuego)
+                                    }
+                                    if index3 == "genres" {
+                                        for (index5, sJson3):(String, JSON) in sJson2 {
+                                            //print (index5 + " -> \(sJson3)")
+                                            for (index6, sJson4):(String, JSON) in sJson3 {
+                                                //print (index5 + "-> \(index6) -> \(sJson4)")
+                                                if sJson4["langue"].stringValue == "es" {
+                                                    print("Genero: " + sJson4["text"].stringValue)
+                                                    generoJuego = sJson4["text"].stringValue
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if index3 == "synopsis" {
+                                        var encuentrame = false
+                                        for (index5, sJson3):(String, JSON) in sJson {
+                                            
+                                            if sJson3["langue"].stringValue == "es" {
+                                                descJuego = sJson3["text"].stringValue
+                                                print("Descripcion: \(descJuego)")
+                                                encuentrame = true
+                                            }
+                                            if encuentrame == true{
+                                                break
+                                            }
+                                            
+                                        }
+                                        if encuentrame == true{
+                                            break
+                                        }
+                                    }
+                                    if index3 == "dates" {
+                                        var encuentra = false
+                                        for (index5, sJson3):(String, JSON) in sJson {
+                                            
+                                            if sJson3["region"].stringValue == "eu" {
+                                                fechaJuego = sJson3["text"].stringValue
+                                                print("Fecha: \(fechaJuego)")
+                                                encuentra = true
+                                            }
+                                            if encuentra == true{
+                                                break
+                                            }
+                                        }
+                                        if encuentra == true{
+                                            break
+                                        }
+                                    }
+                                    if index3 == "medias" {
+                                        var encuentrass = false
+                                        for (index5, sJson3):(String, JSON) in sJson {
+                                            
+                                            if sJson3["type"].stringValue == "ss" {
+                                                screenshotJuego = sJson3["url"].stringValue
+                                                print("Screenshot: \(screenshotJuego)")
+                                                
+                                            }
+                                            if sJson3["type"].stringValue == "video" {
+                                                videoJuego = sJson3["url"].stringValue
+                                                print("Video: \(videoJuego)")
+                                                
+                                            }
+                                            if sJson3["type"].stringValue == "fanart" {
+                                                fanartJuego = sJson3["url"].stringValue
+                                                print("Fanart: \(fanartJuego)")
+                                                
+                                            }
+                                            if sJson3["type"].stringValue == "sstitle" {
+                                                tittleshotJuego = sJson3["url"].stringValue
+                                                print("TittleShot: \(tittleshotJuego)")
+                                                
+                                            }
+                                            if sJson3["type"].stringValue == "screenmarquee" {
+                                                marqueeJuego = sJson3["url"].stringValue
+                                                print("Marquee: \(marqueeJuego)")
+                                                
+                                            }
+                                            if sJson3["type"].stringValue == "manuel" && sJson3["region"].stringValue == "us"{
+                                                manualJuego = sJson3["url"].stringValue
+                                                print("Manual: \(manualJuego)")
+                                                encuentrass = true
+                                                
+                                            }
+                                            if encuentrass == true{
+                                                break
+                                            }
+                                        }
+                                        if encuentrass == true{
+                                            break
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            
+            DispatchQueue.global(qos: .background).async {
+                if screenshotJuego != "" {
+                    self.descargaMedia(tipo: "png", url: screenshotJuego, nombre: nombrejuego)
+                }
+                if videoJuego != "" {
+                    self.descargaMedia(tipo: "mp4", url: videoJuego, nombre: nombrejuego)
+                }
+                if manualJuego != "" {
+                    self.descargaMedia(tipo: "pdf", url: manualJuego, nombre: nombrejuego)
+                }
+                if fanartJuego != "" {
+                    self.descargaMedia(tipo: "png", url: fanartJuego, nombre: nombrejuego + "_fanart")
+                }
+                if tittleshotJuego != "" {
+                    self.descargaMedia(tipo: "png", url: tittleshotJuego, nombre: nombrejuego + "_tittleshot")
+                }
+                if marqueeJuego != "" {
+                    self.descargaMedia(tipo: "png", url: marqueeJuego, nombre: nombrejuego + "_marquee")
+                }
+                
+            }
+            
+            ///ACTUALIZAR EL ARRAY DE JUEGOS
+            self.juegosXml[filajuego][2] = descJuego.replacingOccurrences(of: "\n", with: " ")
+            self.juegosXml[filajuego][3] = self.juegosXml[filajuego][3]
+            self.juegosXml[filajuego][4] = rompath + "/media/" + nombrejuego + ".pdf"
+            self.juegosXml[filajuego][5] = self.juegosXml[filajuego][5]
+            self.juegosXml[filajuego][6] = rompath + "/media/"  + nombrejuego + "_tittleshot.png"
+            self.juegosXml[filajuego][7] = rompath + "/media/"  + nombrejuego + "_fanart.png"
+            self.juegosXml[filajuego][8] = rompath + "/media/" + nombrejuego + ".png"
+            self.juegosXml[filajuego][9] = rompath + "/media/"  + nombrejuego + ".png"
+            self.juegosXml[filajuego][10] = rompath + "/media/" + nombrejuego + ".mp4"
+            self.juegosXml[filajuego][11] = rompath + "/media/"  + nombrejuego + "_marquee.png"
+            self.juegosXml[filajuego][12] = fechaJuego
+            self.juegosXml[filajuego][13] = desarroladorJuego
+            self.juegosXml[filajuego][14] = desarroladorJuego
+            self.juegosXml[filajuego][15] = generoJuego
+            self.juegosXml[filajuego][16] = self.juegosXml[filajuego][16]
+            self.juegosXml[filajuego][17] = playersJuego
+            self.juegosXml[filajuego][18] = self.juegosXml[filajuego][18]
+            
+            self.xmlJuegosNuevos()
+            self.infoLabel.stringValue = "Juego ESCRAPEADO!!"
+            
+        }
+        
+        
+        
+        
+        
+        
     }
     
+    func descargaMedia (tipo: String, url: String, nombre: String){
+        let myFilePathString = "file://" + rompath + "/media" + "/\(nombre).\(tipo)"
+        let midestino = URL(string: myFilePathString)
+        let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let destinationFileUrl = midestino
+        
+        //Create URL to the source file you want to download
+        let fileURL = URL(string: url)
+        
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        
+        let request = URLRequest(url:fileURL!)
+        print(request)
+        let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+            if let tempLocalUrl = tempLocalUrl, error == nil {
+                // Success
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    print("Successfully downloaded. Status code: \(statusCode)")
+                }
+                
+                do {
+                    try? FileManager.default.removeItem(at: destinationFileUrl!)
+                    try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                } catch (let writeError) {
+                    print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                }
+                
+            } else {
+                print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
+            }
+        }
+        task.resume()
+    }
 }
 
 

@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		271417972762516C009CA02D /* ListaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271417962762516C009CA02D /* ListaViewController.swift */; };
-		274FEB14277331E6007CE357 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FEB13277331E5007CE357 /* ViewController.swift */; };
 		274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FEB152773321C007CE357 /* ScrollingTextView.swift */; };
 		27670276277E127900E43E7D /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27670275277E127900E43E7D /* ConfigViewController.swift */; };
 		2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801A2757DCBE00414985 /* AppDelegate.swift */; };
 		2789801D2757DCBE00414985 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801C2757DCBE00414985 /* ViewController.swift */; };
 		2789801F2757DCC000414985 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2789801E2757DCC000414985 /* Assets.xcassets */; };
 		278980222757DCC000414985 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 278980202757DCC000414985 /* Main.storyboard */; };
+		278A629A278364F80051BA13 /* pdf.png in Resources */ = {isa = PBXBuildFile; fileRef = 278A6299278364F70051BA13 /* pdf.png */; };
 		279FBD56277350C900CD5586 /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD52277350C700CD5586 /* down.png */; };
 		279FBD57277350C900CD5586 /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD53277350C800CD5586 /* up.png */; };
 		279FBD58277350C900CD5586 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD54277350C800CD5586 /* right.png */; };
@@ -50,7 +50,6 @@
 
 /* Begin PBXFileReference section */
 		271417962762516C009CA02D /* ListaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaViewController.swift; sourceTree = "<group>"; };
-		274FEB13277331E5007CE357 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		274FEB152773321C007CE357 /* ScrollingTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollingTextView.swift; sourceTree = "<group>"; };
 		27670275277E127900E43E7D /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		278980172757DCBE00414985 /* RetroMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RetroMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +59,7 @@
 		278980212757DCC000414985 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		278980232757DCC000414985 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		278980242757DCC000414985 /* RetroMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RetroMac.entitlements; sourceTree = "<group>"; };
+		278A6299278364F70051BA13 /* pdf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pdf.png; sourceTree = "<group>"; };
 		279FBD52277350C700CD5586 /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
 		279FBD53277350C800CD5586 /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up.png; sourceTree = "<group>"; };
 		279FBD54277350C800CD5586 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
@@ -141,9 +141,9 @@
 				278980232757DCC000414985 /* Info.plist */,
 				279FBD7827739DAC00CD5586 /* icons.icns */,
 				27E7A30A276B54240087C67A /* NoVideo.mp4 */,
-				274FEB13277331E5007CE357 /* ViewController.swift */,
 				278980242757DCC000414985 /* RetroMac.entitlements */,
 				274FEB152773321C007CE357 /* ScrollingTextView.swift */,
+				278A6299278364F70051BA13 /* pdf.png */,
 				27E7A3042768E9BA0087C67A /* themes */,
 				27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */,
 			);
@@ -245,6 +245,7 @@
 				27E7A30B276B57810087C67A /* NoVideo.mp4 in Resources */,
 				279FBD71277375AA00CD5586 /* sp_bar.png in Resources */,
 				27E7A3052768E9BB0087C67A /* themes in Resources */,
+				278A629A278364F80051BA13 /* pdf.png in Resources */,
 				27E7A30727691F740087C67A /* Base in Resources */,
 				279FBD56277350C900CD5586 /* down.png in Resources */,
 				2789801F2757DCC000414985 /* Assets.xcassets in Resources */,
@@ -308,7 +309,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				274FEB14277331E6007CE357 /* ViewController.swift in Sources */,
 				271417972762516C009CA02D /* ListaViewController.swift in Sources */,
 				27670276277E127900E43E7D /* ConfigViewController.swift in Sources */,
 				274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */,
