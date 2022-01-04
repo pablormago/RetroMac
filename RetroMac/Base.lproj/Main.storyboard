@@ -434,7 +434,7 @@
                                 <autoresizingMask key="autoresizingMask"/>
                             </customView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mss-SW-xAW">
-                                <rect key="frame" x="1745" y="1058" width="168" height="16"/>
+                                <rect key="frame" x="1621" y="1058" width="292" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" drawsBackground="YES" id="UWY-Sc-NbS">
                                     <font key="font" metaFont="system"/>

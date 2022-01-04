@@ -13,13 +13,6 @@ import AVFoundation
 
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
-    
-    
-    
-    
-    
-    
-    
     @IBOutlet weak var pdfImage: NSButton!
     @IBOutlet weak var infoLabel: NSTextField!
     @IBOutlet weak var scrollerDesc: ScrollingTextView!
@@ -111,7 +104,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         //        //CARGAR IMAGENES Y VIDEOS
         let miFila = juegosTableView.selectedRow
-        let miDesc = String(juegosXml[miFila][2])
+        let miDesc = String(juegosXml[miFila][2]).replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\r", with: " ").replacingOccurrences(of: "\t", with: " ")
         let miMap = String(juegosXml[miFila][3])
         let miManual = String(juegosXml[miFila][4])
         let miNews = String(juegosXml[miFila][5])
@@ -233,72 +226,73 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             }
             print("Backspace")
         }else if event.keyCode == 53 && abiertaLista == true {
-            infoLabel.stringValue = "Escrapeando Juego..."
-            DispatchQueue.global(qos: .utility).async { [unowned self] in
-                self.buscaJuego()
-             }
+            infoLabel.stringValue = "Buscando Juego..."
+            //DispatchQueue.global(qos: .utility).async { [unowned self] in
+            self.buscaJuego()
+            //self.escrapeartodos()
+            //}
         }else if event.keyCode == 49 && abiertaLista == true {
             
         }
         
-                if event.keyCode == 124 && abiertaLista == true {
-                    if botonactual < cuantosSistemas {
-                        print("Derecha")
-                        if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-                            //self.view.window?.contentViewController = controller
-                            abiertaLista = true
-                            ventana = "Principal"
-                            cuentaboton = botonactual
-                            botonactual += 1
-                            juegosXml = []
-                            let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                            sistemaActual = button?.Fullname! ?? ""
-                            nombresistemaactual = button!.Sistema ?? ""
-                            //print(sistemaActual)
-        
-                            controller.selecionSistema(button!)
-        
-                            self.viewDidLoad()
-                            self.viewDidAppear()
-                            juegosTableView.reloadData()
-                            if juegosXml.count > 0 {
-                                let indexSet = NSIndexSet(index: 0)
-                                juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
-                            }
-        
-                        }
+        if event.keyCode == 124 && abiertaLista == true {
+            if botonactual < cuantosSistemas {
+                print("Derecha")
+                if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                    //self.view.window?.contentViewController = controller
+                    abiertaLista = true
+                    ventana = "Principal"
+                    cuentaboton = botonactual
+                    botonactual += 1
+                    juegosXml = []
+                    let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                    sistemaActual = button?.Fullname! ?? ""
+                    nombresistemaactual = button!.Sistema ?? ""
+                    //print(sistemaActual)
+                    
+                    controller.selecionSistema(button!)
+                    
+                    self.viewDidLoad()
+                    self.viewDidAppear()
+                    juegosTableView.reloadData()
+                    if juegosXml.count > 0 {
+                        let indexSet = NSIndexSet(index: 0)
+                        juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
                     }
-        
-        
+                    
                 }
-                if event.keyCode == 123 && abiertaLista == true {
-                    if botonactual > 1 {
-                        print("Izquierda")
-                        if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-                            //self.view.window?.contentViewController = controller
-                            abiertaLista = true
-                            ventana = "Principal"
-                            cuentaboton = botonactual
-                            botonactual -= 1
-                            juegosXml = []
-                            let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                            sistemaActual = button?.Fullname! ?? ""
-                            nombresistemaactual = button!.Sistema ?? ""
-                            //print(sistemaActual)
-        
-                            controller.selecionSistema(button!)
-        
-                            self.viewDidLoad()
-                            self.viewDidAppear()
-                            juegosTableView.reloadData()
-                            if juegosXml.count > 0 {
-                                let indexSet = NSIndexSet(index: 0)
-                                juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
-                            }
-                        }
+            }
+            
+            
+        }
+        if event.keyCode == 123 && abiertaLista == true {
+            if botonactual > 1 {
+                print("Izquierda")
+                if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                    //self.view.window?.contentViewController = controller
+                    abiertaLista = true
+                    ventana = "Principal"
+                    cuentaboton = botonactual
+                    botonactual -= 1
+                    juegosXml = []
+                    let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                    sistemaActual = button?.Fullname! ?? ""
+                    nombresistemaactual = button!.Sistema ?? ""
+                    //print(sistemaActual)
+                    
+                    controller.selecionSistema(button!)
+                    
+                    self.viewDidLoad()
+                    self.viewDidAppear()
+                    juegosTableView.reloadData()
+                    if juegosXml.count > 0 {
+                        let indexSet = NSIndexSet(index: 0)
+                        juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
                     }
-        
                 }
+            }
+            
+        }
         
         
         
@@ -531,15 +525,32 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let SSUser = defaults.string(forKey: "SSUser") ?? ""
         let SSPassword = defaults.string(forKey: "SSPassword") ?? ""
         let numero = (juegosTableView.selectedRow)
-        var nombre = juegosXml[numero][1].addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        var nombreplano = juegosXml[numero][1].replacingOccurrences(of: " ", with: "")
+        var nombre = ""
+        var miputonombre = ""
+        nombre = juegosXml[numero][1]
+        if nombre.contains("/") {
+            let index2 = nombre.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = nombre.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            nombre = result1
+            print("NOMBRE CON /: \(nombre)")
+        }
+        nombre = nombre.replacingOccurrences(of: "\\s?\\([\\w\\s]*\\)", with: "", options: .regularExpression)
+        nombre = nombre.replacingOccurrences(of: "\\s?\\[[\\w\\s]*\\]", with: "", options: .regularExpression)
+        nombre = nombre.replacingOccurrences(of: "\\s(\\[.+\\]|\\(.+\\))", with: "", options: .regularExpression)
+        nombre = nombre.replacingOccurrences(of: "\\s?\\[[\\w\\s]*\\]", with: "", options: .regularExpression)
         nombre = nombre.replacingOccurrences(of: ".", with: "")
+        miputonombre = nombre
+        nombre = nombre.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        
+        var nombreplano = juegosXml[numero][1].replacingOccurrences(of: " ", with: "")
+        
         var miId = String()
         var idSistema = String()
         let datasource = "https://www.screenscraper.fr/api2/jeuRecherche.php?devid=" + userDev + "&devpassword=" + userpass + "&softname=RetroMac&output=json&ssid=\(SSUser)&sspassword=\(SSPassword)&systemeid=\(misystemid)&recherche=\(nombre)"
         print(datasource)
-        DispatchQueue.global(qos: .background).async {
-            // do your job here
+        DispatchQueue.background(background: {
+            // do something in background
             guard let url = URL(string: datasource) else {
                 
                 return
@@ -555,6 +566,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             let newFeed = JSON(parseJSON: data)
             feed = newFeed
             var encontrada = false
+            //print(miputonombre)
             for (index,subJson):(String, JSON) in feed! {
                 
                 if index == "response" {
@@ -562,57 +574,65 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                         
                         if node == "jeux" {
                             
-                            for (tercero, subsubJson) in object{
-                                
-                                for (cuarto, cuartoJson) in subsubJson {
-                                    
-                                    for (quinto, quintoJon):(String, JSON) in cuartoJson {
-                                        //print(cuarto + "->" + quinto + "->" + quintoJon.stringValue)
-                                        
-                                        if cuarto == "systeme" && quinto == "id" {
-                                            idSistema = quintoJon.stringValue
-                                            //print(quintoJon)
-                                        }
-                                    }
-                                    if cuarto == "id" {
-                                        
-                                        miId = cuartoJson.stringValue
-                                        encontrada = true
-                                        
-                                        
-                                    }
-                                    if encontrada == true{break}
-                                    
+                            for (tercero, subsubJson):(String, JSON) in object{
+                                //print(subsubJson["id"].stringValue)
+                                miId = subsubJson["id"].stringValue
+                                if ((subsubJson["noms"].rawString())?.contains(miputonombre))! {
+                                    print("EUREKA")
+                                    encontrada = true
+                                    break
                                 }
-                                if encontrada == true{break}
                             }
                         }
-                        
+                        if encontrada == true {break}
                     }
                 }
+                if encontrada == true {break}
             }
-            
+            if nombreplano.contains("/") {
+                let index2 = nombreplano.range(of: "/", options: .backwards)?.lowerBound
+                let substring2 = nombreplano.substring(from: index2! )
+                let result1 = String(substring2.dropFirst())
+                nombreplano = result1
+            }
             if miId != ""{
                 print("ID: \(miId)")
-                DispatchQueue.main.async {
-                    print(idSistema)
-                    if idSistema != "" {
+                //DispatchQueue.main.sync {
+                print(idSistema)
+                if idSistema != "" {
+                    DispatchQueue.main.sync {
+                        self.infoLabel.stringValue = "Juego ENCONTRADO, escrapeando..."
                         self.scrapearJuego(juego: miId, sistema: idSistema, nombrejuego: nombreplano, filajuego: numero)
-                        //self.juegosTableView.reloadData()
-                    } else {
-                        self.scrapearJuego(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numero)
-                        //self.juegosTableView.reloadData()
                     }
-                    
+                } else {
+                    DispatchQueue.main.sync {
+                        self.infoLabel.stringValue = "Juego ENCONTRADO, escrapeando..."
+                        self.scrapearJuego(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numero)
+                    }
                 }
+                
+                //}
                 
             }else{
                 print("Juego no encontrado")
+                DispatchQueue.main.sync {
+                    self.infoLabel.stringValue = "Juego no encontrado"
+                    
+                }
+                
+                
             }
-            //            DispatchQueue.main.async {
-            //                // update ui here
-            //            }
-        }
+        }, completion:{
+            
+            // when background job finished, do something in main thread
+        })
+        //DispatchQueue.global(qos: .background).async {
+        // do your job here
+        
+        //            DispatchQueue.main.async {
+        //                // update ui here
+        //            }
+        //}
         
         
         
@@ -639,8 +659,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         var tittleshotJuego = ""
         var marqueeJuego = ""
         
-        DispatchQueue.global(qos: .background).async {
-            // do your job here
+        //DispatchQueue.global(qos: .background).async {
+        // do your job here
+        DispatchQueue.background(background: {
+            // do something in background
             guard let url = URL(string: datasource) else {
                 
                 return
@@ -653,7 +675,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             }
             let newFeed = JSON(parseJSON: data)
             mifeed = newFeed
-            
+        }, completion:{
             for (index,subJson):(String, JSON) in mifeed! {
                 if index == "response" {
                     for (index2,subJson2):(String, JSON) in subJson{
@@ -691,7 +713,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                         for (index5, sJson3):(String, JSON) in sJson {
                                             
                                             if sJson3["langue"].stringValue == "es" {
-                                                descJuego = sJson3["text"].stringValue
+                                                descJuego = sJson3["text"].stringValue.replacingOccurrences(of: "\n", with: " ")
                                                 print("Descripcion: \(descJuego)")
                                                 encuentrame = true
                                             }
@@ -772,51 +794,264 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 }
             }
             
-            DispatchQueue.global(qos: .background).async {
+            //DispatchQueue.global(qos: .background).async {
+            DispatchQueue.background(delay: 10.0, background: {
+                ///ScreenShot
                 if screenshotJuego != "" {
-                    self.descargaMedia(tipo: "png", url: screenshotJuego, nombre: nombrejuego)
-                }
-                if videoJuego != "" {
-                    self.descargaMedia(tipo: "mp4", url: videoJuego, nombre: nombrejuego)
-                }
-                if manualJuego != "" {
-                    self.descargaMedia(tipo: "pdf", url: manualJuego, nombre: nombrejuego)
-                }
-                if fanartJuego != "" {
-                    self.descargaMedia(tipo: "png", url: fanartJuego, nombre: nombrejuego + "_fanart")
-                }
-                if tittleshotJuego != "" {
-                    self.descargaMedia(tipo: "png", url: tittleshotJuego, nombre: nombrejuego + "_tittleshot")
-                }
-                if marqueeJuego != "" {
-                    self.descargaMedia(tipo: "png", url: marqueeJuego, nombre: nombrejuego + "_marquee")
+                    //self.descargaMedia(tipo: "png", url: screenshotJuego, nombre: nombrejuego)
+                    let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego).\("png")"
+                    let midestino = URL(string: myFilePathString)
+                    let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let destinationFileUrl = midestino
+                    
+                    //Create URL to the source file you want to download
+                    let fileURL = URL(string: screenshotJuego)
+                    
+                    let sessionConfig = URLSessionConfiguration.default
+                    let session = URLSession(configuration: sessionConfig)
+                    
+                    let request = URLRequest(url:fileURL!)
+                    print(request)
+                    let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+                        if let tempLocalUrl = tempLocalUrl, error == nil {
+                            // Success
+                            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                                print("Successfully downloaded. Status code: \(statusCode)")
+                            }
+                            
+                            do {
+                                try? FileManager.default.removeItem(at: destinationFileUrl!)
+                                try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                            } catch (let writeError) {
+                                print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                            }
+                            
+                        } else {
+                            print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
+                        }
+                    }
+                    task.resume()
                 }
                 
-            }
+                ///Video
+                ///self.descargaMedia(tipo: "mp4", url: videoJuego, nombre: nombrejuego)
+                if videoJuego != "" {
+                    let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego).\("mp4")"
+                    let midestino = URL(string: myFilePathString)
+                    let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let destinationFileUrl = midestino
+                    
+                    //Create URL to the source file you want to download
+                    let fileURL = URL(string: videoJuego)
+                    
+                    let sessionConfig = URLSessionConfiguration.default
+                    let session = URLSession(configuration: sessionConfig)
+                    
+                    let request = URLRequest(url:fileURL!)
+                    print(request)
+                    let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+                        if let tempLocalUrl = tempLocalUrl, error == nil {
+                            // Success
+                            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                                print("Successfully downloaded. Status code: \(statusCode)")
+                            }
+                            
+                            do {
+                                try? FileManager.default.removeItem(at: destinationFileUrl!)
+                                try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                            } catch (let writeError) {
+                                print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                            }
+                            
+                        } else {
+                            print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
+                        }
+                    }
+                    task.resume()
+                }
+                ///MANUAL
+                
+                if manualJuego != "" {
+                    //self.descargaMedia(tipo: "pdf", url: manualJuego, nombre: nombrejuego)
+                    let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego).\("pdf")"
+                    let midestino = URL(string: myFilePathString)
+                    let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let destinationFileUrl = midestino
+                    
+                    //Create URL to the source file you want to download
+                    let fileURL = URL(string: manualJuego)
+                    
+                    let sessionConfig = URLSessionConfiguration.default
+                    let session = URLSession(configuration: sessionConfig)
+                    
+                    let request = URLRequest(url:fileURL!)
+                    print(request)
+                    let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+                        if let tempLocalUrl = tempLocalUrl, error == nil {
+                            // Success
+                            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                                print("Successfully downloaded. Status code: \(statusCode)")
+                            }
+                            
+                            do {
+                                try? FileManager.default.removeItem(at: destinationFileUrl!)
+                                try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                            } catch (let writeError) {
+                                print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                            }
+                            
+                        } else {
+                            print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
+                        }
+                    }
+                    task.resume()
+                }
+                ///FanArt
+                if fanartJuego != "" {
+                    //self.descargaMedia(tipo: "png", url: fanartJuego, nombre: nombrejuego + "_fanart")
+                    let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego)_fanart.\("png")"
+                    let midestino = URL(string: myFilePathString)
+                    let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let destinationFileUrl = midestino
+                    
+                    //Create URL to the source file you want to download
+                    let fileURL = URL(string: fanartJuego)
+                    
+                    let sessionConfig = URLSessionConfiguration.default
+                    let session = URLSession(configuration: sessionConfig)
+                    
+                    let request = URLRequest(url:fileURL!)
+                    print(request)
+                    let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+                        if let tempLocalUrl = tempLocalUrl, error == nil {
+                            // Success
+                            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                                print("Successfully downloaded. Status code: \(statusCode)")
+                            }
+                            
+                            do {
+                                try? FileManager.default.removeItem(at: destinationFileUrl!)
+                                try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                            } catch (let writeError) {
+                                print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                            }
+                            
+                        } else {
+                            print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
+                        }
+                    }
+                    task.resume()
+                }
+                //TittleShot
+                if tittleshotJuego != "" {
+                    //self.descargaMedia(tipo: "png", url: tittleshotJuego, nombre: nombrejuego + "_tittleshot")
+                    let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego)._tittleshot\("png")"
+                    let midestino = URL(string: myFilePathString)
+                    let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let destinationFileUrl = midestino
+                    
+                    //Create URL to the source file you want to download
+                    let fileURL = URL(string: tittleshotJuego)
+                    
+                    let sessionConfig = URLSessionConfiguration.default
+                    let session = URLSession(configuration: sessionConfig)
+                    
+                    let request = URLRequest(url:fileURL!)
+                    print(request)
+                    let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+                        if let tempLocalUrl = tempLocalUrl, error == nil {
+                            // Success
+                            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                                print("Successfully downloaded. Status code: \(statusCode)")
+                            }
+                            
+                            do {
+                                try? FileManager.default.removeItem(at: destinationFileUrl!)
+                                try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                            } catch (let writeError) {
+                                print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                            }
+                            
+                        } else {
+                            print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
+                        }
+                    }
+                    task.resume()
+                }
+                ///MARQUEE
+                if marqueeJuego != "" {
+                    //self.descargaMedia(tipo: "png", url: marqueeJuego, nombre: nombrejuego + "_marquee")
+                    let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego)_marquee.\("png")"
+                    let midestino = URL(string: myFilePathString)
+                    let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let destinationFileUrl = midestino
+                    
+                    //Create URL to the source file you want to download
+                    let fileURL = URL(string: marqueeJuego)
+                    
+                    let sessionConfig = URLSessionConfiguration.default
+                    let session = URLSession(configuration: sessionConfig)
+                    
+                    let request = URLRequest(url:fileURL!)
+                    print(request)
+                    let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+                        if let tempLocalUrl = tempLocalUrl, error == nil {
+                            // Success
+                            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                                print("Successfully downloaded. Status code: \(statusCode)")
+                            }
+                            
+                            do {
+                                try? FileManager.default.removeItem(at: destinationFileUrl!)
+                                try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                            } catch (let writeError) {
+                                print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                            }
+                            
+                        } else {
+                            print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
+                        }
+                    }
+                    task.resume()
+                }
+                // do something in background
+            }, completion:{
+                ///ACTUALIZAR EL ARRAY DE JUEGOS
+                self.juegosXml[filajuego][2] = descJuego.replacingOccurrences(of: "\n", with: " ")
+                self.juegosXml[filajuego][3] = self.juegosXml[filajuego][3]
+                self.juegosXml[filajuego][4] = rompath + "/media/" + nombrejuego + ".pdf"
+                self.juegosXml[filajuego][5] = self.juegosXml[filajuego][5]
+                self.juegosXml[filajuego][6] = rompath + "/media/"  + nombrejuego + "_tittleshot.png"
+                self.juegosXml[filajuego][7] = rompath + "/media/"  + nombrejuego + "_fanart.png"
+                self.juegosXml[filajuego][8] = rompath + "/media/" + nombrejuego + ".png"
+                self.juegosXml[filajuego][9] = rompath + "/media/"  + nombrejuego + ".png"
+                self.juegosXml[filajuego][10] = rompath + "/media/" + nombrejuego + ".mp4"
+                self.juegosXml[filajuego][11] = rompath + "/media/"  + nombrejuego + "_marquee.png"
+                self.juegosXml[filajuego][12] = fechaJuego
+                self.juegosXml[filajuego][13] = desarroladorJuego
+                self.juegosXml[filajuego][14] = desarroladorJuego
+                self.juegosXml[filajuego][15] = generoJuego
+                self.juegosXml[filajuego][16] = self.juegosXml[filajuego][16]
+                self.juegosXml[filajuego][17] = playersJuego
+                self.juegosXml[filajuego][18] = self.juegosXml[filajuego][18]
+                self.xmlJuegosNuevos()
+                //DispatchQueue.main.sync {
+                self.infoLabel.stringValue = "Juego ESCRAPEADO!!"
+                // when background job finished, do something in main thread
+            })
             
-            ///ACTUALIZAR EL ARRAY DE JUEGOS
-            self.juegosXml[filajuego][2] = descJuego.replacingOccurrences(of: "\n", with: " ")
-            self.juegosXml[filajuego][3] = self.juegosXml[filajuego][3]
-            self.juegosXml[filajuego][4] = rompath + "/media/" + nombrejuego + ".pdf"
-            self.juegosXml[filajuego][5] = self.juegosXml[filajuego][5]
-            self.juegosXml[filajuego][6] = rompath + "/media/"  + nombrejuego + "_tittleshot.png"
-            self.juegosXml[filajuego][7] = rompath + "/media/"  + nombrejuego + "_fanart.png"
-            self.juegosXml[filajuego][8] = rompath + "/media/" + nombrejuego + ".png"
-            self.juegosXml[filajuego][9] = rompath + "/media/"  + nombrejuego + ".png"
-            self.juegosXml[filajuego][10] = rompath + "/media/" + nombrejuego + ".mp4"
-            self.juegosXml[filajuego][11] = rompath + "/media/"  + nombrejuego + "_marquee.png"
-            self.juegosXml[filajuego][12] = fechaJuego
-            self.juegosXml[filajuego][13] = desarroladorJuego
-            self.juegosXml[filajuego][14] = desarroladorJuego
-            self.juegosXml[filajuego][15] = generoJuego
-            self.juegosXml[filajuego][16] = self.juegosXml[filajuego][16]
-            self.juegosXml[filajuego][17] = playersJuego
-            self.juegosXml[filajuego][18] = self.juegosXml[filajuego][18]
             
-            self.xmlJuegosNuevos()
-            self.infoLabel.stringValue = "Juego ESCRAPEADO!!"
+            //}
             
-        }
+            
+            //}
+            // when background job finished, do something in main thread
+        })
+        
+        
+        
+        
+        //}
         
         
         
@@ -859,7 +1094,150 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
         task.resume()
     }
+    
+    func buscaJuegoS(numerojuego: Int){
+        print("Escrapeo - 1")
+        
+        //mkdir -p foo
+        var rutaacrear = rompath + "/media"
+        var comando = "mkdir -p \(rutaacrear)"
+        Commands.Bash.system("\(comando)")
+        var misystemid = String()
+        for sistema in systemsIds {
+            
+            if sistema[0] == nombresistemaactual {
+                misystemid = sistema[1]
+                break
+            }
+        }
+        
+        let defaults = UserDefaults.standard
+        let SSUser = defaults.string(forKey: "SSUser") ?? ""
+        let SSPassword = defaults.string(forKey: "SSPassword") ?? ""
+        //let numero = (juegosTableView.selectedRow)
+        var nombre = ""
+        var miputonombre = ""
+        nombre = juegosXml[numerojuego][1]
+        if nombre.contains("/") {
+            let index2 = nombre.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = nombre.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            nombre = result1
+            print("NOMBRE CON /: \(nombre)")
+        }
+        nombre = nombre.replacingOccurrences(of: "\\s?\\([\\w\\s]*\\)", with: "", options: .regularExpression)
+        nombre = nombre.replacingOccurrences(of: "\\s?\\[[\\w\\s]*\\]", with: "", options: .regularExpression)
+        nombre = nombre.replacingOccurrences(of: "\\s(\\[.+\\]|\\(.+\\))", with: "", options: .regularExpression)
+        nombre = nombre.replacingOccurrences(of: "\\s?\\[[\\w\\s]*\\]", with: "", options: .regularExpression)
+        nombre = nombre.replacingOccurrences(of: ".", with: "")
+        miputonombre = nombre
+        nombre = nombre.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        
+        var nombreplano = juegosXml[numerojuego][1].replacingOccurrences(of: " ", with: "")
+        
+        var miId = String()
+        var idSistema = String()
+        let datasource = "https://www.screenscraper.fr/api2/jeuRecherche.php?devid=" + userDev + "&devpassword=" + userpass + "&softname=RetroMac&output=json&ssid=\(SSUser)&sspassword=\(SSPassword)&systemeid=\(misystemid)&recherche=\(nombre)"
+        print(datasource)
+        
+        // do your job here
+        guard let url = URL(string: datasource) else {
+            
+            return
+            
+        }
+        guard let data = try? String(contentsOf: url) else {
+            
+            return
+        }
+        
+        
+        var feed: JSON?
+        let newFeed = JSON(parseJSON: data)
+        feed = newFeed
+        var encontrada = false
+        //print(miputonombre)
+        for (index,subJson):(String, JSON) in feed! {
+            
+            if index == "response" {
+                for (node, object):(String, JSON) in subJson {
+                    
+                    if node == "jeux" {
+                        
+                        for (tercero, subsubJson):(String, JSON) in object{
+                            //print(subsubJson["id"].stringValue)
+                            miId = subsubJson["id"].stringValue
+                            if ((subsubJson["noms"].rawString())?.contains(miputonombre))! {
+                                print("EUREKA")
+                                encontrada = true
+                                break
+                            }
+                        }
+                    }
+                    if encontrada == true {break}
+                }
+            }
+            if encontrada == true {break}
+        }
+        if nombreplano.contains("/") {
+            let index2 = nombreplano.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = nombreplano.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            nombreplano = result1
+        }
+        if miId != ""{
+            print("ID: \(miId)")
+            
+            print(idSistema)
+            if idSistema != "" {
+                self.scrapearJuego(juego: miId, sistema: idSistema, nombrejuego: nombreplano, filajuego: numerojuego)
+                
+            } else {
+                self.scrapearJuego(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numerojuego)
+                
+            }
+            
+            
+            
+        }else{
+            print("Juego no encontrado")
+            
+            self.infoLabel.stringValue = "Juego no encontrado"
+            
+            
+        }
+        //            DispatchQueue.main.async {
+        //                // update ui here
+        //            }
+        
+        
+        
+        
+    }
+    
+    func escrapeartodos(){
+        for (index, juego)  in juegosXml.enumerated() {
+            buscaJuegoS(numerojuego: index)
+            //print(index)
+        }
+        infoLabel.stringValue = "** JUEGOS ESCRAPEADOS **"
+    }
+    
 }
 
+extension DispatchQueue {
+    
+    static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
+        DispatchQueue.global(qos: .background).async {
+            background?()
+            if let completion = completion {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+                    completion()
+                })
+            }
+        }
+    }
+    
+}
 
 
