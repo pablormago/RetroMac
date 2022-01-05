@@ -351,7 +351,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 let miDescripcion = String(game.desc)
                 let miMapa = siRutaRelativa(ruta:String(game.map))
                 let miManual = siRutaRelativa(ruta:String(game.manual))
-                let miNews = String(game.news)
+                let miNews = siRutaRelativa(ruta:String(game.news))
                 let miTittleShot = siRutaRelativa(ruta:String(game.tittleshot))
                 let miFanArt = siRutaRelativa(ruta:String(game.fanart))
                 let miThumbnail = siRutaRelativa(ruta:String(game.thumbnail))
@@ -539,8 +539,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         nombre = nombre.replacingOccurrences(of: "\\s?\\[[\\w\\s]*\\]", with: "", options: .regularExpression)
         nombre = nombre.replacingOccurrences(of: "\\s(\\[.+\\]|\\(.+\\))", with: "", options: .regularExpression)
         nombre = nombre.replacingOccurrences(of: "\\s?\\[[\\w\\s]*\\]", with: "", options: .regularExpression)
-        nombre = nombre.replacingOccurrences(of: ".", with: "")
         miputonombre = nombre
+        nombre = nombre.replacingOccurrences(of: ".", with: "")
+        
         nombre = nombre.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         
         var nombreplano = juegosXml[numero][1].replacingOccurrences(of: " ", with: "")
@@ -549,6 +550,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         var idSistema = String()
         let datasource = "https://www.screenscraper.fr/api2/jeuRecherche.php?devid=" + userDev + "&devpassword=" + userpass + "&softname=RetroMac&output=json&ssid=\(SSUser)&sspassword=\(SSPassword)&systemeid=\(misystemid)&recherche=\(nombre)"
         print(datasource)
+        print(nombre)
+        print(miputonombre)
+        print(nombreplano)
         DispatchQueue.background(background: {
             // do something in background
             guard let url = URL(string: datasource) else {
@@ -576,12 +580,28 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                             
                             for (tercero, subsubJson):(String, JSON) in object{
                                 //print(subsubJson["id"].stringValue)
-                                miId = subsubJson["id"].stringValue
-                                if ((subsubJson["noms"].rawString())?.contains(miputonombre))! {
-                                    print("EUREKA")
-                                    encontrada = true
-                                    break
+                                
+                                let cuantos = Int(subsubJson["noms"].count)
+                                if cuantos > 0 {
+                                    for i in 0...cuantos - 1 {
+                                        var nombreEncontrado = subsubJson["noms"][i]["text"].rawString()!
+                                        print(nombreEncontrado)
+                                        print(miputonombre)
+                                        if nombreEncontrado == miputonombre {
+                                            print("COJONUDO")
+                                            miId = subsubJson["id"].stringValue
+                                            encontrada = true
+                                            break
+                                        }
+                                    }
                                 }
+                                
+                                
+                                
+//                                if ((subsubJson["noms"].rawString())?.contains(miputonombre))! {
+//                                    print("EUREKA")
+//
+//                                }
                             }
                         }
                         if encontrada == true {break}
@@ -599,17 +619,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 print("ID: \(miId)")
                 //DispatchQueue.main.sync {
                 print(idSistema)
-                if idSistema != "" {
-                    DispatchQueue.main.sync {
-                        self.infoLabel.stringValue = "Juego ENCONTRADO, escrapeando..."
-                        self.scrapearJuego(juego: miId, sistema: idSistema, nombrejuego: nombreplano, filajuego: numero)
-                    }
-                } else {
+                
                     DispatchQueue.main.sync {
                         self.infoLabel.stringValue = "Juego ENCONTRADO, escrapeando..."
                         self.scrapearJuego(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numero)
                     }
-                }
+                
                 
                 //}
                 
