@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		270485E52785FA7A00375232 /* funciones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270485E42785FA7A00375232 /* funciones.swift */; };
 		271417972762516C009CA02D /* ListaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271417962762516C009CA02D /* ListaViewController.swift */; };
+		2748C058278620FA002D633B /* mamelist.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2748C057278620FA002D633B /* mamelist.txt */; };
 		274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FEB152773321C007CE357 /* ScrollingTextView.swift */; };
 		27670276277E127900E43E7D /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27670275277E127900E43E7D /* ConfigViewController.swift */; };
 		2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801A2757DCBE00414985 /* AppDelegate.swift */; };
@@ -49,7 +51,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		270485E42785FA7A00375232 /* funciones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funciones.swift; sourceTree = "<group>"; };
 		271417962762516C009CA02D /* ListaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaViewController.swift; sourceTree = "<group>"; };
+		2748C057278620FA002D633B /* mamelist.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mamelist.txt; sourceTree = "<group>"; };
 		274FEB152773321C007CE357 /* ScrollingTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollingTextView.swift; sourceTree = "<group>"; };
 		27670275277E127900E43E7D /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		278980172757DCBE00414985 /* RetroMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RetroMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -131,11 +135,13 @@
 				27E6675F275A29B300B50AD6 /* parserSystems.swift */,
 				27E7A3082769C39E0087C67A /* gameListParser.swift */,
 				2789801C2757DCBE00414985 /* ViewController.swift */,
+				270485E42785FA7A00375232 /* funciones.swift */,
 				271417962762516C009CA02D /* ListaViewController.swift */,
 				2789801E2757DCC000414985 /* Assets.xcassets */,
 				278980202757DCC000414985 /* Main.storyboard */,
 				27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */,
 				27670275277E127900E43E7D /* ConfigViewController.swift */,
+				2748C057278620FA002D633B /* mamelist.txt */,
 				27E7A30627691F740087C67A /* Base */,
 				27E7A3022768B4B90087C67A /* logo.jpeg */,
 				278980232757DCC000414985 /* Info.plist */,
@@ -257,6 +263,7 @@
 				27E7A3032768B4B90087C67A /* logo.jpeg in Resources */,
 				279FBD70277375AA00CD5586 /* borrar.png in Resources */,
 				27E7A2FF2768B40C0087C67A /* es_systems_mac.cfg in Resources */,
+				2748C058278620FA002D633B /* mamelist.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +324,7 @@
 				27B58953277EF3F6006DBAB9 /* SwiftyJSON.swift in Sources */,
 				27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */,
 				2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */,
+				270485E52785FA7A00375232 /* funciones.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

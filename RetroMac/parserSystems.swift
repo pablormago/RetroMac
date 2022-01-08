@@ -370,6 +370,7 @@ extension BookParser: XMLParserDelegate
         if elementName == BooksSection
         {
             self.parser.abortParsing()
+            
         }
         
         self.actualElement = ""

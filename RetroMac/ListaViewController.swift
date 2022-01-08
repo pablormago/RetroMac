@@ -164,7 +164,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     
     override func viewDidAppear() {
-        
+        ventana = "Lista"
         print("LISTA APPEAR")
         if !self.view.window!.isZoomed{
             //self.view.window?.zoom(self)
@@ -194,7 +194,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         
         
-        if event.keyCode == 36  && abiertaLista == true {
+        if event.keyCode == 36  && abiertaLista == true && ventana == "Lista" {
             
             let numero = (juegosTableView.selectedRow)
             let romXml = "\"\(juegosXml[numero][0])\""
@@ -318,6 +318,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         print("PDF")
         let miFila = juegosTableView.selectedRow
         let miManual = String(juegosXml[miFila][4])
+        print(miManual)
         NSWorkspace.shared.openFile(miManual)
     }
     
@@ -527,7 +528,31 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let numero = (juegosTableView.selectedRow)
         var nombre = ""
         var miputonombre = ""
-        nombre = juegosXml[numero][1]
+        //Si el sistema es MAME
+        if misystemid == "75" {
+            
+            var juegoMame = juegosXml[numero][1]
+            if juegoMame.contains("/") {
+                let index2 = juegoMame.range(of: "/", options: .backwards)?.lowerBound
+                let substring2 = juegoMame.substring(from: index2! )
+                let result1 = String(substring2.dropFirst())
+                juegoMame = result1
+                print("JUEGO /: \(juegoMame)")
+            }
+            for juego in titulosMame {
+                print("Tengo: \(juego[0])")
+                if juego[0] == juegoMame {
+                    print("EL JUEGO: \(juego[0])")
+                    nombre = juego[1]
+                    break
+                }
+            }
+        }else {
+            nombre = juegosXml[numero][1]
+        }
+        
+        //
+        
         if nombre.contains("/") {
             let index2 = nombre.range(of: "/", options: .backwards)?.lowerBound
             let substring2 = nombre.substring(from: index2! )
@@ -540,6 +565,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         nombre = nombre.replacingOccurrences(of: "\\s(\\[.+\\]|\\(.+\\))", with: "", options: .regularExpression)
         nombre = nombre.replacingOccurrences(of: "\\s?\\[[\\w\\s]*\\]", with: "", options: .regularExpression)
         miputonombre = nombre
+        if miputonombre.contains("/") {
+            let index3 = miputonombre.range(of: "/", options: .backwards)?.lowerBound
+            let substring3 = miputonombre.substring(from: index3! )
+            let result2 = String(substring3.dropFirst())
+            miputonombre = result2
+            print("NOMBRE CON /: \(miputonombre)")
+        }
+        miputonombre = miputonombre.trimmingCharacters(in: .whitespaces)
         nombre = nombre.replacingOccurrences(of: ".", with: "")
         
         nombre = nombre.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -585,13 +618,17 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                 if cuantos > 0 {
                                     for i in 0...cuantos - 1 {
                                         var nombreEncontrado = subsubJson["noms"][i]["text"].rawString()!
-                                        print(nombreEncontrado)
-                                        print(miputonombre)
-                                        if nombreEncontrado == miputonombre {
+                                        print("Encuentro: \(nombreEncontrado)")
+                                        print("Buscaba: \(miputonombre)")
+                                        
+                                        if miputonombre.caseInsensitiveCompare(nombreEncontrado) == ComparisonResult.orderedSame {
                                             print("COJONUDO")
                                             miId = subsubJson["id"].stringValue
                                             encontrada = true
                                             break
+                                        }
+                                        if nombreEncontrado == miputonombre {
+                                            
                                         }
                                     }
                                 }
@@ -673,6 +710,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         var editorJuego = ""
         var tittleshotJuego = ""
         var marqueeJuego = ""
+        var sistemaJuegoSS = ""
         
         //DispatchQueue.global(qos: .background).async {
         // do your job here
@@ -758,6 +796,29 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             break
                                         }
                                     }
+                                    ///Buscar la plataforma interna del juego en SS
+                                    if index3 == "systeme" {
+                                        var encuentra = false
+                                        for (index5, sJson3):(String, JSON) in sJson {
+                                            if index5 == "id" {
+                                                sistemaJuegoSS = sJson3.stringValue
+                                                print(sistemaJuegoSS)
+                                                encuentra = true
+                                                
+                                            }
+                                            //sistemaJuegoSS = sJson3["id"].stringValue
+                                            //print(index5)
+                                            //encuentra = true
+                                            
+                                            if encuentra == true{
+                                                break
+                                            }
+                                        }
+                                        if encuentra == true{
+                                            break
+                                        }
+                                    }
+                                    ///
                                     if index3 == "medias" {
                                         var encuentrass = false
                                         for (index5, sJson3):(String, JSON) in sJson {
@@ -767,7 +828,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                                 print("Screenshot: \(screenshotJuego)")
                                                 
                                             }
-                                            if sJson3["type"].stringValue == "video" {
+                                            if sJson3["type"].stringValue == "video-normalized" {
                                                 videoJuego = sJson3["url"].stringValue
                                                 print("Video: \(videoJuego)")
                                                 
@@ -851,6 +912,11 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 ///Video
                 ///self.descargaMedia(tipo: "mp4", url: videoJuego, nombre: nombrejuego)
                 if videoJuego != "" {
+                    ///https://https://www.screenscraper.fr/medias/147/150935/video.mp4
+                    //var kk = "https://www.screenscraper.fr/api2/mediaVideoJeu.php?devid=\(userDev)&devpassword=\(userpass)&softname=RetroMac&ssid=\(SSuser)&sspassword=\(SSPassword)&systemeid=\(sistemaJuegoSS)&jeuid=\(juego)&media=video"
+                    
+                    //let videoURL = "https://www.screenscraper.fr/medias/\(sistemaJuegoSS)/\(juego)/video.mp4"
+                    //print(videoURL)
                     let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego).\("mp4")"
                     let midestino = URL(string: myFilePathString)
                     let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -960,7 +1026,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 //TittleShot
                 if tittleshotJuego != "" {
                     //self.descargaMedia(tipo: "png", url: tittleshotJuego, nombre: nombrejuego + "_tittleshot")
-                    let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego)._tittleshot\("png")"
+                    let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego)_tittleshot.\("png")"
                     let midestino = URL(string: myFilePathString)
                     let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
                     let destinationFileUrl = midestino
@@ -1034,14 +1100,41 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 ///ACTUALIZAR EL ARRAY DE JUEGOS
                 self.juegosXml[filajuego][2] = descJuego.replacingOccurrences(of: "\n", with: " ")
                 self.juegosXml[filajuego][3] = self.juegosXml[filajuego][3]
-                self.juegosXml[filajuego][4] = rompath + "/media/" + nombrejuego + ".pdf"
+                if manualJuego != "" {
+                    self.juegosXml[filajuego][4] = rompath + "/media/" + nombrejuego + ".pdf"
+                }else {
+                    
+                    self.juegosXml[filajuego][4] = ""
+                }
                 self.juegosXml[filajuego][5] = self.juegosXml[filajuego][5]
-                self.juegosXml[filajuego][6] = rompath + "/media/"  + nombrejuego + "_tittleshot.png"
-                self.juegosXml[filajuego][7] = rompath + "/media/"  + nombrejuego + "_fanart.png"
-                self.juegosXml[filajuego][8] = rompath + "/media/" + nombrejuego + ".png"
-                self.juegosXml[filajuego][9] = rompath + "/media/"  + nombrejuego + ".png"
-                self.juegosXml[filajuego][10] = rompath + "/media/" + nombrejuego + ".mp4"
-                self.juegosXml[filajuego][11] = rompath + "/media/"  + nombrejuego + "_marquee.png"
+                if tittleshotJuego != "" {
+                    self.juegosXml[filajuego][6] = rompath + "/media/"  + nombrejuego + "_tittleshot.png"
+                }else {
+                    self.juegosXml[filajuego][6] = ""
+                }
+                if fanartJuego != "" {
+                    self.juegosXml[filajuego][7] = rompath + "/media/"  + nombrejuego + "_fanart.png"
+                }else {
+                    self.juegosXml[filajuego][7] = ""
+                }
+                if screenshotJuego != "" {
+                    self.juegosXml[filajuego][8] = rompath + "/media/" + nombrejuego + ".png"
+                    self.juegosXml[filajuego][9] = rompath + "/media/"  + nombrejuego + ".png"
+                } else {
+                    self.juegosXml[filajuego][8] = ""
+                    self.juegosXml[filajuego][9] = ""
+                }
+                if videoJuego != "" {
+                    self.juegosXml[filajuego][10] = rompath + "/media/" + nombrejuego + ".mp4"
+                } else {
+                    self.juegosXml[filajuego][10] = ""
+                }
+                if marqueeJuego != "" {
+                    self.juegosXml[filajuego][11] = rompath + "/media/"  + nombrejuego + "_marquee.png"
+                } else {
+                    self.juegosXml[filajuego][11] = ""
+                }
+                
                 self.juegosXml[filajuego][12] = fechaJuego
                 self.juegosXml[filajuego][13] = desarroladorJuego
                 self.juegosXml[filajuego][14] = desarroladorJuego
@@ -1052,6 +1145,15 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 self.xmlJuegosNuevos()
                 //DispatchQueue.main.sync {
                 self.infoLabel.stringValue = "Juego ESCRAPEADO!!"
+                
+                // Movemos fila para actualizar
+                
+                
+                
+                let indexSet = NSIndexSet(index: (self.juegosTableView.selectedRow + -1))
+                let indexSet2 = NSIndexSet(index: self.juegosTableView.selectedRow )
+                self.juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                self.juegosTableView.selectRowIndexes(indexSet2 as IndexSet, byExtendingSelection: false)
                 // when background job finished, do something in main thread
             })
             

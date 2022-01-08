@@ -1,0 +1,108 @@
+[INFO] === Build =======================================
+[INFO] CPU Model Name: Intel(R) Core(TM) i5-8210Y CPU @ 1.60GHz
+[INFO] Capabilities:  MMX MMXEXT SSE SSE2 SSE3 SSSE3 SSE4 SSE4.2 AES AVX AVX2
+[INFO] Built: Oct 24 2021
+[INFO] Version: 1.9.12
+[INFO] =================================================
+[INFO] [Input]: Found input driver: "cocoa".
+[INFO] [Core]: Loading dynamic libretro core from: "/Volumes/EEROMS/Emuladores_Mac/cores/mednafen_saturn_libretro.dylib"
+[INFO] [Overrides]: No core-specific overrides found at "/Users/pablojimenez/Library/Application Support/RetroArch/config/Beetle Saturn/Beetle Saturn.cfg".
+[INFO] [Overrides]: No content-dir-specific overrides found at "/Users/pablojimenez/Library/Application Support/RetroArch/config/Beetle Saturn/saturn.cfg".
+[INFO] [Overrides]: No game-specific overrides found at "/Users/pablojimenez/Library/Application Support/RetroArch/config/Beetle Saturn/SEGARALLY.cfg".
+[INFO] [Environ]: GET_CORE_OPTIONS_VERSION.
+[INFO] [Environ]: GET_LANGUAGE: "0".
+[INFO] [Environ]: RETRO_ENVIRONMENT_SET_CORE_OPTIONS_V2_INTL.
+[INFO] Core requested VFS version >= v1, providing v3
+[INFO] [Environ]: SET_CONTROLLER_INFO.
+[INFO] [Remaps]: Remap directory: "/Users/pablojimenez/Library/Application Support/RetroArch/config/remaps".
+[INFO] [Overrides]: Redirecting save file to "/Users/pablojimenez/Documents/RetroArch/saves/SEGARALLY.srm".
+[INFO] [Overrides]: Redirecting save state to "/Users/pablojimenez/Documents/RetroArch/states/SEGARALLY.state".
+[INFO] [Environ]: GET_LOG_INTERFACE.
+[INFO] [Environ]: SYSTEM_DIRECTORY: "/Users/pablojimenez/Documents/RetroArch/system".
+[INFO] [Environ]: GET_SAVE_DIRECTORY.
+[INFO] [Environ]: GET_DISK_CONTROL_INTERFACE_VERSION.
+[INFO] [Environ]: SET_DISK_CONTROL_EXT_INTERFACE.
+[INFO] [Environ]: GET_PERF_INTERFACE.
+[INFO] [Environ]: PERFORMANCE_LEVEL: 15.
+[INFO] [CONTENT LOAD]: Content loading skipped. Implementation will load it on its own.
+[INFO] [Environ]: SET_INPUT_DESCRIPTORS:
+[INFO] [Environ]: SET_PIXEL_FORMAT: XRGB8888.
+[INFO] [Environ]: SET_CONTROLLER_INFO.
+[INFO] [Environ]: SET_CONTROLLER_INFO.
+[libretro INFO] Loading "/Volumes/EEROMS/saturn/SEGARALLY.CUE"
+[libretro INFO] Loading SBI file "/Volumes/EEROMS/saturn/SEGARALLY.SBI"...
+[libretro INFO] Calculating game ID (1 discs)
+[libretro INFO] Game ID is: MK-81207
+[libretro INFO] This is a Saturn disc.
+[libretro INFO] Disc Region: "Europe"
+[libretro INFO] [Mednafen]: CPU Cache Emulation Mode: Data only
+[libretro INFO] [Mednafen]: Region: 0xc.
+[libretro INFO] [Mednafen]: Cart: Backup Memory.
+[DEBUG] [Environ]: RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY.
+[DEBUG] [Environ]: RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY.
+[INFO] [SRAM]: Skipping SRAM load.
+[INFO] Version of libretro API: 1
+[INFO] Compiled against API: 1
+[INFO] [Audio]: Set audio input rate to: 44100.00 Hz.
+[INFO] [Video]: Timings deviate too much. Will not adjust. (Display = 60.00 Hz, Game = 49.96 Hz)
+[INFO] [Video]: Video @ fullscreen
+[INFO] [GL]: Found GL context: cocoagl
+[INFO] [GL]: Detecting screen resolution 960x720.
+[INFO] [GL]: Vendor: Intel Inc., Renderer: Intel(R) UHD Graphics 617.
+[INFO] [GL]: Version: 2.1 INTEL-14.7.8.
+[INFO] [GL]: Using resolution 2880x1800
+[INFO] [GL]: Default shader backend found: glsl.
+[INFO] [Shader driver]: Using GLSL shader backend.
+[INFO] [GLSL]: Checking GLSL shader support ...
+[WARN] [GL]: Stock GLSL shaders will be used.
+[INFO] [GLSL]: Found GLSL vertex shader.
+[INFO] [GLSL]: Found GLSL fragment shader.
+[INFO] [GLSL]: Linking GLSL program.
+[INFO] [GLSL]: Found GLSL vertex shader.
+[INFO] [GLSL]: Found GLSL fragment shader.
+[INFO] [GLSL]: Linking GLSL program.
+[INFO] [GLSL]: Found GLSL vertex shader.
+[INFO] [GLSL]: Found GLSL fragment shader.
+[INFO] [GLSL]: Linking GLSL program.
+[INFO] [GL]: Using 4 textures.
+[INFO] [GL]: Loaded 1 program(s).
+[INFO] [Font]: Using font rendering backend: bitmap.
+[INFO] [Video]: Graphics driver did not initialize an input driver. Attempting to pick a suitable driver.
+[INFO] [Input]: Found HID driver: "iohidmanager".
+[INFO] [Joypad]: Found joypad driver: "hid".
+[INFO] [Video]: Found display server: null
+[INFO] [CoreAudio]: Using output sample rate of 48000.0 Hz
+[INFO] [CoreAudio]: Using buffer size of 24576 bytes: (latency = 64 ms)
+[INFO] [Display]: Found display driver: "gl".
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[libretro INFO] Controller 1: Control Pad
+[libretro INFO] Controller 2: Control Pad
+[INFO] [Playlist]: Loading history file: [/Users/pablojimenez/Library/Application Support/RetroArch/config/content_history.lpl].
+[INFO] [Playlist]: Loading history file: [/Users/pablojimenez/Library/Application Support/RetroArch/config/content_music_history.lpl].
+[INFO] [Playlist]: Loading history file: [/Users/pablojimenez/Library/Application Support/RetroArch/config/content_image_history.lpl].
+[INFO] [Playlist]: Loading favorites file: [/Users/pablojimenez/Library/Application Support/RetroArch/config/content_favorites.lpl].
+[INFO] [Playlist]: Written to playlist file: /Users/pablojimenez/Library/Application Support/RetroArch/config/content_history.lpl
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Font]: Using font rendering backend: stb-unicode.
+[INFO] [Environ]: SET_GEOMETRY: 352x272, aspect: 1.333.
+[libretro INFO] Target framebuffer size : 330x272
+[libretro INFO] input_set_geometry: 330x272
+[INFO] [Config]: Saved new config to "/Users/pablojimenez/Library/Application Support/RetroArch/config/retroarch.cfg".
+[INFO] [Core]: Content ran for a total of: 00 hours, 00 minutes, 02 seconds.
+[INFO] [Core]: Unloading game..
+[INFO] [Core]: Unloading core..
+[libretro INFO] [Beetle Saturn]: Samples / Frame: 883.04545
+[libretro INFO] [Beetle Saturn]: Estimated FPS: 49.94080
+[INFO] [Core]: Unloading core symbols..
+[INFO] [Core Options]: Saved core options file to "/Users/pablojimenez/Library/Application Support/RetroArch/config/Beetle Saturn/Beetle Saturn.opt"
+[INFO] [Video]: Does not have enough samples for monitor refresh rate estimation. Requires to run for at least 4096 frames.
+[INFO] [Video]: Does not have enough samples for monitor refresh rate estimation. Requires to run for at least 4096 frames.
