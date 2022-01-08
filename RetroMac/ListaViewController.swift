@@ -409,7 +409,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             }
             
         }
-        if juegosnuevos > 1 {
+        if juegosnuevos >= 1 {
             xmlJuegosNuevos()
         }
         print("Total: \(juegosXml.count) Juegos en XML")

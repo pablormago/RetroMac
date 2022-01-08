@@ -183,7 +183,9 @@ class ViewController: NSViewController {
         rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
         //print(rutaApp)
         onOff.stringValue = "SALIR"
-        let totalSistemas = cuentaSistemas()
+        var totalSistemas = 0
+        totalSistemas = cuentaSistemas()
+        print(cuentaSistemas())
         let totalAnchuraMenu = ((totalSistemas+1) * 560)
         //Parsear Sistemas
         let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
@@ -496,6 +498,8 @@ class ViewController: NSViewController {
         }
         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+        // sistemaLabel.attributedStringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+        
         
         ///TECLAS
         //cuentaDec = CGFloat(botonactual)
@@ -616,7 +620,7 @@ func crearGameListInicio (ruta: String){
 func cuentaSistemas() -> NSInteger {
     //print("ENTRO A CONTAR")
     let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
-    
+    sistemasTengo = []
     tieneRoms = false
     if let pathXMLinterno = pathXMLinterno, let data = try? Data(contentsOf: pathXMLinterno as URL)
         
