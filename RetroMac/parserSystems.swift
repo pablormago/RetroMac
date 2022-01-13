@@ -252,7 +252,7 @@ extension LinksParser: XMLParserDelegate
     
     public func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error)
     {
-        print("Author parsing error. \(parseError.localizedDescription)")
+        //print("Author parsing error. \(parseError.localizedDescription)")
         parser.abortParsing()
     }
 }

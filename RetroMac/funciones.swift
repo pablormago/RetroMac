@@ -205,93 +205,7 @@ func mamelista() -> Any{
     return miArray
     
 }
-func cuentaJuegosEnSistemas()  {
-    //print("ENTRO A CONTAR")
-    let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
-    var datosdelsitema = [[String]]()
-    datosdelsitema = []
-    tieneRoms = false
-    juegosPorConsola = []
-    if let pathXMLinterno = pathXMLinterno, let data = try? Data(contentsOf: pathXMLinterno as URL)
-        
-    {
-        let parser = BookParser(data: data)
-        
-        
-        for book in parser.books
-        {
-            //print(book.name)
-            let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
-            let miruta = rutaApp2 + book.path /// Es lo mismo que ROMPATH
-            //print(miruta)
-            ///Comprobar si ha gamelist.xml
-            let fileDoesExist2 = FileManager.default.fileExists(atPath: miruta + "/gamelist.xml")
-            
-            if fileDoesExist2 {
-                ///Si existe, lo añadimos al array de sistemas
-                //sistemasTengo.append(book.name)
-                print(book.name)
-                var miSistema = book.name
-                var extensionescuenta = String()
-                extensionescuenta = book.extensiones
-                var migrupo = [miSistema,extensionescuenta]
-                
-                datosdelsitema.append(migrupo)
-                //print(datosdelsitema)
-                //print(datosdelsitema)
-                
-            }else {
-                ///Si no existe hay que comprobar si hay juegos, y crear el xml en caso de que lo haya
-                
-                //                var encuentra =  false
-                //                var isDir:ObjCBool = true
-                //                if FileManager.default.fileExists(atPath: miruta, isDirectory: &isDir) {
-                //                    //para cada book.extensiones
-                //                    var extensionescuenta = [String]()
-                //
-                //                    extensionescuenta = book.extensiones.components(separatedBy: " ")
-                //                    for extensiones in extensionescuenta {
-                //
-                //                        let fileManager = FileManager.default
-                //                        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: miruta as String)!
-                //                        while let element = enumerator.nextObject() as? String {
-                //                            if element.hasSuffix(extensiones) { // checks the extension
-                //                                //print(element)
-                //                                encuentra = true
-                //                                break
-                //                            }
-                //                        }
-                //                        if encuentra == true {
-                //                            break
-                //                        }else{
-                //                            encuentra = false
-                //                        }
-                //                    }
-                //
-                //                    if encuentra == true {
-                //                        ///Creamos el xml y añadimos el sistema al array porque ha encontrado ROMS
-                //                        //print("ROMS ENCONTRADAS")
-                //                        systemextensions = extensionescuenta
-                //                        rompath = miruta
-                //                        //print(systemextensions)
-                //                        crearGameListInicio(ruta: miruta)
-                //                        //sistemasTengo.append(book.name)
-                //                    }else {
-                //
-                //                    }
-                //                }
-            }
-            
-            
-        }
-    }
-    
-    //sistemasTengo.sort()
-    //return sistemasTengo
-    //print(datosdelsitema)
-    cuentajuegos(arraySistema: datosdelsitema)
-    
-}
+
 
 func cuentajuegos(arraySistema: [[String]]) -> [[String]]{
     var juegosPorSistema = [[String]]()
@@ -318,6 +232,7 @@ func cuentajuegos(arraySistema: [[String]]) -> [[String]]{
             
         }else{
             print("ERROR GARGANDO gamelist.xml en: \(String(describing: pathXMLinterno2))")
+            juegosenTotal = 0
         }
         //    print("Nuevos: ")
         
@@ -325,6 +240,7 @@ func cuentajuegos(arraySistema: [[String]]) -> [[String]]{
         migrupo2 = [sistema[0], String(juegosenTotal)]
         
         juegosPorConsola.append(migrupo2)
+        
         juegosPorSistema.append(migrupo2)
     }
     
@@ -332,7 +248,246 @@ func cuentajuegos(arraySistema: [[String]]) -> [[String]]{
     //print("Total: \(juegosEnSistema.count) Juegos en XML")
     //print(juegosPorConsola)
     //print(juegosPorSistema)
+    
     return juegosPorSistema
+}
+
+func juegosGamelistCarga(sistema: [String]) -> [Juego] {
+    var juegosnuevos = 0
+    var miSistema = String(sistema[0])
+    var rutaApp3 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "") + "/roms/\(sistema[0])"
+    let extensionesSistema = sistema[2].components(separatedBy: " ")
+    var losJuegos: [Juego] = []
+    juegosXml2 = []
+    let pathXMLinterno2 = NSURL(string:  "file://" + rutaApp3 + "/gamelist.xml")
+    if let pathXMLinterno2 = pathXMLinterno2, let data2 = try? Data(contentsOf: pathXMLinterno2 as URL )
+    {
+        let parser2 = GameParser(data: data2)
+        for game in parser2.games
+        {
+            var datosJuego3 = [String]()
+            
+            let miJuego = siRutaRelativa2(ruta: String(game.path))
+            let miNombre = String(game.name)
+            let miDescripcion = String(game.desc)
+            let miMapa = siRutaRelativa2(ruta:String(game.map))
+            let miManual = siRutaRelativa2(ruta:String(game.manual))
+            let miNews = siRutaRelativa2(ruta:String(game.news))
+            let miTittleShot = siRutaRelativa2(ruta:String(game.tittleshot))
+            let miFanArt = siRutaRelativa2(ruta:String(game.fanart))
+            let miThumbnail = siRutaRelativa2(ruta:String(game.thumbnail))
+            let miImage = siRutaRelativa2(ruta:String(game.image))
+            let miVideo = siRutaRelativa2(ruta:String(game.video))
+            let miMarquee = siRutaRelativa2(ruta:String(game.marquee))
+            let miReleaseData = String(game.releasedata)
+            let miDeveloper = String(game.developer)
+            let miPublisher = String(game.publisher)
+            let miGenre = String(game.genre)
+            let miLang = String(game.lang)
+            let miPlayers = String(game.players)
+            let miRating = String(game.rating)
+            var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating)
+            
+            datosJuego3 = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating ]
+            
+            juegosXml2.append(datosJuego3)
+            losJuegos.append(datosDeMiJuego)
+            //return datosJuego3
+            
+            
+        }
+        
+    }else{
+        print("ERROR GARGANDO gamelist.xml en: \(String(describing: pathXMLinterno2))")
+    }
+    print("Nuevos: ")
+    for extensiones in extensionesSistema {
+        
+        
+        let fileManager = FileManager.default
+        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rutaApp3 as String)!
+        while let element = enumerator.nextObject() as? String {
+            if element.hasSuffix(extensiones) { // checks the extension
+                
+                let rutacompleta = rutaApp3 + "/" + element
+                var encuentra = false
+                for juego in juegosXml2 {
+                    if juego[0] == rutacompleta {
+                        encuentra = true
+                        break
+                    }else {
+                        encuentra = false
+                    }
+                }
+                
+                if encuentra == false {
+                    juegosnuevos += 1
+                    ///AÑADIR FUNCION PARA AÑADIR JUEGO AL XML
+                    var datosJuegoNoXml = [String]()
+                    var datosDeMiJuego: Juego = Juego(path: rutacompleta, name: String(element), description: "", map: "", manual: "", news: "", tittleshot: "", fanart: "", thumbnail: "", image: "", video: "", marquee: "", releasedate: "", developer: "", publisher: "", genre: "", lang: "", players: "", rating: "")
+                    datosJuegoNoXml = [rutacompleta , String(element), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" ]
+                    juegosXml2.append(datosJuegoNoXml)
+                    losJuegos.append(datosDeMiJuego)
+                }
+                
+            }
+        }
+        
+    }
+    if juegosnuevos >= 1 {
+        print(juegosnuevos)
+        xmlJuegosNuevos2(ruta: rutaApp3)
+    }
+    //print("PRUEBA Total: \(losJuegos.count) Juegos en XML")
+    juegosXml2.sort(by: {($0[1] ) < ($1[1] ) })
+    //
+    
+    
+    //allTheGames.append(miGrupo)
+    //print(miGrupo)
+    return losJuegos
+}
+
+func siRutaRelativa2(ruta: String) -> String {
+    var rutaAbsoluta = ""
+    if ruta.hasPrefix("./") {
+        rutaAbsoluta = rompath + String(String(ruta).dropFirst())
+    }else{
+        rutaAbsoluta = ruta
+    }
+    return rutaAbsoluta
+}
+func xmlJuegosNuevos2(ruta: String){
+    print("Crear XML añadiendo Juegos Nuevos")
+    var nuevoGamelist = ruta + "/gamelist.xml"
+    let root = XMLElement(name: "gameList")
+    let xml = XMLDocument(rootElement: root)
+    for juego in juegosXml2 {
+        let gameNode = XMLElement(name: "game")
+        root.addChild(gameNode)
+        let pathNode = XMLElement(name: "path", stringValue: juego[0])
+        let filename = juego[1]
+        let name = (filename as NSString).deletingPathExtension
+        let nameNode = XMLElement(name: "name", stringValue: name)
+        let descNode = XMLElement(name: "desc", stringValue: juego[2])
+        let mapNode = XMLElement(name: "map", stringValue: juego[3])
+        let manualNode = XMLElement(name: "manual", stringValue: juego[4])
+        let newsNode = XMLElement(name: "news",  stringValue: juego[5])
+        let tittleshotNode = XMLElement(name: "tittleshot", stringValue: juego[6])
+        let fanartNode = XMLElement(name: "fanart", stringValue: juego[7])
+        let thumbnailNode = XMLElement(name: "thumbnail", stringValue: juego[8])
+        //let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: juego[1]) )
+        let imageNode = XMLElement(name: "image", stringValue: juego[9] )
+        //let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: juego[1]) )
+        let videoNode = XMLElement(name: "video", stringValue: juego[10] )
+        let marqueeNode = XMLElement(name: "marquee", stringValue: juego[11])
+        let releasedateNode = XMLElement(name: "releasedate",  stringValue: juego[12])
+        let developerNode = XMLElement(name: "developer", stringValue: juego[13])
+        let publisherNode = XMLElement(name: "publisher", stringValue: juego[14])
+        let genreNode = XMLElement(name: "genre", stringValue: juego[15])
+        let langNode = XMLElement(name: "lang", stringValue: juego[16])
+        let playersNode = XMLElement(name: "players", stringValue: juego[17])
+        let ratingNode = XMLElement(name: "rating", stringValue: juego[18])
+        ///AÑADIMOS LOS NODOS
+        gameNode.addChild(pathNode)
+        gameNode.addChild(nameNode)
+        gameNode.addChild(descNode)
+        gameNode.addChild(mapNode)
+        gameNode.addChild(manualNode)
+        gameNode.addChild(newsNode)
+        gameNode.addChild(tittleshotNode)
+        gameNode.addChild(fanartNode)
+        gameNode.addChild(thumbnailNode)
+        gameNode.addChild(imageNode)
+        gameNode.addChild(videoNode)
+        gameNode.addChild(marqueeNode)
+        gameNode.addChild(releasedateNode)
+        gameNode.addChild(developerNode)
+        gameNode.addChild(publisherNode)
+        gameNode.addChild(genreNode)
+        gameNode.addChild(langNode)
+        gameNode.addChild(playersNode)
+        gameNode.addChild(ratingNode)
+    }
+    let xmlData = xml.xmlData(options: .nodePrettyPrint)
+    
+    print("TOTAL: \(juegosXml2.count) Juegos en Total")
+    do{
+        try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
+    }catch {}
+}
+
+func crearGameListInicioCarga (ruta: String){
+    var counter = 0
+    var nuevoGamelist = ruta + "/gamelist.xml"
+    let root = XMLElement(name: "gameList")
+    let xml = XMLDocument(rootElement: root)
+    
+    //print(xml.xmlString)
+    for extensiones in extensionesTemp {
+        
+        let fileManager = FileManager.default
+        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
+        while let element = enumerator.nextObject() as? String {
+            if element.hasSuffix(extensiones) { // checks the extension
+                counter += 1
+                let gameNode = XMLElement(name: "game")
+                root.addChild(gameNode)
+                let pathNode = XMLElement(name: "path", stringValue: ruta + "/" + element)
+                let filename = element
+                let name = (filename as NSString).deletingPathExtension
+                let nameNode = XMLElement(name: "name", stringValue: name)
+                let descNode = XMLElement(name: "desc")
+                let mapNode = XMLElement(name: "map")
+                let manualNode = XMLElement(name: "manual")
+                let newsNode = XMLElement(name: "news")
+                let tittleshotNode = XMLElement(name: "tittleshot")
+                let fanartNode = XMLElement(name: "fanart")
+                let thumbnailNode = XMLElement(name: "thumbnail")
+                let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: element) )
+                let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: element) )
+                let marqueeNode = XMLElement(name: "marquee")
+                let releasedateNode = XMLElement(name: "releasedate")
+                let developerNode = XMLElement(name: "developer")
+                let publisherNode = XMLElement(name: "publisher")
+                let genreNode = XMLElement(name: "genre")
+                let langNode = XMLElement(name: "lang")
+                let playersNode = XMLElement(name: "players")
+                let ratingNode = XMLElement(name: "rating")
+                ///AÑADIMOS LOS NODOS
+                gameNode.addChild(pathNode)
+                gameNode.addChild(nameNode)
+                gameNode.addChild(descNode)
+                gameNode.addChild(mapNode)
+                gameNode.addChild(manualNode)
+                gameNode.addChild(newsNode)
+                gameNode.addChild(tittleshotNode)
+                gameNode.addChild(fanartNode)
+                gameNode.addChild(thumbnailNode)
+                gameNode.addChild(imageNode)
+                gameNode.addChild(videoNode)
+                gameNode.addChild(marqueeNode)
+                gameNode.addChild(releasedateNode)
+                gameNode.addChild(developerNode)
+                gameNode.addChild(publisherNode)
+                gameNode.addChild(genreNode)
+                gameNode.addChild(langNode)
+                gameNode.addChild(playersNode)
+                gameNode.addChild(ratingNode)
+                
+                
+            }
+        }
+        
+    }
+    let xmlData = xml.xmlData(options: .nodePrettyPrint)
+    
+    print("TOTAL: \(counter) Juegos")
+    do{
+        try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
+    }catch {}
+    
+    
 }
 
 

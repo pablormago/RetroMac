@@ -61,6 +61,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             
         }
         
+        for consola in allTheGames {
+            if consola.sistema == nombresistemaactual {
+                for game in consola.games {
+                    print(game)
+                }
+            }
+        }
+        
         /// FIN JUEGOS GAMELIST
         
         

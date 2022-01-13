@@ -36,6 +36,12 @@ var nombresistemaactual = String()
 var abiertaHome = true
 var titulosMame = [[String]]()
 var juegosPorConsola = [[String]]()
+var juegosXml2 = [[String]]()
+var allTheGames: [Consola] = []
+var extensionesTemp = [String]()
+var cuentaPrincipio = 0
+
+
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -67,17 +73,8 @@ class ViewController: NSViewController {
     @IBAction func openSettings(_ sender: NSButton)  {
         
         
-//        if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ViewController {
-//            controller.dismiss(self)
-//            ventana = "Principal"
-//
-//        }
         
         self.presentAsSheet(sheetViewController)
-        
-        //Función para abrir ventana de ajustes
-        
-        
         
     }
     
@@ -154,12 +151,17 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        titulosMame = mamelista() as! [[String]]
+        
         ventana = "Principal"
         print("DID LOAD")
         cuenta = 0
-        llenaSistemasIds()
-        cuentaJuegosEnSistemas()
+//        titulosMame = mamelista() as! [[String]]
+//        llenaSistemasIds()
+        
+//        if cuentaPrincipio == 0 {
+//            cuentaJuegosEnSistemas()
+//        }
+        
         
         //view.window?.isOpaque = false
         //view.window?.backgroundColor = NSColor (red: 1, green: 0.5, blue: 0.5, alpha: 0.5)
@@ -188,76 +190,112 @@ class ViewController: NSViewController {
         print(cuentaSistemas())
         let totalAnchuraMenu = ((totalSistemas+1) * 560)
         //Parsear Sistemas
-        let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
+//        let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
+//        let documentView = NSView(frame: NSRect(x: 0,y: 0,width: totalAnchuraMenu,height: 178))
+//        if let pathXMLinterno = pathXMLinterno, let data = try? Data(contentsOf: pathXMLinterno as URL)
+//        {
+//            
+//            let parser = BookParser(data: data)
+//            var counter = 0
+//            
+//            for book in parser.books
+//                
+//            {
+//                
+//                let offset = CGFloat(counter * 560)
+//                let button = ButtonConsolas(frame: NSRect(x: offset, y: 0, width: 560, height: 178 ))
+//                button.tag = counter+1
+//                button.title = book.name
+//                let home = Bundle.main.bundlePath
+//                let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png")!
+//                button.imageScaling = .scaleProportionallyDown
+//                let path =  home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png"
+//                let fileDoesExist = FileManager.default.fileExists(atPath: path)
+//                if fileDoesExist {
+//                    button.image = imagen2
+//                }
+//                button.Sistema = book.name
+//                button.Comando = book.comando
+//                button.RomsPath = book.path
+//                button.Extensiones = book.extensiones
+//                button.Platform = book.platform
+//                button.Theme = book.theme
+//                button.Fullname = book.fullname
+//                button.target = self
+//                button.action = #selector(ViewController.selecionSistema)
+//                button.isBordered = false
+//                
+//                //button.layer?.backgroundColor = NSColor.red.cgColor
+//                //var miruta = rutaApp + book.path
+//                //var isDir:ObjCBool = true
+//                
+//                /// COMPROBAMOS SI TIENE ROMS ***********************
+//                
+//                
+//                for sistema in sistemasTengo {
+//                    
+//                    if sistema == book.name{
+//                        for consola in juegosPorConsola {
+//                            if consola[0] == book.name {
+//                                button.numeroJuegos = consola[1]
+//                                break
+//                            }
+//                        }
+//                        
+//                        //button.numeroJuegos = cuentajuegos(sistema: book.name)
+//                        //print ("Sistema: \(book.name) -> \(button.numeroJuegos) juegos" )
+//                        documentView.addSubview(button)
+//                        counter += 1
+//                        break
+//                    }
+//                    
+//                }
+//                
+//                /// COMPROBAMOS SI TIENE ROMS ***********************
+//                
+//                scrollMain.documentView = documentView
+//                
+//            }
+//            
+//            cuantosSistemas = counter
+//            ventana = "Principal"
+//            //onOff.stringValue = rutaApp
+//        }
+        ///Carga desde allTheGames
+        var counter = 0
         let documentView = NSView(frame: NSRect(x: 0,y: 0,width: totalAnchuraMenu,height: 178))
-        if let pathXMLinterno = pathXMLinterno, let data = try? Data(contentsOf: pathXMLinterno as URL)
-        {
+        for consola in allTheGames {
             
-            let parser = BookParser(data: data)
-            var counter = 0
-            
-            for book in parser.books
-                
-            {
-                
-                let offset = CGFloat(counter * 560)
-                let button = ButtonConsolas(frame: NSRect(x: offset, y: 0, width: 560, height: 178 ))
-                button.tag = counter+1
-                button.title = book.name
-                let home = Bundle.main.bundlePath
-                let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png")!
-                button.imageScaling = .scaleProportionallyDown
-                let path =  home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png"
-                let fileDoesExist = FileManager.default.fileExists(atPath: path)
-                if fileDoesExist {
-                    button.image = imagen2
-                }
-                button.Sistema = book.name
-                button.Comando = book.comando
-                button.RomsPath = book.path
-                button.Extensiones = book.extensiones
-                button.Platform = book.platform
-                button.Theme = book.theme
-                button.Fullname = book.fullname
-                button.target = self
-                button.action = #selector(ViewController.selecionSistema)
-                button.isBordered = false
-                //button.layer?.backgroundColor = NSColor.red.cgColor
-                //var miruta = rutaApp + book.path
-                //var isDir:ObjCBool = true
-                
-                /// COMPROBAMOS SI TIENE ROMS ***********************
-                
-                
-                for sistema in sistemasTengo {
-                    
-                    if sistema == book.name{
-                        for consola in juegosPorConsola {
-                            if consola[0] == book.name {
-                                button.numeroJuegos = consola[1]
-                                break
-                            }
-                        }
-                        
-                        //button.numeroJuegos = cuentajuegos(sistema: book.name)
-                        //print ("Sistema: \(book.name) -> \(button.numeroJuegos) juegos" )
-                        documentView.addSubview(button)
-                        counter += 1
-                        break
-                    }
-                    
-                }
-                
-                /// COMPROBAMOS SI TIENE ROMS ***********************
-                
-                scrollMain.documentView = documentView
-                
+            let offset = CGFloat(counter * 560)
+            let button = ButtonConsolas(frame: NSRect(x: offset, y: 0, width: 560, height: 178 ))
+            button.tag = counter+1
+            button.title = consola.sistema
+            let home = Bundle.main.bundlePath
+            let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + consola.sistema + ".png")!
+            button.imageScaling = .scaleProportionallyDown
+            let path =  home +  "/Contents/Resources/themes/default/logos/" + consola.sistema + ".png"
+            let fileDoesExist = FileManager.default.fileExists(atPath: path)
+            if fileDoesExist {
+                button.image = imagen2
             }
-            
-            cuantosSistemas = counter
-            ventana = "Principal"
-            //onOff.stringValue = rutaApp
+            button.Sistema = consola.sistema
+            button.Comando = consola.command
+            button.RomsPath = consola.rompath
+            button.Extensiones = consola.extensions
+            button.Platform = consola.platform
+            //button.Theme = book.theme
+            button.Fullname = consola.fullname
+            button.numeroJuegos = String(consola.games.count)
+            button.target = self
+            button.action = #selector(ViewController.selecionSistema)
+            button.isBordered = false
+            documentView.addSubview(button)
+            counter += 1
         }
+        cuantosSistemas = counter
+        ventana = "Principal"
+        scrollMain.documentView = documentView
+        ///Fin carga desde allTheGames
         if let screen = NSScreen.main {
             
             let rect = screen.frame
@@ -278,24 +316,17 @@ class ViewController: NSViewController {
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 scrollMain.isHidden = false
                 botonactual = cuentaboton
-                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                //sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+               
+               
             }else {
                 cuentaboton = botonactual
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 scrollMain.isHidden = false
-                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                //sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                
             }
             
-            
-            
-            //button!.isHighlighted = true
-            //button?.highlight(true)
         }
         cuentaDec = CGFloat(botonactual)
-//        let button = self.view.viewWithTag(Int(cuentaboton)) as? ButtonConsolas
-//        sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
     }
     
     
@@ -341,12 +372,7 @@ class ViewController: NSViewController {
                         print ("BOTONACTUAL: \(botonactual)")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-//                        let button = self.view.viewWithTag(Int(cuentaboton)) as? ButtonConsolas
-//                        sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
-                        //cuentaboton = (Int (anchuraPantall / 560))
-                        //let button = self.view.viewWithTag(Int(cuentaboton)) as? NSButton
-                        //button!.isHighlighted = true
-                        //button?.highlight(true)
+
                     }
                 }
                 
@@ -364,21 +390,12 @@ class ViewController: NSViewController {
                         let width = rect.size.width
                         let mitadPantalla = Int (width / 2)
                         anchuraPantall = Int(width)
-                        
-                        
-                        //print("Derecho Mover")
                         cuentaboton = botonactual
                         let trozoamover = (560 * botonactual) - 280
                         let cachito = trozoamover - mitadPantalla
                         //print(botonactual)
                         scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                         scrollMain.isHidden = false
-//                        let button = self.view.viewWithTag(Int(cuentaboton)) as? ButtonConsolas
-//                        sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
-                        //cuentaboton = (Int (anchuraPantall / 560))
-                        //let button = self.view.viewWithTag(Int(cuentaboton)) as? NSButton
-                        //button!.isHighlighted = true
-                        //button?.highlight(true)
                         print ("CUENTABOTON: \(cuentaboton)")
                         print ("BOTONACTUAL: \(botonactual)")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
@@ -472,6 +489,7 @@ class ViewController: NSViewController {
     
     override func viewWillAppear() {
         super.viewWillAppear()
+        self.view.window?.styleMask = [.titled,.closable, .fullSizeContentView, .resizable]
         if let screen = NSScreen.main {
             let rect = screen.frame
             let width = rect.size.width
@@ -496,13 +514,15 @@ class ViewController: NSViewController {
             //button!.isHighlighted = true
             //button?.highlight(true)
         }
+        
         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-        // sistemaLabel.attributedStringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+        if button!.numeroJuegos == nil {
+            button?.numeroJuegos = "0"
+        }
+        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos! ?? "0") Juegos "
+       
         
-        
-        ///TECLAS
-        //cuentaDec = CGFloat(botonactual)
+       
         
         
     }
@@ -512,20 +532,20 @@ class ViewController: NSViewController {
         
         sistemaActual = sender.Fullname!
         nombresistemaactual = sender.Sistema!
-        print(nombresistemaactual)
+        //print(nombresistemaactual)
         //print (sender.Comando! )
         //print (sender.Sistema! )
         rompath = rutaApp + sender.RomsPath!
-        print(rompath)
+        //print(rompath)
         systemextensions = sender.Extensiones!.components(separatedBy: " ")
         comandoaejecutar = rutaApp
         comandoaejecutar = comandoaejecutar + sender.Comando!.replacingOccurrences(of: "%CORE%", with: rutaApp)
         botonactual = sender.tag
         //crearGameList(ruta: rompath)
-        print(sistemaActual)
+        //print(sistemaActual)
         if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ListaViewController {
             abiertaLista = true
-            
+            cuentaPrincipio += 1
             self.view.window?.contentViewController = controller
         }
     }
@@ -717,54 +737,66 @@ func buscaVideo (juego: String) ->String {
         
     }
     let fileManager = FileManager.default
-    let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
-    //Comprobamos Video
-    while let element = enumerator.nextObject() as? String {
-        if element.contains(name) && element.hasSuffix(".mp4") {
-            tieneVideo = true
-            miVideo = rompath + "/" + element
-            break
+    if rompath != "" && rompath != nil {
+        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
+        //Comprobamos Video
+        while let element = enumerator.nextObject() as? String {
+            if element.contains(name) && element.hasSuffix(".mp4") {
+                tieneVideo = true
+                miVideo = rompath + "/" + element
+                break
+            }
+            else {
+                miVideo = ""
+                tieneVideo = false
+            }
         }
-        else {
-            miVideo = ""
-            tieneVideo = false
-        }
+        return miVideo
+    } else {
+        return ""
     }
     
-    return miVideo
+    
+    
 }
 
 func buscaImage (juego: String) -> String {
     var tieneSnap = false
     var miFoto = ""
     let fileManager = FileManager.default
-    let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
-    var name = (juego as NSString).deletingPathExtension
-    if name.contains("/") {
-        let index2 = name.range(of: "/", options: .backwards)?.lowerBound
-        let substring2 = name.substring(from: index2! )
-        let result1 = String(substring2.dropFirst())
-        name = result1
-    }
-    else {
-        
-    }
-    while let element = enumerator2.nextObject() as? String {
-        
-        if element.contains(name){
-            if (element.hasSuffix(".png") || element.hasSuffix(".jpg") || element.hasSuffix(".jpeg")) && !element.contains("marquee"){
-                tieneSnap = true
-                miFoto = rompath + "/" + element
-                break
-            }
+    print("MI ROMPATH: \(rompath)")
+    if rompath != "" && rompath != nil {
+        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
+        var name = (juego as NSString).deletingPathExtension
+        if name.contains("/") {
+            let index2 = name.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = name.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            name = result1
         }
         else {
-            miFoto = ""
-            tieneSnap = false
+            
         }
+        while let element = enumerator2.nextObject() as? String {
+            
+            if element.contains(name){
+                if (element.hasSuffix(".png") || element.hasSuffix(".jpg") || element.hasSuffix(".jpeg")) && !element.contains("marquee"){
+                    tieneSnap = true
+                    miFoto = rompath + "/" + element
+                    break
+                }
+            }
+            else {
+                miFoto = ""
+                tieneSnap = false
+            }
+        }
+        
+        return miFoto
+    } else {
+        return ""
     }
     
-    return miFoto
     
 }
 
@@ -798,3 +830,33 @@ class ButtonConsolas: NSButton {
     }
 }
 
+struct Juego {
+    let path: String
+    let name: String
+    let description: String
+    let map: String
+    let manual: String
+    let news: String
+    let tittleshot: String
+    let fanart: String
+    let thumbnail: String
+    let image: String
+    let video: String
+    let marquee: String
+    let releasedate: String
+    let developer: String
+    let publisher: String
+    let genre: String
+    let lang: String
+    let players: String
+    let rating: String
+}
+struct Consola {
+    let sistema: String
+    let fullname: String
+    let command: String
+    let rompath: String
+    let platform: String
+    let extensions: String
+    let games: [Juego]
+}

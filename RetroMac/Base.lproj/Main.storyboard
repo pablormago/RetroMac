@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="XfG-lQ-9wD">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="DoT-eK-WVN">
     <dependencies>
         <plugIn identifier="com.apple.AVKitIBPlugin" version="15705"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
@@ -83,9 +83,9 @@
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
-                <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="RetroMac" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
-                        <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
+                <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
+                    <window key="window" title="- RetroMac -" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hasShadow="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                        <windowStyleMask key="styleMask" titled="YES" fullSizeContentView="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="518" y="320" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
@@ -501,6 +501,51 @@
             </objects>
             <point key="canvasLocation" x="-1980" y="1506"/>
         </scene>
+        <!-- - RetroMac - -->
+        <scene sceneID="9W5-uM-uo2">
+            <objects>
+                <viewController title="- RetroMac - " storyboardIdentifier="SplashView" id="DoT-eK-WVN" customClass="SplashController" customModule="RetroMac" sceneMemberID="viewController">
+                    <view key="view" id="Znw-V2-fKt">
+                        <rect key="frame" x="0.0" y="0.0" width="511" height="370"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FOh-pR-ngj">
+                                <rect key="frame" x="0.0" y="0.0" width="511" height="370"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="retro" imagePosition="only" alignment="center" imageScaling="axesIndependently" inset="2" id="ItK-8e-q1c">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YiX-m8-daB">
+                                <rect key="frame" x="-2" y="43" width="515" height="39"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="BGR-QY-yaq">
+                                    <font key="font" size="17" name="GB18030Bitmap"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uGl-i7-Qn4">
+                                <rect key="frame" x="-2" y="273" width="515" height="71"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" allowsUndo="NO" alignment="center" title="RetroMAC" id="xxn-qk-uXh">
+                                    <font key="font" size="51" name="GB18030Bitmap"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="taskLabel" destination="YiX-m8-daB" id="6dZ-YJ-ySb"/>
+                        <segue destination="XfG-lQ-9wD" kind="show" id="rNI-hX-NhJ"/>
+                    </connections>
+                </viewController>
+                <customObject id="T76-IN-3oi" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-580.5" y="1465"/>
+        </scene>
         <!--Configuración-->
         <scene sceneID="gWK-2M-Tqp">
             <objects>
@@ -597,8 +642,12 @@
         <image name="entrar" width="621" height="347"/>
         <image name="lefft" width="94" height="95"/>
         <image name="pdf" width="128" height="128"/>
+        <image name="retro" width="1920" height="1080"/>
         <image name="right" width="94" height="95"/>
         <image name="sp_bar" width="1838" height="408"/>
         <image name="up" width="95" height="94"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="cq2-FE-JQM"/>
+    </inferredMetricsTieBreakers>
 </document>

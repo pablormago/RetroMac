@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		270485E52785FA7A00375232 /* funciones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270485E42785FA7A00375232 /* funciones.swift */; };
 		271417972762516C009CA02D /* ListaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271417962762516C009CA02D /* ListaViewController.swift */; };
+		272A6EA5278F4417005B0930 /* SplashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272A6EA4278F4416005B0930 /* SplashController.swift */; };
+		272A6EA8278F5EFE005B0930 /* retro.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 272A6EA6278F5EFD005B0930 /* retro.jpeg */; };
+		272A6EA9278F5EFE005B0930 /* retro2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 272A6EA7278F5EFE005B0930 /* retro2.jpeg */; };
 		2748C058278620FA002D633B /* mamelist.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2748C057278620FA002D633B /* mamelist.txt */; };
 		274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FEB152773321C007CE357 /* ScrollingTextView.swift */; };
 		27670276277E127900E43E7D /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27670275277E127900E43E7D /* ConfigViewController.swift */; };
@@ -53,6 +56,9 @@
 /* Begin PBXFileReference section */
 		270485E42785FA7A00375232 /* funciones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funciones.swift; sourceTree = "<group>"; };
 		271417962762516C009CA02D /* ListaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaViewController.swift; sourceTree = "<group>"; };
+		272A6EA4278F4416005B0930 /* SplashController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashController.swift; sourceTree = "<group>"; };
+		272A6EA6278F5EFD005B0930 /* retro.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = retro.jpeg; sourceTree = "<group>"; };
+		272A6EA7278F5EFE005B0930 /* retro2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = retro2.jpeg; sourceTree = "<group>"; };
 		2748C057278620FA002D633B /* mamelist.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mamelist.txt; sourceTree = "<group>"; };
 		274FEB152773321C007CE357 /* ScrollingTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollingTextView.swift; sourceTree = "<group>"; };
 		27670275277E127900E43E7D /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
@@ -139,7 +145,10 @@
 				271417962762516C009CA02D /* ListaViewController.swift */,
 				2789801E2757DCC000414985 /* Assets.xcassets */,
 				278980202757DCC000414985 /* Main.storyboard */,
+				272A6EA4278F4416005B0930 /* SplashController.swift */,
 				27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */,
+				272A6EA6278F5EFD005B0930 /* retro.jpeg */,
+				272A6EA7278F5EFE005B0930 /* retro2.jpeg */,
 				27670275277E127900E43E7D /* ConfigViewController.swift */,
 				2748C057278620FA002D633B /* mamelist.txt */,
 				27E7A30627691F740087C67A /* Base */,
@@ -252,7 +261,9 @@
 				279FBD71277375AA00CD5586 /* sp_bar.png in Resources */,
 				27E7A3052768E9BB0087C67A /* themes in Resources */,
 				278A629A278364F80051BA13 /* pdf.png in Resources */,
+				272A6EA9278F5EFE005B0930 /* retro2.jpeg in Resources */,
 				27E7A30727691F740087C67A /* Base in Resources */,
+				272A6EA8278F5EFE005B0930 /* retro.jpeg in Resources */,
 				279FBD56277350C900CD5586 /* down.png in Resources */,
 				2789801F2757DCC000414985 /* Assets.xcassets in Resources */,
 				279FBD59277350C900CD5586 /* lefft.png in Resources */,
@@ -320,6 +331,7 @@
 				27670276277E127900E43E7D /* ConfigViewController.swift in Sources */,
 				274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */,
 				2789801D2757DCBE00414985 /* ViewController.swift in Sources */,
+				272A6EA5278F4417005B0930 /* SplashController.swift in Sources */,
 				27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */,
 				27B58953277EF3F6006DBAB9 /* SwiftyJSON.swift in Sources */,
 				27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */,

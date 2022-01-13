@@ -287,7 +287,7 @@ extension GameParser: XMLParserDelegate
     
     public func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error)
     {
-        print("Book parsing error. \(parseError)")
+        //print("Book parsing error. \(parseError)")
     }
 }
 
