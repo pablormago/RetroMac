@@ -23,7 +23,7 @@ class SplashController: NSViewController {
 //        self.view.layer?.cornerRadius = 20.0
 //        self.view.window?.isOpaque = false
 //        self.view.window?.titlebarAppearsTransparent = true
-        self.view.window?.styleMask = [.borderless, .fullSizeContentView]
+        self.view.window?.styleMask = [.borderless]
     }
     
     override func viewDidAppear() {
@@ -162,7 +162,7 @@ class SplashController: NSViewController {
             print("Consola: \(consola.fullname) Juegos: \(consola.games.count)")
         }
         datosdelsitema.sort(by: {($0[0] ) < ($1[0] ) })
-        print(datosdelsitema)
+        //print(datosdelsitema)
         //cuentajuegos(arraySistema: datosdelsitema)
         
     }

@@ -489,7 +489,7 @@ class ViewController: NSViewController {
     
     override func viewWillAppear() {
         super.viewWillAppear()
-        self.view.window?.styleMask = [.titled,.closable, .fullSizeContentView, .resizable]
+        //self.view.window?.styleMask = [.titled,.closable, .fullSizeContentView, .resizable]
         if let screen = NSScreen.main {
             let rect = screen.frame
             let width = rect.size.width
@@ -588,8 +588,8 @@ func crearGameListInicio (ruta: String){
                 let tittleshotNode = XMLElement(name: "tittleshot")
                 let fanartNode = XMLElement(name: "fanart")
                 let thumbnailNode = XMLElement(name: "thumbnail")
-                let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: element) )
-                let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: element) )
+                let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: element, ruta: ruta) )
+                let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: element,ruta: ruta) )
                 let marqueeNode = XMLElement(name: "marquee")
                 let releasedateNode = XMLElement(name: "releasedate")
                 let developerNode = XMLElement(name: "developer")
@@ -721,7 +721,7 @@ func copiarBase(){
     
 }
 
-func buscaVideo (juego: String) ->String {
+func buscaVideo (juego: String, ruta: String) ->String {
     var tieneVideo = false
     var miVideo = ""
     //let nombreabuscar = juegos[juegosTableView.selectedRow]
@@ -737,8 +737,8 @@ func buscaVideo (juego: String) ->String {
         
     }
     let fileManager = FileManager.default
-    if rompath != "" && rompath != nil {
-        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
+    if ruta != "" && ruta != nil {
+        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         //Comprobamos Video
         while let element = enumerator.nextObject() as? String {
             if element.contains(name) && element.hasSuffix(".mp4") {
@@ -760,13 +760,13 @@ func buscaVideo (juego: String) ->String {
     
 }
 
-func buscaImage (juego: String) -> String {
+func buscaImage (juego: String, ruta: String) -> String {
     var tieneSnap = false
     var miFoto = ""
     let fileManager = FileManager.default
-    print("MI ROMPATH: \(rompath)")
-    if rompath != "" && rompath != nil {
-        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
+    print("MI ROMPATH: \(ruta)")
+    if ruta != "" && ruta != nil {
+        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
             let index2 = name.range(of: "/", options: .backwards)?.lowerBound

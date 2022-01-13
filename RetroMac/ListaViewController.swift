@@ -57,7 +57,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         if fileDoesExist {
             print("HAY XML")
-            juegosGamelist()
+            //juegosGamelist()
             
         }
         
@@ -65,10 +65,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             if consola.sistema == nombresistemaactual {
                 for game in consola.games {
                     print(game)
+                    let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating]
+                    juegosXml.append(mijuego)
+                    
                 }
             }
         }
-        
+        sistemaLabel.stringValue = sistemaActual
+        juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
         /// FIN JUEGOS GAMELIST
         
         
@@ -188,7 +192,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
         self.view.window?.setFrame(mirect, display: true)
-        
+        sistemaLabel.stringValue = sistemaActual
     }
     
     override func keyDown(with event: NSEvent) {
