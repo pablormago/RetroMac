@@ -340,7 +340,7 @@
                                 </clipView>
                                 <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="ALT-92-iKp">
-                                    <rect key="frame" x="1" y="729" width="1038" height="15"/>
+                                    <rect key="frame" x="1" y="728" width="1053" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="5bT-gi-3zL">
@@ -522,7 +522,7 @@
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="BGR-QY-yaq">
                                     <font key="font" size="17" name="GB18030Bitmap"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -531,13 +531,14 @@
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" allowsUndo="NO" alignment="center" title="RetroMAC" id="xxn-qk-uXh">
                                     <font key="font" size="51" name="GB18030Bitmap"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="botonFondo" destination="FOh-pR-ngj" id="BEs-Ij-oP7"/>
                         <outlet property="taskLabel" destination="YiX-m8-daB" id="6dZ-YJ-ySb"/>
                         <segue destination="XfG-lQ-9wD" kind="show" id="rNI-hX-NhJ"/>
                     </connections>

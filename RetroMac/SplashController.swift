@@ -11,6 +11,7 @@ import Cocoa
 class SplashController: NSViewController {
 
     
+    @IBOutlet weak var botonFondo: NSButton!
     @IBOutlet weak var taskLabel: NSTextField!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,18 +153,13 @@ class SplashController: NSViewController {
             }
         }
         
-        //sistemasTengo.sort()
-        //return sistemasTengo
-        //print(datosdelsitema)
-        //print("Sitema: \(allTheGames[0].fullname). Juego: \(allTheGames[0].games[0].path) ")
         allTheGames.sort(by: {($0.fullname ) < ($1.fullname) })
         
         for consola in allTheGames {
             print("Consola: \(consola.fullname) Juegos: \(consola.games.count)")
         }
         datosdelsitema.sort(by: {($0[0] ) < ($1[0] ) })
-        //print(datosdelsitema)
-        //cuentajuegos(arraySistema: datosdelsitema)
+        
         
     }
 }

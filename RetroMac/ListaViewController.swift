@@ -21,6 +21,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     @IBOutlet weak var backButton: NSButton!
     @IBOutlet weak var juegosTableView: NSTableView!
     @IBOutlet weak var snapShot: NSImageView!
+    
+    
     var juegos = [String]()
     var juegosXml = [[String]]()
     
@@ -34,6 +36,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         view.wantsLayer = true
         // change the background color of the layer
         view.layer?.backgroundColor = CGColor(red: 73/255, green: 74/255, blue: 77/255, alpha: 1)
+        setupMenu()
+        
         // Do view setup here.
         
         
@@ -64,7 +68,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         for consola in allTheGames {
             if consola.sistema == nombresistemaactual {
                 for game in consola.games {
-                    print(game)
+                    //print(game)
                     let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating]
                     juegosXml.append(mijuego)
                     
@@ -317,7 +321,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     
     @IBAction func backFunc(_ sender: NSButton) {
-        
+        print("ES: \(view.window?.firstResponder)")
         if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
             self.view.window?.contentViewController = controller
             abiertaLista = true
@@ -458,9 +462,11 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         return miImagen
     }
     
+    
+    
     func xmlJuegosNuevos(){
         print("Crear XML añadiendo Juegos Nuevos")
-        var nuevoGamelist = rompath + "/gamelist.xml"
+        let nuevoGamelist = rompath + "/gamelist.xml"
         let root = XMLElement(name: "gameList")
         let xml = XMLDocument(rootElement: root)
         for juego in juegosXml {
@@ -518,9 +524,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }catch {}
     }
     
-    func buscaJuego(){
+    @objc func buscaJuego(){
         print("Escrapeo - 1")
-        
+        infoLabel.stringValue = "Buscando Juego..."
         //mkdir -p foo
         var rutaacrear = rompath + "/media"
         var comando = "mkdir -p \(rutaacrear)"
@@ -647,10 +653,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                 
                                 
                                 
-//                                if ((subsubJson["noms"].rawString())?.contains(miputonombre))! {
-//                                    print("EUREKA")
-//
-//                                }
+                                //                                if ((subsubJson["noms"].rawString())?.contains(miputonombre))! {
+                                //                                    print("EUREKA")
+                                //
+                                //                                }
                             }
                         }
                         if encontrada == true {break}
@@ -669,10 +675,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 //DispatchQueue.main.sync {
                 print(idSistema)
                 
-                    DispatchQueue.main.sync {
-                        self.infoLabel.stringValue = "Juego ENCONTRADO, escrapeando..."
-                        self.scrapearJuego(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numero)
-                    }
+                DispatchQueue.main.sync {
+                    self.infoLabel.stringValue = "Juego ENCONTRADO, escrapeando..."
+                    self.scrapearJuego(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numero)
+                }
                 
                 
                 //}
@@ -702,7 +708,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
     }
     
-    func scrapearJuego (juego: String, sistema: String, nombrejuego: String, filajuego: Int){
+    @objc func scrapearJuego (juego: String, sistema: String, nombrejuego: String, filajuego: Int){
         print("Escrapeo - 2")
         var mifeed: JSON?
         let defaults = UserDefaults.standard
@@ -1351,6 +1357,48 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
         infoLabel.stringValue = "** JUEGOS ESCRAPEADOS **"
     }
+    
+    func crearItemsMenu() -> [NSMenuItem]{
+        
+        ///Menu ITEMS de Scrapear
+        let scrapGame = NSMenuItem(title: "Scrapear Juego", action: #selector(buscaJuego), keyEquivalent: "")
+        let scrapSystem = NSMenuItem(title: "Scrapear Sistema", action: nil, keyEquivalent: "")
+        let scrapAll = NSMenuItem(title: "Scrapear Todos los Sistemas", action: nil, keyEquivalent: "")
+        let scrapSubmenu = NSMenu()
+        scrapSubmenu.addItem(scrapGame)
+        scrapSubmenu.addItem(scrapSystem)
+        scrapSubmenu.addItem(scrapAll)
+        let scrapItem = NSMenuItem(title: "Scrapear", action: nil, keyEquivalent: "")
+        scrapItem.submenu = scrapSubmenu
+        
+        /// Menu ITEMS de Juego
+        let renameGame = NSMenuItem(title: "Cambiar Nombre del Juego", action: nil, keyEquivalent: "")
+        let favGame = NSMenuItem(title: "Añadir Juego a Favoritos", action: nil, keyEquivalent: "")
+        let searchGame = NSMenuItem(title: "Buscar Juego", action: nil, keyEquivalent: "")
+        //let delGame = NSMenuItem(title: "Borrar Juego", action: #selector(abrirDeleteGame), keyEquivalent: "")
+        
+        let gameSubmenu = NSMenu()
+        gameSubmenu.addItem(renameGame)
+        gameSubmenu.addItem(favGame)
+        gameSubmenu.addItem(searchGame)
+        //gameSubmenu.addItem(delGame)
+        
+        let gameItem = NSMenuItem(title: "Juego", action: nil, keyEquivalent: "")
+        gameItem.submenu = gameSubmenu
+        
+        
+        
+        return[scrapItem, gameItem]
+    }
+    
+    func setupMenu() {
+        let contextMenu = NSMenu()
+        let items = crearItemsMenu()
+        items.forEach {contextMenu.addItem($0)}
+        self.view.menu = contextMenu
+    }
+    
+    
     
 }
 

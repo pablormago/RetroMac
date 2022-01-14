@@ -52,8 +52,8 @@ class ViewController: NSViewController {
     var keyIsDown = false
     var cuentaDec = CGFloat()
     override var acceptsFirstResponder: Bool { return true }
-    override func becomeFirstResponder() -> Bool { return true }
-    override func resignFirstResponder() -> Bool { return true }
+//    override func becomeFirstResponder() -> Bool { return true }
+//    override func resignFirstResponder() -> Bool { return true }
     
     @IBOutlet weak var scrollerText: ScrollingTextView!
     @IBOutlet weak var mainBackImage: NSImageView!
@@ -344,7 +344,10 @@ class ViewController: NSViewController {
                     let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                     sistemaActual = button?.Fullname! ?? ""
                     //print(sistemaActual)
-                    selecionSistema(button!)
+                    if Int(button!.numeroJuegos!)! > 0 {
+                        selecionSistema(button!)
+                    }
+                    
                 }
                 
                 
@@ -416,7 +419,10 @@ class ViewController: NSViewController {
                     let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                     sistemaActual = button?.Fullname! ?? ""
                     //print(sistemaActual)
-                    selecionSistema(button!)
+                    if Int(button!.numeroJuegos!)! > 0 {
+                        selecionSistema(button!)
+                    }
+                    
                 }
                 
                 
@@ -529,25 +535,22 @@ class ViewController: NSViewController {
     
     
     @objc func selecionSistema(_ sender: ButtonConsolas) {
-        
-        sistemaActual = sender.Fullname!
-        nombresistemaactual = sender.Sistema!
-        //print(nombresistemaactual)
-        //print (sender.Comando! )
-        //print (sender.Sistema! )
-        rompath = rutaApp + sender.RomsPath!
-        //print(rompath)
-        systemextensions = sender.Extensiones!.components(separatedBy: " ")
-        comandoaejecutar = rutaApp
-        comandoaejecutar = comandoaejecutar + sender.Comando!.replacingOccurrences(of: "%CORE%", with: rutaApp)
-        botonactual = sender.tag
-        //crearGameList(ruta: rompath)
-        //print(sistemaActual)
-        if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ListaViewController {
-            abiertaLista = true
-            cuentaPrincipio += 1
-            self.view.window?.contentViewController = controller
+        if Int(sender.numeroJuegos!)! > 0 {
+            sistemaActual = sender.Fullname!
+            nombresistemaactual = sender.Sistema!
+            rompath = rutaApp + sender.RomsPath!
+            systemextensions = sender.Extensiones!.components(separatedBy: " ")
+            comandoaejecutar = rutaApp
+            comandoaejecutar = comandoaejecutar + sender.Comando!.replacingOccurrences(of: "%CORE%", with: rutaApp)
+            botonactual = sender.tag
+            
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ListaViewController {
+                abiertaLista = true
+                cuentaPrincipio += 1
+                self.view.window?.contentViewController = controller
+            }
         }
+        
     }
     
     

@@ -351,7 +351,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
 func siRutaRelativa2(ruta: String) -> String {
     var rutaAbsoluta = ""
     if ruta.hasPrefix("./") {
-        rutaAbsoluta = rompath + String(String(ruta).dropFirst())
+        rutaAbsoluta = String(String(ruta).dropFirst())
     }else{
         rutaAbsoluta = ruta
     }
