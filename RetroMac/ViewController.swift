@@ -40,7 +40,7 @@ var juegosXml2 = [[String]]()
 var allTheGames: [Consola] = []
 var extensionesTemp = [String]()
 var cuentaPrincipio = 0
-
+var favoritos: [Juego] = []
 
 
 class ViewController: NSViewController {
@@ -51,7 +51,7 @@ class ViewController: NSViewController {
     
     var keyIsDown = false
     var cuentaDec = CGFloat()
-    override var acceptsFirstResponder: Bool { return true }
+    //verride var acceptsFirstResponder: Bool { return true }
 //    override func becomeFirstResponder() -> Bool { return true }
 //    override func resignFirstResponder() -> Bool { return true }
     
@@ -71,11 +71,8 @@ class ViewController: NSViewController {
     }()
     
     @IBAction func openSettings(_ sender: NSButton)  {
-        
-        
-        
         self.presentAsSheet(sheetViewController)
-        
+        //self.presentAsModalWindow(sheetViewController)
     }
     
     
@@ -99,7 +96,18 @@ class ViewController: NSViewController {
     
     override func viewDidAppear() {
         scrollMain.isHidden = true
-        let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+        let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+        let path2 =  rutaApp2 +  "/BOBwin.exe"
+        let fileDoesExist = FileManager.default.fileExists(atPath: path2)
+        print("Existe")
+        var pathLogo = Bundle.main.url(forResource: "logo_retro", withExtension: "jpeg")
+        if fileDoesExist {
+             pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+        }else {
+             pathLogo = Bundle.main.url(forResource: "logo_retro", withExtension: "jpeg")
+        }
+        //let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+        //let pathLogo = Bundle.main.url(forResource: "logo_retro", withExtension: "jpeg")
         let imagen = NSImage(contentsOf: pathLogo!)!
         myImage.image = imagen
         NSEvent.addLocalMonitorForEvents(matching: .keyUp) { (aEvent) -> NSEvent? in
@@ -601,6 +609,7 @@ func crearGameListInicio (ruta: String){
                 let langNode = XMLElement(name: "lang")
                 let playersNode = XMLElement(name: "players")
                 let ratingNode = XMLElement(name: "rating")
+                let favNode = XMLElement(name: "fav")
                 ///AÑADIMOS LOS NODOS
                 gameNode.addChild(pathNode)
                 gameNode.addChild(nameNode)
@@ -621,6 +630,7 @@ func crearGameListInicio (ruta: String){
                 gameNode.addChild(langNode)
                 gameNode.addChild(playersNode)
                 gameNode.addChild(ratingNode)
+                gameNode.addChild(favNode)
                 
                 
             }
@@ -767,7 +777,7 @@ func buscaImage (juego: String, ruta: String) -> String {
     var tieneSnap = false
     var miFoto = ""
     let fileManager = FileManager.default
-    print("MI ROMPATH: \(ruta)")
+    //print("MI ROMPATH: \(ruta)")
     if ruta != "" && ruta != nil {
         let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
@@ -835,24 +845,26 @@ class ButtonConsolas: NSButton {
 
 struct Juego {
     let path: String
-    let name: String
-    let description: String
-    let map: String
-    let manual: String
-    let news: String
-    let tittleshot: String
-    let fanart: String
-    let thumbnail: String
-    let image: String
-    let video: String
-    let marquee: String
-    let releasedate: String
-    let developer: String
-    let publisher: String
-    let genre: String
-    let lang: String
-    let players: String
-    let rating: String
+    var name: String
+    var description: String
+    var map: String
+    var manual: String
+    var news: String
+    var tittleshot: String
+    var fanart: String
+    var thumbnail: String
+    var image: String
+    var video: String
+    var marquee: String
+    var releasedate: String
+    var developer: String
+    var publisher: String
+    var genre: String
+    var lang: String
+    var players: String
+    var rating: String
+    var fav: String
+    var comando: String
 }
 struct Consola {
     let sistema: String
@@ -861,5 +873,5 @@ struct Consola {
     let rompath: String
     let platform: String
     let extensions: String
-    let games: [Juego]
+    var games: [Juego]
 }

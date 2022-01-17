@@ -23,7 +23,13 @@ class ConfigViewController: NSViewController {
     }
     
     @IBAction func salir(_ sender: Any) {
+        
         self.dismiss(self)
+       
+        //print((self.view.window?.attachedSheet)
+        //self.view.window?.endSheet(((self.view.window?.attachedSheet)!))
+        
+        
     }
     
     override func viewDidLoad() {

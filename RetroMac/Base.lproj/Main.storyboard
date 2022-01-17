@@ -114,7 +114,7 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" id="Gii-na-zMO"/>
                             </imageView>
                             <scrollView ambiguous="YES" borderType="line" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="0.0" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="puU-Kb-vPb">
-                                <rect key="frame" x="0.0" y="476" width="1920" height="189"/>
+                                <rect key="frame" x="1" y="476" width="1920" height="189"/>
                                 <clipView key="contentView" copiesOnScroll="NO" id="DYo-qa-Gvp">
                                     <rect key="frame" x="1" y="1" width="1918" height="187"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -280,7 +280,6 @@
                 <viewController storyboardIdentifier="ListaView" showSeguePresentationStyle="single" id="fL4-9U-n43" customClass="ListaViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="62j-uW-CLT">
                         <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="50" horizontalPageScroll="10" verticalLineScroll="50" verticalPageScroll="10" allowsMagnification="YES" usesPredominantAxisScrolling="NO" findBarPosition="belowContent" translatesAutoresizingMaskIntoConstraints="NO" id="S23-0k-76Q">
                                 <rect key="frame" x="39" y="184" width="1055" height="745"/>
@@ -294,6 +293,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="8" height="20"/>
                                             <color key="backgroundColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                            <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                             <color key="gridColor" red="0.2932489935" green="0.28520277259999999" blue="0.28802099790000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <tableColumns>
                                                 <tableColumn identifier="Games" width="1000" minWidth="40" maxWidth="1000" id="fgP-MJ-Xas">
@@ -454,12 +454,23 @@
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G9C-SA-fXz">
                                             <rect key="frame" x="26" y="697" width="48" height="48"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pdf" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="sS1-2K-rk4">
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pdf" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="sS1-2K-rk4">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="pdfImage:" target="fL4-9U-n43" id="fXx-p1-zqD"/>
+                                            </connections>
+                                        </button>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e6A-b0-GKw">
+                                            <rect key="frame" x="26" y="639" width="48" height="48"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="favorite" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XSi-oE-0aS">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="pdfImage:" target="fL4-9U-n43" id="Geo-WD-lCc"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -483,10 +494,126 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <box hidden="YES" boxType="custom" borderType="bezel" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="S7L-bA-nsr">
+                                <rect key="frame" x="752" y="438" width="416" height="204"/>
+                                <view key="contentView" id="vXv-fl-x0s">
+                                    <rect key="frame" x="1" y="1" width="414" height="202"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iCH-dU-Xiu">
+                                            <rect key="frame" x="18" y="85" width="378" height="97"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" alignment="center" title="⚠️⚠️¿Estás seguro de borrar el juego de tu DISCO DURO??⚠️⚠️🤔" id="9jr-A0-R3T">
+                                                <font key="font" size="16" name="GB18030Bitmap"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xcj-LG-WcU">
+                                            <rect key="frame" x="92" y="49" width="100" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="   Borrar   " bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zot-WT-4gt">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="deleteGame:" target="fL4-9U-n43" id="wWg-zj-jpS"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9lw-bn-ofx">
+                                            <rect key="frame" x="223" y="49" width="94" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Cancelar" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vGG-2c-2ok">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="cancelBorrar:" target="fL4-9U-n43" id="35y-9u-Srg"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="S7L-bA-nsr" secondAttribute="height" multiplier="104:51" id="1e5-Gg-evk"/>
+                                    <constraint firstAttribute="height" constant="204" id="NkU-Vd-bxr"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="180" id="QZZ-uu-nHI"/>
+                                    <constraint firstAttribute="width" constant="416" id="bAf-ha-oqn"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="350" id="g2r-gO-oyn"/>
+                                </constraints>
+                                <color key="fillColor" red="0.48896628619999999" green="0.1073794439" blue="0.482855916" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </box>
+                            <box hidden="YES" boxType="custom" borderType="bezel" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="a3f-1P-Ihc">
+                                <rect key="frame" x="752" y="438" width="416" height="204"/>
+                                <view key="contentView" id="gHK-QU-2Lq">
+                                    <rect key="frame" x="1" y="1" width="414" height="202"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RSZ-gn-uB6">
+                                            <rect key="frame" x="18" y="85" width="378" height="97"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" alignment="center" title="Editar Nombre del Juego" id="zy3-sV-UWi">
+                                                <font key="font" size="16" name="GB18030Bitmap"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b1D-Ys-0dO">
+                                            <rect key="frame" x="95" y="49" width="96" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Guardar  " bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h8p-zW-ZXt">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="aceptarTitulo:" target="fL4-9U-n43" id="0Ex-5v-CnY"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ur2-7d-3Ba">
+                                            <rect key="frame" x="223" y="49" width="94" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Cancelar" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xn9-hn-IhM">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="cancelEditar:" target="fL4-9U-n43" id="zl5-hv-tef"/>
+                                            </connections>
+                                        </button>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WKZ-3a-IHK">
+                                            <rect key="frame" x="20" y="102" width="374" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="NKc-A4-eiE">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="204" id="G1K-GG-fXB"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="180" id="fjj-rN-M71"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="350" id="mrG-Fr-aax"/>
+                                    <constraint firstAttribute="width" constant="416" id="n3x-OK-ea6"/>
+                                    <constraint firstAttribute="width" secondItem="a3f-1P-Ihc" secondAttribute="height" multiplier="104:51" id="qgq-ek-k46"/>
+                                </constraints>
+                                <color key="fillColor" red="0.48896628619999999" green="0.1073794439" blue="0.482855916" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </box>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="a3f-1P-Ihc" firstAttribute="width" secondItem="a3f-1P-Ihc" secondAttribute="height" multiplier="104:51" id="Fvd-Cr-CzW"/>
+                            <constraint firstItem="S7L-bA-nsr" firstAttribute="centerY" secondItem="62j-uW-CLT" secondAttribute="centerY" id="J3b-UL-9er"/>
+                            <constraint firstItem="S7L-bA-nsr" firstAttribute="centerX" secondItem="62j-uW-CLT" secondAttribute="centerX" id="id0-Bq-OjZ"/>
+                            <constraint firstItem="a3f-1P-Ihc" firstAttribute="centerX" secondItem="62j-uW-CLT" secondAttribute="centerX" id="qmN-cd-jHK"/>
+                            <constraint firstItem="a3f-1P-Ihc" firstAttribute="centerY" secondItem="62j-uW-CLT" secondAttribute="centerY" id="zuI-b1-yz3"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="backButton" destination="dSH-4W-sxG" id="cXX-bM-BrK"/>
+                        <outlet property="borrarBox" destination="S7L-bA-nsr" id="Xqt-Xz-hVi"/>
+                        <outlet property="borrarLabel" destination="iCH-dU-Xiu" id="Fql-RJ-8eR"/>
+                        <outlet property="editarBox" destination="a3f-1P-Ihc" id="JBk-Za-4Qj"/>
+                        <outlet property="favImagen" destination="e6A-b0-GKw" id="tdq-xz-HLz"/>
                         <outlet property="info" destination="Mss-SW-xAW" id="kjv-An-7IL"/>
                         <outlet property="infoLabel" destination="Mss-SW-xAW" id="nLP-5K-7fO"/>
                         <outlet property="juegosTableView" destination="TtI-VK-hG3" id="cHy-k2-X50"/>
@@ -495,6 +622,7 @@
                         <outlet property="sistemaLabel" destination="cDy-fA-o2i" id="evr-iD-PWb"/>
                         <outlet property="snapPlayer" destination="7VG-VF-6w3" id="5vd-YM-9DP"/>
                         <outlet property="snapShot" destination="0Hq-Dl-Zc4" id="gSb-Yz-utJ"/>
+                        <outlet property="tituloTextField" destination="WKZ-3a-IHK" id="efz-1x-8T6"/>
                     </connections>
                 </viewController>
                 <customObject id="12X-ig-E9G" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -629,6 +757,8 @@
                         <outlet property="passwordTxt" destination="TeH-AC-JAM" id="3gm-4Z-E4A"/>
                         <outlet property="salirBtn" destination="KW5-Zd-RFi" id="DV5-ut-xTD"/>
                         <outlet property="userTXT" destination="2p8-WP-HhN" id="EgR-PI-Rc1"/>
+                        <segue destination="XfG-lQ-9wD" kind="show" id="63D-qW-YZX"/>
+                        <segue destination="fL4-9U-n43" kind="show" id="mXR-Hk-bfU"/>
                     </connections>
                 </viewController>
                 <customObject id="gmZ-Vd-4yB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -641,6 +771,7 @@
         <image name="borrar" width="540" height="345"/>
         <image name="down" width="95" height="94"/>
         <image name="entrar" width="621" height="347"/>
+        <image name="favorite" width="179" height="179"/>
         <image name="lefft" width="94" height="95"/>
         <image name="pdf" width="128" height="128"/>
         <image name="retro" width="1920" height="1080"/>
@@ -649,6 +780,7 @@
         <image name="up" width="95" height="94"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="rNI-hX-NhJ"/>
+        <segue reference="mXR-Hk-bfU"/>
+        <segue reference="63D-qW-YZX"/>
     </inferredMetricsTieBreakers>
 </document>

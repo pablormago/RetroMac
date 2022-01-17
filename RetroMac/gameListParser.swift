@@ -54,6 +54,8 @@ public struct Game
     public var players: String = ""
     ///Rating del juego
     public var rating: String = ""
+    
+    public var fav: String = ""
 }
 
 //
@@ -88,6 +90,7 @@ public class GameParser: NSObject
     private let LangTag = "lang"
     private let PlayersTag = "players"
     private let RatingTag = "rating"
+    private let FavTag = "fav"
     
     
     
@@ -272,6 +275,11 @@ extension GameParser: XMLParserDelegate
         {
             
             self.actualBook?.rating.append(string)
+        }
+        if self.actualElement == FavTag
+        {
+            
+            self.actualBook?.fav.append(string)
         }
     }
     

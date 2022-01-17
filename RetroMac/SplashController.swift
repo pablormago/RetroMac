@@ -152,7 +152,9 @@ class SplashController: NSViewController {
                 
             }
         }
+        let favoritosSystem: Consola = Consola(sistema: "fav", fullname: "Favoritos", command: "", rompath: "", platform: "", extensions: "", games: favoritos)
         
+        allTheGames.append(favoritosSystem)
         allTheGames.sort(by: {($0.fullname ) < ($1.fullname) })
         
         for consola in allTheGames {
