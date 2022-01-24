@@ -14,22 +14,37 @@ import AVFoundation
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
+    override var acceptsFirstResponder: Bool { return true }
+    override func becomeFirstResponder() -> Bool { return true }
+    override func resignFirstResponder() -> Bool { return true }
     
+    @IBOutlet weak var dateLabel: NSTextField!
+    @IBOutlet weak var scrollDescrip: NSScrollView!
+    @IBOutlet var scrollDescripText: NSTextView!
+    @IBOutlet weak var playersLabel: NSTextField!
+    @IBOutlet weak var genreLabel: NSTextField!
+    @IBOutlet weak var publisherLabel: NSTextField!
+    @IBOutlet weak var developerLabel: NSTextField!
+    @IBOutlet weak var logoImage: NSImageView!
+    @IBOutlet weak var screenshotImage: NSImageView!
     @IBOutlet weak var favImagen: NSButton!
     @IBOutlet weak var tituloTextField: NSTextField!
+    
     @IBAction func aceptarTitulo(_ sender: NSButton) {
         
         let indexSet = NSIndexSet(index: juegosTableView.selectedRow)
         juegosXml[juegosTableView.selectedRow][1] = tituloTextField.stringValue
+        let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == juegosXml[juegosTableView.selectedRow][0]})
+        allTheGames[mifila!].games[mifilaJuego!].name = tituloTextField.stringValue
+        
         xmlJuegosNuevos()
         juegosTableView.reloadData()
         juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
         editarBox.isHidden = true
         abiertaLista = true
         
-        let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == juegosXml[juegosTableView.selectedRow][0]})
-        allTheGames[mifila!].games[mifilaJuego!].name = tituloTextField.stringValue
+        
         
         
     }
@@ -90,16 +105,32 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     var keyIsDown = false
     var playingVideo = false
+    let contextMenu = NSMenu()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        NSEvent.addLocalMonitorForEvents(matching: .keyUp) { (qEvent) -> NSEvent? in
+//            self.keyUp(with: qEvent)
+//            return qEvent
+//        }
+//
+//        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (qEvent) -> NSEvent? in
+//            self.keyDown(with: qEvent)
+//            return qEvent
+//        }
+        print(view.window?.firstResponder)
         print("LISTA LOAD")
         view.wantsLayer = true
         // change the background color of the layer
         view.layer?.backgroundColor = CGColor(red: 73/255, green: 74/255, blue: 77/255, alpha: 1)
         setupMenu()
-        
+        snapShot.wantsLayer = true
+        snapShot.layer?.cornerRadius = 10.0
+        snapShot.layer?.masksToBounds = true
+        snapPlayer.wantsLayer = true
+        snapPlayer.layer!.cornerRadius = 10.0
+        snapPlayer.layer!.masksToBounds = true
         // Do view setup here.
         
         
@@ -131,7 +162,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             if consola.sistema == nombresistemaactual {
                 for game in consola.games {
                     print(game)
-                    let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating, game.fav, game.comando]
+                    let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating, game.fav, game.comando, game.core, game.system, game.box]
                     juegosXml.append(mijuego)
                     
                 }
@@ -149,19 +180,19 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         juegosTableView.doubleAction = #selector(onItemClicked)
         pdfImage.action = #selector(abrirPdf)
-        favImagen.isEnabled = false
-        pdfImage.isEnabled = false
-    
+        favImagen.isHidden = true
+        pdfImage.isHidden = true
+        
         if juegosXml.count > 0 {
             if juegosXml[0][4] == "" {
-                pdfImage.isEnabled = false
+                pdfImage.isHidden = true
             }else {
-                pdfImage.isEnabled = true
+                pdfImage.isHidden = false
             }
             if juegosXml[0][19] == "" {
-                favImagen.isEnabled = false
+                favImagen.isHidden = true
             }else {
-                favImagen.isEnabled = true
+                favImagen.isHidden = false
             }
         }
         
@@ -217,20 +248,83 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let miRating = String(juegosXml[miFila][18])
         let miFav = String(juegosXml[miFila][19])
         let miComando = String(juegosXml[miFila][20])
+        let miCore = String(juegosXml[miFila][21])
+        let miSystem = String(juegosXml[miFila][22])
+        let miBox = String(juegosXml[miFila][23])
+        
+        dateLabel.stringValue = miRelaseDate
+        publisherLabel.stringValue = miPublisher
+        developerLabel.stringValue = miDeveloper
+        genreLabel.stringValue = miGenre
+        playersLabel.stringValue = miPlayers
+        //print(miCore)
+        //print(miSystem)
         scrollerDesc.font = NSFont(name: "Arial", size: 20)
         scrollerDesc.delay = 1
         scrollerDesc.speed = 2
         scrollerDesc.setup(string: miDesc.replacingOccurrences(of: "\n", with: " "))
         
-        if miImagen != nil && miImagen != "" {
+        
+        
+        if  miTittleShot != "" {
             let imagenURL = URL(fileURLWithPath: miImagen)
             imageSelected(path: imagenURL)
+        } else {
+            let imagenURL = URL(fileURLWithPath: miImagen)
+            imageSelected(path: imagenURL)
+            
         }
+        
+        if miBox != "" {
+            let imagenURL2 = URL(fileURLWithPath: miBox)
+            var imagen2 = NSImage(contentsOf: imagenURL2)
+            screenshotImage.isHidden = false
+            if imagen2 != nil {
+                screenshotImage.image = imagen2
+            } else {
+                screenshotImage.isHidden = true
+                let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+                let imagen2  = NSImage(contentsOf: pathLogo!)
+                screenshotImage.image = imagen2
+            }
+        }else {
+            let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+            let imagen2  = NSImage(contentsOf: pathLogo!)
+            screenshotImage.image = imagen2
+            screenshotImage.isHidden = true
+        }
+        
+        if  miMarquee != "" {
+            
+            let imagenURL2 = URL(fileURLWithPath: miMarquee)
+            var imagen2 = NSImage(contentsOf: imagenURL2)
+            if imagen2 != nil {
+                logoImage.isHidden = false
+                logoImage.image = imagen2
+            }else{
+                let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+                imagen2  = NSImage(contentsOf: pathLogo!)
+                logoImage.image = imagen2
+                logoImage.isHidden = true
+            }
+        }else {
+            let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+            let imagen2  = NSImage(contentsOf: pathLogo!)
+            logoImage.image = imagen2
+            logoImage.isHidden = true
+        }
+        
         if miVideo != nil && miVideo != "" {
             let videoURL = URL(fileURLWithPath: miVideo)
             let player2 = AVPlayer(url: videoURL)
             snapPlayer.player = player2
             snapPlayer.player?.play()
+            player2.actionAtItemEnd = .none
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(playerItemDidReachEnd(notification:)),
+                                                   name: .AVPlayerItemDidPlayToEndTime,
+                                                   object: player2.currentItem)
+
             playingVideo = true
         }else{
             let noVideo = Bundle.main.path(forResource: "NoVideo", ofType:"mp4")
@@ -238,19 +332,31 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             let player2 = AVPlayer(url: videoURL)
             snapPlayer.player = player2
             snapPlayer.player?.play()
+            player2.actionAtItemEnd = .none
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(playerItemDidReachEnd(notification:)),
+                                                   name: .AVPlayerItemDidPlayToEndTime,
+                                                   object: player2.currentItem)
+            playingVideo = true
         }
         if miManual == "" {
-            pdfImage.isEnabled = false
+            pdfImage.isHidden = true
         }else {
-            pdfImage.isEnabled = true
+            pdfImage.isHidden = false
         }
         if miFav == "" {
-            favImagen.isEnabled = false
+            favImagen.isHidden = true
+            contextMenu.items[1].submenu?.items[2].isHidden = true
+            contextMenu.items[1].submenu?.items[1].isHidden = false
         }else {
-            favImagen.isEnabled = true
+            favImagen.isHidden = false
+            contextMenu.items[1].submenu?.items[2].isHidden = false
+            contextMenu.items[1].submenu?.items[1].isHidden = true
         }
+        scrollDescripText.string = miDesc
         abiertaLista = true
         print("Tengo Fav:\(miFav)")
+        
     }
     
     func imageSelected(path: URL) {
@@ -267,12 +373,46 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     override func viewDidAppear() {
         ventana = "Lista"
         print("LISTA APPEAR")
-        if !self.view.window!.isZoomed{
-            //self.view.window?.zoom(self)
-        }
+        
+        
+//        if !self.view.window!.isZoomed{
+//            //self.view.window?.zoom(self)
+//        }
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
         
         self.view.window?.setFrame(mirect, display: true)
+        snapShot.wantsLayer = true
+        snapShot.layer?.cornerRadius = 10.0
+        
+        screenshotImage.wantsLayer = true
+        screenshotImage.shadow = NSShadow()
+        screenshotImage.layer!.cornerRadius = 10.0
+        screenshotImage.layer!.shadowOpacity = 1.0
+        screenshotImage.layer!.shadowColor = NSColor.black.cgColor
+        screenshotImage.layer!.shadowOffset = NSMakeSize(0, -3)
+        screenshotImage.layer!.shadowRadius = 20
+        
+        logoImage.wantsLayer = true
+        logoImage.shadow = NSShadow()
+        logoImage.layer!.cornerRadius = 10.0
+        logoImage.layer!.shadowOpacity = 1.0
+        logoImage.layer!.shadowColor = NSColor.black.cgColor
+        
+        logoImage.layer!.shadowOffset = NSMakeSize(0, -3)
+        logoImage.layer!.shadowRadius = 20
+        //snapShot.layer?.masksToBounds = true
+        snapPlayer.wantsLayer = true
+        snapPlayer.layer!.cornerRadius = 10.0
+        snapPlayer.shadow = NSShadow()
+        snapPlayer.layer!.shadowOpacity = 1.0
+        snapPlayer.layer!.shadowColor = NSColor.black.cgColor
+        snapPlayer.layer!.shadowOffset = NSMakeSize(0, -3)
+        snapPlayer.layer!.shadowRadius = 20
+        
+        self.juegosTableView.becomeFirstResponder()
+        print(view.window?.firstResponder)
+        
+        //snapPlayer.layer!.masksToBounds = true
         // *** /FullScreen ***
     }
     
@@ -352,6 +492,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                     cuentaboton = botonactual
                     botonactual += 1
                     juegosXml = []
+                    contextMenu.items.removeAll()
                     let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                     sistemaActual = button?.Fullname! ?? ""
                     nombresistemaactual = button!.Sistema ?? ""
@@ -382,6 +523,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                     cuentaboton = botonactual
                     botonactual -= 1
                     juegosXml = []
+                    contextMenu.items.removeAll()
                     let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                     sistemaActual = button?.Fullname! ?? ""
                     nombresistemaactual = button!.Sistema ?? ""
@@ -479,8 +621,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 let miPlayers = String(game.players)
                 let miRating = String(game.rating)
                 let miFav = String(game.fav)
+                let miBox = String(game.box)
                 
-                datosJuego = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating , miFav ]
+                datosJuego = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating , miFav, miBox ]
                 
                 juegosXml.append(datosJuego)
                 
@@ -593,6 +736,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             let playersNode = XMLElement(name: "players", stringValue: juego[17])
             let ratingNode = XMLElement(name: "rating", stringValue: juego[18])
             let favNode = XMLElement(name: "fav", stringValue: juego[19])
+            let boxNode = XMLElement(name: "box", stringValue: juego[23])
             ///AÑADIMOS LOS NODOS
             gameNode.addChild(pathNode)
             gameNode.addChild(nameNode)
@@ -606,6 +750,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             gameNode.addChild(imageNode)
             gameNode.addChild(videoNode)
             gameNode.addChild(marqueeNode)
+            gameNode.addChild(boxNode)
             gameNode.addChild(releasedateNode)
             gameNode.addChild(developerNode)
             gameNode.addChild(publisherNode)
@@ -828,6 +973,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         var tittleshotJuego = ""
         var marqueeJuego = ""
         var sistemaJuegoSS = ""
+        var logoJuego = ""
+        var box2dJuego = ""
+        var box3dJuego = ""
         
         //DispatchQueue.global(qos: .background).async {
         // do your job here
@@ -856,15 +1004,15 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                     //print (index3 + "-> \(index4) ->\(sJson2)")
                                     if index3 == "developpeur" && index4 == "text" {
                                         desarroladorJuego = sJson2.stringValue
-                                        print("Desarrrolador: " + desarroladorJuego)
+                                        //print("Desarrrolador: " + desarroladorJuego)
                                     }
                                     if index3 == "joueurs" && index4 == "text" {
                                         playersJuego = sJson2.stringValue
-                                        print("Jugadores: " + playersJuego)
+                                        //print("Jugadores: " + playersJuego)
                                     }
                                     if index3 == "editeur" && index4 == "text" {
                                         editorJuego = sJson2.stringValue
-                                        print("Editor: " + editorJuego)
+                                        //print("Editor: " + editorJuego)
                                     }
                                     if index3 == "genres" {
                                         for (index5, sJson3):(String, JSON) in sJson2 {
@@ -872,7 +1020,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             for (index6, sJson4):(String, JSON) in sJson3 {
                                                 //print (index5 + "-> \(index6) -> \(sJson4)")
                                                 if sJson4["langue"].stringValue == "es" {
-                                                    print("Genero: " + sJson4["text"].stringValue)
+                                                    //print("Genero: " + sJson4["text"].stringValue)
                                                     generoJuego = sJson4["text"].stringValue
                                                 }
                                             }
@@ -884,7 +1032,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             
                                             if sJson3["langue"].stringValue == "es" {
                                                 descJuego = sJson3["text"].stringValue.replacingOccurrences(of: "\n", with: " ")
-                                                print("Descripcion: \(descJuego)")
+                                                //print("Descripcion: \(descJuego)")
                                                 encuentrame = true
                                             }
                                             if encuentrame == true{
@@ -900,7 +1048,11 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                         var encuentra = false
                                         for (index5, sJson3):(String, JSON) in sJson {
                                             
-                                            if sJson3["region"].stringValue == "eu" {
+                                            if sJson3["region"].stringValue != "jp" {
+                                                fechaJuego = sJson3["text"].stringValue
+                                                print("Fecha: \(fechaJuego)")
+                                                encuentra = true
+                                            }else if sJson3["region"].stringValue == "jp" {
                                                 fechaJuego = sJson3["text"].stringValue
                                                 print("Fecha: \(fechaJuego)")
                                                 encuentra = true
@@ -919,7 +1071,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                         for (index5, sJson3):(String, JSON) in sJson {
                                             if index5 == "id" {
                                                 sistemaJuegoSS = sJson3.stringValue
-                                                print(sistemaJuegoSS)
+                                                //print(sistemaJuegoSS)
                                                 encuentra = true
                                                 
                                             }
@@ -940,37 +1092,60 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                         var encuentrass = false
                                         for (index5, sJson3):(String, JSON) in sJson {
                                             
+                                            
                                             if sJson3["type"].stringValue == "ss" {
                                                 screenshotJuego = sJson3["url"].stringValue
-                                                print("Screenshot: \(screenshotJuego)")
+                                                //print("Screenshot: \(screenshotJuego)")
                                                 
                                             }
                                             if sJson3["type"].stringValue == "video-normalized" {
                                                 videoJuego = sJson3["url"].stringValue
-                                                print("Video: \(videoJuego)")
+                                                //print("Video: \(videoJuego)")
                                                 
                                             }
                                             if sJson3["type"].stringValue == "fanart" {
                                                 fanartJuego = sJson3["url"].stringValue
-                                                print("Fanart: \(fanartJuego)")
+                                                //print("Fanart: \(fanartJuego)")
                                                 
                                             }
                                             if sJson3["type"].stringValue == "sstitle" {
                                                 tittleshotJuego = sJson3["url"].stringValue
-                                                print("TittleShot: \(tittleshotJuego)")
+                                                //print("TittleShot: \(tittleshotJuego)")
                                                 
                                             }
                                             if sJson3["type"].stringValue == "screenmarquee" {
                                                 marqueeJuego = sJson3["url"].stringValue
-                                                print("Marquee: \(marqueeJuego)")
+                                                //print("Marquee: \(marqueeJuego)")
                                                 
                                             }
                                             if sJson3["type"].stringValue == "manuel" && sJson3["region"].stringValue == "us"{
                                                 manualJuego = sJson3["url"].stringValue
-                                                print("Manual: \(manualJuego)")
-                                                encuentrass = true
+                                                //print("Manual: \(manualJuego)")
+                                                
                                                 
                                             }
+                                            if sJson3["type"].stringValue == "wheel" && (sJson3["region"] == "us" || sJson3["region"] == "eu" || sJson3["region"] == "wor") {
+                                                logoJuego = sJson3["url"].stringValue
+                                                //print("MINIMarquee: \(miniMarqueeJuego)")
+                                                
+                                            }else if sJson3["type"].stringValue == "wheel" && sJson3["region"] == "jp" {
+                                                
+                                                logoJuego = sJson3["url"].stringValue
+                                                //print("MINIMarquee: \(miniMarqueeJuego)")
+                                            }
+                                            
+                                            if sJson3["type"].stringValue == ("box-2D") && (sJson3["region"] == "us" || sJson3["region"] == "eu" || sJson3["region"] == "ss"){
+                                                box2dJuego = sJson3["url"].stringValue
+                                                //print("MINIMarquee: \(miniMarqueeJuego)")
+                                                print("3d: \(box2dJuego)")
+                                                
+                                            }
+                                            if sJson3["type"].stringValue == ("box-3D") && (sJson3["region"] == "us" || sJson3["region"] == "eu" || sJson3["region"] == "ss"){
+                                                box3dJuego = sJson3["url"].stringValue
+                                                print("3d: \(box3dJuego)")
+                                                encuentrass = true
+                                            }
+                                            
                                             if encuentrass == true{
                                                 break
                                             }
@@ -1177,7 +1352,16 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                     task.resume()
                 }
                 ///MARQUEE
-                if marqueeJuego != "" {
+                var marqueeDescarga = ""
+                if logoJuego == "" {
+                    marqueeDescarga = marqueeJuego
+                }else {
+                    marqueeDescarga = logoJuego
+                    print("TIENE LOGO")
+                }
+                
+                if marqueeDescarga != "" {
+                    
                     //self.descargaMedia(tipo: "png", url: marqueeJuego, nombre: nombrejuego + "_marquee")
                     let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego)_marquee.\("png")"
                     let midestino = URL(string: myFilePathString)
@@ -1185,7 +1369,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                     let destinationFileUrl = midestino
                     
                     //Create URL to the source file you want to download
-                    let fileURL = URL(string: marqueeJuego)
+                    let fileURL = URL(string: marqueeDescarga)
                     
                     let sessionConfig = URLSessionConfiguration.default
                     let session = URLSession(configuration: sessionConfig)
@@ -1212,6 +1396,56 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                     }
                     task.resume()
                 }
+                
+                //BOX
+                
+                var boxDescarga = ""
+                
+                if box3dJuego == "" {
+                    boxDescarga = box2dJuego
+                    print("TIENE 2D")
+                }else {
+                    boxDescarga = box3dJuego
+                    print("TIENE 3D")
+                }
+                
+                if boxDescarga != "" {
+                    
+                    //self.descargaMedia(tipo: "png", url: marqueeJuego, nombre: nombrejuego + "_marquee")
+                    let myFilePathString = "file://" + rompath + "/media" + "/\(nombrejuego)_box.\("png")"
+                    let midestino = URL(string: myFilePathString)
+                    let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let destinationFileUrl = midestino
+                    
+                    //Create URL to the source file you want to download
+                    let fileURL = URL(string: boxDescarga)
+                    
+                    let sessionConfig = URLSessionConfiguration.default
+                    let session = URLSession(configuration: sessionConfig)
+                    
+                    let request = URLRequest(url:fileURL!)
+                    print(request)
+                    let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+                        if let tempLocalUrl = tempLocalUrl, error == nil {
+                            // Success
+                            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                                print("Successfully downloaded. Status code: \(statusCode)")
+                            }
+                            
+                            do {
+                                try? FileManager.default.removeItem(at: destinationFileUrl!)
+                                try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                            } catch (let writeError) {
+                                print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                            }
+                            
+                        } else {
+                            print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
+                        }
+                    }
+                    task.resume()
+                }
+                
                 // do something in background
             }, completion:{
                 ///ACTUALIZAR EL ARRAY DE JUEGOS
@@ -1260,13 +1494,15 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 self.juegosXml[filajuego][17] = playersJuego
                 self.juegosXml[filajuego][18] = self.juegosXml[filajuego][18]
                 self.juegosXml[filajuego][19] = self.juegosXml[filajuego][19]
+                self.juegosXml[filajuego][23] = rompath + "/media/"  + nombrejuego + "_box.png"
                 self.xmlJuegosNuevos()
                 //DispatchQueue.main.sync {
-                self.infoLabel.stringValue = "Juego ESCRAPEADO!!"
+                
                 
                 let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
                 let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == self.juegosXml[self.juegosTableView.selectedRow][0]})
                 
+
                 allTheGames[mifila!].games[mifilaJuego!].description = self.juegosXml[filajuego][2]
                 allTheGames[mifila!].games[mifilaJuego!].map = self.juegosXml[filajuego][3]
                 allTheGames[mifila!].games[mifilaJuego!].manual = self.juegosXml[filajuego][4]
@@ -1284,6 +1520,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 allTheGames[mifila!].games[mifilaJuego!].players = self.juegosXml[filajuego][17]
                 allTheGames[mifila!].games[mifilaJuego!].rating = self.juegosXml[filajuego][18]
                 allTheGames[mifila!].games[mifilaJuego!].fav = self.juegosXml[filajuego][19]
+                allTheGames[mifila!].games[mifilaJuego!].box = self.juegosXml[filajuego][23]
                 
                 
                 // Movemos fila para actualizar
@@ -1294,6 +1531,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 let indexSet2 = NSIndexSet(index: self.juegosTableView.selectedRow )
                 self.juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
                 self.juegosTableView.selectRowIndexes(indexSet2 as IndexSet, byExtendingSelection: false)
+                self.infoLabel.stringValue = "Juego ESCRAPEADO!!"
                 // when background job finished, do something in main thread
             })
             
@@ -1371,10 +1609,32 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let defaults = UserDefaults.standard
         let SSUser = defaults.string(forKey: "SSUser") ?? ""
         let SSPassword = defaults.string(forKey: "SSPassword") ?? ""
-        //let numero = (juegosTableView.selectedRow)
+        let numero = numerojuego
         var nombre = ""
         var miputonombre = ""
-        nombre = juegosXml[numerojuego][1]
+        //Si el sistema es MAME
+        if misystemid == "75" {
+            
+            var juegoMame = juegosXml[numero][1]
+            if juegoMame.contains("/") {
+                let index2 = juegoMame.range(of: "/", options: .backwards)?.lowerBound
+                let substring2 = juegoMame.substring(from: index2! )
+                let result1 = String(substring2.dropFirst())
+                juegoMame = result1
+                print("JUEGO /: \(juegoMame)")
+            }
+            for juego in titulosMame {
+                print("Tengo: \(juego[0])")
+                if juego[0] == juegoMame {
+                    print("EL JUEGO: \(juego[0])")
+                    nombre = juego[1]
+                    break
+                }
+            }
+        }else {
+            nombre = juegosXml[numero][1]
+        }
+        //nombre = juegosXml[numerojuego][1]
         if nombre.contains("/") {
             let index2 = nombre.range(of: "/", options: .backwards)?.lowerBound
             let substring2 = nombre.substring(from: index2! )
@@ -1470,6 +1730,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     @objc func escrapeartodos(){
+        backButton.isEnabled = false
+        abiertaLista = false
+        juegosTableView.isEnabled = false
         self.infoLabel.stringValue = "ESCRAPEANDO \(juegosXml.count) JUEGOS"
         DispatchQueue.background(delay: 0.0, background: {
             self.juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
@@ -1477,11 +1740,20 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             for a in 0..<kk {
                 self.buscaJuegoS(numerojuego: a)
                 self.infoLabel.stringValue = "Escrapeados \(a + 1) juegos de \(self.juegosXml.count)"
+                if a == (kk - 1) {
+                    abiertaLista = true
+                    self.backButton.isEnabled = true
+                    self.juegosTableView.isEnabled = true
+                    self.juegosTableView.becomeFirstResponder()
+                    self.juegosTableView.cell?.performClick((Any).self)
+                }else{
+                    abiertaLista = false
+                }
             }
-//            for (index, juego)  in self.juegosXml.enumerated() {
-//
-//                //print(index)
-//            }
+            //            for (index, juego)  in self.juegosXml.enumerated() {
+            //
+            //                //print(index)
+            //            }
             self.infoLabel.stringValue = "** JUEGOS ESCRAPEADOS **"
         })
         
@@ -1505,6 +1777,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         
         /// Menu ITEMS de Juego
+        
         let renameGame = NSMenuItem(title: "Cambiar Nombre del Juego", action: #selector(enableBoxEditar), keyEquivalent: "")
         let favGame = NSMenuItem(title: "Añadir Juego a Favoritos", action: #selector(favGames), keyEquivalent: "")
         let unfavGame = NSMenuItem(title: "Eliminar Juego de Favoritos", action: #selector(unfavGames), keyEquivalent: "")
@@ -1520,9 +1793,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         gameSubmenu.addItem(delGame)
         
         let gameItem = NSMenuItem(title: "Juego", action: nil, keyEquivalent: "")
-        if sistemaActual != "Favoritos" {
+        //if sistemaActual != "Favoritos" {
             gameItem.submenu = gameSubmenu
-        }
+        //}
         
         
         
@@ -1531,7 +1804,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     func setupMenu() {
-        let contextMenu = NSMenu()
+        
         let items = crearItemsMenu()
         items.forEach {contextMenu.addItem($0)}
         self.view.menu = contextMenu
@@ -1580,27 +1853,70 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let miRating = juegosXml[juegosTableView.selectedRow][18]
         let miFav = juegosXml[juegosTableView.selectedRow][19]
         let miComando = juegosXml[juegosTableView.selectedRow][20]
+        let miCore = juegosXml[juegosTableView.selectedRow][21]
+        let miSystem = juegosXml[juegosTableView.selectedRow][22]
+        let miBox = juegosXml[juegosTableView.selectedRow][23]
         //Actualizar aaray de favoritos
         
-        var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating, fav: miFav, comando: miComando)
+        var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating, fav: miFav, comando: miComando, core: miCore, system: miSystem, box: miBox)
         
         let mifilafav = allTheGames.firstIndex(where: {$0.fullname == "Favoritos"})
         
         allTheGames[mifilafav!].games.append(datosDeMiJuego)
-        print(allTheGames[mifilafav!].games.count)
+        favImagen.isHidden = false
+        contextMenu.items[1].submenu?.items[2].isHidden = false
+        contextMenu.items[1].submenu?.items[1].isHidden = true
         
     }
     
     @objc func unfavGames(){
-        let mifila = juegosTableView.selectedRow
-        juegosXml[mifila][19] = ""
-        let mifilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        let mifilaJuego = allTheGames[mifilaAll!].games.firstIndex(where: {$0.path == juegosXml[juegosTableView.selectedRow][0]})
-        allTheGames[mifilaAll!].games[mifilaJuego!].fav = ""
-        let mifilafav = allTheGames.firstIndex(where: {$0.fullname == "Favoritos"})
-        let miJuegoFav = allTheGames[mifilafav!].games.firstIndex(where: {$0.path == juegosXml[juegosTableView.selectedRow][0]})
-        allTheGames[mifilafav!].games.remove(at: miJuegoFav!)
-        xmlJuegosNuevos()
+        if sistemaActual != "Favoritos" {
+            let mifila = juegosTableView.selectedRow
+            juegosXml[mifila][19] = ""
+            let mifilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+            let mifilaJuego = allTheGames[mifilaAll!].games.firstIndex(where: {$0.path == juegosXml[juegosTableView.selectedRow][0]})
+            allTheGames[mifilaAll!].games[mifilaJuego!].fav = ""
+            let mifilafav = allTheGames.firstIndex(where: {$0.fullname == "Favoritos"})
+            let miJuegoFav = allTheGames[mifilafav!].games.firstIndex(where: {$0.path == juegosXml[juegosTableView.selectedRow][0]})
+            allTheGames[mifilafav!].games.remove(at: miJuegoFav!)
+            xmlJuegosNuevos()
+            favImagen.isHidden = true
+            contextMenu.items[1].submenu?.items[2].isHidden = true
+            contextMenu.items[1].submenu?.items[1].isHidden = false
+        }else {
+            
+            let mifila = juegosTableView.selectedRow
+            var miarray = [[String]]()
+            juegosXml[mifila][19] = ""
+            let miSystem = String(juegosXml[mifila][22])
+            let mifilaAll = allTheGames.firstIndex(where: {$0.sistema == miSystem})
+            let miRomPath = allTheGames[mifilaAll!].rompath
+            let mifilaJuego = allTheGames[mifilaAll!].games.firstIndex(where: {$0.path == juegosXml[juegosTableView.selectedRow][0]})
+            allTheGames[mifilaAll!].games[mifilaJuego!].fav = ""
+            for game in allTheGames[mifilaAll!].games {
+                
+                let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating, game.fav, game.comando, game.core]
+                miarray.append(mijuego)
+                
+            }
+            
+            let mifilafav = allTheGames.firstIndex(where: {$0.fullname == "Favoritos"})
+            let miJuegoFav = allTheGames[mifilafav!].games.firstIndex(where: {$0.path == juegosXml[juegosTableView.selectedRow][0]})
+            allTheGames[mifilafav!].games.remove(at: miJuegoFav!)
+            xmlJuegosNuevosFav(systema: miRomPath, arrayNuevo: miarray)
+            let indexSet = NSIndexSet(index: juegosTableView.selectedRow)
+            juegosTableView.removeRows(at: indexSet as IndexSet, withAnimation: .effectFade)
+            favImagen.isHidden = true
+            contextMenu.items[1].submenu?.items[2].isHidden = true
+            contextMenu.items[1].submenu?.items[1].isHidden = false
+            
+            
+            
+        }
+        
+        
+        
+        
         
     }
     
@@ -1608,19 +1924,87 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         var miFilaTable = 0
         infoLabel.stringValue = "Escrapeando \(juegosXml.count) juegos"
         
-            for game in self.juegosXml{
-                let miSeleccion = NSIndexSet(index: miFilaTable)
-                self.juegosTableView.selectRowIndexes(miSeleccion as IndexSet, byExtendingSelection: false)
-                self.buscaJuego()
-                self.infoLabel.stringValue = "Escrapeados \(miFilaTable + 1) /\(self.juegosXml.count) Juegos"
-                miFilaTable += 1
-            }
+        for game in self.juegosXml{
+            let miSeleccion = NSIndexSet(index: miFilaTable)
+            self.juegosTableView.selectRowIndexes(miSeleccion as IndexSet, byExtendingSelection: false)
+            self.buscaJuego()
+            self.infoLabel.stringValue = "Escrapeados \(miFilaTable + 1) /\(self.juegosXml.count) Juegos"
+            miFilaTable += 1
+        }
         
         
         //infoLabel.stringValue = "\(sistemaActual) ESCRAPEADO"
     }
     
+    func xmlJuegosNuevosFav(systema: String, arrayNuevo: [[String]]){
+        print("Crear XML añadiendo Juegos Nuevos")
+        let nuevoGamelist = rutaApp  + systema + "/gamelist.xml"
+        let root = XMLElement(name: "gameList")
+        let xml = XMLDocument(rootElement: root)
+        for juego in arrayNuevo {
+            let gameNode = XMLElement(name: "game")
+            root.addChild(gameNode)
+            let pathNode = XMLElement(name: "path", stringValue: juego[0])
+            let filename = juego[1]
+            let name = (filename as NSString).deletingPathExtension
+            let nameNode = XMLElement(name: "name", stringValue: name)
+            let descNode = XMLElement(name: "desc", stringValue: juego[2])
+            let mapNode = XMLElement(name: "map", stringValue: juego[3])
+            let manualNode = XMLElement(name: "manual", stringValue: juego[4])
+            let newsNode = XMLElement(name: "news",  stringValue: juego[5])
+            let tittleshotNode = XMLElement(name: "tittleshot", stringValue: juego[6])
+            let fanartNode = XMLElement(name: "fanart", stringValue: juego[7])
+            let thumbnailNode = XMLElement(name: "thumbnail", stringValue: juego[8])
+            //let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: juego[1]) )
+            let imageNode = XMLElement(name: "image", stringValue: juego[9] )
+            //let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: juego[1]) )
+            let videoNode = XMLElement(name: "video", stringValue: juego[10] )
+            let marqueeNode = XMLElement(name: "marquee", stringValue: juego[11])
+            let releasedateNode = XMLElement(name: "releasedate",  stringValue: juego[12])
+            let developerNode = XMLElement(name: "developer", stringValue: juego[13])
+            let publisherNode = XMLElement(name: "publisher", stringValue: juego[14])
+            let genreNode = XMLElement(name: "genre", stringValue: juego[15])
+            let langNode = XMLElement(name: "lang", stringValue: juego[16])
+            let playersNode = XMLElement(name: "players", stringValue: juego[17])
+            let ratingNode = XMLElement(name: "rating", stringValue: juego[18])
+            let favNode = XMLElement(name: "fav", stringValue: juego[19])
+            let coreNode = XMLElement(name: "core", stringValue: juego[21])
+            ///AÑADIMOS LOS NODOS
+            gameNode.addChild(pathNode)
+            gameNode.addChild(nameNode)
+            gameNode.addChild(descNode)
+            gameNode.addChild(mapNode)
+            gameNode.addChild(manualNode)
+            gameNode.addChild(newsNode)
+            gameNode.addChild(tittleshotNode)
+            gameNode.addChild(fanartNode)
+            gameNode.addChild(thumbnailNode)
+            gameNode.addChild(imageNode)
+            gameNode.addChild(videoNode)
+            gameNode.addChild(marqueeNode)
+            gameNode.addChild(releasedateNode)
+            gameNode.addChild(developerNode)
+            gameNode.addChild(publisherNode)
+            gameNode.addChild(genreNode)
+            gameNode.addChild(langNode)
+            gameNode.addChild(playersNode)
+            gameNode.addChild(ratingNode)
+            gameNode.addChild(favNode)
+            gameNode.addChild(coreNode)
+        }
+        let xmlData = xml.xmlData(options: .nodePrettyPrint)
+        
+        print("TOTAL: \(arrayNuevo.count) Juegos en Total")
+        do{
+            try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
+        }catch {}
+    }
     
+    @objc func playerItemDidReachEnd(notification: Notification) {
+        if let playerItem = notification.object as? AVPlayerItem {
+            playerItem.seek(to: CMTime.zero, completionHandler: nil)
+        }
+    }
     
     
     

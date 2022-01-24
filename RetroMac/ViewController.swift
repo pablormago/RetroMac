@@ -51,9 +51,9 @@ class ViewController: NSViewController {
     
     var keyIsDown = false
     var cuentaDec = CGFloat()
-    //verride var acceptsFirstResponder: Bool { return true }
-//    override func becomeFirstResponder() -> Bool { return true }
-//    override func resignFirstResponder() -> Bool { return true }
+    override var acceptsFirstResponder: Bool { return true }
+    override func becomeFirstResponder() -> Bool { return true }
+    override func resignFirstResponder() -> Bool { return true }
     
     @IBOutlet weak var scrollerText: ScrollingTextView!
     @IBOutlet weak var mainBackImage: NSImageView!
@@ -67,11 +67,11 @@ class ViewController: NSViewController {
     @IBOutlet weak var myImage: NSImageView!
     lazy var sheetViewController: NSViewController = {
         return self.storyboard!.instantiateController(withIdentifier: "ConfigView")
-        as! NSViewController
+            as! NSViewController
     }()
     
     @IBAction func openSettings(_ sender: NSButton)  {
-        self.presentAsSheet(sheetViewController)
+        self.presentAsModalWindow(sheetViewController)
         //self.presentAsModalWindow(sheetViewController)
     }
     
@@ -95,6 +95,7 @@ class ViewController: NSViewController {
     
     
     override func viewDidAppear() {
+        print(view.window?.firstResponder)
         scrollMain.isHidden = true
         let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
         let path2 =  rutaApp2 +  "/BOBwin.exe"
@@ -102,9 +103,9 @@ class ViewController: NSViewController {
         print("Existe")
         var pathLogo = Bundle.main.url(forResource: "logo_retro", withExtension: "jpeg")
         if fileDoesExist {
-             pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+            pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
         }else {
-             pathLogo = Bundle.main.url(forResource: "logo_retro", withExtension: "jpeg")
+            pathLogo = Bundle.main.url(forResource: "logo_retro", withExtension: "jpeg")
         }
         //let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
         //let pathLogo = Bundle.main.url(forResource: "logo_retro", withExtension: "jpeg")
@@ -163,33 +164,17 @@ class ViewController: NSViewController {
         ventana = "Principal"
         print("DID LOAD")
         cuenta = 0
-//        titulosMame = mamelista() as! [[String]]
-//        llenaSistemasIds()
+        //        titulosMame = mamelista() as! [[String]]
+        //        llenaSistemasIds()
         
-//        if cuentaPrincipio == 0 {
-//            cuentaJuegosEnSistemas()
-//        }
+        //        if cuentaPrincipio == 0 {
+        //            cuentaJuegosEnSistemas()
+        //        }
         
         
         //view.window?.isOpaque = false
         //view.window?.backgroundColor = NSColor (red: 1, green: 0.5, blue: 0.5, alpha: 0.5)
         
-        
-        rutaRomsLabel.stringValue = rompath
-        let Xemu = "/users/Shared/Xemu"
-        let myGroup = DispatchGroup()
-        myGroup.enter()
-        //// Do your task
-        var isDir:ObjCBool = true
-        let theProjectPath = Xemu
-        if !FileManager.default.fileExists(atPath: theProjectPath, isDirectory: &isDir) {
-            copiarBase()
-        } else {
-            //print("Existe")
-        }
-        myGroup.leave() //// When your task completes
-        myGroup.notify(queue: DispatchQueue.main) {
-        }
         rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
         //print(rutaApp)
         onOff.stringValue = "SALIR"
@@ -198,77 +183,77 @@ class ViewController: NSViewController {
         print(cuentaSistemas())
         let totalAnchuraMenu = ((totalSistemas+1) * 560)
         //Parsear Sistemas
-//        let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
-//        let documentView = NSView(frame: NSRect(x: 0,y: 0,width: totalAnchuraMenu,height: 178))
-//        if let pathXMLinterno = pathXMLinterno, let data = try? Data(contentsOf: pathXMLinterno as URL)
-//        {
-//            
-//            let parser = BookParser(data: data)
-//            var counter = 0
-//            
-//            for book in parser.books
-//                
-//            {
-//                
-//                let offset = CGFloat(counter * 560)
-//                let button = ButtonConsolas(frame: NSRect(x: offset, y: 0, width: 560, height: 178 ))
-//                button.tag = counter+1
-//                button.title = book.name
-//                let home = Bundle.main.bundlePath
-//                let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png")!
-//                button.imageScaling = .scaleProportionallyDown
-//                let path =  home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png"
-//                let fileDoesExist = FileManager.default.fileExists(atPath: path)
-//                if fileDoesExist {
-//                    button.image = imagen2
-//                }
-//                button.Sistema = book.name
-//                button.Comando = book.comando
-//                button.RomsPath = book.path
-//                button.Extensiones = book.extensiones
-//                button.Platform = book.platform
-//                button.Theme = book.theme
-//                button.Fullname = book.fullname
-//                button.target = self
-//                button.action = #selector(ViewController.selecionSistema)
-//                button.isBordered = false
-//                
-//                //button.layer?.backgroundColor = NSColor.red.cgColor
-//                //var miruta = rutaApp + book.path
-//                //var isDir:ObjCBool = true
-//                
-//                /// COMPROBAMOS SI TIENE ROMS ***********************
-//                
-//                
-//                for sistema in sistemasTengo {
-//                    
-//                    if sistema == book.name{
-//                        for consola in juegosPorConsola {
-//                            if consola[0] == book.name {
-//                                button.numeroJuegos = consola[1]
-//                                break
-//                            }
-//                        }
-//                        
-//                        //button.numeroJuegos = cuentajuegos(sistema: book.name)
-//                        //print ("Sistema: \(book.name) -> \(button.numeroJuegos) juegos" )
-//                        documentView.addSubview(button)
-//                        counter += 1
-//                        break
-//                    }
-//                    
-//                }
-//                
-//                /// COMPROBAMOS SI TIENE ROMS ***********************
-//                
-//                scrollMain.documentView = documentView
-//                
-//            }
-//            
-//            cuantosSistemas = counter
-//            ventana = "Principal"
-//            //onOff.stringValue = rutaApp
-//        }
+        //        let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
+        //        let documentView = NSView(frame: NSRect(x: 0,y: 0,width: totalAnchuraMenu,height: 178))
+        //        if let pathXMLinterno = pathXMLinterno, let data = try? Data(contentsOf: pathXMLinterno as URL)
+        //        {
+        //
+        //            let parser = BookParser(data: data)
+        //            var counter = 0
+        //
+        //            for book in parser.books
+        //
+        //            {
+        //
+        //                let offset = CGFloat(counter * 560)
+        //                let button = ButtonConsolas(frame: NSRect(x: offset, y: 0, width: 560, height: 178 ))
+        //                button.tag = counter+1
+        //                button.title = book.name
+        //                let home = Bundle.main.bundlePath
+        //                let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png")!
+        //                button.imageScaling = .scaleProportionallyDown
+        //                let path =  home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png"
+        //                let fileDoesExist = FileManager.default.fileExists(atPath: path)
+        //                if fileDoesExist {
+        //                    button.image = imagen2
+        //                }
+        //                button.Sistema = book.name
+        //                button.Comando = book.comando
+        //                button.RomsPath = book.path
+        //                button.Extensiones = book.extensiones
+        //                button.Platform = book.platform
+        //                button.Theme = book.theme
+        //                button.Fullname = book.fullname
+        //                button.target = self
+        //                button.action = #selector(ViewController.selecionSistema)
+        //                button.isBordered = false
+        //
+        //                //button.layer?.backgroundColor = NSColor.red.cgColor
+        //                //var miruta = rutaApp + book.path
+        //                //var isDir:ObjCBool = true
+        //
+        //                /// COMPROBAMOS SI TIENE ROMS ***********************
+        //
+        //
+        //                for sistema in sistemasTengo {
+        //
+        //                    if sistema == book.name{
+        //                        for consola in juegosPorConsola {
+        //                            if consola[0] == book.name {
+        //                                button.numeroJuegos = consola[1]
+        //                                break
+        //                            }
+        //                        }
+        //
+        //                        //button.numeroJuegos = cuentajuegos(sistema: book.name)
+        //                        //print ("Sistema: \(book.name) -> \(button.numeroJuegos) juegos" )
+        //                        documentView.addSubview(button)
+        //                        counter += 1
+        //                        break
+        //                    }
+        //
+        //                }
+        //
+        //                /// COMPROBAMOS SI TIENE ROMS ***********************
+        //
+        //                scrollMain.documentView = documentView
+        //
+        //            }
+        //
+        //            cuantosSistemas = counter
+        //            ventana = "Principal"
+        //            //onOff.stringValue = rutaApp
+        //        }
         ///Carga desde allTheGames
         var counter = 0
         let documentView = NSView(frame: NSRect(x: 0,y: 0,width: totalAnchuraMenu,height: 178))
@@ -324,8 +309,8 @@ class ViewController: NSViewController {
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 scrollMain.isHidden = false
                 botonactual = cuentaboton
-               
-               
+                
+                
             }else {
                 cuentaboton = botonactual
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
@@ -371,19 +356,19 @@ class ViewController: NSViewController {
                         let mitadPantalla = Int (width / 2)
                         anchuraPantall = Int(width)
                         
-                            
-                            //print("Derecho Mover")
-                            cuentaboton = botonactual
-                            let trozoamover = (560 * botonactual) - 280
-                            let cachito = trozoamover - mitadPantalla
-                            //print(botonactual)
-                            scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                            scrollMain.isHidden = false
+                        
+                        //print("Derecho Mover")
+                        cuentaboton = botonactual
+                        let trozoamover = (560 * botonactual) - 280
+                        let cachito = trozoamover - mitadPantalla
+                        //print(botonactual)
+                        scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
+                        scrollMain.isHidden = false
                         print ("CUENTABOTON: \(cuentaboton)")
                         print ("BOTONACTUAL: \(botonactual)")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-
+                        
                     }
                 }
                 
@@ -394,8 +379,8 @@ class ViewController: NSViewController {
                 //print ("CURSOR IZQUIERDO")
                 
                 if botonactual > 1 {
-                botonactual -= 1
-                
+                    botonactual -= 1
+                    
                     if let screen = NSScreen.main {
                         let rect = screen.frame
                         let width = rect.size.width
@@ -412,7 +397,7 @@ class ViewController: NSViewController {
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
                     }
-               
+                    
                 }
                 
             }
@@ -447,14 +432,14 @@ class ViewController: NSViewController {
                         let mitadPantalla = Int (width / 2)
                         anchuraPantall = Int(width)
                         
-                            
-                            //print("entro")
-                            cuentaboton = botonactual
-                            let trozoamover = (560 * Int(cuentaDec)) - 280
-                            let cachito = trozoamover - mitadPantalla
-                            scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-//                            let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-//                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
+                        
+                        //print("entro")
+                        cuentaboton = botonactual
+                        let trozoamover = (560 * Int(cuentaDec)) - 280
+                        let cachito = trozoamover - mitadPantalla
+                        scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
+                        //                            let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
+                        //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
                         
@@ -475,14 +460,14 @@ class ViewController: NSViewController {
                         let mitadPantalla = Int (width / 2)
                         anchuraPantall = Int(width)
                         
-                            
-                            //print("entro")
-                            cuentaboton = botonactual
-                            let trozoamover = (560 * Int(cuentaDec)) - 280
-                            let cachito = trozoamover - mitadPantalla
-                            scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-//                            let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-//                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
+                        
+                        //print("entro")
+                        cuentaboton = botonactual
+                        let trozoamover = (560 * Int(cuentaDec)) - 280
+                        let cachito = trozoamover - mitadPantalla
+                        scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
+                        //                            let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
+                        //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
                         
@@ -503,6 +488,11 @@ class ViewController: NSViewController {
     
     override func viewWillAppear() {
         super.viewWillAppear()
+        
+        //NSApplication.shared.windows.first?.styleMask.insert(.fullScreen)
+        //NSApplication.shared.windows.first?.styleMask.insert(.miniaturizable)
+        //NSApplication.shared.windows.first?.styleMask.insert(.fullSizeContentView)
+        
         //self.view.window?.styleMask = [.titled,.closable, .fullSizeContentView, .resizable]
         if let screen = NSScreen.main {
             let rect = screen.frame
@@ -534,9 +524,9 @@ class ViewController: NSViewController {
             button?.numeroJuegos = "0"
         }
         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos! ?? "0") Juegos "
-       
         
-       
+        
+        
         
         
     }
@@ -610,6 +600,7 @@ func crearGameListInicio (ruta: String){
                 let playersNode = XMLElement(name: "players")
                 let ratingNode = XMLElement(name: "rating")
                 let favNode = XMLElement(name: "fav")
+                let boxNode = XMLElement(name: "box")
                 ///AÑADIMOS LOS NODOS
                 gameNode.addChild(pathNode)
                 gameNode.addChild(nameNode)
@@ -623,6 +614,7 @@ func crearGameListInicio (ruta: String){
                 gameNode.addChild(imageNode)
                 gameNode.addChild(videoNode)
                 gameNode.addChild(marqueeNode)
+                gameNode.addChild(boxNode)
                 gameNode.addChild(releasedateNode)
                 gameNode.addChild(developerNode)
                 gameNode.addChild(publisherNode)
@@ -723,6 +715,8 @@ fileprivate func directoryExistsAtPath(_ path: String) -> Bool {
 }
 
 func copiarBase(){
+    
+    print("COPIANDO BASE")
     let home = Bundle.main.bundlePath
     //let Xemu = "cp -r " + APPpathStr +  "/BaseMac/Shared/Xemu  /Users/Shared/Xemu"
     let baseXemu =  "cp -r " + home +  "/Contents/Resources/Base/Shared/Xemu /Users/Shared/Xemu"
@@ -865,6 +859,9 @@ struct Juego {
     var rating: String
     var fav: String
     var comando: String
+    var core: String
+    var system: String
+    var box: String
 }
 struct Consola {
     let sistema: String

@@ -56,6 +56,8 @@ public struct Game
     public var rating: String = ""
     
     public var fav: String = ""
+    
+    public var box: String = ""
 }
 
 //
@@ -83,7 +85,7 @@ public class GameParser: NSObject
     private let ImageTag = "image"
     private let VideoTag = "video"
     private let MarqueeTag = "marquee"
-    private let ReleasedataTag = "releasedata"
+    private let ReleasedataTag = "releasedate"
     private let DeveloperTag = "developer"
     private let PublisherTag = "publisher"
     private let GenreTag = "genre"
@@ -91,6 +93,7 @@ public class GameParser: NSObject
     private let PlayersTag = "players"
     private let RatingTag = "rating"
     private let FavTag = "fav"
+    private let BoxTag = "box"
     
     
     
@@ -280,6 +283,11 @@ extension GameParser: XMLParserDelegate
         {
             
             self.actualBook?.fav.append(string)
+        }
+        if self.actualElement == BoxTag
+        {
+            
+            self.actualBook?.box.append(string)
         }
     }
     

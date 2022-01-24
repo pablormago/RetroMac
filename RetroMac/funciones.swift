@@ -288,7 +288,8 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
             let miPlayers = String(game.players)
             let miRating = String(game.rating)
             let miFav = String(game.fav)
-            var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating, fav: miFav, comando: miComando)
+            let miBox = String(game.box)
+            var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating, fav: miFav, comando: miComando, core: "", system: miSistema, box: miBox)
             
             datosJuego3 = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating, miFav,  miComando ]
             if miFav == "FAV" {
@@ -328,7 +329,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
                     juegosnuevos += 1
                     ///AÑADIR FUNCION PARA AÑADIR JUEGO AL XML
                     var datosJuegoNoXml = [String]()
-                    var datosDeMiJuego: Juego = Juego(path: rutacompleta, name: String(element), description: "", map: "", manual: "", news: "", tittleshot: "", fanart: "", thumbnail: "", image: "", video: "", marquee: "", releasedate: "", developer: "", publisher: "", genre: "", lang: "", players: "", rating: "", fav: "", comando: miComando)
+                    var datosDeMiJuego: Juego = Juego(path: rutacompleta, name: String(element), description: "", map: "", manual: "", news: "", tittleshot: "", fanart: "", thumbnail: "", image: "", video: "", marquee: "", releasedate: "", developer: "", publisher: "", genre: "", lang: "", players: "", rating: "", fav: "", comando: miComando, core: "", system: miSistema, box: "")
                     datosJuegoNoXml = [rutacompleta , String(element), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" , miComando]
                     juegosXml2.append(datosJuegoNoXml)
                     losJuegos.append(datosDeMiJuego)
@@ -393,6 +394,7 @@ func xmlJuegosNuevos2(ruta: String){
         let playersNode = XMLElement(name: "players", stringValue: juego[17])
         let ratingNode = XMLElement(name: "rating", stringValue: juego[18])
         let favNode = XMLElement(name: "fav", stringValue: "")
+        let boxNode = XMLElement(name: "box", stringValue: "")
         ///AÑADIMOS LOS NODOS
         gameNode.addChild(pathNode)
         gameNode.addChild(nameNode)
@@ -406,6 +408,7 @@ func xmlJuegosNuevos2(ruta: String){
         gameNode.addChild(imageNode)
         gameNode.addChild(videoNode)
         gameNode.addChild(marqueeNode)
+        gameNode.addChild(boxNode)
         gameNode.addChild(releasedateNode)
         gameNode.addChild(developerNode)
         gameNode.addChild(publisherNode)
@@ -414,6 +417,7 @@ func xmlJuegosNuevos2(ruta: String){
         gameNode.addChild(playersNode)
         gameNode.addChild(ratingNode)
         gameNode.addChild(favNode)
+        
     }
     let xmlData = xml.xmlData(options: .nodePrettyPrint)
     
@@ -461,6 +465,7 @@ func crearGameListInicioCarga (ruta: String){
                 let playersNode = XMLElement(name: "players")
                 let ratingNode = XMLElement(name: "rating")
                 let favNode = XMLElement(name: "fav")
+                let boxNode = XMLElement(name: "box")
                 ///AÑADIMOS LOS NODOS
                 gameNode.addChild(pathNode)
                 gameNode.addChild(nameNode)
@@ -474,6 +479,7 @@ func crearGameListInicioCarga (ruta: String){
                 gameNode.addChild(imageNode)
                 gameNode.addChild(videoNode)
                 gameNode.addChild(marqueeNode)
+                gameNode.addChild(boxNode)
                 gameNode.addChild(releasedateNode)
                 gameNode.addChild(developerNode)
                 gameNode.addChild(publisherNode)

@@ -21,10 +21,18 @@ class SplashController: NSViewController {
     }
     
     override func viewWillAppear() {
-//        self.view.layer?.cornerRadius = 20.0
-//        self.view.window?.isOpaque = false
-//        self.view.window?.titlebarAppearsTransparent = true
-        self.view.window?.styleMask = [.borderless]
+///        self.view.layer?.cornerRadius = 20.0
+///        self.view.window?.isOpaque = false
+///        self.view.window?.titlebarAppearsTransparent = true
+        ///self.view.window?.styleMask = [.borderless]
+        self.view.window?.titleVisibility = .hidden
+        self.view.window?.titlebarAppearsTransparent = true
+        //self.view.window?.styleMask.insert(.fullSizeContentView)
+
+        self.view.window?.styleMask.remove(.closable)
+        ///self.view.window?.styleMask.remove(.fullScreen)
+        //self.view.window?.styleMask.remove(.miniaturizable)
+        //self.view.window?.styleMask.remove(.resizable)
     }
     
     override func viewDidAppear() {
@@ -36,6 +44,52 @@ class SplashController: NSViewController {
 //        DispatchQueue.main.sync {
 //
 //        }
+        
+        var existeRetro = Bool()
+        ///comprobar que EXISTE RETROMAC.TXT
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let url = NSURL(fileURLWithPath: path)
+        if let pathComponent = url.appendingPathComponent("/Retroarch/RetroMac.txt") {
+            let filePath = pathComponent.path
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: filePath) {
+                existeRetro = true
+                print("ESTÁ")
+                
+            } else {
+               existeRetro = false
+                print("NO ESTÁ")
+                let str = "1.3"
+                let filename = getDocumentsDirectory().appendingPathComponent("/Retroarch/RetroMac.txt")
+
+                do {
+                    try str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
+                } catch {
+                    // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+                }
+            }
+        } else {
+            print("FILE PATH NOT AVAILABLE")
+        }
+        
+        
+        let Xemu = "/users/Shared/Xemu"
+        let myGroup = DispatchGroup()
+        myGroup.enter()
+        //// Do your task
+        var isDir:ObjCBool = true
+        let theProjectPath = Xemu
+        if !FileManager.default.fileExists(atPath: theProjectPath, isDirectory: &isDir) || existeRetro == false {
+            taskLabel.stringValue = "Generando la Base"
+            copiarBase()
+        } else {
+            //print("Existe")
+        }
+        myGroup.leave() //// When your task completes
+        myGroup.notify(queue: DispatchQueue.main) {
+        }
+        
+        
         DispatchQueue.background(background: {
             titulosMame = mamelista() as! [[String]]
             llenaSistemasIds()
@@ -164,4 +218,10 @@ class SplashController: NSViewController {
         
         
     }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
 }
