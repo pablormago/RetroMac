@@ -1722,7 +1722,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 self.juegosXml[filajuego][19] = self.juegosXml[filajuego][19]
                 self.juegosXml[filajuego][23] = rompath + "/media/"  + nombrejuego + "_box.png"
                 self.xmlJuegosNuevos()
-                //DispatchQueue.main.sync {
+                //DispatchQueue.main.sync {}
                 
                 
                 let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
