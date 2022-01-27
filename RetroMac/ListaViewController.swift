@@ -11,6 +11,9 @@ import Commands
 import AVKit
 import AVFoundation
 
+var escrapeandoSistema: Bool = false
+var juegosaescrapearensistema = Int()
+var juesgosEscrapeados = Int()
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
@@ -30,6 +33,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     @IBOutlet weak var favImagen: NSButton!
     @IBOutlet weak var tituloTextField: NSTextField!
     
+    @IBOutlet weak var barraProgress: NSProgressIndicator!
     @IBAction func aceptarTitulo(_ sender: NSButton) {
         
         let indexSet = NSIndexSet(index: juegosTableView.selectedRow)
@@ -110,15 +114,15 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        NSEvent.addLocalMonitorForEvents(matching: .keyUp) { (qEvent) -> NSEvent? in
-//            self.keyUp(with: qEvent)
-//            return qEvent
-//        }
-//
-//        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (qEvent) -> NSEvent? in
-//            self.keyDown(with: qEvent)
-//            return qEvent
-//        }
+        //        NSEvent.addLocalMonitorForEvents(matching: .keyUp) { (qEvent) -> NSEvent? in
+        //            self.keyUp(with: qEvent)
+        //            return qEvent
+        //        }
+        //
+        //        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (qEvent) -> NSEvent? in
+        //            self.keyDown(with: qEvent)
+        //            return qEvent
+        //        }
         print(view.window?.firstResponder)
         print("LISTA LOAD")
         view.wantsLayer = true
@@ -324,7 +328,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                                    selector: #selector(playerItemDidReachEnd(notification:)),
                                                    name: .AVPlayerItemDidPlayToEndTime,
                                                    object: player2.currentItem)
-
+            
             playingVideo = true
         }else{
             let noVideo = Bundle.main.path(forResource: "NoVideo", ofType:"mp4")
@@ -375,9 +379,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         print("LISTA APPEAR")
         
         
-//        if !self.view.window!.isZoomed{
-//            //self.view.window?.zoom(self)
-//        }
+        //        if !self.view.window!.isZoomed{
+        //            //self.view.window?.zoom(self)
+        //        }
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
         
         self.view.window?.setFrame(mirect, display: true)
@@ -769,6 +773,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     @objc func buscaJuego(){
+        escrapeandoSistema = false
+        juegosTableView.isEnabled = false
         print("Escrapeo - 1")
         infoLabel.stringValue = "Buscando Juego..."
         //mkdir -p foo
@@ -940,20 +946,30 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             
             // when background job finished, do something in main thread
         })
-        //DispatchQueue.global(qos: .background).async {
-        // do your job here
-        
-        //            DispatchQueue.main.async {
-        //                // update ui here
-        //            }
-        //}
         
         
         
     }
     
+    func habilitarTabla (){
+        abiertaLista = true
+        self.juegosTableView.isEnabled = true
+        self.view.window?.makeFirstResponder(self.juegosTableView)
+        self.infoLabel.stringValue = "JUEGO ESCRAPEADO"
+        
+        
+    }
+    func habilitarTabla2 (){
+        abiertaLista = true
+        backButton.isEnabled = true
+        self.juegosTableView.isEnabled = true
+        self.view.window?.makeFirstResponder(self.juegosTableView)
+        self.infoLabel.stringValue = "SISTEMA ESCRAPEADO"
+    }
+    
     @objc func scrapearJuego (juego: String, sistema: String, nombrejuego: String, filajuego: Int){
         print("Escrapeo - 2")
+        var cuenta = 0
         var mifeed: JSON?
         let defaults = UserDefaults.standard
         let SSuser = defaults.string(forKey: "SSUser") ?? ""
@@ -1098,7 +1114,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                                 //print("Screenshot: \(screenshotJuego)")
                                                 
                                             }
-                                            if sJson3["type"].stringValue == "video-normalized" {
+                                            if sJson3["type"].stringValue == "video" {
                                                 videoJuego = sJson3["url"].stringValue
                                                 //print("Video: \(videoJuego)")
                                                 
@@ -1162,8 +1178,54 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 }
             }
             
+            var marqueeDescarga = ""
+            if logoJuego == "" {
+                marqueeDescarga = marqueeJuego
+            }else {
+                marqueeDescarga = logoJuego
+                print("TIENE LOGO")
+            }
+            var boxDescarga = ""
+            
+            if box3dJuego == "" {
+                boxDescarga = box2dJuego
+                print("TIENE 2D")
+            }else {
+                boxDescarga = box3dJuego
+                print("TIENE 3D")
+            }
+            
+            
+            
+            if screenshotJuego != "" {
+                cuenta += 1
+            }
+            if videoJuego != "" {
+                cuenta += 1
+            }
+            if fanartJuego != "" {
+                cuenta += 1
+            }
+            if tittleshotJuego != "" {
+                cuenta += 1
+            }
+            
+            if manualJuego != "" {
+                cuenta += 1
+            }
+            if marqueeDescarga != "" {
+                cuenta += 1
+            }
+            if boxDescarga != "" {
+                cuenta += 1
+            }
+            
+            print("El juego tiene \(cuenta) medias")
+            
+            var cuentadescarga = 0
+            
             //DispatchQueue.global(qos: .background).async {
-            DispatchQueue.background(delay: 1.0, background: {
+            DispatchQueue.background(delay: 0.0, background: {
                 ///ScreenShot
                 if screenshotJuego != "" {
                     //self.descargaMedia(tipo: "png", url: screenshotJuego, nombre: nombrejuego)
@@ -1190,6 +1252,34 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                             do {
                                 try? FileManager.default.removeItem(at: destinationFileUrl!)
                                 try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                                DispatchQueue.main.sync {
+                                    cuentadescarga += 1
+                                    
+                                    if cuentadescarga == cuenta {
+                                        if escrapeandoSistema == false {
+                                            self.habilitarTabla()
+                                        }else{
+                                            
+                                                self.barraProgress.increment(by: 1)
+                                            
+                                            
+                                            
+                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                                self.habilitarTabla2()
+                                            }else {
+                                               
+                                                    self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
+                                                
+                                                
+                                            }
+                                        }
+                                        
+                                        
+                                    }
+                                }
+                                
+                                
+                                
                             } catch (let writeError) {
                                 print("Error creating a file \(destinationFileUrl) : \(writeError)")
                             }
@@ -1232,6 +1322,31 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                             do {
                                 try? FileManager.default.removeItem(at: destinationFileUrl!)
                                 try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                                DispatchQueue.main.sync {
+                                    cuentadescarga += 1
+                                    
+                                    if cuentadescarga == cuenta {
+                                        if escrapeandoSistema == false {
+                                            self.habilitarTabla()
+                                        }else{
+                                            
+                                                self.barraProgress.increment(by: 1)
+                                            
+                                            
+                                            
+                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                                self.habilitarTabla2()
+                                            }else {
+                                               
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
+                                                
+                                                
+                                            }
+                                        }
+                                        
+                                        
+                                    }
+                                }
                             } catch (let writeError) {
                                 print("Error creating a file \(destinationFileUrl) : \(writeError)")
                             }
@@ -1269,6 +1384,31 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                             do {
                                 try? FileManager.default.removeItem(at: destinationFileUrl!)
                                 try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                                DispatchQueue.main.sync {
+                                    cuentadescarga += 1
+                                    
+                                    if cuentadescarga == cuenta {
+                                        if escrapeandoSistema == false {
+                                            self.habilitarTabla()
+                                        }else{
+                                            
+                                                self.barraProgress.increment(by: 1)
+                                            
+                                            
+                                            
+                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                                self.habilitarTabla2()
+                                            }else {
+                                               
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
+                                                
+                                                
+                                            }
+                                        }
+                                        
+                                        
+                                    }
+                                }
                             } catch (let writeError) {
                                 print("Error creating a file \(destinationFileUrl) : \(writeError)")
                             }
@@ -1305,6 +1445,31 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                             do {
                                 try? FileManager.default.removeItem(at: destinationFileUrl!)
                                 try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                                DispatchQueue.main.sync {
+                                    cuentadescarga += 1
+                                    
+                                    if cuentadescarga == cuenta {
+                                        if escrapeandoSistema == false {
+                                            self.habilitarTabla()
+                                        }else{
+                                            
+                                                self.barraProgress.increment(by: 1)
+                                            
+                                            
+                                            
+                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                                self.habilitarTabla2()
+                                            }else {
+                                               
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
+                                                
+                                                
+                                            }
+                                        }
+                                        
+                                        
+                                    }
+                                }
                             } catch (let writeError) {
                                 print("Error creating a file \(destinationFileUrl) : \(writeError)")
                             }
@@ -1341,6 +1506,31 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                             do {
                                 try? FileManager.default.removeItem(at: destinationFileUrl!)
                                 try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                                DispatchQueue.main.sync {
+                                    cuentadescarga += 1
+                                    
+                                    if cuentadescarga == cuenta {
+                                        if escrapeandoSistema == false {
+                                            self.habilitarTabla()
+                                        }else{
+                                            
+                                                self.barraProgress.increment(by: 1)
+                                            
+                                            
+                                            
+                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                                self.habilitarTabla2()
+                                            }else {
+                                               
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
+                                                
+                                                
+                                            }
+                                        }
+                                        
+                                        
+                                    }
+                                }
                             } catch (let writeError) {
                                 print("Error creating a file \(destinationFileUrl) : \(writeError)")
                             }
@@ -1352,13 +1542,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                     task.resume()
                 }
                 ///MARQUEE
-                var marqueeDescarga = ""
-                if logoJuego == "" {
-                    marqueeDescarga = marqueeJuego
-                }else {
-                    marqueeDescarga = logoJuego
-                    print("TIENE LOGO")
-                }
+                
                 
                 if marqueeDescarga != "" {
                     
@@ -1386,6 +1570,31 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                             do {
                                 try? FileManager.default.removeItem(at: destinationFileUrl!)
                                 try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                                DispatchQueue.main.sync {
+                                    cuentadescarga += 1
+                                    
+                                    if cuentadescarga == cuenta {
+                                        if escrapeandoSistema == false {
+                                            self.habilitarTabla()
+                                        }else{
+                                            
+                                                self.barraProgress.increment(by: 1)
+                                            
+                                            
+                                            
+                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                                self.habilitarTabla2()
+                                            }else {
+                                               
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
+                                                
+                                                
+                                            }
+                                        }
+                                        
+                                        
+                                    }
+                                }
                             } catch (let writeError) {
                                 print("Error creating a file \(destinationFileUrl) : \(writeError)")
                             }
@@ -1399,15 +1608,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 
                 //BOX
                 
-                var boxDescarga = ""
                 
-                if box3dJuego == "" {
-                    boxDescarga = box2dJuego
-                    print("TIENE 2D")
-                }else {
-                    boxDescarga = box3dJuego
-                    print("TIENE 3D")
-                }
                 
                 if boxDescarga != "" {
                     
@@ -1435,6 +1636,31 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                             do {
                                 try? FileManager.default.removeItem(at: destinationFileUrl!)
                                 try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
+                                DispatchQueue.main.sync {
+                                    cuentadescarga += 1
+                                    
+                                    if cuentadescarga == cuenta {
+                                        if escrapeandoSistema == false {
+                                            self.habilitarTabla()
+                                        }else{
+                                            
+                                                self.barraProgress.increment(by: 1)
+                                            
+                                            
+                                            
+                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                                self.habilitarTabla2()
+                                            }else {
+                                               
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
+                                                
+                                                
+                                            }
+                                        }
+                                        
+                                        
+                                    }
+                                }
                             } catch (let writeError) {
                                 print("Error creating a file \(destinationFileUrl) : \(writeError)")
                             }
@@ -1502,7 +1728,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
                 let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == self.juegosXml[filajuego][0]})
                 
-
+                
                 allTheGames[mifila!].games[mifilaJuego!].description = self.juegosXml[filajuego][2]
                 allTheGames[mifila!].games[mifilaJuego!].map = self.juegosXml[filajuego][3]
                 allTheGames[mifila!].games[mifilaJuego!].manual = self.juegosXml[filajuego][4]
@@ -1527,11 +1753,11 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 
                 
                 
-                let indexSet = NSIndexSet(index: (self.juegosTableView.selectedRow + -1))
-                let indexSet2 = NSIndexSet(index: self.juegosTableView.selectedRow )
-                self.juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
-                self.juegosTableView.selectRowIndexes(indexSet2 as IndexSet, byExtendingSelection: false)
-                self.infoLabel.stringValue = "Juego ESCRAPEADO!!"
+                //                let indexSet = NSIndexSet(index: (self.juegosTableView.selectedRow + -1))
+                //                let indexSet2 = NSIndexSet(index: self.juegosTableView.selectedRow )
+                //                self.juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                //                self.juegosTableView.selectRowIndexes(indexSet2 as IndexSet, byExtendingSelection: false)
+                //                self.infoLabel.stringValue = "Juego ESCRAPEADO!!"
                 // when background job finished, do something in main thread
             })
             
@@ -1555,44 +1781,16 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
     }
     
-    func descargaMedia (tipo: String, url: String, nombre: String){
-        let myFilePathString = "file://" + rompath + "/media" + "/\(nombre).\(tipo)"
-        let midestino = URL(string: myFilePathString)
-        let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let destinationFileUrl = midestino
-        
-        //Create URL to the source file you want to download
-        let fileURL = URL(string: url)
-        
-        let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig)
-        
-        let request = URLRequest(url:fileURL!)
-        print(request)
-        let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
-            if let tempLocalUrl = tempLocalUrl, error == nil {
-                // Success
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    print("Successfully downloaded. Status code: \(statusCode)")
-                }
-                
-                do {
-                    try? FileManager.default.removeItem(at: destinationFileUrl!)
-                    try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl!)
-                } catch (let writeError) {
-                    print("Error creating a file \(destinationFileUrl) : \(writeError)")
-                }
-                
-            } else {
-                print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
-            }
-        }
-        task.resume()
-    }
+    
     
     func buscaJuegoS(numerojuego: Int){
         print("Escrapeo - 1")
+        abiertaLista = false
+        DispatchQueue.main.sync {
+            self.juegosTableView.isEnabled = false
+        }
         
+        escrapeandoSistema = true
         //mkdir -p foo
         var rutaacrear = rompath + "/media"
         var comando = "mkdir -p \(rutaacrear)"
@@ -1605,6 +1803,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 break
             }
         }
+        juegosaescrapearensistema = juegosXml.count
         
         let defaults = UserDefaults.standard
         let SSUser = defaults.string(forKey: "SSUser") ?? ""
@@ -1715,6 +1914,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             nombreplano = result1
         }
         if miId != ""{
+            juesgosEscrapeados += 1
             print("ID: \(miId)")
             
             print(idSistema)
@@ -1732,7 +1932,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             print("Juego no encontrado")
             
             self.infoLabel.stringValue = "Juego no encontrado"
-            
+            juesgosEscrapeados += 1
             
         }
         
@@ -1742,6 +1942,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     @objc func escrapeartodos(){
+        barraProgress.minValue = 0
+        barraProgress.maxValue = Double(juegosXml.count)
         backButton.isEnabled = false
         abiertaLista = false
         juegosTableView.isEnabled = false
@@ -1751,13 +1953,13 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             let kk = self.juegosXml.count
             for a in 0..<kk {
                 self.buscaJuegoS(numerojuego: a)
-                self.infoLabel.stringValue = "Escrapeados \(a + 1) juegos de \(self.juegosXml.count)"
+                
                 if a == (kk - 1) {
                     abiertaLista = true
-                    self.backButton.isEnabled = true
-                    self.juegosTableView.isEnabled = true
-                    self.juegosTableView.becomeFirstResponder()
-                    self.juegosTableView.cell?.performClick((Any).self)
+                    //                    self.backButton.isEnabled = true
+                    //                    self.juegosTableView.isEnabled = true
+                    //                    self.juegosTableView.becomeFirstResponder()
+                    //                    self.juegosTableView.cell?.performClick((Any).self)
                 }else{
                     abiertaLista = false
                 }
@@ -1766,7 +1968,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             //
             //                //print(index)
             //            }
-            self.infoLabel.stringValue = "** JUEGOS ESCRAPEADOS **"
+            //self.infoLabel.stringValue = "** JUEGOS ESCRAPEADOS **"
         })
         
         
@@ -1806,7 +2008,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         let gameItem = NSMenuItem(title: "Juego", action: nil, keyEquivalent: "")
         //if sistemaActual != "Favoritos" {
-            gameItem.submenu = gameSubmenu
+        gameItem.submenu = gameSubmenu
         //}
         
         

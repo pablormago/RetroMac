@@ -95,7 +95,7 @@ class ViewController: NSViewController {
     
     
     override func viewDidAppear() {
-        print(view.window?.firstResponder)
+        
         scrollMain.isHidden = true
         let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
         let path2 =  rutaApp2 +  "/BOBwin.exe"
@@ -153,6 +153,7 @@ class ViewController: NSViewController {
         
         ///TECLAS
         cuentaDec = CGFloat(botonactual)
+        self.view.window?.makeFirstResponder(self.scrollMain)
         // *** /FullScreen ***
     }
     
