@@ -10,7 +10,7 @@ import Cocoa
 import Commands
 import AVKit
 import AVFoundation
-
+var playingVideo = false
 var escrapeandoSistema: Bool = false
 var juegosaescrapearensistema = Int()
 var juesgosEscrapeados = Int()
@@ -108,12 +108,13 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     var juegosXml = [[String]]()
     
     var keyIsDown = false
-    var playingVideo = false
+    
     let contextMenu = NSMenu()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        infoLabel.isHidden = true
         //        NSEvent.addLocalMonitorForEvents(matching: .keyUp) { (qEvent) -> NSEvent? in
         //            self.keyUp(with: qEvent)
         //            return qEvent
@@ -225,7 +226,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     func tableViewSelectionDidChange(_ notification: Notification) {
-        
+        infoLabel.isHidden = true
         guard juegosTableView.selectedRow != -1 else {return}
         //infoLabel.stringValue = "INFO"
         let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
@@ -773,6 +774,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     @objc func buscaJuego(){
+        if playingVideo == true {
+            snapPlayer.player?.pause()
+        }
+        infoLabel.isHidden = false
         escrapeandoSistema = false
         juegosTableView.isEnabled = false
         print("Escrapeo - 1")
@@ -1784,6 +1789,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     
     func buscaJuegoS(numerojuego: Int){
+        if playingVideo == true {
+            snapPlayer.player?.pause()
+        }
+        infoLabel.isHidden = false
         print("Escrapeo - 1")
         abiertaLista = false
         DispatchQueue.main.sync {
