@@ -1792,11 +1792,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         if playingVideo == true {
             snapPlayer.player?.pause()
         }
-        infoLabel.isHidden = false
+        
         print("Escrapeo - 1")
         abiertaLista = false
         DispatchQueue.main.sync {
             self.juegosTableView.isEnabled = false
+            self.infoLabel.isHidden = false
         }
         
         escrapeandoSistema = true
