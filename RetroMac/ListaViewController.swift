@@ -1500,7 +1500,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 
                 
                 let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-                let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == self.juegosXml[self.juegosTableView.selectedRow][0]})
+                let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == self.juegosXml[filajuego][0]})
                 
 
                 allTheGames[mifila!].games[mifilaJuego!].description = self.juegosXml[filajuego][2]
@@ -1683,11 +1683,23 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                         
                         for (tercero, subsubJson):(String, JSON) in object{
                             //print(subsubJson["id"].stringValue)
-                            miId = subsubJson["id"].stringValue
-                            if ((subsubJson["noms"].rawString())?.contains(miputonombre))! {
-                                print("EUREKA")
-                                encontrada = true
-                                break
+                            let cuantos = Int(subsubJson["noms"].count)
+                            if cuantos > 0 {
+                                for i in 0...cuantos - 1 {
+                                    var nombreEncontrado = subsubJson["noms"][i]["text"].rawString()!
+                                    print("Encuentro: \(nombreEncontrado)")
+                                    print("Buscaba: \(miputonombre)")
+                                    
+                                    if miputonombre.caseInsensitiveCompare(nombreEncontrado) == ComparisonResult.orderedSame {
+                                        print("COJONUDO")
+                                        miId = subsubJson["id"].stringValue
+                                        encontrada = true
+                                        break
+                                    }
+                                    if nombreEncontrado == miputonombre {
+                                        
+                                    }
+                                }
                             }
                         }
                     }
