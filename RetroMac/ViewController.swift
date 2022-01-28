@@ -570,9 +570,11 @@ class ViewController: NSViewController {
     }
     func backplay (tag: Int) {
         let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
-        if (button?.videos!.count)! > 0 {
+        
+        if button?.videos?.count ?? 0 > 0 {
             let miVideo = button?.videos?.randomElement()
             if miVideo != "" {
+                print("Mivideo: \(miVideo)")
                 let videoURL = URL(fileURLWithPath: miVideo!)
                 let player2 = AVPlayer(url: videoURL)
                 backPlayer.player = player2

@@ -165,7 +165,7 @@ class SplashController: NSViewController {
                 ///
                 let consolaRaw1: ConsolaRaw = ConsolaRaw(nombrecorto: book.name, nombrelargo: book.fullname, comando: book.comando, rompath: book.path, platform: book.platform, extensions: book.extensiones, theme: book.theme, emuladores: misCores)
                 allTheSystems.append(consolaRaw1)
-                print(consolaRaw1)
+                //print(consolaRaw1)
                 ///Comprobar si ha gamelist.xml
                 let fileDoesExist2 = FileManager.default.fileExists(atPath: miruta + "/gamelist.xml")
                 if fileDoesExist2 {
