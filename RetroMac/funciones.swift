@@ -253,6 +253,7 @@ func cuentajuegos(arraySistema: [[String]]) -> [[String]]{
 }
 
 func juegosGamelistCarga(sistema: [String]) -> [Juego] {
+    arrayVideos = []
     var juegosnuevos = 0
     var miSistema = String(sistema[0])
     var miComando = String(sistema[3])
@@ -294,9 +295,15 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
             datosJuego3 = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating, miFav,  miComando ]
             if miFav == "FAV" {
                 favoritos.append(datosDeMiJuego)
+                if miVideo != "" {
+                    arrayVideosFav.append(miVideo)
+                }
             }
             juegosXml2.append(datosJuego3)
             losJuegos.append(datosDeMiJuego)
+            if miVideo != "" {
+                arrayVideos.append(miVideo)
+            }
             //return datosJuego3
             
             

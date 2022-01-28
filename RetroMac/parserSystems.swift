@@ -24,20 +24,23 @@ public struct Author
 public struct Link
 {
     ///
-    public var provider: String = ""
+    //public var provider: String = ""
     ///
-    public var providerURI: String?
-
+    //public var providerURI: String?
+    
+    public var name: String = ""
+    public var core: String = ""
+    public var emucommand: String = ""
     ///
-    public var bookURL: URL?
-    {
-        guard let uri = self.providerURI, let url = URL(string: uri) else
-        {
-            return nil
-        }
-        
-        return url
-    }
+//    public var bookURL: URL?
+//    {
+//        guard let uri = self.providerURI, let url = URL(string: uri) else
+//        {
+//            return nil
+//        }
+//        
+//        return url
+//    }
 }
 
 public struct Book
@@ -178,9 +181,11 @@ public class LinksParser: NSObject
 {
     // MARK: - Tags -
     
-    private let LinkTag = "link"
-    private let BuyLinksSection = "buy_links"
+    private let LinkTag = "emu"
+    private let BuyLinksSection = "emuladores"
     private let ProviderAttribute = "provider"
+    private let NameAttribute = "name"
+    private let CoreAttribute = "core"
     
     ///
     internal weak var delegate: LinksParserDelegate?
@@ -211,9 +216,13 @@ extension LinksParser: XMLParserDelegate
         {
             self.actualLink = Link()
             
-            if let provider = attributeDict[ProviderAttribute]
+            if let name = attributeDict[NameAttribute]
             {
-                self.actualLink?.provider = provider
+                self.actualLink?.name = name
+            }
+            if let core = attributeDict[CoreAttribute]
+            {
+                self.actualLink?.core = core
             }
         }
 
@@ -240,14 +249,11 @@ extension LinksParser: XMLParserDelegate
     }
     
     ///
-    public func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data)
+    public func parser(_ parser: XMLParser, foundCharacters string: String)
     {
-        guard let stringValue = String(data: CDATABlock, encoding: .utf8) else
-        {
-            return
-        }
         
-        self.actualLink?.providerURI = stringValue
+        
+        self.actualLink?.emucommand = string
     }
     
     public func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error)
@@ -268,7 +274,7 @@ public class BookParser: NSObject
     private let BooksSection = "systemList"
     private let BookSection = "system"
     private let AuthorsSection = "authors"
-    private let BuyLinksSection = "buy_links"
+    private let BuyLinksSection = "emuladores"
     
     private let NameTag = "name"
     private let FullNameTag = "fullname"

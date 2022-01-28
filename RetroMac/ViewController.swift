@@ -9,6 +9,8 @@
 
 import Cocoa
 import Commands
+import AVKit
+import AVFoundation
 
 var rutaApp = ""
 var rompath = ""
@@ -41,7 +43,9 @@ var allTheGames: [Consola] = []
 var extensionesTemp = [String]()
 var cuentaPrincipio = 0
 var favoritos: [Juego] = []
-
+var arrayVideos = [String]()
+var arrayVideosFav = [String]()
+var backIsPlaying = false
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -61,6 +65,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var onOff: NSTextField!
     @IBOutlet weak var settingsButton: NSButton!
     
+    @IBOutlet weak var backPlayer: AVPlayerView!
     @IBOutlet weak var sistemaLabel: NSTextField!
     @IBOutlet weak var rutaRomsLabel: NSTextField!
     @IBOutlet weak var scrollMain: NSScrollView!
@@ -132,10 +137,11 @@ class ViewController: NSViewController {
             let width = rect.size.width
             let mitadPantalla = Int (width / 2)
             anchuraPantall = Int(width)
-            //print(scrollMain.contentView.bounds.origin.x)
+            
             if abiertaLista == false {
-                //scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
+                
                 scrollMain.isHidden = false
+                
             }else {
                 
                 
@@ -145,10 +151,7 @@ class ViewController: NSViewController {
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 scrollMain.isHidden = false
             }
-            //cuentaboton = (Int (anchuraPantall / 560))
-            //let button = self.view.viewWithTag(Int(cuentaboton)) as? NSButton
-            //button!.isHighlighted = true
-            //button?.highlight(true)
+            
         }
         
         ///TECLAS
@@ -280,6 +283,7 @@ class ViewController: NSViewController {
             //button.Theme = book.theme
             button.Fullname = consola.fullname
             button.numeroJuegos = String(consola.games.count)
+            button.videos = consola.videos
             button.target = self
             button.action = #selector(ViewController.selecionSistema)
             button.isBordered = false
@@ -310,17 +314,19 @@ class ViewController: NSViewController {
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 scrollMain.isHidden = false
                 botonactual = cuentaboton
-                
+                backplay (tag: botonactual)
                 
             }else {
                 cuentaboton = botonactual
                 scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 scrollMain.isHidden = false
-                
+                backplay (tag: cuentaboton)
             }
             
         }
         cuentaDec = CGFloat(botonactual)
+        self.view.window?.makeFirstResponder(self.scrollMain)
+        
     }
     
     
@@ -351,6 +357,7 @@ class ViewController: NSViewController {
                 
                 if botonactual < cuantosSistemas {
                     botonactual += 1
+                    
                     if let screen = NSScreen.main {
                         let rect = screen.frame
                         let width = rect.size.width
@@ -369,7 +376,7 @@ class ViewController: NSViewController {
                         print ("BOTONACTUAL: \(botonactual)")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        
+                        backplay (tag: botonactual)
                     }
                 }
                 
@@ -397,6 +404,7 @@ class ViewController: NSViewController {
                         print ("BOTONACTUAL: \(botonactual)")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                        backplay (tag: botonactual)
                     }
                     
                 }
@@ -443,7 +451,7 @@ class ViewController: NSViewController {
                         //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        
+                        backplay (tag: Int(cuentaDec))
                         
                     }
                 }
@@ -471,7 +479,7 @@ class ViewController: NSViewController {
                         //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        
+                        backplay (tag: Int(cuentaDec))
                         
                     }
                 }
@@ -531,10 +539,18 @@ class ViewController: NSViewController {
         
         
     }
+    @objc func playerItemDidReachEnd(notification: Notification) {
+        if let playerItem = notification.object as? AVPlayerItem {
+            playerItem.seek(to: CMTime.zero, completionHandler: nil)
+        }
+    }
     
     
     @objc func selecionSistema(_ sender: ButtonConsolas) {
         if Int(sender.numeroJuegos!)! > 0 {
+            if backIsPlaying == true {
+                backPlayer.player?.pause()
+            }
             sistemaActual = sender.Fullname!
             nombresistemaactual = sender.Sistema!
             rompath = rutaApp + sender.RomsPath!
@@ -551,7 +567,21 @@ class ViewController: NSViewController {
         }
         
     }
-    
+    func backplay (tag: Int) {
+        let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
+        let miVideo = button?.videos?.randomElement()
+        let videoURL = URL(fileURLWithPath: miVideo!)
+        let player2 = AVPlayer(url: videoURL)
+        backPlayer.player = player2
+        backPlayer.player?.play()
+        backIsPlaying = true
+        player2.actionAtItemEnd = .none
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemDidReachEnd(notification:)),
+                                               name: .AVPlayerItemDidPlayToEndTime,
+                                               object: player2.currentItem)
+        
+    }
     
     
     
@@ -826,6 +856,7 @@ class ButtonConsolas: NSButton {
     var Theme: String?
     var id: Int?
     var numeroJuegos: String?
+    var videos: [String]?
     
     
     override init(frame: CGRect) {
@@ -872,4 +903,16 @@ struct Consola {
     let platform: String
     let extensions: String
     var games: [Juego]
+    var videos: [String]
+}
+
+struct Sistema {
+    let sistema: String
+    let fullname: String
+    let command: String
+    let rompath: String
+    let platform: String
+    let extensions: String
+    let theme: String
+    
 }

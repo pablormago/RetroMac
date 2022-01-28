@@ -126,6 +126,8 @@ class SplashController: NSViewController {
                 var extensionescuenta = String()
                 extensionescuenta = book.extensiones
                 let miPath = book.path
+                let miCores = book.links
+                print(miCores)
                 let micomando = book.comando
                 let minombre = book.fullname
                 let miplataforma = book.platform
@@ -151,7 +153,7 @@ class SplashController: NSViewController {
                     //                    let extensions: String
                     //                    let games: [Juego]
                     //                }
-                    let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: extensionescuenta, games: juegosGamelistCarga(sistema: migrupo))
+                    let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: extensionescuenta, games: juegosGamelistCarga(sistema: migrupo), videos: arrayVideos)
                     allTheGames.append(sistema1)
                     datosdelsitema.append(migrupo)
                     contador += 1
@@ -190,7 +192,7 @@ class SplashController: NSViewController {
                                             extensionesTemp = extensionescuenta
                                             var migrupo2 = [String]()
                                             migrupo2 = [miSistema, String(contador) , book.extensiones, micomando, minombre]
-                                            let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: book.extensiones, games: juegosGamelistCarga(sistema: migrupo2))
+                                            let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: book.extensiones, games: juegosGamelistCarga(sistema: migrupo2), videos: [])
                                             allTheGames.append(sistema1)
                                             DispatchQueue.main.sync {
                                                 taskLabel.stringValue = "Cargando \(minombre)"
@@ -206,7 +208,7 @@ class SplashController: NSViewController {
                 
             }
         }
-        let favoritosSystem: Consola = Consola(sistema: "fav", fullname: "Favoritos", command: "", rompath: "", platform: "", extensions: "", games: favoritos)
+        let favoritosSystem: Consola = Consola(sistema: "fav", fullname: "Favoritos", command: "", rompath: "", platform: "", extensions: "", games: favoritos, videos: arrayVideosFav)
         
         allTheGames.append(favoritosSystem)
         allTheGames.sort(by: {($0.fullname ) < ($1.fullname) })

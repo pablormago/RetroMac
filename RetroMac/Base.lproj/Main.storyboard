@@ -114,6 +114,10 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" id="Gii-na-zMO"/>
                             </imageView>
+                            <avPlayerView fixedFrame="YES" controlsStyle="none" videoGravity="resizeAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="bLb-fe-C9e">
+                                <rect key="frame" x="1" y="110" width="1919" height="970"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </avPlayerView>
                             <scrollView ambiguous="YES" borderType="line" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="0.0" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="puU-Kb-vPb">
                                 <rect key="frame" x="1" y="476" width="1920" height="189"/>
                                 <clipView key="contentView" copiesOnScroll="NO" id="DYo-qa-Gvp">
@@ -261,6 +265,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="backPlayer" destination="bLb-fe-C9e" id="Cu2-OO-iYH"/>
                         <outlet property="myImage" destination="f0W-XH-aHk" id="k9H-Lf-vks"/>
                         <outlet property="onOff" destination="3ts-4A-8EX" id="tNX-Kb-4sR"/>
                         <outlet property="rutaRomsLabel" destination="iwn-fC-rF1" id="Ltf-XX-1Ck"/>
@@ -928,7 +933,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="mXR-Hk-bfU"/>
+        <segue reference="LeI-Id-sQd"/>
         <segue reference="cq2-FE-JQM"/>
     </inferredMetricsTieBreakers>
     <resources>
