@@ -186,7 +186,7 @@ class SplashController: NSViewController {
                     //                    let extensions: String
                     //                    let games: [Juego]
                     //                }
-                    let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: extensionescuenta, games: juegosGamelistCarga(sistema: migrupo), videos: arrayVideos)
+                    let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: extensionescuenta, games: juegosGamelistCarga(sistema: migrupo), videos: arrayVideos, cores: misCores)
                     allTheGames.append(sistema1)
                     datosdelsitema.append(migrupo)
                     contador += 1
@@ -225,7 +225,7 @@ class SplashController: NSViewController {
                                             extensionesTemp = extensionescuenta
                                             var migrupo2 = [String]()
                                             migrupo2 = [miSistema, String(contador) , book.extensiones, micomando, minombre]
-                                            let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: book.extensiones, games: juegosGamelistCarga(sistema: migrupo2), videos: [])
+                                            let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: book.extensiones, games: juegosGamelistCarga(sistema: migrupo2), videos: arrayVideos, cores: misCores)
                                             allTheGames.append(sistema1)
                                             DispatchQueue.main.sync {
                                                 taskLabel.stringValue = "Cargando \(minombre)"
@@ -241,9 +241,10 @@ class SplashController: NSViewController {
                 
             }
         }
-        let favoritosSystem: Consola = Consola(sistema: "fav", fullname: "Favoritos", command: "", rompath: "", platform: "", extensions: "", games: favoritos, videos: arrayVideosFav)
+        let favoritosSystem: Consola = Consola(sistema: "fav", fullname: "Favoritos", command: "", rompath: "", platform: "", extensions: "", games: favoritos, videos: arrayVideosFav, cores: [])
         
         allTheGames.append(favoritosSystem)
+        allTheSystems.sort(by: {($0.nombrelargo ) < ($1.nombrelargo) })
         allTheGames.sort(by: {($0.fullname ) < ($1.fullname) })
         
         for consola in allTheGames {

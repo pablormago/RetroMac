@@ -1943,6 +1943,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             
             self.infoLabel.stringValue = "Juego no encontrado"
             juesgosEscrapeados += 1
+            if escrapeandoSistema == false {
+                habilitarTabla()
+            }
             
         }
         

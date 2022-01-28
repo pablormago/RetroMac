@@ -570,17 +570,23 @@ class ViewController: NSViewController {
     }
     func backplay (tag: Int) {
         let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
-        let miVideo = button?.videos?.randomElement()
-        let videoURL = URL(fileURLWithPath: miVideo!)
-        let player2 = AVPlayer(url: videoURL)
-        backPlayer.player = player2
-        backPlayer.player?.play()
-        backIsPlaying = true
-        player2.actionAtItemEnd = .none
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerItemDidReachEnd(notification:)),
-                                               name: .AVPlayerItemDidPlayToEndTime,
-                                               object: player2.currentItem)
+        if (button?.videos!.count)! > 0 {
+            let miVideo = button?.videos?.randomElement()
+            if miVideo != "" {
+                let videoURL = URL(fileURLWithPath: miVideo!)
+                let player2 = AVPlayer(url: videoURL)
+                backPlayer.player = player2
+                backPlayer.player?.play()
+                backIsPlaying = true
+                player2.actionAtItemEnd = .none
+                NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(playerItemDidReachEnd(notification:)),
+                                                       name: .AVPlayerItemDidPlayToEndTime,
+                                                       object: player2.currentItem)
+            }
+        }
+        
+        
         
     }
     
@@ -905,6 +911,7 @@ struct Consola {
     let extensions: String
     var games: [Juego]
     var videos: [String]
+    var cores: [[String]]
 }
 
 struct ConsolaRaw {
