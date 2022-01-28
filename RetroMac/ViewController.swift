@@ -46,6 +46,7 @@ var favoritos: [Juego] = []
 var arrayVideos = [String]()
 var arrayVideosFav = [String]()
 var backIsPlaying = false
+var allTheSystems: [ConsolaRaw] = []
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -906,13 +907,14 @@ struct Consola {
     var videos: [String]
 }
 
-struct Sistema {
-    let sistema: String
-    let fullname: String
-    let command: String
+struct ConsolaRaw {
+    let nombrecorto: String
+    let nombrelargo: String
+    let comando: String
     let rompath: String
     let platform: String
     let extensions: String
     let theme: String
+    let emuladores: [[String]]
     
 }

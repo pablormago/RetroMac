@@ -127,12 +127,45 @@ class SplashController: NSViewController {
                 extensionescuenta = book.extensiones
                 let miPath = book.path
                 let miCores = book.links
-                print(miCores)
+                var misCores = [[String]]()
+                if let links = book.links {
+                    for link in links
+                    {
+                        let miNombre = link.name
+                        let miCore = link.core
+                        let miComando = link.emucommand
+                        let migrupo = [miNombre, miCore, miComando]
+                        misCores.append(migrupo)
+                    }
+                } else {
+                    misCores.append([""])
+                }
+                    
+                
+                        
                 let micomando = book.comando
                 let minombre = book.fullname
                 let miplataforma = book.platform
                 let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
                 let miruta = rutaApp2 + book.path /// Es lo mismo que ROMPATH
+                ///
+                ///DATOS DEL STRUCT SISTEMA:
+//                struct Sistema {
+//                let sistema: String
+//                let fullname: String
+//                let command: String
+//                let rompath: String
+//                let platform: String
+//                let extensions: String
+//                let theme: String
+//                let emuladores: [[String]]
+//
+//                }
+                ///GUARDAR TODOS LOS SISTEMAS EN EL ARRAY allTheSystems
+                ///
+                let consolaRaw1: ConsolaRaw = ConsolaRaw(nombrecorto: book.name, nombrelargo: book.fullname, comando: book.comando, rompath: book.path, platform: book.platform, extensions: book.extensiones, theme: book.theme, emuladores: misCores)
+                allTheSystems.append(consolaRaw1)
+                print(consolaRaw1)
                 ///Comprobar si ha gamelist.xml
                 let fileDoesExist2 = FileManager.default.fileExists(atPath: miruta + "/gamelist.xml")
                 if fileDoesExist2 {
