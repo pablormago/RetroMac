@@ -138,7 +138,7 @@ class SplashController: NSViewController {
                         misCores.append(migrupo)
                     }
                 } else {
-                    misCores.append([""])
+                    //misCores.append([""])
                 }
                     
                 
@@ -165,7 +165,7 @@ class SplashController: NSViewController {
                 ///
                 let consolaRaw1: ConsolaRaw = ConsolaRaw(nombrecorto: book.name, nombrelargo: book.fullname, comando: book.comando, rompath: book.path, platform: book.platform, extensions: book.extensiones, theme: book.theme, emuladores: misCores)
                 allTheSystems.append(consolaRaw1)
-                //print(consolaRaw1)
+                
                 ///Comprobar si ha gamelist.xml
                 let fileDoesExist2 = FileManager.default.fileExists(atPath: miruta + "/gamelist.xml")
                 if fileDoesExist2 {
@@ -242,7 +242,8 @@ class SplashController: NSViewController {
             }
         }
         let favoritosSystem: Consola = Consola(sistema: "fav", fullname: "Favoritos", command: "", rompath: "", platform: "", extensions: "", games: favoritos, videos: arrayVideosFav, cores: [])
-        
+        //allTheSystems.sort(by: {($0.nombrecorto ) < ($1.nombrecorto) })
+        //escribeSistemas ()
         allTheGames.append(favoritosSystem)
         allTheSystems.sort(by: {($0.nombrelargo ) < ($1.nombrelargo) })
         allTheGames.sort(by: {($0.fullname ) < ($1.fullname) })

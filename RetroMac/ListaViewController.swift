@@ -124,7 +124,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         //            self.keyDown(with: qEvent)
         //            return qEvent
         //        }
-        print(view.window?.firstResponder)
+        //print(view.window?.firstResponder)
         print("LISTA LOAD")
         view.wantsLayer = true
         // change the background color of the layer
@@ -156,7 +156,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         ///Juegos GAMELIST
         let fileDoesExist = FileManager.default.fileExists(atPath: rompath + "/gamelist.xml")
-        
+        print(sistemaActual)
         if fileDoesExist {
             print("HAY XML")
             //juegosGamelist()
@@ -166,7 +166,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         for consola in allTheGames {
             if consola.sistema == nombresistemaactual {
                 for game in consola.games {
-                    print(game)
+                    //print(game)
                     let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating, game.fav, game.comando, game.core, game.system, game.box]
                     juegosXml.append(mijuego)
                     
@@ -360,7 +360,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
         scrollDescripText.string = miDesc
         abiertaLista = true
-        print("Tengo Fav:\(miFav)")
+        //print("Tengo Fav:\(miFav)")
         
     }
     
@@ -415,7 +415,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         snapPlayer.layer!.shadowRadius = 20
         
         self.juegosTableView.becomeFirstResponder()
-        print(view.window?.firstResponder)
+        
         
         //snapPlayer.layer!.masksToBounds = true
         // *** /FullScreen ***
@@ -862,12 +862,16 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         DispatchQueue.background(background: {
             // do something in background
             guard let url = URL(string: datasource) else {
-                
                 return
-                
             }
             guard let data = try? String(contentsOf: url) else {
-                
+                DispatchQueue.main.sync {
+                    abiertaLista = true
+                    self.juegosTableView.isEnabled = true
+                    self.infoLabel.stringValue = "ERROR de conexión"
+                    self.view.window?.makeFirstResponder(self.juegosTableView)
+                    
+                }
                 return
             }
             
@@ -942,7 +946,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 print("Juego no encontrado")
                 DispatchQueue.main.sync {
                     self.infoLabel.stringValue = "Juego no encontrado"
-                    
+                    abiertaLista = true
+                    self.juegosTableView.isEnabled = true
+                    self.view.window?.makeFirstResponder(self.juegosTableView)
                 }
                 
                 
@@ -1873,7 +1879,13 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             
         }
         guard let data = try? String(contentsOf: url) else {
-            
+            DispatchQueue.main.sync {
+                abiertaLista = true
+                self.juegosTableView.isEnabled = true
+                self.infoLabel.stringValue = "ERROR de conexión"
+                self.view.window?.makeFirstResponder(self.juegosTableView)
+                
+            }
             return
         }
         
@@ -1990,6 +2002,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     func crearItemsMenu() -> [NSMenuItem]{
         
         ///Menu ITEMS de Scrapear
+        
+        var arrayMenu = [NSMenuItem]()
+        
         let scrapGame = NSMenuItem(title: "Scrapear Juego", action: #selector(buscaJuego), keyEquivalent: "")
         let scrapSystem = NSMenuItem(title: "Scrapear Sistema (Experimental)", action: #selector(escrapeartodos), keyEquivalent: "")
         let scrapAll = NSMenuItem(title: "Scrapear Todos los Sistemas", action: nil, keyEquivalent: "")
@@ -2024,10 +2039,42 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         gameItem.submenu = gameSubmenu
         //}
         
+        /// Menu ITEMS de sistema
+        
+        let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController
+        let button = controller!.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+        
+        var cuentaCores = button?.cores?.count
+        let sistemaItem = NSMenuItem(title: "Cores del Sistema", action: nil, keyEquivalent: "")
+        if button?.cores != nil {
+            
+            let cambiarItem = NSMenuItem(title: "Cambiar Core", action: nil, keyEquivalent: "")
+            let misCores = button?.cores
+            
+            let coreSubmenu = NSMenu()
+            for a in 0..<cuentaCores! {
+                
+                var core = misCores![a][1]
+                let coreItem = NSMenuItem(title: core, action: nil, keyEquivalent: "")
+                coreSubmenu.addItem(coreItem)
+            }
+            cambiarItem.submenu = coreSubmenu
+            sistemaItem.submenu = coreSubmenu
+            
+        }
+        
+        arrayMenu.append(scrapItem)
+        arrayMenu.append(gameItem)
+        
+        if button?.cores != nil {
+            if button?.cores?.count ?? 0 > 1 {
+                arrayMenu.append(sistemaItem)
+            }
+            
+        }
         
         
-        
-        return[scrapItem, gameItem]
+        return arrayMenu
     }
     
     func setupMenu() {
@@ -2233,6 +2280,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
     }
     
+    @objc func coresistema (core: String) {
+        let FilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        let FilaSystems = allTheSystems.firstIndex(where: {$0.nombrelargo == sistemaActual})
+        
+        //actualizar array AllTheGames con el Comando
+        //actualizar arra AlltheSystems y escribir el archivo con el core cambiado ya
+        
+    }
     
     
 }

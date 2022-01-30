@@ -511,4 +511,51 @@ func crearGameListInicioCarga (ruta: String){
     
 }
 
+func escribeSistemas () {
+    let root = XMLElement(name: "systemList")
+    let xml = XMLDocument(rootElement: root)
+    //Loop
+    for consolaRaw in allTheSystems {
+        
+        let systemNode = XMLElement(name: "system")
+        root.addChild(systemNode)
+        let shortNameNode = XMLElement(name: "name", stringValue: consolaRaw.nombrecorto)
+        let fullNameNode = XMLElement(name: "fullname", stringValue: consolaRaw.nombrelargo)
+        let pathNode = XMLElement(name: "path", stringValue: consolaRaw.rompath)
+        let extensionNode = XMLElement(name: "extensions", stringValue: consolaRaw.extensions)
+        let commandNode = XMLElement(name: "command", stringValue: consolaRaw.comando)
+        let platformNode = XMLElement(name: "platform", stringValue: consolaRaw.platform)
+        let themeNode = XMLElement(name: "theme", stringValue: consolaRaw.theme)
+        var emuladoresNode = XMLElement(name: "emuladores")
+        if consolaRaw.emuladores.count > 0 {
+            //loop para añadir cores
+            for core in consolaRaw.emuladores {
+                let miEmulador = core[0]
+                let miCore = core [1]
+                let miComando = core[2]
+                let emu = XMLElement(name: "emu", stringValue: miComando)
+                emu.addAttribute(XMLNode.attribute(withName: "name", stringValue: miEmulador) as! XMLNode)
+                emu.addAttribute(XMLNode.attribute(withName: "core", stringValue: miCore) as! XMLNode)
+                emuladoresNode.addChild(emu)
+            }
+        }
+        systemNode.addChild(shortNameNode)
+        systemNode.addChild(fullNameNode)
+        systemNode.addChild(pathNode)
+        systemNode.addChild(extensionNode)
+        systemNode.addChild(commandNode)
+        systemNode.addChild(platformNode)
+        systemNode.addChild(themeNode)
+        if consolaRaw.emuladores.count > 0 {
+            systemNode.addChild(emuladoresNode)
+        }
+    }
+    let xmlData = xml.xmlData(options: .nodePrettyPrint)
+    let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+    var nuevoGamelist = rutaApp2 + "/systems_test.xml"
+    do{
+        try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
+    }catch {}
+    
+}
 

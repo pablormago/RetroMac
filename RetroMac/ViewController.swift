@@ -285,6 +285,7 @@ class ViewController: NSViewController {
             button.Fullname = consola.fullname
             button.numeroJuegos = String(consola.games.count)
             button.videos = consola.videos
+            button.cores = consola.cores
             button.target = self
             button.action = #selector(ViewController.selecionSistema)
             button.isBordered = false
@@ -574,7 +575,7 @@ class ViewController: NSViewController {
         if button?.videos?.count ?? 0 > 0 {
             let miVideo = button?.videos?.randomElement()
             if miVideo != "" {
-                print("Mivideo: \(miVideo)")
+                //print("Mivideo: \(miVideo)")
                 let videoURL = URL(fileURLWithPath: miVideo!)
                 let player2 = AVPlayer(url: videoURL)
                 backPlayer.player = player2
@@ -866,6 +867,7 @@ class ButtonConsolas: NSButton {
     var id: Int?
     var numeroJuegos: String?
     var videos: [String]?
+    var cores: [[String]]?
     
     
     override init(frame: CGRect) {
