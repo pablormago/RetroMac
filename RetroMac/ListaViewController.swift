@@ -2055,6 +2055,11 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             for a in 0..<cuentaCores! {
                 
                 var core = misCores![a][1]
+                var comando: String =  (button?.Comando)!
+                if comando.contains(core) {
+                    core = core + "✔️"
+                }
+                
                 let coreItem = NSMenuItem(title: core, action: nil, keyEquivalent: "")
                 coreSubmenu.addItem(coreItem)
             }
