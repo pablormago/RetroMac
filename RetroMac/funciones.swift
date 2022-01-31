@@ -335,8 +335,9 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
                 if encuentra == false {
                     juegosnuevos += 1
                     ///AÑADIR FUNCION PARA AÑADIR JUEGO AL XML
+                    let name = (String(element) as NSString).deletingPathExtension
                     var datosJuegoNoXml = [String]()
-                    var datosDeMiJuego: Juego = Juego(path: rutacompleta, name: String(element), description: "", map: "", manual: "", news: "", tittleshot: "", fanart: "", thumbnail: "", image: "", video: "", marquee: "", releasedate: "", developer: "", publisher: "", genre: "", lang: "", players: "", rating: "", fav: "", comando: miComando, core: "", system: miSistema, box: "")
+                    var datosDeMiJuego: Juego = Juego(path: rutacompleta, name: name, description: "", map: "", manual: "", news: "", tittleshot: "", fanart: "", thumbnail: "", image: "", video: "", marquee: "", releasedate: "", developer: "", publisher: "", genre: "", lang: "", players: "", rating: "", fav: "", comando: miComando, core: "", system: miSistema, box: "")
                     datosJuegoNoXml = [rutacompleta , String(element), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" , miComando]
                     juegosXml2.append(datosJuegoNoXml)
                     losJuegos.append(datosDeMiJuego)
@@ -515,6 +516,10 @@ func escribeSistemas () {
     let root = XMLElement(name: "systemList")
     let xml = XMLDocument(rootElement: root)
     //Loop
+    //stringByAppendingPathComponent(name)
+    let path2 = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+    let url2 = NSURL(fileURLWithPath: path2)
+    let pathComponent = url2.appendingPathComponent("/RetroMac/es_systems_mac.cfg")
     for consolaRaw in allTheSystems {
         
         let systemNode = XMLElement(name: "system")
@@ -522,7 +527,7 @@ func escribeSistemas () {
         let shortNameNode = XMLElement(name: "name", stringValue: consolaRaw.nombrecorto)
         let fullNameNode = XMLElement(name: "fullname", stringValue: consolaRaw.nombrelargo)
         let pathNode = XMLElement(name: "path", stringValue: consolaRaw.rompath)
-        let extensionNode = XMLElement(name: "extensions", stringValue: consolaRaw.extensions)
+        let extensionNode = XMLElement(name: "extension", stringValue: consolaRaw.extensions)
         let commandNode = XMLElement(name: "command", stringValue: consolaRaw.comando)
         let platformNode = XMLElement(name: "platform", stringValue: consolaRaw.platform)
         let themeNode = XMLElement(name: "theme", stringValue: consolaRaw.theme)
@@ -550,12 +555,16 @@ func escribeSistemas () {
             systemNode.addChild(emuladoresNode)
         }
     }
+    let pathXMLinterno = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg")
+    //let url = URL (fileURLWithPath: pathXMLinterno!)
     let xmlData = xml.xmlData(options: .nodePrettyPrint)
     let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
     var nuevoGamelist = rutaApp2 + "/systems_test.xml"
     do{
-        try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
-    }catch {}
+        try? xmlData.write(to: pathComponent!)
+        print("EXITO")
+        
+    }catch {print("ERROR")}
     
 }
 

@@ -45,6 +45,41 @@ class SplashController: NSViewController {
 //
 //        }
         
+        ///COMPROBAR QUE EXISTE CONFIG
+        var existeconfig = Bool()
+        let path2 = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let url2 = NSURL(fileURLWithPath: path2)
+        if let pathComponent = url2.appendingPathComponent("/RetroMac/es_systems_mac.cfg") {
+            let filePath = pathComponent.path
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: filePath) {
+                existeconfig = true
+                print("ESTÁ")
+                
+            } else {
+                existeconfig = false
+                print("NO ESTÁ")
+                
+
+                do {
+                    guard let sourcePath = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg") else {
+                                return
+                            }
+                    
+                    //try str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
+                    let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let sourceUrl = URL(fileURLWithPath: sourcePath)
+                    let destination = documentsDirectory.appendingPathComponent("RetroMac/es_systems_mac.cfg", isDirectory: false)
+                    try fileManager.copyItem(at: sourceUrl, to: destination)
+                } catch {
+                    // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+                }
+            }
+        } else {
+            print("FILE PATH NOT AVAILABLE")
+        }
+        
+        
         var existeRetro = Bool()
         ///comprobar que EXISTE RETROMAC.TXT
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
@@ -105,15 +140,17 @@ class SplashController: NSViewController {
     }
     func cuentaJuegosEnSistemas()  {
         //print("ENTRO A CONTAR")
-        
-        let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
+        let path2 = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let url2 = NSURL(fileURLWithPath: path2)
+        let pathComponent = url2.appendingPathComponent("/RetroMac/es_systems_mac.cfg")
+        //let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
         var datosdelsitema = [[String]]()
         datosdelsitema = []
         tieneRoms = false
         juegosPorConsola = []
         var contador = Int()
         contador = 0
-        if let pathXMLinterno = pathXMLinterno, let data = try? Data(contentsOf: pathXMLinterno as URL)
+        if let pathComponent = pathComponent, let data = try? Data(contentsOf: pathComponent as URL)
             
         {
             let parser = BookParser(data: data)

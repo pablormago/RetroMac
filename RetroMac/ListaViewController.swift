@@ -1271,15 +1271,15 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             self.habilitarTabla()
                                         }else{
                                             
-                                                self.barraProgress.increment(by: 1)
+                                            self.barraProgress.increment(by: 1)
                                             
                                             
                                             
                                             if self.barraProgress.doubleValue == Double(self.juegosXml.count){
                                                 self.habilitarTabla2()
                                             }else {
-                                               
-                                                    self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
+                                                
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
                                                 
                                                 
                                             }
@@ -1341,14 +1341,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             self.habilitarTabla()
                                         }else{
                                             
-                                                self.barraProgress.increment(by: 1)
+                                            self.barraProgress.increment(by: 1)
                                             
                                             
                                             
                                             if self.barraProgress.doubleValue == Double(self.juegosXml.count){
                                                 self.habilitarTabla2()
                                             }else {
-                                               
+                                                
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
                                                 
                                                 
@@ -1403,14 +1403,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             self.habilitarTabla()
                                         }else{
                                             
-                                                self.barraProgress.increment(by: 1)
+                                            self.barraProgress.increment(by: 1)
                                             
                                             
                                             
                                             if self.barraProgress.doubleValue == Double(self.juegosXml.count){
                                                 self.habilitarTabla2()
                                             }else {
-                                               
+                                                
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
                                                 
                                                 
@@ -1464,14 +1464,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             self.habilitarTabla()
                                         }else{
                                             
-                                                self.barraProgress.increment(by: 1)
+                                            self.barraProgress.increment(by: 1)
                                             
                                             
                                             
                                             if self.barraProgress.doubleValue == Double(self.juegosXml.count){
                                                 self.habilitarTabla2()
                                             }else {
-                                               
+                                                
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
                                                 
                                                 
@@ -1525,14 +1525,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             self.habilitarTabla()
                                         }else{
                                             
-                                                self.barraProgress.increment(by: 1)
+                                            self.barraProgress.increment(by: 1)
                                             
                                             
                                             
                                             if self.barraProgress.doubleValue == Double(self.juegosXml.count){
                                                 self.habilitarTabla2()
                                             }else {
-                                               
+                                                
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
                                                 
                                                 
@@ -1589,14 +1589,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             self.habilitarTabla()
                                         }else{
                                             
-                                                self.barraProgress.increment(by: 1)
+                                            self.barraProgress.increment(by: 1)
                                             
                                             
                                             
                                             if self.barraProgress.doubleValue == Double(self.juegosXml.count){
                                                 self.habilitarTabla2()
                                             }else {
-                                               
+                                                
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
                                                 
                                                 
@@ -1655,14 +1655,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             self.habilitarTabla()
                                         }else{
                                             
-                                                self.barraProgress.increment(by: 1)
+                                            self.barraProgress.increment(by: 1)
                                             
                                             
                                             
                                             if self.barraProgress.doubleValue == Double(self.juegosXml.count){
                                                 self.habilitarTabla2()
                                             }else {
-                                               
+                                                
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
                                                 
                                                 
@@ -2055,12 +2055,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             for a in 0..<cuentaCores! {
                 
                 var core = misCores![a][1]
+                var tooltip = misCores![a][2]
                 var comando: String =  (button?.Comando)!
                 if comando.contains(core) {
                     core = core + "✔️"
                 }
                 
-                let coreItem = NSMenuItem(title: core, action: nil, keyEquivalent: "")
+                let coreItem = NSMenuItem(title: core, action: #selector(coresistema), keyEquivalent: "")
+                coreItem.toolTip = tooltip
                 coreSubmenu.addItem(coreItem)
             }
             cambiarItem.submenu = coreSubmenu
@@ -2285,12 +2287,22 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
     }
     
-    @objc func coresistema (core: String) {
-        let FilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        let FilaSystems = allTheSystems.firstIndex(where: {$0.nombrelargo == sistemaActual})
+    @objc func coresistema (_ sender: NSMenuItem) {
         
-        //actualizar array AllTheGames con el Comando
-        //actualizar arra AlltheSystems y escribir el archivo con el core cambiado ya
+        var newComand = sender.toolTip!
+        print(newComand)
+        var FilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        var FilaSystems = allTheSystems.firstIndex(where: {$0.nombrelargo == sistemaActual})
+        print(FilaSystems)
+        allTheSystems[FilaSystems!].comando = newComand
+        allTheGames[FilaAll!].command = newComand
+        for a in 0..<allTheGames[FilaAll!].games.count {
+            allTheGames[FilaAll!].games[a].comando = newComand
+        }
+        for numero in 0..<juegosXml.count {
+            juegosXml[numero][20] = newComand
+        }
+        escribeSistemas()
         
     }
     

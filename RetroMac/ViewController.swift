@@ -909,7 +909,7 @@ struct Juego {
 struct Consola {
     let sistema: String
     let fullname: String
-    let command: String
+    var command: String
     let rompath: String
     let platform: String
     let extensions: String
@@ -921,7 +921,7 @@ struct Consola {
 struct ConsolaRaw {
     let nombrecorto: String
     let nombrelargo: String
-    let comando: String
+    var comando: String
     let rompath: String
     let platform: String
     let extensions: String
