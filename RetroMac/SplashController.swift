@@ -46,6 +46,18 @@ class SplashController: NSViewController {
 //        }
         
         ///COMPROBAR QUE EXISTE CONFIG
+        ///
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        let docURL = URL(string: documentsDirectory)!
+        let dataPath = docURL.appendingPathComponent("RetroMac")
+        if !FileManager.default.fileExists(atPath: dataPath.absoluteString) {
+            do {
+                try FileManager.default.createDirectory(atPath: dataPath.absoluteString, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print(error.localizedDescription);
+            }
+        }
         var existeconfig = Bool()
         let path2 = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
         let url2 = NSURL(fileURLWithPath: path2)
@@ -203,7 +215,7 @@ class SplashController: NSViewController {
                 let consolaRaw1: ConsolaRaw = ConsolaRaw(nombrecorto: book.name, nombrelargo: book.fullname, comando: book.comando, rompath: book.path, platform: book.platform, extensions: book.extensiones, theme: book.theme, emuladores: misCores)
                 allTheSystems.append(consolaRaw1)
                 
-                ///Comprobar si ha gamelist.xml
+                ///Comprobar si hay gamelist.xml
                 let fileDoesExist2 = FileManager.default.fileExists(atPath: miruta + "/gamelist.xml")
                 if fileDoesExist2 {
                     ///Si existe, lo añadimos al array de sistemas
@@ -260,6 +272,7 @@ class SplashController: NSViewController {
                                             ///Creamos el xml y añadimos el sistema al array porque ha encontrado ROMS
                                             print("ROMS ENCONTRADAS")
                                             extensionesTemp = extensionescuenta
+                                            crearGameListInicioCarga(ruta: miruta)
                                             var migrupo2 = [String]()
                                             migrupo2 = [miSistema, String(contador) , book.extensiones, micomando, minombre]
                                             let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: book.extensiones, games: juegosGamelistCarga(sistema: migrupo2), videos: arrayVideos, cores: misCores)
@@ -267,7 +280,7 @@ class SplashController: NSViewController {
                                             DispatchQueue.main.sync {
                                                 taskLabel.stringValue = "Cargando \(minombre)"
                                             }
-                                            crearGameListInicioCarga(ruta: miruta)
+                                            
                                             //sistemasTengo.append(book.name)
                                         }else {
                     

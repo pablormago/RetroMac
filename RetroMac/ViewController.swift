@@ -47,6 +47,7 @@ var arrayVideos = [String]()
 var arrayVideosFav = [String]()
 var backIsPlaying = false
 var allTheSystems: [ConsolaRaw] = []
+var arrayGamesCores = [[String]]()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -188,77 +189,7 @@ class ViewController: NSViewController {
         print(cuentaSistemas())
         let totalAnchuraMenu = ((totalSistemas+1) * 560)
         //Parsear Sistemas
-        //        let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
-        //        let documentView = NSView(frame: NSRect(x: 0,y: 0,width: totalAnchuraMenu,height: 178))
-        //        if let pathXMLinterno = pathXMLinterno, let data = try? Data(contentsOf: pathXMLinterno as URL)
-        //        {
-        //
-        //            let parser = BookParser(data: data)
-        //            var counter = 0
-        //
-        //            for book in parser.books
-        //
-        //            {
-        //
-        //                let offset = CGFloat(counter * 560)
-        //                let button = ButtonConsolas(frame: NSRect(x: offset, y: 0, width: 560, height: 178 ))
-        //                button.tag = counter+1
-        //                button.title = book.name
-        //                let home = Bundle.main.bundlePath
-        //                let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png")!
-        //                button.imageScaling = .scaleProportionallyDown
-        //                let path =  home +  "/Contents/Resources/themes/default/logos/" + book.name + ".png"
-        //                let fileDoesExist = FileManager.default.fileExists(atPath: path)
-        //                if fileDoesExist {
-        //                    button.image = imagen2
-        //                }
-        //                button.Sistema = book.name
-        //                button.Comando = book.comando
-        //                button.RomsPath = book.path
-        //                button.Extensiones = book.extensiones
-        //                button.Platform = book.platform
-        //                button.Theme = book.theme
-        //                button.Fullname = book.fullname
-        //                button.target = self
-        //                button.action = #selector(ViewController.selecionSistema)
-        //                button.isBordered = false
-        //
-        //                //button.layer?.backgroundColor = NSColor.red.cgColor
-        //                //var miruta = rutaApp + book.path
-        //                //var isDir:ObjCBool = true
-        //
-        //                /// COMPROBAMOS SI TIENE ROMS ***********************
-        //
-        //
-        //                for sistema in sistemasTengo {
-        //
-        //                    if sistema == book.name{
-        //                        for consola in juegosPorConsola {
-        //                            if consola[0] == book.name {
-        //                                button.numeroJuegos = consola[1]
-        //                                break
-        //                            }
-        //                        }
-        //
-        //                        //button.numeroJuegos = cuentajuegos(sistema: book.name)
-        //                        //print ("Sistema: \(book.name) -> \(button.numeroJuegos) juegos" )
-        //                        documentView.addSubview(button)
-        //                        counter += 1
-        //                        break
-        //                    }
-        //
-        //                }
-        //
-        //                /// COMPROBAMOS SI TIENE ROMS ***********************
-        //
-        //                scrollMain.documentView = documentView
-        //
-        //            }
-        //
-        //            cuantosSistemas = counter
-        //            ventana = "Principal"
-        //            //onOff.stringValue = rutaApp
-        //        }
+        
         ///Carga desde allTheGames
         var counter = 0
         let documentView = NSView(frame: NSRect(x: 0,y: 0,width: totalAnchuraMenu,height: 178))
@@ -327,6 +258,13 @@ class ViewController: NSViewController {
             
         }
         cuentaDec = CGFloat(botonactual)
+        //cargar array de juegos-cores
+        let defaults = UserDefaults.standard
+        arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
+        print(arrayVideos)
+        
+        
+        
         self.view.window?.makeFirstResponder(self.scrollMain)
         
     }
@@ -378,6 +316,7 @@ class ViewController: NSViewController {
                         print ("BOTONACTUAL: \(botonactual)")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                        print(arrayVideos)
                         backplay (tag: botonactual)
                     }
                 }
@@ -406,6 +345,7 @@ class ViewController: NSViewController {
                         print ("BOTONACTUAL: \(botonactual)")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                        print(arrayVideos)
                         backplay (tag: botonactual)
                     }
                     
@@ -454,6 +394,7 @@ class ViewController: NSViewController {
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
                         backplay (tag: Int(cuentaDec))
+                        print(arrayVideos)
                         
                     }
                 }
@@ -481,6 +422,7 @@ class ViewController: NSViewController {
                         //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                        print(arrayVideos)
                         backplay (tag: Int(cuentaDec))
                         
                     }
@@ -571,11 +513,11 @@ class ViewController: NSViewController {
     }
     func backplay (tag: Int) {
         let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
-        
+        //backIsPlaying = true
         if button?.videos?.count ?? 0 > 0 {
             let miVideo = button?.videos?.randomElement()
             if miVideo != "" {
-                //print("Mivideo: \(miVideo)")
+                print("Mivideo: \(miVideo)")
                 let videoURL = URL(fileURLWithPath: miVideo!)
                 let player2 = AVPlayer(url: videoURL)
                 backPlayer.player = player2
@@ -787,11 +729,13 @@ func buscaVideo (juego: String, ruta: String) ->String {
     let fileManager = FileManager.default
     if ruta != "" && ruta != nil {
         let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
+        //print("RUTA: \(ruta)")
         //Comprobamos Video
         while let element = enumerator.nextObject() as? String {
-            if element.contains(name) && element.hasSuffix(".mp4") {
+            if (element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")) ) && element.hasSuffix(".mp4") {
                 tieneVideo = true
-                miVideo = rompath + "/" + element
+                //print("EL ROMPATH ES: \(rompath)")
+                miVideo = ruta + "/" + element
                 break
             }
             else {
@@ -827,10 +771,10 @@ func buscaImage (juego: String, ruta: String) -> String {
         }
         while let element = enumerator2.nextObject() as? String {
             
-            if element.contains(name){
-                if (element.hasSuffix(".png") || element.hasSuffix(".jpg") || element.hasSuffix(".jpeg")) && !element.contains("marquee"){
+            if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
+                if (element.hasSuffix(".png") || element.hasSuffix(".jpg") || element.hasSuffix(".jpeg") ) && !element.contains("marquee") && !element.contains("box") && !element.contains("fanart") && !element.contains("tittleshot"){
                     tieneSnap = true
-                    miFoto = rompath + "/" + element
+                    miFoto = ruta + "/" + element
                     break
                 }
             }

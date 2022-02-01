@@ -301,7 +301,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
             }
             juegosXml2.append(datosJuego3)
             losJuegos.append(datosDeMiJuego)
-            if miVideo != "" {
+            if String(miVideo) != "" {
                 arrayVideos.append(miVideo)
             }
             //return datosJuego3
@@ -389,10 +389,10 @@ func xmlJuegosNuevos2(ruta: String){
         let tittleshotNode = XMLElement(name: "tittleshot", stringValue: juego[6])
         let fanartNode = XMLElement(name: "fanart", stringValue: juego[7])
         let thumbnailNode = XMLElement(name: "thumbnail", stringValue: juego[8])
-        //let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: juego[1]) )
-        let imageNode = XMLElement(name: "image", stringValue: juego[9] )
-        //let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: juego[1]) )
-        let videoNode = XMLElement(name: "video", stringValue: juego[10] )
+        let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: juego[1], ruta: rutaApp + juego[0] ))
+        //let imageNode = XMLElement(name: "image", stringValue: juego[9] )
+        let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: juego[1], ruta: rutaApp + juego[0]))
+        //let videoNode = XMLElement(name: "video", stringValue: juego[10] )
         let marqueeNode = XMLElement(name: "marquee", stringValue: juego[11])
         let releasedateNode = XMLElement(name: "releasedate",  stringValue: juego[12])
         let developerNode = XMLElement(name: "developer", stringValue: juego[13])
@@ -457,14 +457,14 @@ func crearGameListInicioCarga (ruta: String){
                 let nameNode = XMLElement(name: "name", stringValue: name)
                 let descNode = XMLElement(name: "desc")
                 let mapNode = XMLElement(name: "map")
-                let manualNode = XMLElement(name: "manual")
+                let manualNode = XMLElement(name: "manual",stringValue: buscaManual(juego: name, ruta: ruta))
                 let newsNode = XMLElement(name: "news")
-                let tittleshotNode = XMLElement(name: "tittleshot")
-                let fanartNode = XMLElement(name: "fanart")
-                let thumbnailNode = XMLElement(name: "thumbnail")
-                let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: element, ruta: ruta) )
-                let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: element, ruta: ruta) )
-                let marqueeNode = XMLElement(name: "marquee")
+                let tittleshotNode = XMLElement(name: "tittleshot",stringValue: buscaTittleShot(juego: name, ruta: ruta))
+                let fanartNode = XMLElement(name: "fanart",stringValue: buscaFanArt(juego: name, ruta: ruta))
+                let thumbnailNode = XMLElement(name: "thumbnail", stringValue: buscaImage(juego: name, ruta: ruta))
+                let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: name, ruta: ruta) )
+                let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: name, ruta: ruta) )
+                let marqueeNode = XMLElement(name: "marquee",stringValue: buscaMarquee(juego: name, ruta: ruta))
                 let releasedateNode = XMLElement(name: "releasedate")
                 let developerNode = XMLElement(name: "developer")
                 let publisherNode = XMLElement(name: "publisher")
@@ -473,7 +473,7 @@ func crearGameListInicioCarga (ruta: String){
                 let playersNode = XMLElement(name: "players")
                 let ratingNode = XMLElement(name: "rating")
                 let favNode = XMLElement(name: "fav")
-                let boxNode = XMLElement(name: "box")
+                let boxNode = XMLElement(name: "box",stringValue: buscaBox(juego: name, ruta: ruta))
                 ///AÑADIMOS LOS NODOS
                 gameNode.addChild(pathNode)
                 gameNode.addChild(nameNode)
@@ -568,3 +568,202 @@ func escribeSistemas () {
     
 }
 
+func buscaManual (juego: String, ruta: String) -> String {
+    var tieneSnap = false
+    var miManual = ""
+    let fileManager = FileManager.default
+    //print("MI ROMPATH: \(ruta)")
+    if ruta != "" && ruta != nil {
+        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
+        var name = (juego as NSString).deletingPathExtension
+        if name.contains("/") {
+            let index2 = name.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = name.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            name = result1
+        }
+        else {
+            
+        }
+        while let element = enumerator2.nextObject() as? String {
+            
+            if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
+                if element.hasSuffix(".pdf"){
+                    tieneSnap = true
+                    miManual = ruta + "/" + element
+                    break
+                }
+            }
+            else {
+                miManual = ""
+                tieneSnap = false
+            }
+        }
+        
+        return miManual
+    } else {
+        return ""
+    }
+    
+    
+}
+
+func buscaTittleShot (juego: String, ruta: String) -> String {
+    var tieneSnap = false
+    var miTittleShot = ""
+    let fileManager = FileManager.default
+    //print("MI ROMPATH: \(ruta)")
+    if ruta != "" && ruta != nil {
+        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
+        var name = (juego as NSString).deletingPathExtension
+        if name.contains("/") {
+            let index2 = name.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = name.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            name = result1
+        }
+        else {
+            
+        }
+        while let element = enumerator2.nextObject() as? String {
+            
+            if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
+                if element.hasSuffix("_tittleshot.png"){
+                    tieneSnap = true
+                    miTittleShot = ruta + "/" + element
+                    break
+                }
+            }
+            else {
+                miTittleShot = ""
+                tieneSnap = false
+            }
+        }
+        
+        return miTittleShot
+    } else {
+        return ""
+    }
+    
+    
+}
+
+func buscaFanArt (juego: String, ruta: String) -> String {
+    var tieneSnap = false
+    var miFanArt = ""
+    let fileManager = FileManager.default
+    //print("MI ROMPATH: \(ruta)")
+    if ruta != "" && ruta != nil {
+        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
+        var name = (juego as NSString).deletingPathExtension
+        if name.contains("/") {
+            let index2 = name.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = name.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            name = result1
+        }
+        else {
+            
+        }
+        while let element = enumerator2.nextObject() as? String {
+            
+            if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
+                if element.hasSuffix("_fanart.png"){
+                    tieneSnap = true
+                    miFanArt = ruta + "/" + element
+                    break
+                }
+            }
+            else {
+                miFanArt = ""
+                tieneSnap = false
+            }
+        }
+        
+        return miFanArt
+    } else {
+        return ""
+    }
+    
+    
+}
+
+func buscaMarquee (juego: String, ruta: String) -> String {
+    var tieneSnap = false
+    var miMarquee = ""
+    let fileManager = FileManager.default
+    //print("MI ROMPATH: \(ruta)")
+    if ruta != "" && ruta != nil {
+        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
+        var name = (juego as NSString).deletingPathExtension
+        if name.contains("/") {
+            let index2 = name.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = name.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            name = result1
+        }
+        else {
+            
+        }
+        while let element = enumerator2.nextObject() as? String {
+            
+            if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
+                if element.hasSuffix("marquee.png"){
+                    tieneSnap = true
+                    miMarquee = ruta + "/" + element
+                    break
+                }
+            }
+            else {
+                miMarquee = ""
+                tieneSnap = false
+            }
+        }
+        
+        return miMarquee
+    } else {
+        return ""
+    }
+    
+    
+}
+func buscaBox (juego: String, ruta: String) -> String {
+    var tieneSnap = false
+    var miBox = ""
+    let fileManager = FileManager.default
+    //print("MI ROMPATH: \(ruta)")
+    
+    if ruta != "" && ruta != nil {
+        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
+        var name = (juego as NSString).deletingPathExtension
+        if name.contains("/") {
+            let index2 = name.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = name.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            name = result1
+        }
+        else {
+            
+        }
+        while let element = enumerator2.nextObject() as? String {
+            
+            if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
+                if element.hasSuffix("_box.png"){
+                    tieneSnap = true
+                    miBox = ruta + "/" + element
+                    break
+                }
+            }
+            else {
+                miBox = ""
+                tieneSnap = false
+            }
+        }
+        
+        return miBox
+    } else {
+        return ""
+    }
+    
+    
+}

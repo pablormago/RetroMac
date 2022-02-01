@@ -755,10 +755,26 @@
                                 <rect key="frame" x="1657" y="1010" width="263" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             </progressIndicator>
+                            <popUpButton hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O8K-3R-FpD">
+                                <rect key="frame" x="922" y="526" width="78" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9AH-AG-yRc" id="IrD-Mf-EFn">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="SDp-zp-zRL">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="9AH-AG-yRc"/>
+                                            <menuItem title="Item 2" id="1vY-Pj-Eem"/>
+                                            <menuItem title="Item 3" id="dpf-gY-SIA"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
                         </subviews>
                         <constraints>
                             <constraint firstItem="a3f-1P-Ihc" firstAttribute="width" secondItem="a3f-1P-Ihc" secondAttribute="height" multiplier="104:51" id="Fvd-Cr-CzW"/>
                             <constraint firstItem="S7L-bA-nsr" firstAttribute="centerY" secondItem="62j-uW-CLT" secondAttribute="centerY" id="J3b-UL-9er"/>
+                            <constraint firstItem="O8K-3R-FpD" firstAttribute="centerY" secondItem="62j-uW-CLT" secondAttribute="centerY" id="Lbb-Pn-MH4"/>
+                            <constraint firstItem="O8K-3R-FpD" firstAttribute="centerX" secondItem="62j-uW-CLT" secondAttribute="centerX" id="Lcx-tq-P6K"/>
                             <constraint firstItem="S7L-bA-nsr" firstAttribute="centerX" secondItem="62j-uW-CLT" secondAttribute="centerX" id="id0-Bq-OjZ"/>
                             <constraint firstItem="a3f-1P-Ihc" firstAttribute="centerX" secondItem="62j-uW-CLT" secondAttribute="centerX" id="qmN-cd-jHK"/>
                             <constraint firstItem="a3f-1P-Ihc" firstAttribute="centerY" secondItem="62j-uW-CLT" secondAttribute="centerY" id="zuI-b1-yz3"/>
@@ -780,6 +796,7 @@
                         <outlet property="logoImage" destination="2Kr-vN-IHV" id="8AN-7T-Dj1"/>
                         <outlet property="pdfImage" destination="G9C-SA-fXz" id="ffC-kV-YeW"/>
                         <outlet property="playersLabel" destination="9di-AP-8Zb" id="bcJ-ip-wUB"/>
+                        <outlet property="popButton" destination="O8K-3R-FpD" id="QH9-3X-ng5"/>
                         <outlet property="publisherLabel" destination="NrT-H4-wJf" id="EsP-ws-HZL"/>
                         <outlet property="screenshotImage" destination="pR3-uK-2bY" id="Qze-iT-rGk"/>
                         <outlet property="scrollDescrip" destination="42H-uk-ULj" id="Csk-y8-bW0"/>
