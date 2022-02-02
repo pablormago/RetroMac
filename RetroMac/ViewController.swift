@@ -11,6 +11,7 @@ import Cocoa
 import Commands
 import AVKit
 import AVFoundation
+import GameController
 
 var rutaApp = ""
 var rompath = ""
@@ -49,6 +50,7 @@ var backIsPlaying = false
 var allTheSystems: [ConsolaRaw] = []
 var arrayGamesCores = [[String]]()
 var buscarLocal = Bool()
+var juegosaEscrapear = Double()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -162,9 +164,22 @@ class ViewController: NSViewController {
         self.view.window?.makeFirstResponder(self.scrollMain)
         scrollMain.wantsLayer = true
         scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
-        // *** /FullScreen ***
+        
+       // - MARK: Controllers
+        
+        var controllers = GCController.controllers()
+        if controllers.count != 0 {
+            let myController = controllers[0] as GCController
+            myController.playerIndex = .index1
+            if myController.extendedGamepad != nil {
+                NSLog("Gamepad conectado")
+            }
+        }else {
+            NSLog("No hay Gamepads conectados")
+        }
+       
     }
-    
+    // - MARK: fin de DidAppear
     
     override func viewDidLoad() {
         
@@ -264,7 +279,7 @@ class ViewController: NSViewController {
         //cargar array de juegos-cores
         let defaults = UserDefaults.standard
         arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
-        print(arrayVideos)
+        
         
         
         
@@ -319,7 +334,7 @@ class ViewController: NSViewController {
                         print ("BOTONACTUAL: \(botonactual)")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        print(arrayVideos)
+                        
                         backplay (tag: botonactual)
                     }
                 }
@@ -348,7 +363,7 @@ class ViewController: NSViewController {
                         print ("BOTONACTUAL: \(botonactual)")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        print(arrayVideos)
+                        
                         backplay (tag: botonactual)
                     }
                     
@@ -397,7 +412,7 @@ class ViewController: NSViewController {
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
                         backplay (tag: Int(cuentaDec))
-                        print(arrayVideos)
+                        
                         
                     }
                 }
@@ -421,11 +436,10 @@ class ViewController: NSViewController {
                         let trozoamover = (560 * Int(cuentaDec)) - 280
                         let cachito = trozoamover - mitadPantalla
                         scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                        //                            let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                        //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
+                        
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        print(arrayVideos)
+                        
                         backplay (tag: Int(cuentaDec))
                         
                     }

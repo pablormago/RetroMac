@@ -1287,7 +1287,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             
                                             
                                             
-                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                            if self.barraProgress.doubleValue == juegosaEscrapear {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
@@ -1357,7 +1357,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             
                                             
                                             
-                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                            if self.barraProgress.doubleValue == juegosaEscrapear {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
@@ -1419,7 +1419,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             
                                             
                                             
-                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                            if self.barraProgress.doubleValue == juegosaEscrapear {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
@@ -1480,7 +1480,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             
                                             
                                             
-                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                            if self.barraProgress.doubleValue == juegosaEscrapear {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
@@ -1541,7 +1541,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             
                                             
                                             
-                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                            if self.barraProgress.doubleValue == juegosaEscrapear {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
@@ -1605,7 +1605,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             
                                             
                                             
-                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                            if self.barraProgress.doubleValue == juegosaEscrapear{
                                                 self.habilitarTabla2()
                                             }else {
                                                 
@@ -1671,7 +1671,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             
                                             
                                             
-                                            if self.barraProgress.doubleValue == Double(self.juegosXml.count){
+                                            if self.barraProgress.doubleValue == juegosaEscrapear{
                                                 self.habilitarTabla2()
                                             }else {
                                                 
@@ -1965,10 +1965,20 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }else{
             print("Juego no encontrado")
             
-            self.infoLabel.stringValue = "Juego no encontrado"
+            
             juesgosEscrapeados += 1
+            juegosaEscrapear -= 1.0
+            DispatchQueue.main.sync {
+                self.barraProgress.maxValue -= 1.0
+            } 
             if escrapeandoSistema == false {
+                self.infoLabel.stringValue = "Juego no encontrado"
                 habilitarTabla()
+            }
+            if escrapeandoSistema == true {
+                if juesgosEscrapeados == self.juegosXml.count {
+                    habilitarTabla2()
+                }
             }
             
         }
@@ -1980,6 +1990,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     @objc func escrapeartodos(){
         barraProgress.minValue = 0
+        juegosaEscrapear = Double(juegosXml.count)
         barraProgress.maxValue = Double(juegosXml.count)
         backButton.isEnabled = false
         abiertaLista = false
