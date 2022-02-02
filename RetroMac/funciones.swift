@@ -255,9 +255,10 @@ func cuentajuegos(arraySistema: [[String]]) -> [[String]]{
 func juegosGamelistCarga(sistema: [String]) -> [Juego] {
     arrayVideos = []
     var juegosnuevos = 0
+    var mirompath = String(sistema[5])
     var miSistema = String(sistema[0])
     var miComando = String(sistema[3])
-    var rutaApp3 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "") + "/roms/\(sistema[0])"
+    var rutaApp3 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "") + mirompath
     let extensionesSistema = sistema[2].components(separatedBy: " ")
     var losJuegos: [Juego] = []
     juegosXml2 = []
@@ -293,17 +294,24 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
             var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating, fav: miFav, comando: miComando, core: "", system: miSistema, box: miBox)
             
             datosJuego3 = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating, miFav,  miComando ]
-            if miFav == "FAV" {
-                favoritos.append(datosDeMiJuego)
-                if miVideo != "" {
-                    arrayVideosFav.append(miVideo)
+            
+            let fileDoesExist = FileManager.default.fileExists(atPath: String(miJuego))
+            if fileDoesExist {
+                if miFav == "FAV" {
+                    favoritos.append(datosDeMiJuego)
+                    if miVideo != "" {
+                        arrayVideosFav.append(miVideo)
+                    }
                 }
+                juegosXml2.append(datosJuego3)
+                losJuegos.append(datosDeMiJuego)
+                if String(miVideo) != "" {
+                    arrayVideos.append(miVideo)
+                }
+                
             }
-            juegosXml2.append(datosJuego3)
-            losJuegos.append(datosDeMiJuego)
-            if String(miVideo) != "" {
-                arrayVideos.append(miVideo)
-            }
+            
+            
             //return datosJuego3
             
             
@@ -337,7 +345,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
                     ///AÑADIR FUNCION PARA AÑADIR JUEGO AL XML
                     let name = (String(element) as NSString).deletingPathExtension
                     var datosJuegoNoXml = [String]()
-                    var datosDeMiJuego: Juego = Juego(path: rutacompleta, name: name, description: "", map: "", manual: "", news: "", tittleshot: "", fanart: "", thumbnail: "", image: "", video: "", marquee: "", releasedate: "", developer: "", publisher: "", genre: "", lang: "", players: "", rating: "", fav: "", comando: miComando, core: "", system: miSistema, box: "")
+                    var datosDeMiJuego: Juego = Juego(path: rutacompleta, name: name, description: "", map: "", manual: buscaManual(juego: name, ruta: rutaApp3), news: "", tittleshot: buscaTittleShot(juego: name, ruta: rutaApp3), fanart: buscaFanArt(juego: name, ruta: rutaApp3), thumbnail: buscaImage(juego: name, ruta: rutaApp3), image: buscaImage(juego: name, ruta: rutaApp3), video: buscaVideo(juego: name, ruta: rutaApp3), marquee: buscaMarquee(juego: name, ruta: rutaApp3), releasedate: "", developer: "", publisher: "", genre: "", lang: "", players: "", rating: "", fav: "", comando: miComando, core: "", system: miSistema, box: buscaBox(juego: name, ruta: rutaApp3))
                     datosJuegoNoXml = [rutacompleta , String(element), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" , miComando]
                     juegosXml2.append(datosJuegoNoXml)
                     losJuegos.append(datosDeMiJuego)
@@ -573,7 +581,7 @@ func buscaManual (juego: String, ruta: String) -> String {
     var miManual = ""
     let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
-    if ruta != "" && ruta != nil {
+    if ruta != "" && ruta != nil && buscarLocal == true {
         let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
@@ -613,7 +621,7 @@ func buscaTittleShot (juego: String, ruta: String) -> String {
     var miTittleShot = ""
     let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
-    if ruta != "" && ruta != nil {
+    if ruta != "" && ruta != nil && buscarLocal == true {
         let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
@@ -653,7 +661,7 @@ func buscaFanArt (juego: String, ruta: String) -> String {
     var miFanArt = ""
     let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
-    if ruta != "" && ruta != nil {
+    if ruta != "" && ruta != nil && buscarLocal == true {
         let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
@@ -693,7 +701,7 @@ func buscaMarquee (juego: String, ruta: String) -> String {
     var miMarquee = ""
     let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
-    if ruta != "" && ruta != nil {
+    if ruta != "" && ruta != nil && buscarLocal == true {
         let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
@@ -733,7 +741,7 @@ func buscaBox (juego: String, ruta: String) -> String {
     let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
     
-    if ruta != "" && ruta != nil {
+    if ruta != "" && ruta != nil && buscarLocal == true {
         let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {

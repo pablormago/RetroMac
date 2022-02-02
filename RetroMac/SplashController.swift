@@ -44,6 +44,14 @@ class SplashController: NSViewController {
 //        DispatchQueue.main.sync {
 //
 //        }
+        let defaults = UserDefaults.standard
+        var switchestado = defaults.integer(forKey: "LocalMedia") ?? 0
+        
+        if switchestado == 0 {
+            buscarLocal = false
+        }else {
+            buscarLocal = true
+        }
         
         ///COMPROBAR QUE EXISTE CONFIG
         ///
@@ -223,7 +231,7 @@ class SplashController: NSViewController {
                     taskLabel.stringValue = "Cargando \(minombre)"
                     }
                     
-                    let migrupo = [miSistema, String(contador) , extensionescuenta, micomando, minombre]
+                    let migrupo = [miSistema, String(contador) , extensionescuenta, micomando, minombre, miPath]
                     
                     /// MARK - Datos de la Struct:
                     //                struct Consola {
@@ -274,7 +282,7 @@ class SplashController: NSViewController {
                                             extensionesTemp = extensionescuenta
                                             crearGameListInicioCarga(ruta: miruta)
                                             var migrupo2 = [String]()
-                                            migrupo2 = [miSistema, String(contador) , book.extensiones, micomando, minombre]
+                                            migrupo2 = [miSistema, String(contador) , book.extensiones, micomando, minombre, miPath]
                                             let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: book.extensiones, games: juegosGamelistCarga(sistema: migrupo2), videos: arrayVideos, cores: misCores)
                                             allTheGames.append(sistema1)
                                             DispatchQueue.main.sync {

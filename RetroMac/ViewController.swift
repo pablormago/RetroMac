@@ -48,6 +48,7 @@ var arrayVideosFav = [String]()
 var backIsPlaying = false
 var allTheSystems: [ConsolaRaw] = []
 var arrayGamesCores = [[String]]()
+var buscarLocal = Bool()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -159,6 +160,8 @@ class ViewController: NSViewController {
         ///TECLAS
         cuentaDec = CGFloat(botonactual)
         self.view.window?.makeFirstResponder(self.scrollMain)
+        scrollMain.wantsLayer = true
+        scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         // *** /FullScreen ***
     }
     
@@ -189,7 +192,7 @@ class ViewController: NSViewController {
         print(cuentaSistemas())
         let totalAnchuraMenu = ((totalSistemas+1) * 560)
         //Parsear Sistemas
-        
+        scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         ///Carga desde allTheGames
         var counter = 0
         let documentView = NSView(frame: NSRect(x: 0,y: 0,width: totalAnchuraMenu,height: 178))
@@ -441,7 +444,8 @@ class ViewController: NSViewController {
     
     override func viewWillAppear() {
         super.viewWillAppear()
-        
+        scrollMain.wantsLayer = true
+        scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         //NSApplication.shared.windows.first?.styleMask.insert(.fullScreen)
         //NSApplication.shared.windows.first?.styleMask.insert(.miniaturizable)
         //NSApplication.shared.windows.first?.styleMask.insert(.fullSizeContentView)
@@ -727,7 +731,7 @@ func buscaVideo (juego: String, ruta: String) ->String {
         
     }
     let fileManager = FileManager.default
-    if ruta != "" && ruta != nil {
+    if ruta != "" && ruta != nil && buscarLocal == true {
         let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         //print("RUTA: \(ruta)")
         //Comprobamos Video
@@ -757,7 +761,7 @@ func buscaImage (juego: String, ruta: String) -> String {
     var miFoto = ""
     let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
-    if ruta != "" && ruta != nil {
+    if ruta != "" && ruta != nil && buscarLocal == true {
         let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
