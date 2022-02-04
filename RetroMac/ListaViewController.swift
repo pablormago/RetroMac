@@ -186,6 +186,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 favImagen.isHidden = false
             }
         }
+        
+        print("ROMPATH: \(rompath)")
+        rutaTransformada = rompath
         ///Nombres cargados
         
     }
@@ -609,87 +612,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         print("ENTER")
     }
     
-    func juegosGamelist() {
-        var juegosnuevos = 0
-        let pathXMLinterno2 = NSURL(string:  "file://" + rompath + "/gamelist.xml")
-        if let pathXMLinterno2 = pathXMLinterno2, let data2 = try? Data(contentsOf: pathXMLinterno2 as URL )
-        {
-            let parser2 = GameParser(data: data2)
-            for game in parser2.games
-            {
-                var datosJuego = [String]()
-                let miJuego = siRutaRelativa(ruta: String(game.path))
-                let miNombre = String(game.name)
-                let miDescripcion = String(game.desc)
-                let miMapa = siRutaRelativa(ruta:String(game.map))
-                let miManual = siRutaRelativa(ruta:String(game.manual))
-                let miNews = siRutaRelativa(ruta:String(game.news))
-                let miTittleShot = siRutaRelativa(ruta:String(game.tittleshot))
-                let miFanArt = siRutaRelativa(ruta:String(game.fanart))
-                let miThumbnail = siRutaRelativa(ruta:String(game.thumbnail))
-                let miImage = siRutaRelativa(ruta:String(game.image))
-                let miVideo = siRutaRelativa(ruta:String(game.video))
-                let miMarquee = siRutaRelativa(ruta:String(game.marquee))
-                let miReleaseData = String(game.releasedata)
-                let miDeveloper = String(game.developer)
-                let miPublisher = String(game.publisher)
-                let miGenre = String(game.genre)
-                let miLang = String(game.lang)
-                let miPlayers = String(game.players)
-                let miRating = String(game.rating)
-                let miFav = String(game.fav)
-                let miBox = String(game.box)
-                
-                datosJuego = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating , miFav, miBox ]
-                
-                juegosXml.append(datosJuego)
-                
-                
-            }
-            
-        }else{
-            print("ERROR GARGANDO gamelist.xml en: \(String(describing: pathXMLinterno2))")
-        }
-        print("Nuevos: ")
-        for extensiones in systemextensions {
-            
-            
-            let fileManager = FileManager.default
-            let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rompath as String)!
-            while let element = enumerator.nextObject() as? String {
-                if element.hasSuffix(extensiones) { // checks the extension
-                    
-                    var rutacompleta = rompath + "/" + element
-                    var encuentra = false
-                    for juego in juegosXml {
-                        if juego[0] == rutacompleta {
-                            encuentra = true
-                            break
-                        }else {
-                            encuentra = false
-                        }
-                    }
-                    
-                    if encuentra == false {
-                        juegosnuevos += 1
-                        ///AÑADIR FUNCION PARA AÑADIR JUEGO AL XML
-                        var datosJuegoNoXml = [String]()
-                        datosJuegoNoXml = [rutacompleta , String(element), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" ]
-                        juegosXml.append(datosJuegoNoXml)
-                    }
-                    
-                }
-            }
-            
-        }
-        if juegosnuevos >= 1 {
-            xmlJuegosNuevos()
-        }
-        print("Total: \(juegosXml.count) Juegos en XML")
-        juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
-        sistemaLabel.stringValue = sistemaActual
-        
-    }
+    
     
     func siRutaRelativa(ruta: String) -> String {
         var rutaAbsoluta = ""
@@ -729,22 +652,23 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         for juego in juegosXml {
             let gameNode = XMLElement(name: "game")
             root.addChild(gameNode)
-            let pathNode = XMLElement(name: "path", stringValue: juego[0])
+            let pathNode = XMLElement(name: "path", stringValue: rutaARelativa(ruta: juego[0]))
+            
             let filename = juego[1]
             let name = (filename as NSString).deletingPathExtension
             let nameNode = XMLElement(name: "name", stringValue: name)
             let descNode = XMLElement(name: "desc", stringValue: juego[2])
-            let mapNode = XMLElement(name: "map", stringValue: juego[3])
-            let manualNode = XMLElement(name: "manual", stringValue: juego[4])
-            let newsNode = XMLElement(name: "news",  stringValue: juego[5])
-            let tittleshotNode = XMLElement(name: "tittleshot", stringValue: juego[6])
-            let fanartNode = XMLElement(name: "fanart", stringValue: juego[7])
-            let thumbnailNode = XMLElement(name: "thumbnail", stringValue: juego[8])
+            let mapNode = XMLElement(name: "map", stringValue: rutaARelativa(ruta: juego[3]))
+            let manualNode = XMLElement(name: "manual", stringValue: rutaARelativa(ruta: juego[4]))
+            let newsNode = XMLElement(name: "news",  stringValue: rutaARelativa(ruta: juego[5]))
+            let tittleshotNode = XMLElement(name: "tittleshot", stringValue: rutaARelativa(ruta: juego[6]))
+            let fanartNode = XMLElement(name: "fanart", stringValue: rutaARelativa(ruta: juego[7]))
+            let thumbnailNode = XMLElement(name: "thumbnail", stringValue: rutaARelativa(ruta: juego[8]))
             //let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: juego[1]) )
-            let imageNode = XMLElement(name: "image", stringValue: juego[9] )
+            let imageNode = XMLElement(name: "image", stringValue: rutaARelativa(ruta: juego[9]))
             //let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: juego[1]) )
-            let videoNode = XMLElement(name: "video", stringValue: juego[10] )
-            let marqueeNode = XMLElement(name: "marquee", stringValue: juego[11])
+            let videoNode = XMLElement(name: "video", stringValue: rutaARelativa(ruta: juego[10]) )
+            let marqueeNode = XMLElement(name: "marquee", stringValue: rutaARelativa(ruta: juego[11]))
             let releasedateNode = XMLElement(name: "releasedate",  stringValue: juego[12])
             let developerNode = XMLElement(name: "developer", stringValue: juego[13])
             let publisherNode = XMLElement(name: "publisher", stringValue: juego[14])
@@ -753,7 +677,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             let playersNode = XMLElement(name: "players", stringValue: juego[17])
             let ratingNode = XMLElement(name: "rating", stringValue: juego[18])
             let favNode = XMLElement(name: "fav", stringValue: juego[19])
-            let boxNode = XMLElement(name: "box", stringValue: juego[23])
+            let boxNode = XMLElement(name: "box", stringValue: rutaARelativa(ruta: juego[23]))
             ///AÑADIMOS LOS NODOS
             gameNode.addChild(pathNode)
             gameNode.addChild(nameNode)
@@ -2300,22 +2224,22 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         for juego in arrayNuevo {
             let gameNode = XMLElement(name: "game")
             root.addChild(gameNode)
-            let pathNode = XMLElement(name: "path", stringValue: juego[0])
+            let pathNode = XMLElement(name: "path", stringValue: rutaARelativa(ruta: juego[0]))
             let filename = juego[1]
             let name = (filename as NSString).deletingPathExtension
             let nameNode = XMLElement(name: "name", stringValue: name)
             let descNode = XMLElement(name: "desc", stringValue: juego[2])
             let mapNode = XMLElement(name: "map", stringValue: juego[3])
-            let manualNode = XMLElement(name: "manual", stringValue: juego[4])
-            let newsNode = XMLElement(name: "news",  stringValue: juego[5])
-            let tittleshotNode = XMLElement(name: "tittleshot", stringValue: juego[6])
-            let fanartNode = XMLElement(name: "fanart", stringValue: juego[7])
-            let thumbnailNode = XMLElement(name: "thumbnail", stringValue: juego[8])
+            let manualNode = XMLElement(name: "manual", stringValue: rutaARelativa(ruta: juego[4]))
+            let newsNode = XMLElement(name: "news",  stringValue: rutaARelativa(ruta: juego[5]))
+            let tittleshotNode = XMLElement(name: "tittleshot", stringValue: rutaARelativa(ruta: juego[6]))
+            let fanartNode = XMLElement(name: "fanart", stringValue: rutaARelativa(ruta: juego[7]))
+            let thumbnailNode = XMLElement(name: "thumbnail", stringValue: rutaARelativa(ruta: juego[8]))
             //let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: juego[1]) )
-            let imageNode = XMLElement(name: "image", stringValue: juego[9] )
+            let imageNode = XMLElement(name: "image", stringValue: rutaARelativa(ruta: juego[9]) )
             //let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: juego[1]) )
-            let videoNode = XMLElement(name: "video", stringValue: juego[10] )
-            let marqueeNode = XMLElement(name: "marquee", stringValue: juego[11])
+            let videoNode = XMLElement(name: "video", stringValue: rutaARelativa(ruta: juego[10]) )
+            let marqueeNode = XMLElement(name: "marquee", stringValue: rutaARelativa(ruta: juego[11]))
             let releasedateNode = XMLElement(name: "releasedate",  stringValue: juego[12])
             let developerNode = XMLElement(name: "developer", stringValue: juego[13])
             let publisherNode = XMLElement(name: "publisher", stringValue: juego[14])
@@ -2325,6 +2249,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             let ratingNode = XMLElement(name: "rating", stringValue: juego[18])
             let favNode = XMLElement(name: "fav", stringValue: juego[19])
             let coreNode = XMLElement(name: "core", stringValue: juego[21])
+            let boxNode = XMLElement(name: "box", stringValue: rutaARelativa(ruta: juego[23]))
             ///AÑADIMOS LOS NODOS
             gameNode.addChild(pathNode)
             gameNode.addChild(nameNode)
@@ -2346,7 +2271,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             gameNode.addChild(playersNode)
             gameNode.addChild(ratingNode)
             gameNode.addChild(favNode)
-            gameNode.addChild(coreNode)
+            //gameNode.addChild(coreNode)
+            gameNode.addChild(boxNode)
         }
         let xmlData = xml.xmlData(options: .nodePrettyPrint)
         

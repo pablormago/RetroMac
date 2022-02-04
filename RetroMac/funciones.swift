@@ -259,6 +259,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
     var miSistema = String(sistema[0])
     var miComando = String(sistema[3])
     var rutaApp3 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "") + mirompath
+    rutaTransformada = rutaApp3
     let extensionesSistema = sistema[2].components(separatedBy: " ")
     var losJuegos: [Juego] = []
     juegosXml2 = []
@@ -269,7 +270,6 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
         for game in parser2.games
         {
             var datosJuego3 = [String]()
-            
             let miJuego = siRutaRelativa2(ruta: String(game.path))
             let miNombre = String(game.name)
             let miDescripcion = String(game.desc)
@@ -293,7 +293,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
             let miBox = String(game.box)
             var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating, fav: miFav, comando: miComando, core: "", system: miSistema, box: miBox)
             
-            datosJuego3 = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating, miFav,  miComando ]
+            datosJuego3 = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating, miFav,  miComando, miBox]
             
             let fileDoesExist = FileManager.default.fileExists(atPath: String(miJuego))
             if fileDoesExist {
@@ -346,7 +346,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
                     let name = (String(element) as NSString).deletingPathExtension
                     var datosJuegoNoXml = [String]()
                     var datosDeMiJuego: Juego = Juego(path: rutacompleta, name: name, description: "", map: "", manual: buscaManual(juego: name, ruta: rutaApp3), news: "", tittleshot: buscaTittleShot(juego: name, ruta: rutaApp3), fanart: buscaFanArt(juego: name, ruta: rutaApp3), thumbnail: buscaImage(juego: name, ruta: rutaApp3), image: buscaImage(juego: name, ruta: rutaApp3), video: buscaVideo(juego: name, ruta: rutaApp3), marquee: buscaMarquee(juego: name, ruta: rutaApp3), releasedate: "", developer: "", publisher: "", genre: "", lang: "", players: "", rating: "", fav: "", comando: miComando, core: "", system: miSistema, box: buscaBox(juego: name, ruta: rutaApp3))
-                    datosJuegoNoXml = [rutacompleta , String(element), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" , miComando]
+                    datosJuegoNoXml = [rutacompleta , name, "", "", buscaManual(juego: name, ruta: rutaApp3), "", buscaTittleShot(juego: name, ruta: rutaApp3), buscaFanArt(juego: name, ruta: rutaApp3), buscaImage(juego: name, ruta: rutaApp3), buscaImage(juego: name, ruta: rutaApp3), buscaVideo(juego: name, ruta: rutaApp3), buscaMarquee(juego: name, ruta: rutaApp3), "", "", "", "", "", "", "" , buscaBox(juego: name, ruta: rutaApp3)]
                     juegosXml2.append(datosJuegoNoXml)
                     losJuegos.append(datosDeMiJuego)
                 }
@@ -372,7 +372,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
 func siRutaRelativa2(ruta: String) -> String {
     var rutaAbsoluta = ""
     if ruta.hasPrefix("./") {
-        rutaAbsoluta = String(String(ruta).dropFirst())
+        rutaAbsoluta = rutaTransformada +  String(String(ruta).dropFirst())
     }else{
         rutaAbsoluta = ruta
     }
@@ -386,22 +386,23 @@ func xmlJuegosNuevos2(ruta: String){
     for juego in juegosXml2 {
         let gameNode = XMLElement(name: "game")
         root.addChild(gameNode)
-        let pathNode = XMLElement(name: "path", stringValue: juego[0])
+        let pathNode = XMLElement(name: "path", stringValue: rutaARelativa(ruta: juego[0]))
+        //Hay que formatearlos asi: .\(juego[0].replacingOccurrences(of: rutaTransformada, with: ""))")
         let filename = juego[1]
         let name = (filename as NSString).deletingPathExtension
         let nameNode = XMLElement(name: "name", stringValue: name)
-        let descNode = XMLElement(name: "desc", stringValue: juego[2])
-        let mapNode = XMLElement(name: "map", stringValue: juego[3])
-        let manualNode = XMLElement(name: "manual", stringValue: juego[4])
+        let descNode = XMLElement(name: "desc", stringValue: rutaARelativa(ruta: juego[2]))
+        let mapNode = XMLElement(name: "map", stringValue: rutaARelativa(ruta: juego[3]))
+        let manualNode = XMLElement(name: "manual", stringValue: rutaARelativa(ruta: juego[4]))
         let newsNode = XMLElement(name: "news",  stringValue: juego[5])
-        let tittleshotNode = XMLElement(name: "tittleshot", stringValue: juego[6])
-        let fanartNode = XMLElement(name: "fanart", stringValue: juego[7])
-        let thumbnailNode = XMLElement(name: "thumbnail", stringValue: juego[8])
-        let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: juego[1], ruta: rutaApp + juego[0] ))
+        let tittleshotNode = XMLElement(name: "tittleshot", stringValue: rutaARelativa(ruta: juego[6]))
+        let fanartNode = XMLElement(name: "fanart", stringValue: rutaARelativa(ruta: juego[7]))
+        let thumbnailNode = XMLElement(name: "thumbnail", stringValue: rutaARelativa(ruta: juego[8]))
+        let imageNode = XMLElement(name: "image", stringValue: rutaARelativa(ruta: juego[9]))
         //let imageNode = XMLElement(name: "image", stringValue: juego[9] )
-        let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: juego[1], ruta: rutaApp + juego[0]))
+        let videoNode = XMLElement(name: "video", stringValue: rutaARelativa(ruta: juego[10]))
         //let videoNode = XMLElement(name: "video", stringValue: juego[10] )
-        let marqueeNode = XMLElement(name: "marquee", stringValue: juego[11])
+        let marqueeNode = XMLElement(name: "marquee", stringValue: rutaARelativa(ruta: juego[11]))
         let releasedateNode = XMLElement(name: "releasedate",  stringValue: juego[12])
         let developerNode = XMLElement(name: "developer", stringValue: juego[13])
         let publisherNode = XMLElement(name: "publisher", stringValue: juego[14])
@@ -410,7 +411,7 @@ func xmlJuegosNuevos2(ruta: String){
         let playersNode = XMLElement(name: "players", stringValue: juego[17])
         let ratingNode = XMLElement(name: "rating", stringValue: juego[18])
         let favNode = XMLElement(name: "fav", stringValue: "")
-        let boxNode = XMLElement(name: "box", stringValue: "")
+        let boxNode = XMLElement(name: "box", stringValue: rutaARelativa(ruta: juego[19]))
         ///AÑADIMOS LOS NODOS
         gameNode.addChild(pathNode)
         gameNode.addChild(nameNode)
@@ -449,7 +450,6 @@ func crearGameListInicioCarga (ruta: String){
     let root = XMLElement(name: "gameList")
     let xml = XMLDocument(rootElement: root)
     
-    //print(xml.xmlString)
     for extensiones in extensionesTemp {
         
         let fileManager = FileManager.default
@@ -514,7 +514,7 @@ func crearGameListInicioCarga (ruta: String){
     
     print("TOTAL: \(counter) Juegos")
     do{
-        try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
+        //try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
     }catch {}
     
     
@@ -774,4 +774,15 @@ func buscaBox (juego: String, ruta: String) -> String {
     }
     
     
+}
+
+func rutaARelativa (ruta: String) -> String {
+    var rutarelativa = String()
+    if ruta != "" {
+        rutarelativa = "." + ruta.replacingOccurrences(of: rutaTransformada, with: "")
+    }else {
+        rutarelativa = ""
+    }
+    
+    return rutarelativa
 }

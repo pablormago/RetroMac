@@ -51,6 +51,8 @@ var allTheSystems: [ConsolaRaw] = []
 var arrayGamesCores = [[String]]()
 var buscarLocal = Bool()
 var juegosaEscrapear = Double()
+var esBoB = Bool()
+var rutaTransformada = String()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -516,6 +518,9 @@ class ViewController: NSViewController {
             sistemaActual = sender.Fullname!
             nombresistemaactual = sender.Sistema!
             rompath = rutaApp + sender.RomsPath!
+            print("ROMPATH: \(rompath)")
+            rutaTransformada = rompath
+            print("RUTA TRANSFORMADA: \(rutaTransformada)")
             systemextensions = sender.Extensiones!.components(separatedBy: " ")
             comandoaejecutar = rutaApp
             comandoaejecutar = comandoaejecutar + sender.Comando!.replacingOccurrences(of: "%CORE%", with: rutaApp)
@@ -535,7 +540,7 @@ class ViewController: NSViewController {
         if button?.videos?.count ?? 0 > 0 {
             let miVideo = button?.videos?.randomElement()
             if miVideo != "" {
-                print("Mivideo: \(miVideo)")
+                //print("Mivideo: \(miVideo)")
                 let videoURL = URL(fileURLWithPath: miVideo!)
                 let player2 = AVPlayer(url: videoURL)
                 backPlayer.player = player2

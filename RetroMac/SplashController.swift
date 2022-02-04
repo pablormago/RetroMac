@@ -15,7 +15,15 @@ class SplashController: NSViewController {
     @IBOutlet weak var taskLabel: NSTextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+        let path2 =  rutaApp2 +  "/BOBwin.exe"
+        let fileDoesExist = FileManager.default.fileExists(atPath: path2)
+        print("Existe")
+        if fileDoesExist {
+            esBoB = true
+        }else {
+            esBoB = false
+        }
         taskLabel.stringValue = "Cargando Sistemas"
         // Do view setup here.
     }
@@ -280,7 +288,7 @@ class SplashController: NSViewController {
                                             ///Creamos el xml y añadimos el sistema al array porque ha encontrado ROMS
                                             print("ROMS ENCONTRADAS")
                                             extensionesTemp = extensionescuenta
-                                            crearGameListInicioCarga(ruta: miruta)
+                                            //crearGameListInicioCarga(ruta: miruta)
                                             var migrupo2 = [String]()
                                             migrupo2 = [miSistema, String(contador) , book.extensiones, micomando, minombre, miPath]
                                             let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: book.extensiones, games: juegosGamelistCarga(sistema: migrupo2), videos: arrayVideos, cores: misCores)
