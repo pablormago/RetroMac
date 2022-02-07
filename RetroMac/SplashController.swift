@@ -38,6 +38,7 @@ class SplashController: NSViewController {
         //self.view.window?.styleMask.insert(.fullSizeContentView)
 
         self.view.window?.styleMask.remove(.closable)
+        
         ///self.view.window?.styleMask.remove(.fullScreen)
         //self.view.window?.styleMask.remove(.miniaturizable)
         //self.view.window?.styleMask.remove(.resizable)

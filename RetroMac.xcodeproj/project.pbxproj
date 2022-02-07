@@ -166,7 +166,6 @@
 				27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */,
 				27E7A3042768E9BA0087C67A /* themes */,
 				2789801C2757DCBE00414985 /* ViewController.swift */,
-				27DB1AE3275F489C000FB85D /* ViewControllers */,
 			);
 			path = RetroMac;
 			sourceTree = "<group>";
@@ -183,13 +182,6 @@
 				279FBD53277350C800CD5586 /* up.png */,
 			);
 			path = Arrows;
-			sourceTree = "<group>";
-		};
-		27DB1AE3275F489C000FB85D /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		B4F8AD097037BB2A5D747E55 /* Pods */ = {

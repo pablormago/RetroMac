@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import GameController
 
 func llenaSistemasIds() {
     var nes = ["nes", "3"]
@@ -786,3 +787,224 @@ func rutaARelativa (ruta: String) -> String {
     
     return rutarelativa
 }
+
+ func configureDiamondButtons(_ gamepad: GCGamepad) {
+        
+        //Configuração do botão A
+        gamepad.buttonA.pressedChangedHandler = {(button, value, pressed) in
+            print("Gamepad - A")
+        }
+        
+        //Configuração do botão B
+        gamepad.buttonB.pressedChangedHandler = {(button, value, pressed) in
+           print("Gamepad - B")
+        }
+        
+        //Configuração do botão X
+        gamepad.buttonX.pressedChangedHandler = {(button, value, pressed) in
+            print("Gamepad - X")
+        }
+        
+        //Configuração do botão Y
+        gamepad.buttonY.pressedChangedHandler = {(button, value, pressed) in
+            print("Gamepad - Y")
+        }
+        
+    }
+    
+    /**
+     Método para configurar os botões direcionais do(s) controle(s) do tipo GCGamepad.
+        - Parameters:
+            - gamepad: Gamepad para configuração dos botões.
+     */
+     func configureDPadButtons(_ gamepad: GCGamepad) {
+        
+        //Configuracão do direcional para cima
+        gamepad.dpad.up.pressedChangedHandler = {(button, value, pressed) in
+            print("Gamepad - Up")
+        }
+        
+        //Configuracão do direcional para baixo
+        gamepad.dpad.down.pressedChangedHandler = {(button, value, pressed) in
+            print( "Gamepad - Down")
+        }
+        
+        //Configuracão do direcional para a esquerda
+        gamepad.dpad.left.pressedChangedHandler = {(button, value, pressed) in
+            print("Gamepad - Left")
+        }
+        
+        //Configuracão do direcional para a direita
+        gamepad.dpad.right.pressedChangedHandler = {(button, value, pressed) in
+            print("Gamepad - Right")
+        }
+        
+    }
+    
+    /**
+     Método para configurar os botões de shoulder(L1 e R1) do(s) controle(s) do tipo GCGamepad.
+        - Parameters:
+            - gamepad: Gamepad para configuração dos botões.
+     */
+     func configureShoulderButtons(_ gamepad: GCGamepad) {
+        
+        //Configuracão do L1
+        gamepad.leftShoulder.pressedChangedHandler = {(button, value, pressed) in
+            print("Gamepad - Left Shoulder")
+        }
+        
+        //Configuracão do R1
+        gamepad.rightShoulder.pressedChangedHandler = {(button, value, pressed) in
+            print("Gamepad - Right Shoulder")
+        }
+        
+    }
+    
+    //MARK: - GCExtendedGamepad
+    
+    /**
+     Método para configurar os botões A,B,X e Y do(s) controle(s) do tipo GCExtendedGamepad.
+        - Parameters:
+            - gamepad: Gamepad para configuração dos botões.
+     */
+     func configureDiamondButtons(_ gamepad: GCExtendedGamepad) {
+        
+        //Configuração do botão A
+        gamepad.buttonA.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - A")
+        }
+        
+        //Configuração do botão B
+        gamepad.buttonB.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - B")
+        }
+        
+        //Configuração do botão X
+        gamepad.buttonX.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - X")
+        }
+        
+        //Configuração do botão Y
+        gamepad.buttonY.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Y")
+        }
+        
+    }
+    
+    /**
+     Método para configurar os botões direcionais controle(s) do tipo GCExtendedGamepad.
+        - Parameters:
+            - gamepad: Gamepad para configuração dos botões.
+     */
+     func configureDPadButtons(_ gamepad: GCExtendedGamepad) {
+        
+        //Configuracão do direcional para cima
+        gamepad.dpad.up.pressedChangedHandler = {(button, value, pressed) in
+            print( "ExtendedGamepad - Up")
+        }
+        
+        //Configuracão do direcional para baixo
+        gamepad.dpad.down.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Down")
+        }
+        
+        //Configuracão do direcional para a esquerda
+        gamepad.dpad.left.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Left")
+        }
+        
+        //Configuracão do direcional para a direita
+        gamepad.dpad.right.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Right")
+        }
+        
+    }
+    
+    /**
+     Método para configurar os botões de shoulder(L1 e R1) do(s) controle(s) do tipo GCExtendedGamepad.
+        - Parameters:
+            - gamepad: Gamepad para configuração dos botões.
+     */
+     func configureShoulderButtons(_ gamepad: GCExtendedGamepad) {
+        
+        //Configuracão do L1
+        gamepad.leftShoulder.pressedChangedHandler = {(button, value, pressed) in
+            print( "ExtendedGamepad - Left Shoulder")
+        }
+        
+        //Configuracão do R1
+        gamepad.rightShoulder.pressedChangedHandler = {(button, value, pressed) in
+            print( "ExtendedGamepad - Right Shoulder")
+        }
+        
+    }
+    
+    /**
+     Método para configurar os botões de trigger(L2 e R2) do(s) controle(s) do tipo GCExtendedGamepad.
+        - Parameters:
+            - gamepad: Gamepad para configuração dos botões.
+     */
+    func configureTriggers(_ gamepad: GCExtendedGamepad) {
+        
+        //Configuracão do L2
+        gamepad.leftTrigger.pressedChangedHandler = {(button, value, pressed) in
+            print( "ExtendedGamepad - Left Trigger")
+        }
+        
+        //Configuracão do R2
+        gamepad.rightTrigger.pressedChangedHandler = {(button, value, pressed) in
+            print( "ExtendedGamepad - Right Trigger")
+        }
+        
+    }
+    
+    //MARK: - GCMicroGamepad
+    
+    /**
+     Método para configurar os botões A e Y do(s) controle(s) do tipo GCMicroGamepad.
+        - Parameters:
+            - gamepad: Gamepad para configuração dos botões.
+     */
+    func configureDiamondButtons(_ gamepad: GCMicroGamepad) {
+        
+        //Configuração do botão A
+        gamepad.buttonA.pressedChangedHandler = {(button, value, pressed) in
+            print("MicroGamepad - A")
+        }
+
+        //Configuração do botão X
+        gamepad.buttonX.pressedChangedHandler = {(button, value, pressed) in
+            print("MicroGamepad - X")
+        }
+
+        
+    }
+    
+    /**
+     Método para configurar os botões direcionais do(s) controle(s) do tipo GCMicroGamepad.
+        - Parameters:
+            - gamepad: Gamepad para configuração dos botões.
+     */
+     func configureDPadButtons(_ gamepad: GCMicroGamepad) {
+        
+        //Configuracão do direcional para cima
+        gamepad.dpad.up.pressedChangedHandler = {(button, value, pressed) in
+            print("MicroGamepad - Up")
+        }
+        
+        //Configuracão do direcional para baixo
+        gamepad.dpad.down.pressedChangedHandler = {(button, value, pressed) in
+            print("MicroGamepad - Down")
+        }
+        
+        //Configuracão do direcional para a esquerda
+        gamepad.dpad.left.pressedChangedHandler = {(button, value, pressed) in
+            print("MicroGamepad - Left")
+        }
+        
+        //Configuracão do direcional para a direita
+        gamepad.dpad.right.pressedChangedHandler = {(button, value, pressed) in
+            print("MicroGamepad - Right")
+        }
+        
+    }

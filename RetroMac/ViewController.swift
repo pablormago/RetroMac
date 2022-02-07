@@ -53,6 +53,7 @@ var buscarLocal = Bool()
 var juegosaEscrapear = Double()
 var esBoB = Bool()
 var rutaTransformada = String()
+var mycontroller: GCController?
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -62,9 +63,9 @@ class ViewController: NSViewController {
     
     var keyIsDown = false
     var cuentaDec = CGFloat()
-    override var acceptsFirstResponder: Bool { return true }
-    override func becomeFirstResponder() -> Bool { return true }
-    override func resignFirstResponder() -> Bool { return true }
+    //override var acceptsFirstResponder: Bool { return true }
+    //override func becomeFirstResponder() -> Bool { return true }
+    //override func resignFirstResponder() -> Bool { return true }
     
     @IBOutlet weak var scrollerText: ScrollingTextView!
     @IBOutlet weak var mainBackImage: NSImageView!
@@ -166,19 +167,8 @@ class ViewController: NSViewController {
         self.view.window?.makeFirstResponder(self.scrollMain)
         scrollMain.wantsLayer = true
         scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
-        
-       // - MARK: Controllers
-        
-        var controllers = GCController.controllers()
-        if controllers.count != 0 {
-            let myController = controllers[0] as GCController
-            myController.playerIndex = .index1
-            if myController.extendedGamepad != nil {
-                NSLog("Gamepad conectado")
-            }
-        }else {
-            NSLog("No hay Gamepads conectados")
-        }
+        startWatchingForControllers()
+       
        
     }
     // - MARK: fin de DidAppear
@@ -286,6 +276,7 @@ class ViewController: NSViewController {
         
         
         self.view.window?.makeFirstResponder(self.scrollMain)
+        
         
     }
     
@@ -409,8 +400,6 @@ class ViewController: NSViewController {
                         let trozoamover = (560 * Int(cuentaDec)) - 280
                         let cachito = trozoamover - mitadPantalla
                         scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                        //                            let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                        //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
                         backplay (tag: Int(cuentaDec))
@@ -452,6 +441,70 @@ class ViewController: NSViewController {
             
         }
         
+    }
+    
+    func startWatchingForControllers() {
+         // Subscribe for the notes
+        let ctr = NotificationCenter.default
+        ctr.addObserver(forName: .GCControllerDidConnect, object: nil, queue: .main) { note in
+            if let ctrl = note.object as? GCController {
+                self.add(ctrl)
+            }
+        }
+        ctr.addObserver(forName: .GCControllerDidDisconnect, object: nil, queue: .main) { note in
+            if let ctrl = note.object as? GCController {
+                self.remove(ctrl)
+            }
+        }
+        // and kick off discovery
+        GCController.startWirelessControllerDiscovery(completionHandler: {})
+        self.view.window?.makeFirstResponder( self.view.window)
+    }
+
+    func stopWatchingForControllers() {
+        // Same as the first, 'cept in reverse!
+        GCController.stopWirelessControllerDiscovery()
+        
+
+        let ctr = NotificationCenter.default
+        ctr.removeObserver(self, name: .GCControllerDidConnect, object: nil)
+        ctr.removeObserver(self, name: .GCControllerDidDisconnect, object: nil)
+    }
+
+    func add(_ controller: GCController) {
+        
+        guard let connectedController = GCController.controllers().first else { return }
+        mycontroller = connectedController
+        
+        let name = String(describing:mycontroller?.description)
+        
+        if let extendedGamepad = mycontroller?.extendedGamepad {
+            print("connect extended \(name)")
+            configureDPadButtons(extendedGamepad)
+            configureDiamondButtons(extendedGamepad)
+            configureShoulderButtons(extendedGamepad)
+            configureTriggers(extendedGamepad)
+            //return
+        } else if let microGamepad = mycontroller?.microGamepad {
+            print("connect micro \(name)")
+            configureDPadButtons(microGamepad)
+            configureDiamondButtons(microGamepad)
+            return
+            
+        } else if let gamepad = mycontroller?.gamepad {
+            print("connect gamepad \(name)")
+            configureDPadButtons(gamepad)
+            configureDiamondButtons(gamepad)
+            configureShoulderButtons(gamepad)
+            return
+            
+        } else {
+            print("Huh? \(name)")
+        }
+    }
+
+    func remove(_ controller: GCController) {
+
     }
     
     override func keyUp(with event: NSEvent) {

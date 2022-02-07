@@ -105,7 +105,7 @@
         <!--Principal-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController title="Principal" storyboardIdentifier="HomeView" id="XfG-lQ-9wD" customClass="ViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Principal" storyboardIdentifier="HomeView" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="ViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                         <subviews>
@@ -302,7 +302,7 @@
                                             <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                             <color key="gridColor" red="0.2932489935" green="0.28520277259999999" blue="0.28802099790000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <tableColumns>
-                                                <tableColumn identifier="Games" width="901" minWidth="40" maxWidth="1000" id="fgP-MJ-Xas">
+                                                <tableColumn identifier="Games" width="877" minWidth="40" maxWidth="1000" id="fgP-MJ-Xas">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Juegos">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -315,11 +315,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView translatesAutoresizingMaskIntoConstraints="NO" id="qX0-fm-WF2">
-                                                            <rect key="frame" x="4" y="10" width="905" height="31"/>
+                                                            <rect key="frame" x="4" y="10" width="881" height="31"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKT-aG-DS0">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="905" height="27"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="881" height="27"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Table View Cell" usesSingleLineMode="YES" id="CEm-tF-Pmr">
                                                                         <font key="font" size="17" name="GB18030Bitmap"/>
@@ -815,7 +815,7 @@
         <!-- - RetroMac - -->
         <scene sceneID="9W5-uM-uo2">
             <objects>
-                <viewController title="- RetroMac - " storyboardIdentifier="SplashView" id="DoT-eK-WVN" customClass="SplashController" customModule="RetroMac" sceneMemberID="viewController">
+                <viewController title="- RetroMac - " storyboardIdentifier="SplashView" showSeguePresentationStyle="single" id="DoT-eK-WVN" customClass="SplashController" customModule="RetroMac" sceneMemberID="viewController">
                     <view key="view" id="Znw-V2-fKt">
                         <rect key="frame" x="0.0" y="0.0" width="511" height="370"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -861,7 +861,7 @@
         <!--Configuración-->
         <scene sceneID="gWK-2M-Tqp">
             <objects>
-                <viewController title="Configuración" storyboardIdentifier="ConfigView" id="nsF-45-zou" customClass="ConfigViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Configuración" storyboardIdentifier="ConfigView" showSeguePresentationStyle="single" id="nsF-45-zou" customClass="ConfigViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="lLj-c3-IEJ">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="359"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -973,7 +973,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="mXR-Hk-bfU"/>
+        <segue reference="LeI-Id-sQd"/>
         <segue reference="63D-qW-YZX"/>
     </inferredMetricsTieBreakers>
     <resources>
