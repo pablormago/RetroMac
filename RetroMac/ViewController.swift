@@ -63,9 +63,9 @@ class ViewController: NSViewController {
     
     var keyIsDown = false
     var cuentaDec = CGFloat()
-    //override var acceptsFirstResponder: Bool { return true }
-    //override func becomeFirstResponder() -> Bool { return true }
-    //override func resignFirstResponder() -> Bool { return true }
+    override var acceptsFirstResponder: Bool { return true }
+    override func becomeFirstResponder() -> Bool { return true }
+    override func resignFirstResponder() -> Bool { return true }
     
     @IBOutlet weak var scrollerText: ScrollingTextView!
     @IBOutlet weak var mainBackImage: NSImageView!
@@ -167,7 +167,7 @@ class ViewController: NSViewController {
         self.view.window?.makeFirstResponder(self.scrollMain)
         scrollMain.wantsLayer = true
         scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
-        startWatchingForControllers()
+        ObserveForGameControllers()
        
        
     }
@@ -272,14 +272,123 @@ class ViewController: NSViewController {
         let defaults = UserDefaults.standard
         arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
         
-        
-        
-        
         self.view.window?.makeFirstResponder(self.scrollMain)
-        
-        
     }
     
+    // MARK: Final de viewDidLoad()
+    
+    // MARK: Funciones de GamePad
+    func ObserveForGameControllers() {
+    NotificationCenter.default.addObserver(self, selector: #selector(connectControllers), name: NSNotification.Name.GCControllerDidConnect, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(disconnectControllers), name: NSNotification.Name.GCControllerDidDisconnect, object: nil)
+        if #available(macOS 11.3, *) {
+            GCController.shouldMonitorBackgroundEvents = true
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    
+    @objc func connectControllers() {
+        //Unpause the Game if it is currently paused
+        //self.isPaused = false
+        //Used to register the Nimbus Controllers to a specific Player Number
+        var indexNumber = 0
+        // Run through each controller currently connected to the system
+        for controller in GCController.controllers() {
+            //Check to see whether it is an extended Game Controller (Such as a Nimbus)
+            if controller.extendedGamepad != nil {
+                print ("Controller connected: \(controller.description)")
+                controller.playerIndex = GCControllerPlayerIndex.init(rawValue: indexNumber)!
+                indexNumber += 1
+                setupControllerControls(controller: controller)
+            }
+        }
+    }
+    
+    @objc func disconnectControllers() {
+        // Pause the Game if a controller is disconnected ~ This is mandated by Apple
+        //self.isPaused = true
+    }
+    
+    func setupControllerControls(controller: GCController) {
+        //Function that check the controller when anything is moved or pressed on it
+        controller.extendedGamepad?.valueChangedHandler = {
+            (gamepad: GCExtendedGamepad, element: GCControllerElement) in
+            // Add movement in here for sprites of the controllers
+            self.controllerInputDetected(gamepad: gamepad, element: element, index: controller.playerIndex.rawValue)
+        }
+    }
+    
+    func controllerInputDetected(gamepad: GCExtendedGamepad, element: GCControllerElement, index: Int) {
+        if (gamepad.leftThumbstick == element)
+        {
+            if (gamepad.leftThumbstick.xAxis.value != 0)
+            {
+                print("Controller: \(index), LeftThumbstickXAxis: \(gamepad.leftThumbstick.xAxis)")
+            }
+            else if (gamepad.leftThumbstick.xAxis.value == 0)
+            {
+                // YOU CAN PUT CODE HERE TO STOP YOUR PLAYER FROM MOVING
+            }
+        }
+        // Right Thumbstick
+        if (gamepad.rightThumbstick == element)
+        {
+            if (gamepad.rightThumbstick.xAxis.value != 0)
+            {
+                print("Controller: \(index), rightThumbstickXAxis: \(gamepad.rightThumbstick.xAxis)")
+            }
+        }
+        // D-Pad
+        else if (gamepad.dpad == element)
+        {
+            if (gamepad.dpad.xAxis.value != 0)
+            {
+                print("Controller: \(index), D-PadXAxis: \(gamepad.rightThumbstick.xAxis)")
+            }
+            else if (gamepad.dpad.xAxis.value == 0)
+            {
+                // YOU CAN PUT CODE HERE TO STOP YOUR PLAYER FROM MOVING
+            }
+        }
+        // A-Button
+        else if (gamepad.buttonA == element)
+        {
+            if (gamepad.buttonA.value != 0)
+            {
+                print("Controller: \(index), A-Button Pressed!")
+                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                sistemaActual = button?.Fullname! ?? ""
+                //print(sistemaActual)
+                if Int(button!.numeroJuegos!)! > 0 {
+                    selecionSistema(button!)
+                }
+            }
+        }
+        // B-Button
+        else if (gamepad.buttonB == element)
+        {
+            if (gamepad.buttonB.value != 0)
+            {
+                print("Controller: \(index), B-Button Pressed!")
+            }
+        }
+        else if (gamepad.buttonY == element)
+        {
+            if (gamepad.buttonY.value != 0)
+            {
+                print("Controller: \(index), Y-Button Pressed!")
+            }
+        }
+        else if (gamepad.buttonX == element)
+        {
+            if (gamepad.buttonX.value != 0)
+            {
+                print("Controller: \(index), X-Button Pressed!")
+            }
+        }
+    }
+    // MARK: final de GamePad
     
     //TECLAS
     override func keyDown(with event: NSEvent) {
@@ -400,6 +509,8 @@ class ViewController: NSViewController {
                         let trozoamover = (560 * Int(cuentaDec)) - 280
                         let cachito = trozoamover - mitadPantalla
                         scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
+                        //                            let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
+                        //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
                         let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
                         sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
                         backplay (tag: Int(cuentaDec))
@@ -443,69 +554,11 @@ class ViewController: NSViewController {
         
     }
     
-    func startWatchingForControllers() {
-         // Subscribe for the notes
-        let ctr = NotificationCenter.default
-        ctr.addObserver(forName: .GCControllerDidConnect, object: nil, queue: .main) { note in
-            if let ctrl = note.object as? GCController {
-                self.add(ctrl)
-            }
-        }
-        ctr.addObserver(forName: .GCControllerDidDisconnect, object: nil, queue: .main) { note in
-            if let ctrl = note.object as? GCController {
-                self.remove(ctrl)
-            }
-        }
-        // and kick off discovery
-        GCController.startWirelessControllerDiscovery(completionHandler: {})
-        self.view.window?.makeFirstResponder( self.view.window)
-    }
-
-    func stopWatchingForControllers() {
-        // Same as the first, 'cept in reverse!
-        GCController.stopWirelessControllerDiscovery()
+    
         
+    
 
-        let ctr = NotificationCenter.default
-        ctr.removeObserver(self, name: .GCControllerDidConnect, object: nil)
-        ctr.removeObserver(self, name: .GCControllerDidDisconnect, object: nil)
-    }
-
-    func add(_ controller: GCController) {
-        
-        guard let connectedController = GCController.controllers().first else { return }
-        mycontroller = connectedController
-        
-        let name = String(describing:mycontroller?.description)
-        
-        if let extendedGamepad = mycontroller?.extendedGamepad {
-            print("connect extended \(name)")
-            configureDPadButtons(extendedGamepad)
-            configureDiamondButtons(extendedGamepad)
-            configureShoulderButtons(extendedGamepad)
-            configureTriggers(extendedGamepad)
-            //return
-        } else if let microGamepad = mycontroller?.microGamepad {
-            print("connect micro \(name)")
-            configureDPadButtons(microGamepad)
-            configureDiamondButtons(microGamepad)
-            return
-            
-        } else if let gamepad = mycontroller?.gamepad {
-            print("connect gamepad \(name)")
-            configureDPadButtons(gamepad)
-            configureDiamondButtons(gamepad)
-            configureShoulderButtons(gamepad)
-            return
-            
-        } else {
-            print("Huh? \(name)")
-        }
-    }
-
-    func remove(_ controller: GCController) {
-
-    }
+    
     
     override func keyUp(with event: NSEvent) {
         keyIsDown = false

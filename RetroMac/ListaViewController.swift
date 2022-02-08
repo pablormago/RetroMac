@@ -480,6 +480,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 abiertaLista = true
                 ventana = "Principal"
                 cuentaboton = botonactual
+                
             }
             print("Backspace")
         }else if event.keyCode == 53 && abiertaLista == true {
