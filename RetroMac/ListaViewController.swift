@@ -10,6 +10,7 @@ import Cocoa
 import Commands
 import AVKit
 import AVFoundation
+import GameController
 var playingVideo = false
 var escrapeandoSistema: Bool = false
 var juegosaescrapearensistema = Int()
@@ -18,9 +19,9 @@ var juesgosEscrapeados = Int()
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
-    override var acceptsFirstResponder: Bool { return true }
-    override func becomeFirstResponder() -> Bool { return true }
-    override func resignFirstResponder() -> Bool { return true }
+    //override var acceptsFirstResponder: Bool { return true }
+    //override func becomeFirstResponder() -> Bool { return true }
+    //override func resignFirstResponder() -> Bool { return true }
     
     @IBOutlet weak var popButton: NSPopUpButton!
     @IBOutlet weak var dateLabel: NSTextField!
@@ -111,22 +112,15 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     let contextMenu = NSMenu()
     var keyIsDown = false
     
-    
+    deinit {
+        print("Lista deinit")
+       NotificationCenter.default.removeObserver(self)
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         infoLabel.isHidden = true
-        //        NSEvent.addLocalMonitorForEvents(matching: .keyUp) { (qEvent) -> NSEvent? in
-        //            self.keyUp(with: qEvent)
-        //            return qEvent
-        //        }
-        //
-        //        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (qEvent) -> NSEvent? in
-        //            self.keyDown(with: qEvent)
-        //            return qEvent
-        //        }
-        //print(view.window?.firstResponder)
         print("LISTA LOAD")
         view.wantsLayer = true
         // change the background color of the layer
@@ -189,6 +183,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         print("ROMPATH: \(rompath)")
         rutaTransformada = rompath
+        SingletonState.shared.currentViewController? = self
         ///Nombres cargados
         
     }
@@ -250,10 +245,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         playersLabel.stringValue = miPlayers
         //print(miCore)
         //print(miSystem)
-        scrollerDesc.font = NSFont(name: "Arial", size: 20)
-        scrollerDesc.delay = 1
-        scrollerDesc.speed = 2
-        scrollerDesc.setup(string: miDesc.replacingOccurrences(of: "\n", with: " "))
+//        scrollerDesc.font = NSFont(name: "Arial", size: 20)
+//        scrollerDesc.delay = 1
+//        scrollerDesc.speed = 2
+//        scrollerDesc.setup(string: miDesc.replacingOccurrences(of: "\n", with: " "))
         
         
         
@@ -311,6 +306,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             snapPlayer.player = player2
             snapPlayer.player?.play()
             player2.actionAtItemEnd = .none
+            NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(playerItemDidReachEnd(notification:)),
                                                    name: .AVPlayerItemDidPlayToEndTime,
@@ -324,6 +320,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             snapPlayer.player = player2
             snapPlayer.player?.play()
             player2.actionAtItemEnd = .none
+            NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(playerItemDidReachEnd(notification:)),
                                                    name: .AVPlayerItemDidPlayToEndTime,
@@ -449,6 +446,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         // *** /FullScreen ***
     }
     
+    
     override func viewWillAppear() {
         super.viewWillAppear()
         
@@ -476,7 +474,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
         else if event.keyCode == 51 && abiertaLista == true {
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-                self.view.window?.contentViewController = controller
+                SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
                 abiertaLista = true
                 ventana = "Principal"
                 cuentaboton = botonactual
@@ -568,9 +566,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     
     @IBAction func backFunc(_ sender: NSButton) {
-        print("ES: \(view.window?.firstResponder)")
+        //print("ES: \(view.window?.firstResponder)")
         if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-            self.view.window?.contentViewController = controller
+            SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+            controller.view.window?.makeFirstResponder(controller.scrollMain)
             abiertaLista = true
             ventana = "Principal"
             cuentaboton = botonactual
@@ -1697,35 +1696,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 allTheGames[mifila!].games[mifilaJuego!].box = self.juegosXml[filajuego][23]
                 
                 
-                // Movemos fila para actualizar
-                
-                
-                
-                //                let indexSet = NSIndexSet(index: (self.juegosTableView.selectedRow + -1))
-                //                let indexSet2 = NSIndexSet(index: self.juegosTableView.selectedRow )
-                //                self.juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
-                //                self.juegosTableView.selectRowIndexes(indexSet2 as IndexSet, byExtendingSelection: false)
-                //                self.infoLabel.stringValue = "Juego ESCRAPEADO!!"
-                // when background job finished, do something in main thread
             })
             
-            
-            //}
-            
-            
-            //}
-            // when background job finished, do something in main thread
         })
-        
-        
-        
-        
-        //}
-        
-        
-        
-        
-        
         
     }
     

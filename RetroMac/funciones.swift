@@ -577,6 +577,46 @@ func escribeSistemas () {
     
 }
 
+func buscaImage (juego: String, ruta: String) -> String {
+    var tieneSnap = false
+    var miFoto = ""
+    let fileManager = FileManager.default
+    //print("MI ROMPATH: \(ruta)")
+    if ruta != "" && ruta != nil && buscarLocal == true {
+        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
+        var name = (juego as NSString).deletingPathExtension
+        if name.contains("/") {
+            let index2 = name.range(of: "/", options: .backwards)?.lowerBound
+            let substring2 = name.substring(from: index2! )
+            let result1 = String(substring2.dropFirst())
+            name = result1
+        }
+        else {
+            
+        }
+        while let element = enumerator2.nextObject() as? String {
+            
+            if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
+                if (element.hasSuffix(".png") || element.hasSuffix(".jpg") || element.hasSuffix(".jpeg") ) && !element.contains("marquee") && !element.contains("box") && !element.contains("fanart") && !element.contains("tittleshot"){
+                    tieneSnap = true
+                    miFoto = ruta + "/" + element
+                    break
+                }
+            }
+            else {
+                miFoto = ""
+                tieneSnap = false
+            }
+        }
+        
+        return miFoto
+    } else {
+        return ""
+    }
+    
+    
+}
+
 func buscaManual (juego: String, ruta: String) -> String {
     var tieneSnap = false
     var miManual = ""
@@ -787,4 +827,5 @@ func rutaARelativa (ruta: String) -> String {
     
     return rutarelativa
 }
+
 

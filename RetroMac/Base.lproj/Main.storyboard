@@ -105,7 +105,7 @@
         <!--Principal-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController title="Principal" storyboardIdentifier="HomeView" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="ViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Principal" storyboardIdentifier="HomeView" id="XfG-lQ-9wD" customClass="ViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                         <subviews>
@@ -436,7 +436,7 @@
                                 <color key="fillColor" red="0.48896628619999999" green="0.1073794439" blue="0.482855916" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <font key="titleFont" size="16" name="GB18030Bitmap"/>
                             </box>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zox-re-ViV" customClass="ScrollingTextView" customModule="RetroMac" customModuleProvider="target">
+                            <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zox-re-ViV" customClass="ScrollingTextView" customModule="RetroMac" customModuleProvider="target">
                                 <rect key="frame" x="39" y="110" width="1336" height="76"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </customView>
@@ -974,7 +974,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="LeI-Id-sQd"/>
-        <segue reference="63D-qW-YZX"/>
+        <segue reference="rNI-hX-NhJ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>

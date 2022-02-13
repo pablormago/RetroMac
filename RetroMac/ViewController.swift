@@ -54,6 +54,7 @@ var juegosaEscrapear = Double()
 var esBoB = Bool()
 var rutaTransformada = String()
 var mycontroller: GCController?
+var mainController  = NSViewController()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -61,11 +62,12 @@ class ViewController: NSViewController {
     var anchuraPantall = 0
     
     
+    
     var keyIsDown = false
     var cuentaDec = CGFloat()
-    override var acceptsFirstResponder: Bool { return true }
-    override func becomeFirstResponder() -> Bool { return true }
-    override func resignFirstResponder() -> Bool { return true }
+    //override var acceptsFirstResponder: Bool { return true }
+    //override func becomeFirstResponder() -> Bool { return true }
+    //override func resignFirstResponder() -> Bool { return true }
     
     @IBOutlet weak var scrollerText: ScrollingTextView!
     @IBOutlet weak var mainBackImage: NSImageView!
@@ -80,12 +82,12 @@ class ViewController: NSViewController {
     @IBOutlet weak var myImage: NSImageView!
     lazy var sheetViewController: NSViewController = {
         return self.storyboard!.instantiateController(withIdentifier: "ConfigView")
-            as! NSViewController
+        as! NSViewController
     }()
     
     @IBAction func openSettings(_ sender: NSButton)  {
-        self.presentAsModalWindow(sheetViewController)
-        //self.presentAsModalWindow(sheetViewController)
+        SingletonState.shared.currentViewController?.presentAsSheet(sheetViewController)
+        //self.presentAsSheet(sheetViewController)
     }
     
     
@@ -103,6 +105,10 @@ class ViewController: NSViewController {
     }
     
     
+    deinit {
+        print("Main deinit")
+       NotificationCenter.default.removeObserver(self)
+    }
     
     
     
@@ -167,9 +173,9 @@ class ViewController: NSViewController {
         self.view.window?.makeFirstResponder(self.scrollMain)
         scrollMain.wantsLayer = true
         scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
-        ObserveForGameControllers()
-       
-       
+        
+        
+        
     }
     // - MARK: fin de DidAppear
     
@@ -180,12 +186,7 @@ class ViewController: NSViewController {
         ventana = "Principal"
         print("DID LOAD")
         cuenta = 0
-        //        titulosMame = mamelista() as! [[String]]
-        //        llenaSistemasIds()
-        
-        //        if cuentaPrincipio == 0 {
-        //            cuentaJuegosEnSistemas()
-        //        }
+        mainController = self
         
         
         //view.window?.isOpaque = false
@@ -195,8 +196,7 @@ class ViewController: NSViewController {
         //print(rutaApp)
         onOff.stringValue = "SALIR"
         var totalSistemas = 0
-        totalSistemas = cuentaSistemas()
-        print(cuentaSistemas())
+        totalSistemas = allTheGames.count
         let totalAnchuraMenu = ((totalSistemas+1) * 560)
         //Parsear Sistemas
         scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
@@ -228,7 +228,7 @@ class ViewController: NSViewController {
             button.videos = consola.videos
             button.cores = consola.cores
             button.target = self
-            button.action = #selector(ViewController.selecionSistema)
+            button.action = #selector(selecionSistema)
             button.isBordered = false
             documentView.addSubview(button)
             counter += 1
@@ -238,7 +238,6 @@ class ViewController: NSViewController {
         scrollMain.documentView = documentView
         ///Fin carga desde allTheGames
         if let screen = NSScreen.main {
-            
             let rect = screen.frame
             let width = rect.size.width
             let height = rect.size.height
@@ -272,300 +271,25 @@ class ViewController: NSViewController {
         let defaults = UserDefaults.standard
         arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
         
+        startWatchingForControllers()
         self.view.window?.makeFirstResponder(self.scrollMain)
+        SingletonState.shared.myscroller = self.scrollMain
+        SingletonState.shared.currentViewController = self
+        SingletonState.shared.currentViewController!.view.window?.makeFirstResponder(SingletonState.shared.myscroller)
+        //mainController = self
     }
     
     // MARK: Final de viewDidLoad()
     
-    // MARK: Funciones de GamePad
-    func ObserveForGameControllers() {
-    NotificationCenter.default.addObserver(self, selector: #selector(connectControllers), name: NSNotification.Name.GCControllerDidConnect, object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(disconnectControllers), name: NSNotification.Name.GCControllerDidDisconnect, object: nil)
-        if #available(macOS 11.3, *) {
-            GCController.shouldMonitorBackgroundEvents = true
-        } else {
-            // Fallback on earlier versions
-        }
-    }
     
-    @objc func connectControllers() {
-        //Unpause the Game if it is currently paused
-        //self.isPaused = false
-        //Used to register the Nimbus Controllers to a specific Player Number
-        var indexNumber = 0
-        // Run through each controller currently connected to the system
-        for controller in GCController.controllers() {
-            //Check to see whether it is an extended Game Controller (Such as a Nimbus)
-            if controller.extendedGamepad != nil {
-                print ("Controller connected: \(controller.description)")
-                controller.playerIndex = GCControllerPlayerIndex.init(rawValue: indexNumber)!
-                indexNumber += 1
-                setupControllerControls(controller: controller)
-            }
-        }
-    }
     
-    @objc func disconnectControllers() {
-        // Pause the Game if a controller is disconnected ~ This is mandated by Apple
-        //self.isPaused = true
-    }
-    
-    func setupControllerControls(controller: GCController) {
-        //Function that check the controller when anything is moved or pressed on it
-        controller.extendedGamepad?.valueChangedHandler = {
-            (gamepad: GCExtendedGamepad, element: GCControllerElement) in
-            // Add movement in here for sprites of the controllers
-            self.controllerInputDetected(gamepad: gamepad, element: element, index: controller.playerIndex.rawValue)
-        }
-    }
-    
-    func controllerInputDetected(gamepad: GCExtendedGamepad, element: GCControllerElement, index: Int) {
-        if (gamepad.leftThumbstick == element)
-        {
-            if (gamepad.leftThumbstick.xAxis.value != 0)
-            {
-                print("Controller: \(index), LeftThumbstickXAxis: \(gamepad.leftThumbstick.xAxis)")
-            }
-            else if (gamepad.leftThumbstick.xAxis.value == 0)
-            {
-                // YOU CAN PUT CODE HERE TO STOP YOUR PLAYER FROM MOVING
-            }
-        }
-        // Right Thumbstick
-        if (gamepad.rightThumbstick == element)
-        {
-            if (gamepad.rightThumbstick.xAxis.value != 0)
-            {
-                print("Controller: \(index), rightThumbstickXAxis: \(gamepad.rightThumbstick.xAxis)")
-            }
-        }
-        // D-Pad
-        else if (gamepad.dpad == element)
-        {
-            if (gamepad.dpad.xAxis.value != 0)
-            {
-                print("Controller: \(index), D-PadXAxis: \(gamepad.rightThumbstick.xAxis)")
-            }
-            else if (gamepad.dpad.xAxis.value == 0)
-            {
-                // YOU CAN PUT CODE HERE TO STOP YOUR PLAYER FROM MOVING
-            }
-        }
-        // A-Button
-        else if (gamepad.buttonA == element)
-        {
-            if (gamepad.buttonA.value != 0)
-            {
-                print("Controller: \(index), A-Button Pressed!")
-                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                sistemaActual = button?.Fullname! ?? ""
-                //print(sistemaActual)
-                if Int(button!.numeroJuegos!)! > 0 {
-                    selecionSistema(button!)
-                }
-            }
-        }
-        // B-Button
-        else if (gamepad.buttonB == element)
-        {
-            if (gamepad.buttonB.value != 0)
-            {
-                print("Controller: \(index), B-Button Pressed!")
-            }
-        }
-        else if (gamepad.buttonY == element)
-        {
-            if (gamepad.buttonY.value != 0)
-            {
-                print("Controller: \(index), Y-Button Pressed!")
-            }
-        }
-        else if (gamepad.buttonX == element)
-        {
-            if (gamepad.buttonX.value != 0)
-            {
-                print("Controller: \(index), X-Button Pressed!")
-            }
-        }
-    }
-    // MARK: final de GamePad
     
     //TECLAS
-    override func keyDown(with event: NSEvent) {
-        if keyIsDown == true {
-            return
-        }
-        
-        if abiertaLista == false {
-            
-            if event.keyCode == 36  {
-                if ventana == "Principal" {
-                    //print("SPACEBAR" 49)
-                    let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                    sistemaActual = button?.Fullname! ?? ""
-                    //print(sistemaActual)
-                    if Int(button!.numeroJuegos!)! > 0 {
-                        selecionSistema(button!)
-                    }
-                    
-                }
-                
-                
-            }
-            else if event.keyCode == 124  {
-                
-                
-                if botonactual < cuantosSistemas {
-                    botonactual += 1
-                    
-                    if let screen = NSScreen.main {
-                        let rect = screen.frame
-                        let width = rect.size.width
-                        let mitadPantalla = Int (width / 2)
-                        anchuraPantall = Int(width)
-                        
-                        
-                        //print("Derecho Mover")
-                        cuentaboton = botonactual
-                        let trozoamover = (560 * botonactual) - 280
-                        let cachito = trozoamover - mitadPantalla
-                        //print(botonactual)
-                        scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                        scrollMain.isHidden = false
-                        print ("CUENTABOTON: \(cuentaboton)")
-                        print ("BOTONACTUAL: \(botonactual)")
-                        let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        
-                        backplay (tag: botonactual)
-                    }
-                }
-                
-                
-                
-            }
-            else if event.keyCode == 123 {
-                //print ("CURSOR IZQUIERDO")
-                
-                if botonactual > 1 {
-                    botonactual -= 1
-                    
-                    if let screen = NSScreen.main {
-                        let rect = screen.frame
-                        let width = rect.size.width
-                        let mitadPantalla = Int (width / 2)
-                        anchuraPantall = Int(width)
-                        cuentaboton = botonactual
-                        let trozoamover = (560 * botonactual) - 280
-                        let cachito = trozoamover - mitadPantalla
-                        //print(botonactual)
-                        scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                        scrollMain.isHidden = false
-                        print ("CUENTABOTON: \(cuentaboton)")
-                        print ("BOTONACTUAL: \(botonactual)")
-                        let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        
-                        backplay (tag: botonactual)
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        else if abiertaLista == true {
-            
-            
-            if event.keyCode == 36  {
-                if ventana == "Principal" {
-                    //print("SPACEBAR" 49)
-                    let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                    sistemaActual = button?.Fullname! ?? ""
-                    //print(sistemaActual)
-                    if Int(button!.numeroJuegos!)! > 0 {
-                        selecionSistema(button!)
-                    }
-                    
-                }
-                
-                
-                
-            }
-            else if event.keyCode == 124  {
-                //print ("CURSOR DERECHO")
-                if Int(cuentaDec) < cuantosSistemas {
-                    cuentaDec += 1
-                    //print(cuentaDec)
-                    if let screen = NSScreen.main {
-                        let rect = screen.frame
-                        let width = rect.size.width
-                        let mitadPantalla = Int (width / 2)
-                        anchuraPantall = Int(width)
-                        
-                        
-                        //print("entro")
-                        cuentaboton = botonactual
-                        let trozoamover = (560 * Int(cuentaDec)) - 280
-                        let cachito = trozoamover - mitadPantalla
-                        scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                        //                            let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                        //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
-                        let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        backplay (tag: Int(cuentaDec))
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            else if event.keyCode == 123 {
-                //print ("CURSOR IZQUIERDO")
-                if cuentaDec > 1 {
-                    cuentaDec -= 1
-                    //print(cuentaDec)
-                    if let screen = NSScreen.main {
-                        let rect = screen.frame
-                        let width = rect.size.width
-                        let mitadPantalla = Int (width / 2)
-                        anchuraPantall = Int(width)
-                        
-                        
-                        //print("entro")
-                        cuentaboton = botonactual
-                        let trozoamover = (560 * Int(cuentaDec)) - 280
-                        let cachito = trozoamover - mitadPantalla
-                        scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                        
-                        let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                        
-                        backplay (tag: Int(cuentaDec))
-                        
-                    }
-                }
-                
-                
-            }
-            
-        }
-        
-    }
     
-    
-        
-    
-
-    
-    
-    override func keyUp(with event: NSEvent) {
-        keyIsDown = false
-    }
     
     override func viewWillAppear() {
         super.viewWillAppear()
+        
         scrollMain.wantsLayer = true
         scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         //NSApplication.shared.windows.first?.styleMask.insert(.fullScreen)
@@ -616,10 +340,13 @@ class ViewController: NSViewController {
     }
     
     
-    @objc func selecionSistema(_ sender: ButtonConsolas) {
+    @objc public func selecionSistema(_ sender: ButtonConsolas) {
+        //GCController.stopWirelessControllerDiscovery()
+        //NotificationCenter.default.removeObserver(self, name: .GCControllerDidConnect, object: nil)
         if Int(sender.numeroJuegos!)! > 0 {
+            NotificationCenter.default.removeObserver(self)
             if backIsPlaying == true {
-                backPlayer.player?.pause()
+                self.backPlayer.player?.pause()
             }
             sistemaActual = sender.Fullname!
             nombresistemaactual = sender.Sistema!
@@ -631,34 +358,37 @@ class ViewController: NSViewController {
             comandoaejecutar = rutaApp
             comandoaejecutar = comandoaejecutar + sender.Comando!.replacingOccurrences(of: "%CORE%", with: rutaApp)
             botonactual = sender.tag
+            abiertaLista = true
+            cuentaPrincipio += 1
             
             if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ListaViewController {
-                abiertaLista = true
-                cuentaPrincipio += 1
-                self.view.window?.contentViewController = controller
+                print("ENTRO?")
+                SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+                
             }
         }
         
     }
+    
+    
+    
     func backplay (tag: Int) {
-        let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
-        //backIsPlaying = true
-        if button?.videos?.count ?? 0 > 0 {
-            let miVideo = button?.videos?.randomElement()
-            if miVideo != "" {
-                //print("Mivideo: \(miVideo)")
-                let videoURL = URL(fileURLWithPath: miVideo!)
-                let player2 = AVPlayer(url: videoURL)
-                backPlayer.player = player2
-                backPlayer.player?.play()
+                let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
                 backIsPlaying = true
-                player2.actionAtItemEnd = .none
-                NotificationCenter.default.addObserver(self,
-                                                       selector: #selector(playerItemDidReachEnd(notification:)),
-                                                       name: .AVPlayerItemDidPlayToEndTime,
-                                                       object: player2.currentItem)
-            }
-        }
+                if button?.videos?.count ?? 0 > 0 {
+                    let miVideo = button?.videos?.randomElement()
+                    if miVideo != "" {
+                        //print("Mivideo: \(miVideo)")
+                        let videoURL = URL(fileURLWithPath: miVideo!)
+                        let player2 = AVPlayer(url: videoURL)
+                        backPlayer.player = player2
+                        backPlayer.player?.play()
+                        backIsPlaying = true
+                        player2.actionAtItemEnd = .none
+                        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
+                        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
+                    }
+                }
         
         
         
@@ -674,152 +404,12 @@ class ViewController: NSViewController {
 }
 /// FINAL DE LA CLASE
 
-func crearGameListInicio (ruta: String){
-    var counter = 0
-    var nuevoGamelist = ruta + "/gamelist.xml"
-    let root = XMLElement(name: "gameList")
-    let xml = XMLDocument(rootElement: root)
-    
-    //print(xml.xmlString)
-    for extensiones in systemextensions {
-        
-        let fileManager = FileManager.default
-        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
-        while let element = enumerator.nextObject() as? String {
-            if element.hasSuffix(extensiones) { // checks the extension
-                counter += 1
-                let gameNode = XMLElement(name: "game")
-                root.addChild(gameNode)
-                let pathNode = XMLElement(name: "path", stringValue: rompath + "/" + element)
-                let filename = element
-                let name = (filename as NSString).deletingPathExtension
-                let nameNode = XMLElement(name: "name", stringValue: name)
-                let descNode = XMLElement(name: "desc")
-                let mapNode = XMLElement(name: "map")
-                let manualNode = XMLElement(name: "manual")
-                let newsNode = XMLElement(name: "news")
-                let tittleshotNode = XMLElement(name: "tittleshot")
-                let fanartNode = XMLElement(name: "fanart")
-                let thumbnailNode = XMLElement(name: "thumbnail")
-                let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: element, ruta: ruta) )
-                let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: element,ruta: ruta) )
-                let marqueeNode = XMLElement(name: "marquee")
-                let releasedateNode = XMLElement(name: "releasedate")
-                let developerNode = XMLElement(name: "developer")
-                let publisherNode = XMLElement(name: "publisher")
-                let genreNode = XMLElement(name: "genre")
-                let langNode = XMLElement(name: "lang")
-                let playersNode = XMLElement(name: "players")
-                let ratingNode = XMLElement(name: "rating")
-                let favNode = XMLElement(name: "fav")
-                let boxNode = XMLElement(name: "box")
-                ///AÑADIMOS LOS NODOS
-                gameNode.addChild(pathNode)
-                gameNode.addChild(nameNode)
-                gameNode.addChild(descNode)
-                gameNode.addChild(mapNode)
-                gameNode.addChild(manualNode)
-                gameNode.addChild(newsNode)
-                gameNode.addChild(tittleshotNode)
-                gameNode.addChild(fanartNode)
-                gameNode.addChild(thumbnailNode)
-                gameNode.addChild(imageNode)
-                gameNode.addChild(videoNode)
-                gameNode.addChild(marqueeNode)
-                gameNode.addChild(boxNode)
-                gameNode.addChild(releasedateNode)
-                gameNode.addChild(developerNode)
-                gameNode.addChild(publisherNode)
-                gameNode.addChild(genreNode)
-                gameNode.addChild(langNode)
-                gameNode.addChild(playersNode)
-                gameNode.addChild(ratingNode)
-                gameNode.addChild(favNode)
-                
-                
-            }
-        }
-        
-    }
-    let xmlData = xml.xmlData(options: .nodePrettyPrint)
-    
-    print("TOTAL: \(counter) Juegos")
-    do{
-        try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
-    }catch {}
-    
-    
-}
 
 
 
 
-func cuentaSistemas() -> NSInteger {
-    //print("ENTRO A CONTAR")
-    let pathXMLinterno = Bundle.main.url(forResource: "es_systems_mac", withExtension: "cfg")
-    sistemasTengo = []
-    tieneRoms = false
-    if let pathXMLinterno = pathXMLinterno, let data = try? Data(contentsOf: pathXMLinterno as URL)
-        
-    {
-        let parser = BookParser(data: data)
-        
-        for book in parser.books
-        {
-            let miruta = rutaApp + book.path /// Es lo mismo que ROMPATH
-            ///Comprobar si ha gamelist.xml
-            let fileDoesExist = FileManager.default.fileExists(atPath: miruta + "/gamelist.xml")
-            if fileDoesExist {
-                ///Si existe, lo añadimos al array de sistemas
-                sistemasTengo.append(book.name)
-            }else {
-                ///Si no existe hay que comprobar si hay juegos, y crear el xml en caso de que lo haya
-                
-                var encuentra =  false
-                var isDir:ObjCBool = true
-                if FileManager.default.fileExists(atPath: miruta, isDirectory: &isDir) {
-                    //para cada book.extensiones
-                    var extensionescuenta = [String]()
-                    extensionescuenta = book.extensiones.components(separatedBy: " ")
-                    for extensiones in extensionescuenta {
-                        
-                        let fileManager = FileManager.default
-                        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: miruta as String)!
-                        while let element = enumerator.nextObject() as? String {
-                            if element.hasSuffix(extensiones) { // checks the extension
-                                //print(element)
-                                encuentra = true
-                                break
-                            }
-                        }
-                        if encuentra == true {
-                            break
-                        }else{
-                            encuentra = false
-                        }
-                    }
-                    
-                    if encuentra == true {
-                        ///Creamos el xml y añadimos el sistema al array porque ha encontrado ROMS
-                        //print("ROMS ENCONTRADAS")
-                        systemextensions = extensionescuenta
-                        rompath = miruta
-                        //print(systemextensions)
-                        crearGameListInicio(ruta: miruta)
-                        sistemasTengo.append(book.name)
-                    }else {
-                        
-                    }
-                }
-            }
-            
-            
-        }
-    }
-    
-    sistemasTengo.sort()
-    return sistemasTengo.count
-}
+
+
 fileprivate func directoryExistsAtPath(_ path: String) -> Bool {
     var isdirectory : ObjCBool = true
     let exists = FileManager.default.fileExists(atPath: path, isDirectory:  &isdirectory)
@@ -880,52 +470,6 @@ func buscaVideo (juego: String, ruta: String) ->String {
     
     
 }
-
-func buscaImage (juego: String, ruta: String) -> String {
-    var tieneSnap = false
-    var miFoto = ""
-    let fileManager = FileManager.default
-    //print("MI ROMPATH: \(ruta)")
-    if ruta != "" && ruta != nil && buscarLocal == true {
-        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
-        var name = (juego as NSString).deletingPathExtension
-        if name.contains("/") {
-            let index2 = name.range(of: "/", options: .backwards)?.lowerBound
-            let substring2 = name.substring(from: index2! )
-            let result1 = String(substring2.dropFirst())
-            name = result1
-        }
-        else {
-            
-        }
-        while let element = enumerator2.nextObject() as? String {
-            
-            if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
-                if (element.hasSuffix(".png") || element.hasSuffix(".jpg") || element.hasSuffix(".jpeg") ) && !element.contains("marquee") && !element.contains("box") && !element.contains("fanart") && !element.contains("tittleshot"){
-                    tieneSnap = true
-                    miFoto = ruta + "/" + element
-                    break
-                }
-            }
-            else {
-                miFoto = ""
-                tieneSnap = false
-            }
-        }
-        
-        return miFoto
-    } else {
-        return ""
-    }
-    
-    
-}
-
-
-
-
-
-
 
 
 class ButtonConsolas: NSButton {

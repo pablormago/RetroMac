@@ -15,6 +15,9 @@
 		272A6EA9278F5EFE005B0930 /* retro2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 272A6EA7278F5EFE005B0930 /* retro2.jpeg */; };
 		2748C058278620FA002D633B /* mamelist.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2748C057278620FA002D633B /* mamelist.txt */; };
 		274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FEB152773321C007CE357 /* ScrollingTextView.swift */; };
+		27665B9D27B5A7F100262025 /* singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27665B9C27B5A7F100262025 /* singleton.swift */; };
+		27665BA527B6EE4400262025 /* mainScreenGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27665BA427B6EE4400262025 /* mainScreenGameController.swift */; };
+		27665BA727B6EEB100262025 /* mainScreenKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27665BA627B6EEB100262025 /* mainScreenKeyboard.swift */; };
 		27670276277E127900E43E7D /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27670275277E127900E43E7D /* ConfigViewController.swift */; };
 		2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801A2757DCBE00414985 /* AppDelegate.swift */; };
 		2789801D2757DCBE00414985 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789801C2757DCBE00414985 /* ViewController.swift */; };
@@ -64,6 +67,9 @@
 		272A6EA7278F5EFE005B0930 /* retro2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = retro2.jpeg; sourceTree = "<group>"; };
 		2748C057278620FA002D633B /* mamelist.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mamelist.txt; sourceTree = "<group>"; };
 		274FEB152773321C007CE357 /* ScrollingTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollingTextView.swift; sourceTree = "<group>"; };
+		27665B9C27B5A7F100262025 /* singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = singleton.swift; sourceTree = "<group>"; };
+		27665BA427B6EE4400262025 /* mainScreenGameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainScreenGameController.swift; sourceTree = "<group>"; };
+		27665BA627B6EEB100262025 /* mainScreenKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainScreenKeyboard.swift; sourceTree = "<group>"; };
 		27670275277E127900E43E7D /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		278980172757DCBE00414985 /* RetroMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RetroMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2789801A2757DCBE00414985 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -118,6 +124,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		27665BA027B6ED0B00262025 /* MainScreen */ = {
+			isa = PBXGroup;
+			children = (
+				27665BA427B6EE4400262025 /* mainScreenGameController.swift */,
+				27665BA627B6EEB100262025 /* mainScreenKeyboard.swift */,
+			);
+			path = MainScreen;
+			sourceTree = "<group>";
+		};
 		2789800E2757DCBE00414985 = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +154,8 @@
 		278980192757DCBE00414985 /* RetroMac */ = {
 			isa = PBXGroup;
 			children = (
+				27665BA027B6ED0B00262025 /* MainScreen */,
+				27665B9C27B5A7F100262025 /* singleton.swift */,
 				2789801A2757DCBE00414985 /* AppDelegate.swift */,
 				279FBD51277350A700CD5586 /* Arrows */,
 				2789801E2757DCC000414985 /* Assets.xcassets */,
@@ -327,9 +344,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27665BA527B6EE4400262025 /* mainScreenGameController.swift in Sources */,
 				271417972762516C009CA02D /* ListaViewController.swift in Sources */,
 				27670276277E127900E43E7D /* ConfigViewController.swift in Sources */,
 				274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */,
+				27665B9D27B5A7F100262025 /* singleton.swift in Sources */,
+				27665BA727B6EEB100262025 /* mainScreenKeyboard.swift in Sources */,
 				2789801D2757DCBE00414985 /* ViewController.swift in Sources */,
 				272A6EA5278F4417005B0930 /* SplashController.swift in Sources */,
 				27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */,

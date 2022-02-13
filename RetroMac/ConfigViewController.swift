@@ -27,22 +27,23 @@ class ConfigViewController: NSViewController {
             estadoLocal = 0
         }
         defaults.set(estadoLocal, forKey: "LocalMedia")
-        
         self.dismiss(self)
+        
     }
     
     @IBAction func salir(_ sender: Any) {
         
-        self.dismiss(self)
+        
        
         //print((self.view.window?.attachedSheet)
         //self.view.window?.endSheet(((self.view.window?.attachedSheet)!))
-        
+        self.dismiss(self)
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let defaults = UserDefaults.standard
         userTXT.stringValue = defaults.string(forKey: "SSUser") ?? ""
         passwordTxt.stringValue = defaults.string(forKey: "SSPassword") ?? ""
@@ -53,6 +54,7 @@ class ConfigViewController: NSViewController {
             localSwitch.state = NSControl.StateValue.off
         }
         // Do view setup here.
+        //SingletonState.shared.currentViewController = self
     }
     
 }
