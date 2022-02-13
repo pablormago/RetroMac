@@ -112,15 +112,16 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     let contextMenu = NSMenu()
     var keyIsDown = false
     
-    deinit {
-        print("Lista deinit")
-       NotificationCenter.default.removeObserver(self)
-    }
+//    deinit {
+//        print("Lista deinit")
+//       NotificationCenter.default.removeObserver(self)
+//    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         infoLabel.isHidden = true
+        SingletonState.shared.mytable = self.juegosTableView
         print("LISTA LOAD")
         view.wantsLayer = true
         // change the background color of the layer
@@ -181,9 +182,17 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             }
         }
         
-        print("ROMPATH: \(rompath)")
+        //print("ROMPATH: \(rompath)")
         rutaTransformada = rompath
         SingletonState.shared.currentViewController? = self
+        print("Tengo: \(GCController.controllers().count) Mandos")
+        SingletonState.shared.myJuegosXml = juegosXml
+        SingletonState.shared.mySnapPlayer = self.snapPlayer
+        if GCController.controllers().count > 0 {
+            for gamecontroller in GCController.controllers() {
+                //add2(gamecontroller)
+            }
+        }
         ///Nombres cargados
         
     }
@@ -484,10 +493,6 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }else if event.keyCode == 53 && abiertaLista == true {
             
             
-//            if sistemaActual != "Favoritos" {
-//                infoLabel.stringValue = "Buscando Juego..."
-//                self.buscaJuego()
-//            }
             popButton.performClick(nil)
             
         }else if event.keyCode == 49 && abiertaLista == true {
@@ -567,6 +572,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     @IBAction func backFunc(_ sender: NSButton) {
         //print("ES: \(view.window?.firstResponder)")
+        NotificationCenter.default.removeObserver(self)
+        
         if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
             SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
             controller.view.window?.makeFirstResponder(controller.scrollMain)
@@ -584,8 +591,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         NSWorkspace.shared.openFile(miManual)
     }
     
-    @objc private func onItemClicked() {
-        let numero = (juegosTableView.selectedRow)
+    @objc public func onItemClicked() {
+        let numero = (self.juegosTableView.selectedRow)
         let romXml = "\"\(juegosXml[numero][0])\""
         var rompathabuscar = juegosXml[numero][0]
         var comandojuego = juegosXml[numero][20]

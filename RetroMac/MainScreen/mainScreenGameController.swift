@@ -9,7 +9,9 @@
 import Foundation
 import Cocoa
 import GameController
-
+import Commands
+import AVKit
+import AVFoundation
 extension ViewController {
  
         // MARK: GamePad
@@ -68,6 +70,9 @@ extension ViewController {
             //Configuracão do direcional para baixo
             gamepad.dpad.down.pressedChangedHandler = {(button, value, pressed) in
                 print("ExtendedGamepad - Down")
+                if pressed == true {
+                    
+                }
                 
              }
             
@@ -107,25 +112,39 @@ extension ViewController {
                 //Configuração do botão A
                 gamepad.buttonA.pressedChangedHandler = {(button, value, pressed) in
                     print( "ExtendedGamepad - A")
-                    if cuentaPrincipio  > 0 && ventana == "Principal" {
-                        print("ENTER LISTA TRUE")
-                        let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
-                        sistemaActual = button?.Fullname! ?? ""
-                        //print(sistemaActual)
-                        if Int(button!.numeroJuegos!)! > 0 {
-                            self.selecionSistema(button!)
-                        }
-                        
-                    } else {
-                        if ventana == "Principal" {
-                            print("ENTER LISTA FALSE")
-                            let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                    if pressed == true {
+                        if cuentaPrincipio  > 0 && ventana == "Principal" {
+                            print("ENTER LISTA TRUE")
+                            let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
                             sistemaActual = button?.Fullname! ?? ""
+                            //print(sistemaActual)
+                            if backIsPlaying == true {
+                                self.backPlayer.player?.pause()
+                                SingletonState.shared.myBackPlayer?.player?.pause()
+                            }
                             if Int(button!.numeroJuegos!)! > 0 {
                                 self.selecionSistema(button!)
                             }
+                            
+                        } else {
+                            if ventana == "Principal" {
+                                print("ENTER LISTA FALSE")
+                                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                                sistemaActual = button?.Fullname! ?? ""
+                                if backIsPlaying == true {
+                                    self.backPlayer.player?.pause()
+                                    SingletonState.shared.myBackPlayer?.player?.pause()
+                                }
+                                if Int(button!.numeroJuegos!)! > 0 {
+                                    self.selecionSistema(button!)
+                                }
+                            }
+                        }
+                        if ventana == "Lista" {
+                            self.launchGame()
                         }
                     }
+                    
                 }
                 
                 //Configuração do botão B
@@ -141,6 +160,9 @@ extension ViewController {
                 //Configuração do botão Y
                 gamepad.buttonY.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - y")
+                    if pressed == true {
+                        self.backToMain()
+                    }
                 }
                 
             }
@@ -272,8 +294,45 @@ extension ViewController {
             }
         }
         
+    public func launchGame(){
+        let numero = (SingletonState.shared.mytable?.selectedRow)
+        let romXml = "\"\(SingletonState.shared.myJuegosXml![numero!][0])\""
+        var rompathabuscar = SingletonState.shared.myJuegosXml![numero!][0]
+        var comandojuego = SingletonState.shared.myJuegosXml![numero!][20]
+        var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
+        if fila != nil {
+            comandojuego = arrayGamesCores[fila!][1]
+        }
         
+        var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+        //print(micomando.replacingOccurrences(of: "%ROM%", with: romXml))
+        var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
+        if playingVideo == true {
+            //snapPlayer.player?.pause()
+            SingletonState.shared.mySnapPlayer?.player?.pause()
+        }
+        print(comando)
+        Commands.Bash.system("\(comando)")
+        comando=""
         
+        let indexSet = NSIndexSet(index: (SingletonState.shared.mytable!.selectedRow + -1))
+        let indexSet2 = NSIndexSet(index: SingletonState.shared.mytable!.selectedRow )
+        SingletonState.shared.mytable!.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+        SingletonState.shared.mytable!.selectRowIndexes(indexSet2 as IndexSet, byExtendingSelection: false)
+    }
+    
+    public func backToMain (){
+        if ventana == "Lista" {
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+                controller.view.window?.makeFirstResponder(controller.scrollMain)
+                SingletonState.shared.mySnapPlayer?.player?.pause()
+                abiertaLista = true
+                ventana = "Principal"
+                cuentaboton = botonactual
+            }
+        }
+    }
     
 
 }

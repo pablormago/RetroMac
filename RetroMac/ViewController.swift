@@ -53,7 +53,7 @@ var buscarLocal = Bool()
 var juegosaEscrapear = Double()
 var esBoB = Bool()
 var rutaTransformada = String()
-var mycontroller: GCController?
+var myGameController: GCController?
 var mainController  = NSViewController()
 
 class ViewController: NSViewController {
@@ -105,10 +105,10 @@ class ViewController: NSViewController {
     }
     
     
-    deinit {
-        print("Main deinit")
-       NotificationCenter.default.removeObserver(self)
-    }
+//    deinit {
+//        print("Main deinit")
+//       NotificationCenter.default.removeObserver(self)
+//    }
     
     
     
@@ -276,6 +276,7 @@ class ViewController: NSViewController {
         SingletonState.shared.myscroller = self.scrollMain
         SingletonState.shared.currentViewController = self
         SingletonState.shared.currentViewController!.view.window?.makeFirstResponder(SingletonState.shared.myscroller)
+        SingletonState.shared.myBackPlayer = self.backPlayer
         //mainController = self
     }
     
@@ -346,7 +347,8 @@ class ViewController: NSViewController {
         if Int(sender.numeroJuegos!)! > 0 {
             NotificationCenter.default.removeObserver(self)
             if backIsPlaying == true {
-                self.backPlayer.player?.pause()
+                SingletonState.shared.myBackPlayer?.player?.pause()
+                backPlayer.player?.pause()
             }
             sistemaActual = sender.Fullname!
             nombresistemaactual = sender.Sistema!
@@ -381,8 +383,8 @@ class ViewController: NSViewController {
                         //print("Mivideo: \(miVideo)")
                         let videoURL = URL(fileURLWithPath: miVideo!)
                         let player2 = AVPlayer(url: videoURL)
-                        backPlayer.player = player2
-                        backPlayer.player?.play()
+                        SingletonState.shared.myBackPlayer?.player = player2
+                        SingletonState.shared.myBackPlayer?.player?.play()
                         backIsPlaying = true
                         player2.actionAtItemEnd = .none
                         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
