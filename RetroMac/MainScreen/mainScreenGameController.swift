@@ -21,12 +21,12 @@ extension ViewController {
             let ctr = NotificationCenter.default
             ctr.addObserver(forName: .GCControllerDidConnect, object: nil, queue: .main) {[weak self] note in
                 if let ctrl = note.object as? GCController {
-                    self!.add(ctrl)
+                    self?.add(ctrl)
                 }
             }
             ctr.addObserver(forName: .GCControllerDidDisconnect, object: nil, queue: .main) {[weak self] note in
                 if let ctrl = note.object as? GCController {
-                    self!.remove(ctrl)
+                    self?.remove(ctrl)
                 }
             }
             // and kick off discovery
@@ -63,6 +63,10 @@ extension ViewController {
             gamepad.dpad.up.pressedChangedHandler = {(button, value, pressed) in
                 if pressed == true {
                     print("ExtendedGamepad - Up")
+                    
+                    if ventana == "Lista" {
+                        self.prevGame ()
+                    }
                 }
                 
             }
@@ -71,6 +75,9 @@ extension ViewController {
             gamepad.dpad.down.pressedChangedHandler = {(button, value, pressed) in
                 print("ExtendedGamepad - Down")
                 if pressed == true {
+                    if ventana == "Lista" {
+                        self.nextGame()
+                    }
                     
                 }
                 
@@ -204,53 +211,53 @@ extension ViewController {
             
         }
         public func masSistema() {
-            if Int(cuentaDec) < cuantosSistemas {
-                cuentaDec += 1
-                //print(cuentaDec)
+            if botonactual < cuantosSistemas {
+                botonactual += 1
+                
                 if let screen = NSScreen.main {
                     let rect = screen.frame
                     let width = rect.size.width
                     let mitadPantalla = Int (width / 2)
                     anchuraPantall = Int(width)
-                    
-                    
-                    //print("entro")
                     cuentaboton = botonactual
-                    let trozoamover = (560 * Int(cuentaDec)) - 280
+                    let trozoamover = (560 * botonactual) - 280
                     let cachito = trozoamover - mitadPantalla
+                    //print(botonactual)
                     scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                    let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
+                    scrollMain.isHidden = false
+                    print ("CUENTABOTON: \(cuentaboton)")
+                    print ("BOTONACTUAL: \(botonactual)")
+                    let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                     sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                    backplay (tag: Int(cuentaDec))
                     
-                    
+                    backplay (tag: botonactual)
                 }
             }
         }
         
         public func menosSistema(){
-            if cuentaDec > 1 {
-                cuentaDec -= 1
-                //print(cuentaDec)
+            if botonactual > 1 {
+                botonactual -= 1
+                
                 if let screen = NSScreen.main {
                     let rect = screen.frame
                     let width = rect.size.width
                     let mitadPantalla = Int (width / 2)
                     anchuraPantall = Int(width)
-                    
-                    
-                    //print("entro")
                     cuentaboton = botonactual
-                    let trozoamover = (560 * Int(cuentaDec)) - 280
+                    let trozoamover = (560 * botonactual) - 280
                     let cachito = trozoamover - mitadPantalla
+                    //print(botonactual)
                     scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                    
-                    let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
+                    scrollMain.isHidden = false
+                    print ("CUENTABOTON: \(cuentaboton)")
+                    print ("BOTONACTUAL: \(botonactual)")
+                    let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
                     sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
                     
-                    backplay (tag: Int(cuentaDec))
-                    
+                    backplay (tag: botonactual)
                 }
+                
             }
         }
         
@@ -323,6 +330,7 @@ extension ViewController {
     
     public func backToMain (){
         if ventana == "Lista" {
+            cuentaboton = botonactual
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
                 SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
                 controller.view.window?.makeFirstResponder(controller.scrollMain)
@@ -331,6 +339,27 @@ extension ViewController {
                 ventana = "Principal"
                 cuentaboton = botonactual
             }
+        }
+    }
+    
+    public func nextGame () {
+        let numero = Int((SingletonState.shared.mytable!.selectedRow))
+        
+        if numero < (SingletonState.shared.myJuegosXml!.count) {
+            
+            let indexSet = NSIndexSet(index: (SingletonState.shared.mytable!.selectedRow + 1))
+            SingletonState.shared.mytable!.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+            SingletonState.shared.mytable?.scrollRowToVisible(numero + 1)
+        }
+    }
+    
+    public func prevGame () {
+        var numero = Int((SingletonState.shared.mytable!.selectedRow))
+        
+        if numero > 0 {
+            let indexSet = NSIndexSet(index: (SingletonState.shared.mytable!.selectedRow - 1))
+            SingletonState.shared.mytable!.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+            SingletonState.shared.mytable?.scrollRowToVisible(numero - 1)
         }
     }
     

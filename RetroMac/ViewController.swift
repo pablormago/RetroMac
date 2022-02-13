@@ -236,6 +236,7 @@ class ViewController: NSViewController {
         cuantosSistemas = counter
         ventana = "Principal"
         scrollMain.documentView = documentView
+        SingletonState.shared.myBackPlayer = self.backPlayer
         ///Fin carga desde allTheGames
         if let screen = NSScreen.main {
             let rect = screen.frame
@@ -276,7 +277,7 @@ class ViewController: NSViewController {
         SingletonState.shared.myscroller = self.scrollMain
         SingletonState.shared.currentViewController = self
         SingletonState.shared.currentViewController!.view.window?.makeFirstResponder(SingletonState.shared.myscroller)
-        SingletonState.shared.myBackPlayer = self.backPlayer
+        
         //mainController = self
     }
     

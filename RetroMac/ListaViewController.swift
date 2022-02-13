@@ -187,12 +187,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         SingletonState.shared.currentViewController? = self
         print("Tengo: \(GCController.controllers().count) Mandos")
         SingletonState.shared.myJuegosXml = juegosXml
-        SingletonState.shared.mySnapPlayer = self.snapPlayer
-        if GCController.controllers().count > 0 {
-            for gamecontroller in GCController.controllers() {
-                //add2(gamecontroller)
-            }
-        }
+        
+        
         ///Nombres cargados
         
     }
@@ -406,7 +402,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             }
         }
     }
-    
+    override func viewWillDisappear() {
+        snapPlayer.player?.pause()
+    }
     
     
     override func viewDidAppear() {
@@ -449,7 +447,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         snapPlayer.layer!.shadowRadius = 20
         //setupMenu2()
         self.juegosTableView.becomeFirstResponder()
-        
+        SingletonState.shared.mySnapPlayer = self.snapPlayer
         
         //snapPlayer.layer!.masksToBounds = true
         // *** /FullScreen ***
@@ -483,7 +481,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
         else if event.keyCode == 51 && abiertaLista == true {
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                if playingVideo == true {
+                    
+                }
+                SingletonState.shared.mySnapPlayer?.player?.pause()
                 SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+                snapPlayer.player?.pause()
                 abiertaLista = true
                 ventana = "Principal"
                 cuentaboton = botonactual
@@ -577,6 +580,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
             SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
             controller.view.window?.makeFirstResponder(controller.scrollMain)
+            snapPlayer.player?.pause()
             abiertaLista = true
             ventana = "Principal"
             cuentaboton = botonactual
@@ -605,6 +609,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         //print(micomando.replacingOccurrences(of: "%ROM%", with: romXml))
         var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
         if playingVideo == true {
+            SingletonState.shared.mySnapPlayer?.player?.pause()
             snapPlayer.player?.pause()
         }
         print(comando)
@@ -718,6 +723,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     @objc func buscaJuego(){
         if playingVideo == true {
+            SingletonState.shared.mySnapPlayer?.player?.pause()
             snapPlayer.player?.pause()
         }
         infoLabel.isHidden = false
@@ -1713,6 +1719,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     func buscaJuegoS(numerojuego: Int){
         if playingVideo == true {
+            SingletonState.shared.mySnapPlayer?.player?.pause()
             snapPlayer.player?.pause()
         }
         
