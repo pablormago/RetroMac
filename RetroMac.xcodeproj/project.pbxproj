@@ -146,10 +146,10 @@
 		2789800E2757DCBE00414985 = {
 			isa = PBXGroup;
 			children = (
-				278980192757DCBE00414985 /* RetroMac */,
-				278980182757DCBE00414985 /* Products */,
-				B4F8AD097037BB2A5D747E55 /* Pods */,
 				172E95A680083F85F8FDBC1D /* Frameworks */,
+				B4F8AD097037BB2A5D747E55 /* Pods */,
+				278980182757DCBE00414985 /* Products */,
+				278980192757DCBE00414985 /* RetroMac */,
 			);
 			sourceTree = "<group>";
 		};

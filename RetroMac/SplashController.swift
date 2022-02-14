@@ -19,8 +19,11 @@ class SplashController: NSViewController {
         let path2 =  rutaApp2 +  "/BOBwin.exe"
         let fileDoesExist = FileManager.default.fileExists(atPath: path2)
         print("Existe")
+        var pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
         if fileDoesExist {
             esBoB = true
+            let imagen = NSImage(contentsOf: pathLogo!)!
+            botonFondo.image = imagen
         }else {
             esBoB = false
         }

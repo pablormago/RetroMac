@@ -187,7 +187,7 @@ class ViewController: NSViewController {
         print("DID LOAD")
         cuenta = 0
         mainController = self
-        
+        SingletonState.shared.mySystemLabel = sistemaLabel
         
         //view.window?.isOpaque = false
         //view.window?.backgroundColor = NSColor (red: 1, green: 0.5, blue: 0.5, alpha: 0.5)

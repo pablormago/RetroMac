@@ -12,4 +12,5 @@ class SingletonState {
     var myJuegosXml: [[String]]?
     var mySnapPlayer : AVPlayerView?
     var myBackPlayer: AVPlayerView?
+    var mySystemLabel: NSTextField?
 }
