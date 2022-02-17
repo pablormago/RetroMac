@@ -279,7 +279,7 @@ class ViewController: NSViewController {
         SingletonState.shared.currentViewController = self
         SingletonState.shared.currentViewController!.view.window?.makeFirstResponder(SingletonState.shared.myscroller)
         
-        //writeRetroArchConfig ()
+        //writeRetroArchConfig (param: "input_overlay_aspect_adjust_landscape" , value: "0.130000")
         //mainController = self
     }
     

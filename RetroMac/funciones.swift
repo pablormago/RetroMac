@@ -888,9 +888,14 @@ func readRetroArchConfig () {
         // for debugging, can print it
         //print(lineAsString)
         let myparams = lineAsString.split(separator: "=")
-        let myparam1 = String(myparams[0]).replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\"", with: "")
-        let myparam2 = String(myparams[1]).replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\"", with: "")
-        let arrayLine = [myparam1 , myparam2]
+        var myparam1 = String((myparams[0]).replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\"", with: "")).dropLast()
+        let myparam2 = String((myparams[1]).replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\"", with: "")).dropFirst()
+        var p1 = String()
+        var p2 = String()
+        p1 = String(myparam1)
+        p2 = String(myparam2)
+        let arrayLine = [p1 , p2]
+        //print("Parametro: \(p1) - Valor: \(p2)")
         retroArchConfig.append(arrayLine)
         
         // updates number of bytes read, for the next iteration
@@ -901,13 +906,16 @@ func readRetroArchConfig () {
 }
 
 func writeRetroArchConfig (param: String, value: String) {
-    
+    //"input_overlay_aspect_adjust_landscape = 0.130000"
     let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
     retroArchConfig[mifila!][1] = value
     var mytext = String()
+    mytext = ""
     for line in retroArchConfig {
-        mytext = mytext + line[0] + " = \"" + line[1] + "\" \n"
+        mytext = mytext + line[0] + " = \"" + line[1] + "\"\n"
+        
     }
+    //print(mytext)
     let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
     let fileUrl = home?.appendingPathComponent("RetroArch/config/retroarch.cfg")
     try! mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
@@ -917,38 +925,30 @@ func writeRetroArchConfig (param: String, value: String) {
 
 func gameOverlay(game: String) {
     
-    //game tiene que ser la ruta al overlay, que es el nombre del archivo.png
-    
     let index2 = game.range(of: "/", options: .backwards)?.lowerBound
     let substring2 = game.substring(from: index2! )
     let result1 = String(substring2.dropFirst())
     let solonombre =  (result1 as NSString).deletingPathExtension
     let gamename = solonombre
-    
-    
-    print("JUEGO \(gamename)")
     var miruta = rutaApp + "/decorations/"
     let fileManager = FileManager.default
     let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: miruta as String)!
     var rutaoverlay = String()
     while let element = enumerator.nextObject() as? String {
-        //print(element)
         if element.contains(gamename + ".png") {
             rutaoverlay = miruta + element
             break
         }
-    
     }
-    print(rutaoverlay)
-    
     var myOverlayGame = "overlays = 1" + "\n"
     myOverlayGame = myOverlayGame + "overlay0_overlay = " + "\"\(rutaoverlay)\" \n"
     myOverlayGame = myOverlayGame + "overlay0_full_screen = true" + "\n"
     myOverlayGame = myOverlayGame + "overlay0_descs = 0"
+    
     
     let path2 = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
     let url2 = NSURL(fileURLWithPath: path2)
     let pathComponent = url2.appendingPathComponent("RetroMac/custom_overlay.cfg")
     let filePath = pathComponent?.path
     try! myOverlayGame.write(to: pathComponent!, atomically: false, encoding: .utf8)
-}
+}   
