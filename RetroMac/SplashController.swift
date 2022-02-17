@@ -160,6 +160,7 @@ class SplashController: NSViewController {
         DispatchQueue.background(background: {
             titulosMame = mamelista() as! [[String]]
             llenaSistemasIds()
+            readRetroArchConfig ()
             self.cuentaJuegosEnSistemas()
         }, completion:{
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {

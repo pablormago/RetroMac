@@ -55,6 +55,7 @@ var esBoB = Bool()
 var rutaTransformada = String()
 var myGameController: GCController?
 var mainController  = NSViewController()
+var retroArchConfig = [[String]]()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -278,6 +279,7 @@ class ViewController: NSViewController {
         SingletonState.shared.currentViewController = self
         SingletonState.shared.currentViewController!.view.window?.makeFirstResponder(SingletonState.shared.myscroller)
         
+        //writeRetroArchConfig ()
         //mainController = self
     }
     

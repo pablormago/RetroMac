@@ -828,4 +828,127 @@ func rutaARelativa (ruta: String) -> String {
     return rutarelativa
 }
 
+func readRetroArchConfig () {
+    let applicationSupportFolderURL = try! (FileManager.default.urls(for: .applicationSupportDirectory,
+                                                                        in: .userDomainMask)).first
+    let retroarchfolder = applicationSupportFolderURL?.appendingPathComponent("RetroArch/config/retroarch.cfg")
+    //    let kk = retroarchfolder?.path
+    //
+    //        do {
+    //        let data = try String(contentsOf: retroarchfolder!, encoding: .utf8)
+    //            let myStrings = data.components(separatedBy: .newlines)
+    //            print(myStrings)
+    //        } catch {
+    //            print(error)
+    //        }
+    //
+    let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
+    
+    // add a filename
+    let fileUrl = home?.appendingPathComponent("RetroArch/config/retroarch.cfg")
+    
+    
+    // make sure the file exists
+    guard FileManager.default.fileExists(atPath: (fileUrl?.path)!) else {
+        preconditionFailure("file expected at \(fileUrl?.absoluteString) is missing")
+    }
+    
+    // open the file for reading
+    // note: user should be prompted the first time to allow reading from this location
+    guard let filePointer:UnsafeMutablePointer<FILE> = fopen(fileUrl?.path,"r") else {
+        preconditionFailure("Could not open file at \(fileUrl?.absoluteString)")
+    }
+    
+    // a pointer to a null-terminated, UTF-8 encoded sequence of bytes
+    var lineByteArrayPointer: UnsafeMutablePointer<CChar>? = nil
+    
+    // see the official Swift documentation for more information on the `defer` statement
+    // https://docs.swift.org/swift-book/ReferenceManual/Statements.html#grammar_defer-statement
+    defer {
+        // remember to close the file when done
+        fclose(filePointer)
+        
+        // The buffer should be freed by even if getline() failed.
+        lineByteArrayPointer?.deallocate()
+    }
+    
+    // the smallest multiple of 16 that will fit the byte array for this line
+    var lineCap: Int = 0
+    
+    // initial iteration
+    var bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
+    
+    
+    while (bytesRead > 0) {
+        
+        // note: this translates the sequence of bytes to a string using UTF-8 interpretation
+        let lineAsString = String.init(cString:lineByteArrayPointer!)
+        
+        // do whatever you need to do with this single line of text
+        // for debugging, can print it
+        //print(lineAsString)
+        let myparams = lineAsString.split(separator: "=")
+        let myparam1 = String(myparams[0]).replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\"", with: "")
+        let myparam2 = String(myparams[1]).replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\"", with: "")
+        let arrayLine = [myparam1 , myparam2]
+        retroArchConfig.append(arrayLine)
+        
+        // updates number of bytes read, for the next iteration
+        bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
+    }
+    
+    //print(retroArchConfig)
+}
 
+func writeRetroArchConfig (param: String, value: String) {
+    
+    let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
+    retroArchConfig[mifila!][1] = value
+    var mytext = String()
+    for line in retroArchConfig {
+        mytext = mytext + line[0] + " = \"" + line[1] + "\" \n"
+    }
+    let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
+    let fileUrl = home?.appendingPathComponent("RetroArch/config/retroarch.cfg")
+    try! mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
+    
+    
+}
+
+func gameOverlay(game: String) {
+    
+    //game tiene que ser la ruta al overlay, que es el nombre del archivo.png
+    
+    let index2 = game.range(of: "/", options: .backwards)?.lowerBound
+    let substring2 = game.substring(from: index2! )
+    let result1 = String(substring2.dropFirst())
+    let solonombre =  (result1 as NSString).deletingPathExtension
+    let gamename = solonombre
+    
+    
+    print("JUEGO \(gamename)")
+    var miruta = rutaApp + "/decorations/"
+    let fileManager = FileManager.default
+    let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: miruta as String)!
+    var rutaoverlay = String()
+    while let element = enumerator.nextObject() as? String {
+        //print(element)
+        if element.contains(gamename + ".png") {
+            rutaoverlay = miruta + element
+            break
+        }
+    
+    }
+    print(rutaoverlay)
+    
+    var myOverlayGame = "overlays = 1" + "\n"
+    myOverlayGame = myOverlayGame + "overlay0_overlay = " + "\"\(rutaoverlay)\" \n"
+    myOverlayGame = myOverlayGame + "overlay0_full_screen = true" + "\n"
+    myOverlayGame = myOverlayGame + "overlay0_descs = 0"
+    
+    let path2 = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+    let url2 = NSURL(fileURLWithPath: path2)
+    let pathComponent = url2.appendingPathComponent("RetroMac/custom_overlay.cfg")
+    let filePath = pathComponent?.path
+    try! myOverlayGame.write(to: pathComponent!, atomically: false, encoding: .utf8)
+}

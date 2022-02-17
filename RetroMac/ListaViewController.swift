@@ -597,6 +597,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     @objc public func onItemClicked() {
         let numero = (self.juegosTableView.selectedRow)
+        let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
+        gameOverlay(game: nombredelarchivo)
         let romXml = "\"\(juegosXml[numero][0])\""
         var rompathabuscar = juegosXml[numero][0]
         var comandojuego = juegosXml[numero][20]
