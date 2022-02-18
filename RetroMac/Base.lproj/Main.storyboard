@@ -863,29 +863,29 @@
             <objects>
                 <viewController title="Configuración" storyboardIdentifier="ConfigView" showSeguePresentationStyle="single" id="nsF-45-zou" customClass="ConfigViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="lLj-c3-IEJ">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="359"/>
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="403"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dfF-yl-fFz">
-                                <rect key="frame" x="18" y="322" width="414" height="23"/>
+                                <rect key="frame" x="18" y="357" width="414" height="23"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Ajustes ScreenScraper.fr" id="jiE-mZ-Wf6">
-                                    <font key="font" size="13" name="Menlo-Regular"/>
+                                    <font key="font" size="13" name="Menlo-Bold"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hNx-9R-AO3">
-                                <rect key="frame" x="18" y="157" width="414" height="23"/>
+                                <rect key="frame" x="18" y="197" width="414" height="23"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Otros ajustes" id="fAP-tK-oQ2">
-                                    <font key="font" size="13" name="Menlo-Regular"/>
+                                    <font key="font" size="13" name="Menlo-Bold"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WuN-2t-lSV">
-                                <rect key="frame" x="18" y="114" width="414" height="23"/>
+                                <rect key="frame" x="18" y="154" width="414" height="23"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="En juegos/sistemas nuevos, buscar media en Local" id="rwi-pD-pYP">
                                     <font key="font" size="12" name="Menlo-Regular"/>
@@ -893,8 +893,17 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gC1-jy-35D">
+                                <rect key="frame" x="18" y="114" width="414" height="23"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Habilitar Marcos en RetroArch" id="hUs-qz-UGX">
+                                    <font key="font" size="12" name="Menlo-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0rv-0k-c5a">
-                                <rect key="frame" x="18" y="259" width="69" height="23"/>
+                                <rect key="frame" x="18" y="294" width="69" height="23"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Usuario:" id="Q0r-ln-7lY">
                                     <font key="font" size="13" name="Menlo-Regular"/>
@@ -903,7 +912,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="os2-4V-cJ1">
-                                <rect key="frame" x="18" y="211" width="75" height="23"/>
+                                <rect key="frame" x="18" y="246" width="75" height="23"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Password:" id="YGO-uY-5A5">
                                     <font key="font" size="13" name="Menlo-Regular"/>
@@ -912,7 +921,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2p8-WP-HhN">
-                                <rect key="frame" x="110" y="264" width="320" height="21"/>
+                                <rect key="frame" x="110" y="299" width="320" height="21"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="nombre de usuario" drawsBackground="YES" id="YqZ-ZO-BvG">
                                     <font key="font" metaFont="system"/>
@@ -921,7 +930,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TeH-AC-JAM">
-                                <rect key="frame" x="110" y="216" width="320" height="21"/>
+                                <rect key="frame" x="110" y="251" width="320" height="21"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="password" drawsBackground="YES" id="AjI-hZ-cVj">
                                     <font key="font" metaFont="system"/>
@@ -930,7 +939,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8K-wj-IsK">
-                                <rect key="frame" x="104" y="21" width="89" height="32"/>
+                                <rect key="frame" x="104" y="15" width="89" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Guardar" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tke-gW-idL">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -941,7 +950,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KW5-Zd-RFi">
-                                <rect key="frame" x="263" y="21" width="67" height="32"/>
+                                <rect key="frame" x="263" y="15" width="67" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Salir" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TPx-L0-b7A">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -952,7 +961,24 @@
                                 </connections>
                             </button>
                             <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="0Tl-zP-JTa">
-                                <rect key="frame" x="388" y="117" width="42" height="25"/>
+                                <rect key="frame" x="388" y="158" width="42" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </switch>
+                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="FSy-aB-Oec">
+                                <rect key="frame" x="388" y="118" width="42" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </switch>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6jE-sc-0b4">
+                                <rect key="frame" x="18" y="74" width="414" height="23"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Habilitar Shaders en RetroArch" id="Roh-kQ-Fqd">
+                                    <font key="font" size="12" name="Menlo-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="aXe-i5-jtg">
+                                <rect key="frame" x="388" y="78" width="42" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </switch>
                         </subviews>
@@ -960,8 +986,10 @@
                     <connections>
                         <outlet property="guardarBtn" destination="K8K-wj-IsK" id="4cc-AS-UhU"/>
                         <outlet property="localSwitch" destination="0Tl-zP-JTa" id="fTM-YI-VRP"/>
+                        <outlet property="marcosSwitch" destination="FSy-aB-Oec" id="rt8-D3-vXw"/>
                         <outlet property="passwordTxt" destination="TeH-AC-JAM" id="3gm-4Z-E4A"/>
                         <outlet property="salirBtn" destination="KW5-Zd-RFi" id="DV5-ut-xTD"/>
+                        <outlet property="shadersSwitch" destination="aXe-i5-jtg" id="LXi-QF-V0B"/>
                         <outlet property="userTXT" destination="2p8-WP-HhN" id="EgR-PI-Rc1"/>
                         <segue destination="XfG-lQ-9wD" kind="show" id="63D-qW-YZX"/>
                         <segue destination="fL4-9U-n43" kind="show" id="mXR-Hk-bfU"/>
@@ -969,12 +997,12 @@
                 </viewController>
                 <customObject id="gmZ-Vd-4yB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-982" y="2291.5"/>
+            <point key="canvasLocation" x="-982" y="2313.5"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="LeI-Id-sQd"/>
-        <segue reference="rNI-hX-NhJ"/>
+        <segue reference="mXR-Hk-bfU"/>
+        <segue reference="63D-qW-YZX"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>

@@ -598,10 +598,14 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     @objc public func onItemClicked() {
         let numero = (self.juegosTableView.selectedRow)
         let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
-        gameOverlay(game: nombredelarchivo)
         let romXml = "\"\(juegosXml[numero][0])\""
         var rompathabuscar = juegosXml[numero][0]
         var comandojuego = juegosXml[numero][20]
+        
+        if comandojuego.contains("RetroArch") {
+            gameOverlay(game: nombredelarchivo)
+        }
+        
         var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
         if fila != nil {
             comandojuego = arrayGamesCores[fila!][1]
@@ -2014,19 +2018,6 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let coreItem = NSMenuItem(title: mititulo, action: #selector(coreauto), keyEquivalent: "")
         coreSubmenu.addItem(coreItem)
         
-//        var estaenArray = false
-//        let mifila = juegosTableView.selectedRow ?? 0
-//        let pathabuscar = juegosXml[mifila][0]
-//        let filaencontrada = juegosXml.firstIndex(where: {$0[0] == pathabuscar})
-//        if filaencontrada != nil {
-//            estaenArray = true
-//        }else {
-//            estaenArray = false
-//        }
-//
-//        if estaenArray == false {
-//            mititulo = mititulo + " ✅"
-//        }
         
         if button?.cores != nil {
             
@@ -2126,6 +2117,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let miCore = juegosXml[juegosTableView.selectedRow][21]
         let miSystem = juegosXml[juegosTableView.selectedRow][22]
         let miBox = juegosXml[juegosTableView.selectedRow][23]
+        
         //Actualizar aaray de favoritos
         
         var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating, fav: miFav, comando: miComando, core: miCore, system: miSystem, box: miBox)
@@ -2180,9 +2172,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             contextMenu.items[1].submenu?.items[2].isHidden = true
             contextMenu.items[1].submenu?.items[1].isHidden = false
             
-            
-            
-        }
+            }
         
         
         

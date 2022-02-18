@@ -905,10 +905,10 @@ func readRetroArchConfig () {
     //print(retroArchConfig)
 }
 
-func writeRetroArchConfig (param: String, value: String) {
+func writeRetroArchConfig () {
     //"input_overlay_aspect_adjust_landscape = 0.130000"
-    let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
-    retroArchConfig[mifila!][1] = value
+//    let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
+//    retroArchConfig[mifila!][1] = value
     var mytext = String()
     mytext = ""
     for line in retroArchConfig {
