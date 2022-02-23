@@ -93,6 +93,7 @@ func llenaSistemasIds() {
     var ps3 = ["ps3", "59"]
     var xbox = ["xbox", "32"]
     var nswitch = ["switch", "225"]
+    var n3ds = ["n3ds", "17"]
     
     systemsIds.append(nes)
     systemsIds.append(segacd)
@@ -177,6 +178,7 @@ func llenaSistemasIds() {
     systemsIds.append(ps3)
     systemsIds.append(wii)
     systemsIds.append(nswitch)
+    systemsIds.append(n3ds)
     
     
 }

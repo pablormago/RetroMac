@@ -81,6 +81,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var rutaRomsLabel: NSTextField!
     @IBOutlet weak var scrollMain: NSScrollView!
     @IBOutlet weak var myImage: NSImageView!
+    
     lazy var sheetViewController: NSViewController = {
         return self.storyboard!.instantiateController(withIdentifier: "ConfigView")
         as! NSViewController
@@ -88,7 +89,6 @@ class ViewController: NSViewController {
     
     @IBAction func openSettings(_ sender: NSButton)  {
         SingletonState.shared.currentViewController?.presentAsSheet(sheetViewController)
-        //self.presentAsSheet(sheetViewController)
     }
     
     
@@ -105,15 +105,6 @@ class ViewController: NSViewController {
         }
     }
     
-    
-//    deinit {
-//        print("Main deinit")
-//       NotificationCenter.default.removeObserver(self)
-//    }
-    
-    
-    
-    
     override func viewDidAppear() {
         
         scrollMain.isHidden = true
@@ -121,6 +112,7 @@ class ViewController: NSViewController {
         let path2 =  rutaApp2 +  "/BOBwin.exe"
         let fileDoesExist = FileManager.default.fileExists(atPath: path2)
         print("Existe")
+        
         var pathLogo = Bundle.main.url(forResource: "logo_retro", withExtension: "jpeg")
         if fileDoesExist {
             pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
@@ -189,7 +181,7 @@ class ViewController: NSViewController {
         cuenta = 0
         mainController = self
         SingletonState.shared.mySystemLabel = sistemaLabel
-        
+        SingletonState.shared.myBackPlayer = backPlayer
         //view.window?.isOpaque = false
         //view.window?.backgroundColor = NSColor (red: 1, green: 0.5, blue: 0.5, alpha: 0.5)
         
@@ -237,7 +229,7 @@ class ViewController: NSViewController {
         cuantosSistemas = counter
         ventana = "Principal"
         scrollMain.documentView = documentView
-        SingletonState.shared.myBackPlayer = self.backPlayer
+        
         ///Fin carga desde allTheGames
         if let screen = NSScreen.main {
             let rect = screen.frame
@@ -281,6 +273,8 @@ class ViewController: NSViewController {
         
         //writeRetroArchConfig (param: "input_overlay_aspect_adjust_landscape" , value: "0.130000")
         //mainController = self
+        
+        
     }
     
     // MARK: Final de viewDidLoad()
@@ -337,7 +331,7 @@ class ViewController: NSViewController {
         
         
     }
-    @objc func playerItemDidReachEnd(notification: Notification) {
+    @objc func playerItemDidReachEnd2(notification: Notification) {
         if let playerItem = notification.object as? AVPlayerItem {
             playerItem.seek(to: CMTime.zero, completionHandler: nil)
         }
@@ -348,10 +342,10 @@ class ViewController: NSViewController {
         //GCController.stopWirelessControllerDiscovery()
         //NotificationCenter.default.removeObserver(self, name: .GCControllerDidConnect, object: nil)
         if Int(sender.numeroJuegos!)! > 0 {
-            NotificationCenter.default.removeObserver(self)
+            //NotificationCenter.default.removeObserver(self)
+            backStop()
             if backIsPlaying == true {
-                SingletonState.shared.myBackPlayer?.player?.pause()
-                backPlayer.player?.pause()
+                backStop()
             }
             sistemaActual = sender.Fullname!
             nombresistemaactual = sender.Sistema!
@@ -379,26 +373,26 @@ class ViewController: NSViewController {
     
     func backplay (tag: Int) {
                 let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
-                backIsPlaying = true
+                //backIsPlaying = true
                 if button?.videos?.count ?? 0 > 0 {
                     let miVideo = button?.videos?.randomElement()
                     if miVideo != "" {
                         //print("Mivideo: \(miVideo)")
                         let videoURL = URL(fileURLWithPath: miVideo!)
                         let player2 = AVPlayer(url: videoURL)
-                        SingletonState.shared.myBackPlayer?.player = player2
-                        SingletonState.shared.myBackPlayer?.player?.play()
+                        backPlayer.player = player2
+                        backPlayer.player!.play()
                         backIsPlaying = true
-                        player2.actionAtItemEnd = .none
-                        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
-                        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
+                        player2.actionAtItemEnd = .pause
+//                        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
+//                        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd2(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
                     }
                 }
-        
-        
-        
-    }
+     }
     
+    func backStop () {
+        backPlayer.player?.pause()
+    }
     
     
     override var representedObject: Any? {
@@ -408,12 +402,6 @@ class ViewController: NSViewController {
     }
 }
 /// FINAL DE LA CLASE
-
-
-
-
-
-
 
 fileprivate func directoryExistsAtPath(_ path: String) -> Bool {
     var isdirectory : ObjCBool = true
@@ -429,9 +417,12 @@ func copiarBase(){
     let baseXemu =  "cp -r " + home +  "/Contents/Resources/Base/Shared/Xemu /Users/Shared/Xemu"
     let baseRetro = "cp -r " + home +  "/Contents/Resources/Base/Documents/Retroarch  ~/Documents"
     let baseAppSupport = "cp -r " + home +  "/Contents/Resources/Base/ApplicationSupport/ ~/'Library/Application Support'"
+    
     Commands.Bash.system("\(baseXemu)")
     Commands.Bash.system("\(baseRetro)")
     Commands.Bash.system("\(baseAppSupport)")
+    let baseCitra = "cp -r " + home +  "/Contents/Resources/Base/.config/citra-emu ~/.config/citra-emu"
+    Commands.Bash.system("\(baseCitra)")
     
 }
 

@@ -22,6 +22,7 @@ class ConfigViewController: NSViewController {
         let defaults = UserDefaults.standard
         defaults.set(userTXT.stringValue, forKey: "SSUser")
         defaults.set(passwordTxt.stringValue, forKey: "SSPassword")
+        
         var estadoLocal = 0
         var estadoMarcos = 0
         var estadoShaders = 0
@@ -35,6 +36,8 @@ class ConfigViewController: NSViewController {
         if marcosSwitch.state.rawValue == 1 {
             estadoMarcos = 1
             editRetroArchConfig(param: "input_overlay", value: "~/Documents/RetroMac/custom_overlay.cfg")
+            editRetroArchConfig(param: "input_overlay_aspect_adjust_landscape", value: "0.130000")
+            editRetroArchConfig(param: "input_overlay_opacity", value: "0.700000")
         }else {
             estadoMarcos = 0
             editRetroArchConfig(param: "input_overlay", value: "")
@@ -49,7 +52,9 @@ class ConfigViewController: NSViewController {
         defaults.set(estadoLocal, forKey: "LocalMedia")
         defaults.set(estadoMarcos, forKey: "Marcos")
         defaults.set(estadoMarcos, forKey: "Shaders")
+        
         writeRetroArchConfig()
+        
         self.dismiss(self)
         
     }
@@ -80,10 +85,8 @@ class ConfigViewController: NSViewController {
         
         if marcos == 1 {
             marcosSwitch.state = NSControl.StateValue.on
-            
         }else {
             marcosSwitch.state = NSControl.StateValue.off
-            
         }
         let shaders = defaults.integer(forKey: "Shaders") ?? 0
         

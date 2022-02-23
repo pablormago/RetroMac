@@ -120,8 +120,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         infoLabel.isHidden = true
         SingletonState.shared.mytable = self.juegosTableView
+        SingletonState.shared.myBackPlayer?.player?.pause()
         print("LISTA LOAD")
         view.wantsLayer = true
         // change the background color of the layer
@@ -188,7 +190,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         print("Tengo: \(GCController.controllers().count) Mandos")
         SingletonState.shared.myJuegosXml = juegosXml
         
-        
+        SingletonState.shared.myBackPlayer?.player?.pause()
         ///Nombres cargados
         
     }
@@ -203,9 +205,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         guard let vw = juegosTableview.makeView(withIdentifier: tableColumn!.identifier, owner: self) as? NSTableCellView else {return nil}
         ///AÑADIR JUEGO A LISTA CON GAMELIST
         vw.textField?.stringValue = juegosXml[row][1]
-        ///AÑADIR JUEGO A LISTA SIN GAMELIST
-        //vw.textField?.stringValue = juegos[row]
-        //vw.textField?.font = NSFont(name: "Arial", size: 20)
+
         
         return vw
         
@@ -248,14 +248,6 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         developerLabel.stringValue = miDeveloper
         genreLabel.stringValue = miGenre
         playersLabel.stringValue = miPlayers
-        //print(miCore)
-        //print(miSystem)
-//        scrollerDesc.font = NSFont(name: "Arial", size: 20)
-//        scrollerDesc.delay = 1
-//        scrollerDesc.speed = 2
-//        scrollerDesc.setup(string: miDesc.replacingOccurrences(of: "\n", with: " "))
-        
-        
         
         if  miTittleShot != "" {
             let imagenURL = URL(fileURLWithPath: miImagen)
@@ -456,7 +448,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     override func viewWillAppear() {
         super.viewWillAppear()
-        
+        SingletonState.shared.myBackPlayer?.player?.pause()
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
         self.view.window?.setFrame(mirect, display: true)
         sistemaLabel.stringValue = sistemaActual
@@ -482,9 +474,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         else if event.keyCode == 51 && abiertaLista == true {
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
                 if playingVideo == true {
-                    
+                    SingletonState.shared.mySnapPlayer?.player?.pause()
                 }
-                SingletonState.shared.mySnapPlayer?.player?.pause()
+               
                 SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
                 snapPlayer.player?.pause()
                 abiertaLista = true
@@ -596,6 +588,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     @objc public func onItemClicked() {
+        SingletonState.shared.myBackPlayer?.player?.pause()
         let numero = (self.juegosTableView.selectedRow)
         let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
         let romXml = "\"\(juegosXml[numero][0])\""
@@ -604,6 +597,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         if comandojuego.contains("RetroArch") {
             gameOverlay(game: nombredelarchivo)
+        }
+        
+        if comandojuego.contains("citra-qt") {
+            let home = Bundle.main.bundlePath
+            let baseCitra = "cp -r " + home +  "/Contents/Resources/Base/.config/citra-emu/ ~/.config/citra-emu/"
+            Commands.Bash.system("\(baseCitra)")
         }
         
         var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
