@@ -161,6 +161,7 @@ class SplashController: NSViewController {
             titulosMame = mamelista() as! [[String]]
             llenaSistemasIds()
             readRetroArchConfig ()
+            shadersList ()
             self.cuentaJuegosEnSistemas()
         }, completion:{
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {

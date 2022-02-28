@@ -56,6 +56,10 @@ var rutaTransformada = String()
 var myGameController: GCController?
 var mainController  = NSViewController()
 var retroArchConfig = [[String]]()
+var netplayPlays: [PartidaNetplay] = []
+var NetCores = [[String]]()
+var arrayShaders = [[String]]()
+var arrayGamesShaders = [[String]]()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -84,6 +88,7 @@ class ViewController: NSViewController {
     
     lazy var sheetViewController: NSViewController = {
         return self.storyboard!.instantiateController(withIdentifier: "ConfigView")
+        //return self.storyboard!.instantiateController(withIdentifier: "NetPlayList")
         as! NSViewController
     }()
     
@@ -178,6 +183,7 @@ class ViewController: NSViewController {
         
         ventana = "Principal"
         print("DID LOAD")
+        cargaPartidasNetplay ()
         cuenta = 0
         mainController = self
         SingletonState.shared.mySystemLabel = sistemaLabel
@@ -541,4 +547,33 @@ struct ConsolaRaw {
     let theme: String
     let emuladores: [[String]]
     
+}
+
+struct PartidaNetplay {
+    let id: Int?
+    let username: String?
+    let country: String?
+    let game_Name: String?
+    let game_Crc: String?
+    let core_Name: String?
+    let core_Version: String?
+    let subsystem_Name: String?
+    let retroarch_Version: String?
+    let frontend: String?
+    let ip: String?
+    let port: String?
+    let mitm_Ip: String?
+    let mitm_Port: String?
+    let mitm_Session: String?
+    let host_Method: Int?
+    let has_Password: String?
+    let has_SpectatePassword: String?
+    let connectable: String?
+    let isRetroarch: String?
+    let created: String?
+    let updated: String?
+    let enabled: String?
+    let comando: String?
+    let gamePath: String?
+    let isRelay: String?
 }

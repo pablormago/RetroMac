@@ -340,6 +340,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
         scrollDescripText.string = miDesc
         abiertaLista = true
+        
         //print("Tengo Fav:\(miFav)")
         //Comprobar si está en Automático y añadir el tick si lo está
         var mititulo = "Automático"
@@ -1013,7 +1014,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                             
                                             if sJson3["langue"].stringValue == "es" {
                                                 descJuego = sJson3["text"].stringValue.replacingOccurrences(of: "\n", with: " ")
-                                                //print("Descripcion: \(descJuego)")
+                                                print("Descripcion: \(descJuego)")
                                                 encuentrame = true
                                             }
                                             if encuentrame == true{
@@ -1105,11 +1106,11 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                                                 
                                                 
                                             }
-                                            if sJson3["type"].stringValue == "wheel" && (sJson3["region"] == "us" || sJson3["region"] == "eu" || sJson3["region"] == "wor") {
+                                            if (sJson3["type"].stringValue == "wheel-hd" || sJson3["type"].stringValue == "wheel") && (sJson3["region"] == "us" || sJson3["region"] == "eu" || sJson3["region"] == "wor") {
                                                 logoJuego = sJson3["url"].stringValue
                                                 //print("MINIMarquee: \(miniMarqueeJuego)")
                                                 
-                                            }else if sJson3["type"].stringValue == "wheel" && sJson3["region"] == "jp" {
+                                            }else if (sJson3["type"].stringValue == "wheel-hd" || sJson3["type"].stringValue == "wheel") && sJson3["region"] == "jp" {
                                                 
                                                 logoJuego = sJson3["url"].stringValue
                                                 //print("MINIMarquee: \(miniMarqueeJuego)")
@@ -1965,6 +1966,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let unfavGame = NSMenuItem(title: "Eliminar Juego de Favoritos", action: #selector(unfavGames), keyEquivalent: "")
         let searchGame = NSMenuItem(title: "Buscar Juego", action: nil, keyEquivalent: "")
         let delGame = NSMenuItem(title: "Borrar Juego", action: #selector(EnableBoxBorrar), keyEquivalent: "")
+        let NetGame = NSMenuItem(title: "Iniciar Partida de NETPLAY", action: #selector(lanzarNetPlay), keyEquivalent: "")
         
         let gameSubmenu = NSMenu()
         
@@ -2039,9 +2041,32 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             }
             cambiarItem.submenu = coreSubmenu
             gameSubmenu.addItem(cambiarItem)
+            //shader submenu
             
+            let shaderMenu = NSMenuItem(title: "Establecer Shader del Juego", action: nil, keyEquivalent: "")
+            let shaderSubmenu = NSMenu()
+            shaderMenu.submenu = shaderSubmenu
+            
+            let shaderItemDefault = NSMenuItem(title: "NINGUNO", action: #selector(removeShader), keyEquivalent: "")
+            let defaultTooltip = ""
+            shaderItemDefault.toolTip = defaultTooltip
+            shaderSubmenu.addItem(shaderItemDefault)
+            
+            let shaderItemAuto = NSMenuItem(title: "AUTOMÁTICO", action: nil, keyEquivalent: "")
+            let autoTooltip = ""
+            shaderItemAuto.toolTip = autoTooltip
+            shaderSubmenu.addItem(shaderItemAuto)
+            
+            for shader in arrayShaders {
+                let shaderItem = NSMenuItem(title: shader[1], action: #selector(setShader), keyEquivalent: "")
+                let tooltip2 = shader[0]
+                shaderItem.toolTip = tooltip2
+                shaderSubmenu.addItem(shaderItem)
+            }
+            gameSubmenu.addItem(shaderMenu)
+            gameSubmenu.addItem(NetGame)
         }
-        ///añadir menu core juego en Auto
+        ///NETPLAY
         
         
         ///
@@ -2357,6 +2382,83 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             
         }
     }
+    
+    @objc func lanzarNetPlay() {
+        
+        let mifila = juegosTableView.selectedRow
+        let mirom = "\"\(juegosXml[mifila][0])\""
+        let nombredelarchivo = juegosXml[mifila][0].replacingOccurrences(of: rutaApp , with: "")
+        var comandojuego = juegosXml[mifila][20]
+        if comandojuego.contains("RetroArch") {
+            gameOverlay(game: nombredelarchivo)
+            var fila = arrayGamesCores.firstIndex(where: {$0[0] == juegosXml[mifila][0]})
+            if fila != nil {
+                comandojuego = arrayGamesCores[fila!][1]
+            }
+            var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+            
+            var comando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "-L", with: "-H -L")
+            if playingVideo == true {
+                SingletonState.shared.mySnapPlayer?.player?.pause()
+                snapPlayer.player?.pause()
+            }
+            print(comando)
+            configNetplay()
+            
+            Commands.Bash.system("\(comando)")
+            comando=""
+            
+        }
+        
+    }
+    
+    func configNetplay () {
+        editRetroArchConfig(param: "netplay_allow_pausing", value: "false")
+        editRetroArchConfig(param: "netplay_max_connections", value: "3")
+        editRetroArchConfig(param: "netplay_mitm_server", value: "madrid")
+        //editRetroArchConfig(param: "netplay_nickname", value: "BoBMac")
+        editRetroArchConfig(param: "netplay_use_mitm_server", value: "true")
+        writeRetroArchConfig()
+        
+        
+    }
+    
+    func editRetroArchConfig (param: String, value: String ) {
+        
+        let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
+        retroArchConfig[mifila!][1] = value
+    
+    }
+    
+    @objc func setShader (_ sender: NSMenuItem) {
+        let nombre = sender.title
+        let ruta = sender.toolTip
+        let fila = juegosTableView.selectedRow
+        let rutajuego = juegosXml[fila][0]
+        let migrupo = [rutajuego, nombre, ruta!] as [String]
+        if arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego}) != nil {
+            let filaABuscar = arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego})
+            arrayGamesShaders[filaABuscar!][1] = nombre
+            arrayGamesShaders[filaABuscar!][2] = ruta!
+        }else {
+            arrayGamesShaders.append(migrupo)
+        }
+        
+        print(arrayGamesShaders)
+    }
+    
+    @objc func removeShader (_ sender: NSMenuItem) {
+        let fila = juegosTableView.selectedRow
+        let rutajuego = juegosXml[fila][0]
+        guard let filaABuscar = arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego}) else {return}
+        arrayGamesShaders.remove(at: filaABuscar)
+        print(arrayGamesShaders)
+    }
+    
+    @objc func autoShader (_ sender: NSMenuItem) {
+        
+    }
+    
     
     
 }

@@ -18,6 +18,15 @@ extension ViewController {
         
         if abiertaLista == false {
             
+            if event.keyCode == 53 && ventana == "Principal" {
+                lazy var sheetViewController: NSViewController = {
+                    return self.storyboard!.instantiateController(withIdentifier: "NetPlayList")
+                    as! NSViewController
+                }()
+                SingletonState.shared.currentViewController?.presentAsSheet(sheetViewController)
+                
+            }
+            
             if event.keyCode == 36  {
                 
                 if ventana == "Principal" {
@@ -88,6 +97,14 @@ extension ViewController {
         }
         else if abiertaLista == true {
             
+            if event.keyCode == 53 && ventana == "Principal" {
+                lazy var sheetViewController: NSViewController = {
+                    return self.storyboard!.instantiateController(withIdentifier: "NetPlayList")
+                    as! NSViewController
+                }()
+                SingletonState.shared.currentViewController?.presentAsSheet(sheetViewController)
+                
+            }
             
             if event.keyCode == 36  {
                 if ventana == "Principal" {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		270485E52785FA7A00375232 /* funciones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270485E42785FA7A00375232 /* funciones.swift */; };
+		2710342627C75DF100615B86 /* NetPlayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2710342527C75DF100615B86 /* NetPlayListController.swift */; };
 		271417972762516C009CA02D /* ListaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271417962762516C009CA02D /* ListaViewController.swift */; };
 		2719BEEB279487F700929EE2 /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 2719BEEA279487F700929EE2 /* favorite.png */; };
 		272A6EA5278F4417005B0930 /* SplashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272A6EA4278F4416005B0930 /* SplashController.swift */; };
@@ -61,6 +62,7 @@
 
 /* Begin PBXFileReference section */
 		270485E42785FA7A00375232 /* funciones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funciones.swift; sourceTree = "<group>"; };
+		2710342527C75DF100615B86 /* NetPlayListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetPlayListController.swift; sourceTree = "<group>"; };
 		271417962762516C009CA02D /* ListaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaViewController.swift; sourceTree = "<group>"; };
 		2719BEEA279487F700929EE2 /* favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorite.png; sourceTree = "<group>"; };
 		272A6EA4278F4416005B0930 /* SplashController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashController.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */,
 				27E7A3022768B4B90087C67A /* logo.jpeg */,
 				278980202757DCC000414985 /* Main.storyboard */,
+				2710342527C75DF100615B86 /* NetPlayListController.swift */,
 				2748C057278620FA002D633B /* mamelist.txt */,
 				27E7A30A276B54240087C67A /* NoVideo.mp4 */,
 				27E6675F275A29B300B50AD6 /* parserSystems.swift */,
@@ -355,6 +358,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2710342627C75DF100615B86 /* NetPlayListController.swift in Sources */,
 				27665BA527B6EE4400262025 /* mainScreenGameController.swift in Sources */,
 				271417972762516C009CA02D /* ListaViewController.swift in Sources */,
 				27670276277E127900E43E7D /* ConfigViewController.swift in Sources */,
