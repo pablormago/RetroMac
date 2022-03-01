@@ -60,6 +60,9 @@ var netplayPlays: [PartidaNetplay] = []
 var NetCores = [[String]]()
 var arrayShaders = [[String]]()
 var arrayGamesShaders = [[String]]()
+var arraySystemsShaders = [[String]] ()
+var arrayGamesBezels = [[String]]()
+var arraySystemsBezels = [[String]]()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -267,9 +270,15 @@ class ViewController: NSViewController {
             
         }
         cuentaDec = CGFloat(botonactual)
-        //cargar array de juegos-cores
+        
+        // - MARK: cargar array de juegos-cores, juegos-shaders y systems-shaders, etc
+        
         let defaults = UserDefaults.standard
         arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
+        arrayGamesShaders = (defaults.array(forKey: "juegosShaders")as? [[String]]) ?? []
+        arraySystemsShaders = (defaults.array(forKey: "systemsShaders")as? [[String]]) ?? []
+        arrayGamesBezels = (defaults.array(forKey: "juegosBezels")as? [[String]]) ?? []
+        arraySystemsBezels = (defaults.array(forKey: "systemsBezels")as? [[String]]) ?? []
         
         startWatchingForControllers()
         self.view.window?.makeFirstResponder(self.scrollMain)
@@ -277,8 +286,7 @@ class ViewController: NSViewController {
         SingletonState.shared.currentViewController = self
         SingletonState.shared.currentViewController!.view.window?.makeFirstResponder(SingletonState.shared.myscroller)
         
-        //writeRetroArchConfig (param: "input_overlay_aspect_adjust_landscape" , value: "0.130000")
-        //mainController = self
+       
         
         
     }

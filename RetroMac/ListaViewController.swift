@@ -342,7 +342,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         abiertaLista = true
         
         //print("Tengo Fav:\(miFav)")
-        //Comprobar si está en Automático y añadir el tick si lo está
+        //CORES: Comprobar si está en Automático y añadir el tick si lo está
         var mititulo = "Automático"
         var estaenArray = false
         let mifila = juegosTableView.selectedRow
@@ -385,6 +385,50 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 
             }
         }
+        
+        // MARK: Poner tick a shader seleccionado de Juego
+        
+        for a in 1..<(contextMenu.items[1].submenu?.items[6].submenu?.items.count)! {
+            contextMenu.items[1].submenu?.items[6].submenu?.items[a].title = (contextMenu.items[1].submenu?.items[6].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))!
+        }
+        
+        
+        let mifila2 = juegosTableView.selectedRow
+        let miRuta = juegosXml[mifila2][0]
+        let miGameShaderFila = arrayGamesShaders.firstIndex(where: {$0[0] == miRuta})
+        if miGameShaderFila != nil {
+            //Tiene Shader o NINGUNO
+            let miShader = arrayGamesShaders[miGameShaderFila!][1].replacingOccurrences(of: " ✅", with: "")
+            let miFilaItem = contextMenu.items[1].submenu?.items[6].submenu?.items.firstIndex(where: {$0.title == miShader})
+            if miFilaItem != nil {
+                contextMenu.items[1].submenu?.items[6].submenu?.items[miFilaItem!].title = (contextMenu.items[1].submenu?.items[6].submenu?.items[miFilaItem!].title)!.replacingOccurrences(of: " ✅", with: "") + " ✅"
+            }
+
+        } else {
+            contextMenu.items[1].submenu?.items[6].submenu?.items[1].title = "AUTOMÁTICO ✅"
+        }
+        //print(arrayGamesShaders)
+        
+        // MARK: poner tick al shader del sistema:
+        
+        //Borramos los ticks
+//        for a in 1..<(contextMenu.items[2].submenu?.items[1].submenu?.items.count)! {
+//            contextMenu.items[2].submenu?.items[1].submenu?.items[a].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))!
+//        }
+//
+//        let mifilaShaderSystem = arraySystemsShaders.firstIndex(where: { $0[0] == sistemaActual })
+//        if mifilaShaderSystem != nil {
+//            let miSystemShader = arraySystemsShaders[(mifilaShaderSystem)!][1]
+//            let numero = contextMenu.items[2].submenu?.items[1].submenu?.items.firstIndex(where: {$0.title.replacingOccurrences(of: " ✅", with: "") ==  miSystemShader})
+//            if numero != nil {
+//                contextMenu.items[2].submenu?.items[1].submenu?.items[numero!].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[numero!].title.replacingOccurrences(of: " ✅", with: ""))! + " ✅"
+//            }
+//        } else {
+//            contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "NINGUNO ✅"
+//        }
+//
+//        print(arraySystemsShaders)
+        
     }
     
     func imageSelected(path: URL) {
@@ -441,9 +485,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         //setupMenu2()
         self.juegosTableView.becomeFirstResponder()
         SingletonState.shared.mySnapPlayer = self.snapPlayer
-        
-        //snapPlayer.layer!.masksToBounds = true
-        // *** /FullScreen ***
+        nombresSystemaShaders()
     }
     
     
@@ -593,11 +635,19 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let numero = (self.juegosTableView.selectedRow)
         let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
         let romXml = "\"\(juegosXml[numero][0])\""
-        var rompathabuscar = juegosXml[numero][0]
+        let rompathabuscar = juegosXml[numero][0]
         var comandojuego = juegosXml[numero][20]
         
         if comandojuego.contains("RetroArch") {
+            gameShader(shader: "")
             gameOverlay(game: nombredelarchivo)
+            let juegoABuscar = juegosXml[numero][0]
+            if arrayGamesShaders.firstIndex(where: {$0[0] == juegoABuscar}) != nil {
+                guard let miFila = arrayGamesShaders.firstIndex(where: {$0[0] == juegoABuscar}) else { return  }
+                let miShader = arrayGamesShaders[miFila][2]
+                gameShader(shader: miShader)
+            }
+            
         }
         
         if comandojuego.contains("citra-qt") {
@@ -1987,10 +2037,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let button = controller!.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
         
         var cuentaCores = button?.cores?.count
-        let sistemaItem = NSMenuItem(title: "Cambiar Core del Sistema", action: nil, keyEquivalent: "")
+        let sistemaItem = NSMenuItem(title: "Opciones del Sistema", action: nil, keyEquivalent: "")
+        let sistemaSubmenu = NSMenu()
         if button?.cores != nil {
             
             let cambiarItem = NSMenuItem(title: "Cambiar Core", action: nil, keyEquivalent: "")
+            sistemaSubmenu.addItem(cambiarItem)
             let misCores = button?.cores
             
             let coreSubmenu = NSMenu()
@@ -2008,9 +2060,41 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 coreSubmenu.addItem(coreItem)
             }
             cambiarItem.submenu = coreSubmenu
-            sistemaItem.submenu = coreSubmenu
+            sistemaItem.submenu = sistemaSubmenu
+            
             
         }
+        //SubMenú Shader por sistema
+        let cambiarShaderItem = NSMenuItem(title: "Establecer Shader del Sistema", action: nil, keyEquivalent: "")
+        sistemaSubmenu.addItem(cambiarShaderItem)
+        let sistemaShaders = NSMenu()
+        let borrarShaderItem = NSMenuItem(title: "NINGUNO", action: #selector(removeSystemShader), keyEquivalent: "")
+        let tooltipSystem = "NINGUNO"
+        borrarShaderItem.toolTip = tooltipSystem
+        sistemaShaders.addItem(borrarShaderItem)
+        for shader in arrayShaders {
+            let shaderItem = NSMenuItem(title: shader[1], action: #selector(setSystemShader), keyEquivalent: "")
+            let tooltip2 = shader[0]
+            shaderItem.toolTip = tooltip2
+            sistemaShaders.addItem(shaderItem)
+        }
+        
+//        let mifilashader = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
+//
+//        if mifilashader != nil {
+//            let misystemShader = arraySystemsShaders[mifilashader!][1]
+//            for a in 0..<(contextMenu.items[2].submenu?.items[1].submenu?.items.count)! {
+//                if contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: "") == misystemShader {
+//                    contextMenu.items[2].submenu?.items[1].submenu?.items[a].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))! + " ✅"
+//                }
+//            }
+//
+//        } else {
+//            contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "NINGUNO ✅"
+//        }
+        
+        cambiarShaderItem.submenu = sistemaShaders
+        
         let coreSubmenu = NSMenu()
         ///SubMEnu core por juego
         ///
@@ -2047,12 +2131,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             let shaderSubmenu = NSMenu()
             shaderMenu.submenu = shaderSubmenu
             
-            let shaderItemDefault = NSMenuItem(title: "NINGUNO", action: #selector(removeShader), keyEquivalent: "")
-            let defaultTooltip = ""
+            let shaderItemDefault = NSMenuItem(title: "NINGUNO", action: #selector(setShader), keyEquivalent: "")
+            let defaultTooltip = "NINGUNO"
             shaderItemDefault.toolTip = defaultTooltip
             shaderSubmenu.addItem(shaderItemDefault)
             
-            let shaderItemAuto = NSMenuItem(title: "AUTOMÁTICO", action: nil, keyEquivalent: "")
+            let shaderItemAuto = NSMenuItem(title: "AUTOMÁTICO", action: #selector(autoShader), keyEquivalent: "")
             let autoTooltip = ""
             shaderItemAuto.toolTip = autoTooltip
             shaderSubmenu.addItem(shaderItemAuto)
@@ -2066,6 +2150,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             gameSubmenu.addItem(shaderMenu)
             gameSubmenu.addItem(NetGame)
         }
+        
+        
+        
+        
         ///NETPLAY
         
         
@@ -2357,7 +2445,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let indexSet = NSIndexSet(index: mifila)
         juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
         self.view.window?.makeFirstResponder(self.juegosTableView)
-        print(arrayGamesCores)
+        //print(arrayGamesCores)
     }
     
     func recargar() {
@@ -2431,7 +2519,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     @objc func setShader (_ sender: NSMenuItem) {
-        let nombre = sender.title
+        let nombre = sender.title.replacingOccurrences(of: " ✅", with: "")
         let ruta = sender.toolTip
         let fila = juegosTableView.selectedRow
         let rutajuego = juegosXml[fila][0]
@@ -2443,22 +2531,107 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }else {
             arrayGamesShaders.append(migrupo)
         }
+        let defaults = UserDefaults.standard
+        defaults.set(arrayGamesShaders, forKey: "juegosShaders")
         
-        print(arrayGamesShaders)
+        // MARK: Actualizar los elementos del menú
+        
+        for a in 1..<(contextMenu.items[1].submenu?.items[6].submenu?.items.count)! {
+            contextMenu.items[1].submenu?.items[6].submenu?.items[a].title = (contextMenu.items[1].submenu?.items[6].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))!
+        }
+        
+        sender.title = sender.title.replacingOccurrences(of: " ✅", with: "") + " ✅"
     }
     
     @objc func removeShader (_ sender: NSMenuItem) {
+        let nombre = sender.title.replacingOccurrences(of: " ✅", with: "")
+        let ruta = sender.toolTip
+        let fila = juegosTableView.selectedRow
+        let rutajuego = juegosXml[fila][0]
+        let migrupo = [rutajuego, nombre, ruta!] as [String]
+        if arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego}) != nil {
+            let filaABuscar = arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego})
+            arrayGamesShaders[filaABuscar!][1] = nombre
+            arrayGamesShaders[filaABuscar!][2] = ruta!
+        }else {
+            arrayGamesShaders.append(migrupo)
+        }
+        let defaults = UserDefaults.standard
+        defaults.set(arrayGamesShaders, forKey: "juegosShaders")
+        
+        for a in 1..<(contextMenu.items[1].submenu?.items[6].submenu?.items.count)! {
+            contextMenu.items[1].submenu?.items[6].submenu?.items[a].title = (contextMenu.items[1].submenu?.items[6].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))!
+        }
+        
+        sender.title = sender.title.replacingOccurrences(of: " ✅", with: "") + " ✅"
+        
+    }
+    
+    @objc func autoShader (_ sender: NSMenuItem) {
         let fila = juegosTableView.selectedRow
         let rutajuego = juegosXml[fila][0]
         guard let filaABuscar = arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego}) else {return}
         arrayGamesShaders.remove(at: filaABuscar)
-        print(arrayGamesShaders)
-    }
-    
-    @objc func autoShader (_ sender: NSMenuItem) {
+        let defaults = UserDefaults.standard
+        defaults.set(arrayGamesShaders, forKey: "juegosShaders")
+        for a in 1..<(contextMenu.items[1].submenu?.items[6].submenu?.items.count)! {
+            contextMenu.items[1].submenu?.items[6].submenu?.items[a].title = (contextMenu.items[1].submenu?.items[6].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))!
+        }
         
+        sender.title = sender.title.replacingOccurrences(of: " ✅", with: "") + " ✅"
+    }
+    @objc func setSystemShader (_ sender: NSMenuItem) {
+        
+        for a in 0..<(contextMenu.items[2].submenu?.items[1].submenu?.items.count)! {
+            contextMenu.items[2].submenu?.items[1].submenu?.items[a].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))!
+        }
+        let sistema = sistemaActual
+        let nombre = sender.title.replacingOccurrences(of: " ✅", with: "")
+        let ruta = sender.toolTip
+        let migrupo = [sistema , nombre, ruta!] as [String]
+        if arraySystemsShaders.firstIndex(where: {$0[0] == sistema}) != nil {
+            let filaABuscar = arraySystemsShaders.firstIndex(where: {$0[0] == sistema})
+            arraySystemsShaders[filaABuscar!][1] = nombre
+            arraySystemsShaders[filaABuscar!][2] = ruta!
+        } else {
+            arraySystemsShaders.append(migrupo)
+        }
+        let defaults = UserDefaults.standard
+        defaults.set(arraySystemsShaders, forKey: "systemsShaders")
+        print(arraySystemsShaders)
+        
+        sender.title = nombre + " ✅"
     }
     
+    @objc func removeSystemShader (_ sender: NSMenuItem) {
+        let sistema = sistemaActual
+        guard let filaABuscar = arraySystemsShaders.firstIndex(where: {$0[0] == sistema}) else {return}
+        arraySystemsShaders.remove(at: filaABuscar)
+        let defaults = UserDefaults.standard
+        defaults.set(arraySystemsShaders, forKey: "systemsShaders")
+                     
+        for a in 0..<(contextMenu.items[2].submenu?.items[1].submenu?.items.count)! {
+            contextMenu.items[2].submenu?.items[1].submenu?.items[a].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))!
+        }
+        contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "NINGUNO ✅"
+        print(arraySystemsShaders)
+    }
+    
+    func nombresSystemaShaders() {
+        let mifilashader = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
+        
+        if mifilashader != nil {
+            let misystemShader = arraySystemsShaders[mifilashader!][1]
+            for a in 0..<(contextMenu.items[2].submenu?.items[1].submenu?.items.count)! {
+                if contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: "") == misystemShader {
+                    contextMenu.items[2].submenu?.items[1].submenu?.items[a].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))! + " ✅"
+                }
+            }
+            
+        } else {
+            contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "NINGUNO ✅"
+        }
+    }
     
     
 }

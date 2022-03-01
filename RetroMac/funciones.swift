@@ -999,11 +999,11 @@ func writeRetroArchConfig () {
     
 }
 
-func gameShader(shader: String?) {
+func gameShader(shader: String) {
     var mytext = String()
     mytext = ""
     mytext = mytext + "shaders = \"1\"" + "\n"
-    mytext = mytext + "shader0 = \"../shaders/shaders_glsl/crt/shaders/zfast_crt.glsl\""
+    mytext = mytext + "shader0 = \"\(shader)\""
     let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
     let fileUrl = home?.appendingPathComponent("RetroArch/config/global.glslp")
     try! mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
