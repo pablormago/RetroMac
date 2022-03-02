@@ -407,27 +407,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         } else {
             contextMenu.items[1].submenu?.items[6].submenu?.items[1].title = "AUTOMÁTICO ✅"
         }
-        //print(arrayGamesShaders)
         
-        // MARK: poner tick al shader del sistema:
-        
-        //Borramos los ticks
-//        for a in 1..<(contextMenu.items[2].submenu?.items[1].submenu?.items.count)! {
-//            contextMenu.items[2].submenu?.items[1].submenu?.items[a].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))!
-//        }
-//
-//        let mifilaShaderSystem = arraySystemsShaders.firstIndex(where: { $0[0] == sistemaActual })
-//        if mifilaShaderSystem != nil {
-//            let miSystemShader = arraySystemsShaders[(mifilaShaderSystem)!][1]
-//            let numero = contextMenu.items[2].submenu?.items[1].submenu?.items.firstIndex(where: {$0.title.replacingOccurrences(of: " ✅", with: "") ==  miSystemShader})
-//            if numero != nil {
-//                contextMenu.items[2].submenu?.items[1].submenu?.items[numero!].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[numero!].title.replacingOccurrences(of: " ✅", with: ""))! + " ✅"
-//            }
-//        } else {
-//            contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "NINGUNO ✅"
-//        }
-//
-//        print(arraySystemsShaders)
         
     }
     
@@ -1972,19 +1952,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 
                 if a == (kk - 1) {
                     abiertaLista = true
-                    //                    self.backButton.isEnabled = true
-                    //                    self.juegosTableView.isEnabled = true
-                    //                    self.juegosTableView.becomeFirstResponder()
-                    //                    self.juegosTableView.cell?.performClick((Any).self)
                 }else{
                     abiertaLista = false
                 }
             }
-            //            for (index, juego)  in self.juegosXml.enumerated() {
-            //
-            //                //print(index)
-            //            }
-            //self.infoLabel.stringValue = "** JUEGOS ESCRAPEADOS **"
         })
         
         
@@ -2016,9 +1987,21 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let unfavGame = NSMenuItem(title: "Eliminar Juego de Favoritos", action: #selector(unfavGames), keyEquivalent: "")
         let searchGame = NSMenuItem(title: "Buscar Juego", action: nil, keyEquivalent: "")
         let delGame = NSMenuItem(title: "Borrar Juego", action: #selector(EnableBoxBorrar), keyEquivalent: "")
+        let bezelGame = NSMenuItem(title: "Usar Bezels/Marcos en el Juego", action: nil, keyEquivalent: "")
         let NetGame = NSMenuItem(title: "Iniciar Partida de NETPLAY", action: #selector(lanzarNetPlay), keyEquivalent: "")
         
+        let gameBezelSubmenu  = NSMenu()
+        bezelGame.submenu = gameBezelSubmenu
+        
+        let autoGameBezel = NSMenuItem(title: "Automático", action: #selector(autoGameBezel), keyEquivalent: "")
+        let siGameBezel = NSMenuItem(title: "Sí", action: #selector(siGameBezel), keyEquivalent: "")
+        let noGameBezel = NSMenuItem(title: "No", action: #selector(noGameBezel), keyEquivalent: "")
+        gameBezelSubmenu.addItem(autoGameBezel)
+        gameBezelSubmenu.addItem(siGameBezel)
+        gameBezelSubmenu.addItem(noGameBezel)
+        
         let gameSubmenu = NSMenu()
+        
         
         gameSubmenu.addItem(renameGame)
         gameSubmenu.addItem(favGame)
@@ -2078,27 +2061,20 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             shaderItem.toolTip = tooltip2
             sistemaShaders.addItem(shaderItem)
         }
-        
-//        let mifilashader = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
-//
-//        if mifilashader != nil {
-//            let misystemShader = arraySystemsShaders[mifilashader!][1]
-//            for a in 0..<(contextMenu.items[2].submenu?.items[1].submenu?.items.count)! {
-//                if contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: "") == misystemShader {
-//                    contextMenu.items[2].submenu?.items[1].submenu?.items[a].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))! + " ✅"
-//                }
-//            }
-//
-//        } else {
-//            contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "NINGUNO ✅"
-//        }
-        
         cambiarShaderItem.submenu = sistemaShaders
         
-        let coreSubmenu = NSMenu()
+        
+        let sistemBezelMenu = NSMenuItem(title: "Usar Bezels/Marcos en el Sistema", action: nil, keyEquivalent: "")
+        let sistemBezelSubMenu = NSMenu ()
+        let siSystemBezel = NSMenuItem(title: "Sí", action: #selector(siSistemBezel), keyEquivalent: "")
+        let noSystemBezel = NSMenuItem(title: "No", action: #selector(noSistemBezel), keyEquivalent: "")
+        sistemBezelSubMenu.addItem(siSystemBezel)
+        sistemBezelSubMenu.addItem(noSystemBezel)
+        sistemBezelMenu.submenu = sistemBezelSubMenu
+        sistemaSubmenu.addItem(sistemBezelMenu)
+        
         ///SubMEnu core por juego
-        ///
-        ///
+        let coreSubmenu = NSMenu()
         var mititulo = "Automático"
         let coreItem = NSMenuItem(title: mititulo, action: #selector(coreauto), keyEquivalent: "")
         coreSubmenu.addItem(coreItem)
@@ -2148,6 +2124,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 shaderSubmenu.addItem(shaderItem)
             }
             gameSubmenu.addItem(shaderMenu)
+            gameSubmenu.addItem(bezelGame)
             gameSubmenu.addItem(NetGame)
         }
         
@@ -2633,6 +2610,101 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         }
     }
     
+    @objc func siGameBezel (){
+        let mifila = juegosTableView.selectedRow
+        let mijuego = juegosXml[mifila][0]
+        let filaenArray = arrayGamesBezels.firstIndex(where: {$0[0] == mijuego})
+        if filaenArray != nil {
+            arrayGamesBezels[filaenArray!][1] = "SI"
+            
+        } else {
+            let migrupo = [mijuego, "SI"]
+            arrayGamesBezels.append(migrupo)
+        }
+        
+        //Falta quitar los ticks
+        for a in 0..<(contextMenu.items[1].submenu?.items[7].submenu!.items.count)! {
+            contextMenu.items[1].submenu?.items[7].submenu!.items[a].title  = (contextMenu.items[1].submenu?.items[7].submenu!.items[a].title.replacingOccurrences(of: "  ✅", with: ""))!
+        }
+        contextMenu.items[1].submenu?.items[7].submenu!.items[1].title = ( contextMenu.items[1].submenu?.items[7].submenu?.items[1].title)! + "  ✅"
+        
+        let defaults = UserDefaults.standard
+        defaults.set(arrayGamesBezels, forKey: "juegosBezels")
+        
+    
+    }
+    
+    @objc func noGameBezel (){
+        let mifila = juegosTableView.selectedRow
+        let mijuego = juegosXml[mifila][0]
+        let filaenArray = arrayGamesBezels.firstIndex(where: {$0[0] == mijuego})
+        if filaenArray != nil {
+            arrayGamesBezels[filaenArray!][1] = "NO"
+            
+        } else {
+            let migrupo = [mijuego, "NO"]
+            arrayGamesBezels.append(migrupo)
+        }
+        
+        
+        for a in 0..<(contextMenu.items[1].submenu?.items[7].submenu!.items.count)! {
+            contextMenu.items[1].submenu?.items[7].submenu!.items[a].title  = (contextMenu.items[1].submenu?.items[7].submenu!.items[a].title.replacingOccurrences(of: "  ✅", with: ""))!
+        }
+        contextMenu.items[1].submenu?.items[7].submenu!.items[2].title = ( contextMenu.items[1].submenu?.items[7].submenu?.items[2].title)! + "  ✅"
+        let defaults = UserDefaults.standard
+        defaults.set(arrayGamesBezels, forKey: "juegosBezels")
+        
+    }
+    
+    @objc func autoGameBezel() {
+        let mifila = juegosTableView.selectedRow
+        let mijuego = juegosXml[mifila][0]
+        let filaenArray = arrayGamesBezels.firstIndex(where: {$0[0] == mijuego})
+        if filaenArray != nil {
+            arrayGamesBezels.remove(at: filaenArray!)
+            for a in 0..<(contextMenu.items[1].submenu?.items[7].submenu!.items.count)! {
+                contextMenu.items[1].submenu?.items[7].submenu!.items[a].title  = (contextMenu.items[1].submenu?.items[7].submenu!.items[a].title.replacingOccurrences(of: "  ✅", with: ""))!
+            }
+            contextMenu.items[1].submenu?.items[7].submenu!.items[0].title = ( contextMenu.items[1].submenu?.items[7].submenu?.items[0].title)! + "  ✅"
+        }
+        let defaults = UserDefaults.standard
+        defaults.set(arrayGamesBezels, forKey: "juegosBezels")
+        
+    }
+    
+    @objc func siSistemBezel(){
+        let sistema = sistemaActual
+        let filaAbuscar = arraySystemsBezels.firstIndex(where: {$0[0] == sistema})
+        if filaAbuscar != nil {
+            
+        } else {
+            let miGrupo = [sistema, "SI"]
+            arraySystemsBezels.append(miGrupo)
+        }
+        
+        let defaults = UserDefaults.standard
+        defaults.set(arraySystemsBezels, forKey: "systemsBezels")
+        
+        // Falta Quitar y poner ticks
+        
+    }
+    
+    @objc func noSistemBezel(){
+        
+        let sistema = sistemaActual
+        let filaAbuscar = arraySystemsBezels.firstIndex(where: {$0[0] == sistema})
+        if filaAbuscar != nil {
+            arraySystemsBezels.remove(at: filaAbuscar!)
+        } else {
+            
+        }
+        
+        let defaults = UserDefaults.standard
+        defaults.set(arraySystemsBezels, forKey: "systemsBezels")
+        
+        // Falta Quitar y poner ticks
+        
+    }
     
 }
 
