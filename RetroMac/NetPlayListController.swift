@@ -36,12 +36,16 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
     }
     
     override func viewDidLoad() {
+        cargaPartidasNetplay ()
+        print("*****ENTRO EN NETPLAY******")
         super.viewDidLoad()
         ventana = "Netplay"
         NetPlayTable.doubleAction = #selector(launchGame)
         //cargaPartidasNetplay ()
         // Do view setup here.
     }
+    
+    
     
     func numberOfRows(in NetPlayTable: NSTableView) -> Int {
         

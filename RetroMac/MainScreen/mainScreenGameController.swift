@@ -363,5 +363,38 @@ extension ViewController {
         }
     }
     
+    public func prueba () {
+        if cuentaPrincipio  > 0 && ventana == "Principal" {
+            print("ENTER LISTA TRUE")
+            let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
+            sistemaActual = button?.Fullname! ?? ""
+            //print(sistemaActual)
+            if backIsPlaying == true {
+                self.backPlayer.player?.pause()
+                SingletonState.shared.myBackPlayer?.player?.pause()
+            }
+            if Int(button!.numeroJuegos!)! > 0 {
+                self.selecionSistema(button!)
+            }
+            
+        } else {
+            if ventana == "Principal" {
+                print("ENTER LISTA FALSE")
+                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                sistemaActual = button?.Fullname! ?? ""
+                if backIsPlaying == true {
+                    self.backPlayer.player?.pause()
+                    SingletonState.shared.myBackPlayer?.player?.pause()
+                }
+                if Int(button!.numeroJuegos!)! > 0 {
+                    self.selecionSistema(button!)
+                }
+            }
+        }
+        if ventana == "Lista" {
+            self.launchGame()
+        }
+    }
+    
 
 }

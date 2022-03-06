@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		270485E52785FA7A00375232 /* funciones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270485E42785FA7A00375232 /* funciones.swift */; };
+		2706121A27CFCFB60016B1EB /* listScreenScrapers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706121927CFCFB60016B1EB /* listScreenScrapers.swift */; };
+		2706121C27CFD0780016B1EB /* listaScreenMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706121B27CFD0780016B1EB /* listaScreenMenu.swift */; };
+		2706121E27CFD1160016B1EB /* listScreenBezels&Shaders&Cores.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706121D27CFD1160016B1EB /* listScreenBezels&Shaders&Cores.swift */; };
+		2706122027CFD2030016B1EB /* listScreenTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706121F27CFD2030016B1EB /* listScreenTable.swift */; };
+		2706122227CFD2560016B1EB /* listScreenFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706122127CFD2560016B1EB /* listScreenFunctions.swift */; };
+		2706122427CFD2D60016B1EB /* listScreenKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706122327CFD2D60016B1EB /* listScreenKeyboard.swift */; };
+		2706122627CFD39A0016B1EB /* listScreenNetPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706122527CFD39A0016B1EB /* listScreenNetPlay.swift */; };
 		2710342627C75DF100615B86 /* NetPlayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2710342527C75DF100615B86 /* NetPlayListController.swift */; };
 		271417972762516C009CA02D /* ListaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271417962762516C009CA02D /* ListaViewController.swift */; };
 		2719BEEB279487F700929EE2 /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 2719BEEA279487F700929EE2 /* favorite.png */; };
@@ -36,6 +43,8 @@
 		279FBD7927739DAC00CD5586 /* icons.icns in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD7827739DAC00CD5586 /* icons.icns */; };
 		27ACE2FF279350DF00B2BB46 /* logo_retro.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */; };
 		27B58953277EF3F6006DBAB9 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */; };
+		27C4A87827D10E800069990A /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C4A87727D10E800069990A /* OptionsViewController.swift */; };
+		27C4A87B27D121480069990A /* optionsScreenFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C4A87A27D121470069990A /* optionsScreenFunctions.swift */; };
 		27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E6675F275A29B300B50AD6 /* parserSystems.swift */; };
 		27E7A2FF2768B40C0087C67A /* es_systems_mac.cfg in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */; };
 		27E7A3032768B4B90087C67A /* logo.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A3022768B4B90087C67A /* logo.jpeg */; };
@@ -62,6 +71,13 @@
 
 /* Begin PBXFileReference section */
 		270485E42785FA7A00375232 /* funciones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funciones.swift; sourceTree = "<group>"; };
+		2706121927CFCFB60016B1EB /* listScreenScrapers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listScreenScrapers.swift; sourceTree = "<group>"; };
+		2706121B27CFD0780016B1EB /* listaScreenMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listaScreenMenu.swift; sourceTree = "<group>"; };
+		2706121D27CFD1160016B1EB /* listScreenBezels&Shaders&Cores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "listScreenBezels&Shaders&Cores.swift"; sourceTree = "<group>"; };
+		2706121F27CFD2030016B1EB /* listScreenTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listScreenTable.swift; sourceTree = "<group>"; };
+		2706122127CFD2560016B1EB /* listScreenFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listScreenFunctions.swift; sourceTree = "<group>"; };
+		2706122327CFD2D60016B1EB /* listScreenKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listScreenKeyboard.swift; sourceTree = "<group>"; };
+		2706122527CFD39A0016B1EB /* listScreenNetPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listScreenNetPlay.swift; sourceTree = "<group>"; };
 		2710342527C75DF100615B86 /* NetPlayListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetPlayListController.swift; sourceTree = "<group>"; };
 		271417962762516C009CA02D /* ListaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaViewController.swift; sourceTree = "<group>"; };
 		2719BEEA279487F700929EE2 /* favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorite.png; sourceTree = "<group>"; };
@@ -93,6 +109,8 @@
 		279FBD7827739DAC00CD5586 /* icons.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icons.icns; path = ../../icons.icns; sourceTree = "<group>"; };
 		27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo_retro.jpeg; sourceTree = "<group>"; };
 		27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = "../../../Downloads/SwiftyJSON-master/Source/SwiftyJSON/SwiftyJSON.swift"; sourceTree = "<group>"; };
+		27C4A87727D10E800069990A /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
+		27C4A87A27D121470069990A /* optionsScreenFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = optionsScreenFunctions.swift; sourceTree = "<group>"; };
 		27E6675F275A29B300B50AD6 /* parserSystems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parserSystems.swift; sourceTree = "<group>"; };
 		27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = es_systems_mac.cfg; sourceTree = "<group>"; };
 		27E7A3022768B4B90087C67A /* logo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = logo.jpeg; path = ../../../Downloads/logo.jpeg; sourceTree = "<group>"; };
@@ -141,6 +159,13 @@
 			isa = PBXGroup;
 			children = (
 				27665BA927B8E8AB00262025 /* listScreenGameController.swift */,
+				2706121927CFCFB60016B1EB /* listScreenScrapers.swift */,
+				2706121B27CFD0780016B1EB /* listaScreenMenu.swift */,
+				2706121D27CFD1160016B1EB /* listScreenBezels&Shaders&Cores.swift */,
+				2706121F27CFD2030016B1EB /* listScreenTable.swift */,
+				2706122127CFD2560016B1EB /* listScreenFunctions.swift */,
+				2706122327CFD2D60016B1EB /* listScreenKeyboard.swift */,
+				2706122527CFD39A0016B1EB /* listScreenNetPlay.swift */,
 			);
 			path = ListScreen;
 			sourceTree = "<group>";
@@ -166,6 +191,7 @@
 		278980192757DCBE00414985 /* RetroMac */ = {
 			isa = PBXGroup;
 			children = (
+				27C4A87927D121130069990A /* optionsScreen */,
 				27665BA827B8E87A00262025 /* ListScreen */,
 				27665BA027B6ED0B00262025 /* MainScreen */,
 				27665B9C27B5A7F100262025 /* singleton.swift */,
@@ -184,6 +210,7 @@
 				27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */,
 				27E7A3022768B4B90087C67A /* logo.jpeg */,
 				278980202757DCC000414985 /* Main.storyboard */,
+				27C4A87727D10E800069990A /* OptionsViewController.swift */,
 				2710342527C75DF100615B86 /* NetPlayListController.swift */,
 				2748C057278620FA002D633B /* mamelist.txt */,
 				27E7A30A276B54240087C67A /* NoVideo.mp4 */,
@@ -213,6 +240,14 @@
 				279FBD53277350C800CD5586 /* up.png */,
 			);
 			path = Arrows;
+			sourceTree = "<group>";
+		};
+		27C4A87927D121130069990A /* optionsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				27C4A87A27D121470069990A /* optionsScreenFunctions.swift */,
+			);
+			path = optionsScreen;
 			sourceTree = "<group>";
 		};
 		B4F8AD097037BB2A5D747E55 /* Pods */ = {
@@ -360,17 +395,26 @@
 			files = (
 				2710342627C75DF100615B86 /* NetPlayListController.swift in Sources */,
 				27665BA527B6EE4400262025 /* mainScreenGameController.swift in Sources */,
+				27C4A87827D10E800069990A /* OptionsViewController.swift in Sources */,
+				2706122027CFD2030016B1EB /* listScreenTable.swift in Sources */,
+				27C4A87B27D121480069990A /* optionsScreenFunctions.swift in Sources */,
+				2706121A27CFCFB60016B1EB /* listScreenScrapers.swift in Sources */,
 				271417972762516C009CA02D /* ListaViewController.swift in Sources */,
 				27670276277E127900E43E7D /* ConfigViewController.swift in Sources */,
+				2706122427CFD2D60016B1EB /* listScreenKeyboard.swift in Sources */,
 				274FEB162773321C007CE357 /* ScrollingTextView.swift in Sources */,
 				27665B9D27B5A7F100262025 /* singleton.swift in Sources */,
 				27665BA727B6EEB100262025 /* mainScreenKeyboard.swift in Sources */,
+				2706122227CFD2560016B1EB /* listScreenFunctions.swift in Sources */,
 				2789801D2757DCBE00414985 /* ViewController.swift in Sources */,
 				272A6EA5278F4417005B0930 /* SplashController.swift in Sources */,
+				2706121E27CFD1160016B1EB /* listScreenBezels&Shaders&Cores.swift in Sources */,
 				27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */,
 				27B58953277EF3F6006DBAB9 /* SwiftyJSON.swift in Sources */,
 				27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */,
 				2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */,
+				2706121C27CFD0780016B1EB /* listaScreenMenu.swift in Sources */,
+				2706122627CFD39A0016B1EB /* listScreenNetPlay.swift in Sources */,
 				270485E52785FA7A00375232 /* funciones.swift in Sources */,
 				27665BAA27B8E8AB00262025 /* listScreenGameController.swift in Sources */,
 			);

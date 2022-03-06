@@ -1040,7 +1040,26 @@ func gameOverlay(game: String) {
     let pathComponent = url2.appendingPathComponent("RetroMac/custom_overlay.cfg")
     //let filePath = pathComponent?.path
     try! myOverlayGame.write(to: pathComponent!, atomically: false, encoding: .utf8)
-}   
+}
+
+func noGameOverlay() {
+    
+    
+    var myOverlayGame = "overlays = 1" + "\n"
+    myOverlayGame = myOverlayGame + "overlay0_overlay = " + "\"\" \n"
+    myOverlayGame = myOverlayGame + "overlay0_full_screen = true" + "\n"
+    myOverlayGame = myOverlayGame + "overlay0_descs = 0" + "\n"
+    myOverlayGame = myOverlayGame + "shaders = 1" + "\n"
+    myOverlayGame = myOverlayGame + "video_shader = \"/Users/pablojimenez/Documents/RetroMac/shaders/zfast_crt.glsl\"" + "\n"
+    myOverlayGame = myOverlayGame + "filter_linear0 = true"
+    
+    
+    let path2 = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+    let url2 = NSURL(fileURLWithPath: path2)
+    let pathComponent = url2.appendingPathComponent("RetroMac/custom_overlay.cfg")
+    //let filePath = pathComponent?.path
+    try! myOverlayGame.write(to: pathComponent!, atomically: false, encoding: .utf8)
+}
 
 func cargaPartidasNetplay () {
     netplayPlays = []

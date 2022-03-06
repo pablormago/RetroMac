@@ -64,13 +64,11 @@ var arraySystemsShaders = [[String]] ()
 var arrayGamesBezels = [[String]]()
 var arraySystemsBezels = [[String]]()
 
+
 class ViewController: NSViewController {
     var sistema = ""
     var comandoexe = ""
     var anchuraPantall = 0
-    
-    
-    
     var keyIsDown = false
     var cuentaDec = CGFloat()
     //override var acceptsFirstResponder: Bool { return true }
@@ -83,11 +81,66 @@ class ViewController: NSViewController {
     @IBOutlet weak var onOff: NSTextField!
     @IBOutlet weak var settingsButton: NSButton!
     
+    @IBAction func enterSystem(_ sender: Any) {
+        if cuentaPrincipio  > 0 && ventana == "Principal" {
+            print("ENTER LISTA TRUE")
+            let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
+            sistemaActual = button?.Fullname! ?? ""
+            //print(sistemaActual)
+            if backIsPlaying == true {
+                self.backPlayer.player?.pause()
+                SingletonState.shared.myBackPlayer?.player?.pause()
+            }
+            if Int(button!.numeroJuegos!)! > 0 {
+                self.selecionSistema(button!)
+            }
+            
+        } else {
+            if ventana == "Principal" {
+                print("ENTER LISTA FALSE")
+                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                sistemaActual = button?.Fullname! ?? ""
+                if backIsPlaying == true {
+                    self.backPlayer.player?.pause()
+                    SingletonState.shared.myBackPlayer?.player?.pause()
+                }
+                if Int(button!.numeroJuegos!)! > 0 {
+                    self.selecionSistema(button!)
+                }
+            }
+        }
+    }
+    @IBOutlet weak var enterBtn: NSButton!
     @IBOutlet weak var backPlayer: AVPlayerView!
     @IBOutlet weak var sistemaLabel: NSTextField!
     @IBOutlet weak var rutaRomsLabel: NSTextField!
     @IBOutlet weak var scrollMain: NSScrollView!
     @IBOutlet weak var myImage: NSImageView!
+    
+    @IBAction func openNetplay(_ sender: Any) {
+        lazy var sheetViewController: NSViewController = {
+            return self.storyboard!.instantiateController(withIdentifier: "NetPlayList")
+            as! NSViewController
+        }()
+        SingletonState.shared.currentViewController?.presentAsSheet(sheetViewController)
+    }
+    @IBOutlet weak var netBtn: NSButton!
+    @IBOutlet weak var rightBtm: NSButton!
+    @IBAction func masMenu(_ sender: Any) {
+        if cuentaPrincipio == 0 {
+            self.masSistemaKeys()
+        }else {
+            self.masSistemaListaKeys()
+        }
+    }
+    @IBOutlet weak var leftBtn: NSButton!
+    @IBAction func menosMenu(_ sender: Any) {
+        if cuentaPrincipio == 0 {
+            self.menosSistemaKeys()
+        }else {
+            self.menosSistemaListaKeys()
+        }
+    }
     
     lazy var sheetViewController: NSViewController = {
         return self.storyboard!.instantiateController(withIdentifier: "ConfigView")
@@ -185,24 +238,24 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         ventana = "Principal"
+        
         print("DID LOAD")
-        cargaPartidasNetplay ()
+        //cargaPartidasNetplay ()
         cuenta = 0
         mainController = self
         SingletonState.shared.mySystemLabel = sistemaLabel
         SingletonState.shared.myBackPlayer = backPlayer
-        //view.window?.isOpaque = false
-        //view.window?.backgroundColor = NSColor (red: 1, green: 0.5, blue: 0.5, alpha: 0.5)
-        
         rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
         //print(rutaApp)
         onOff.stringValue = "SALIR"
         var totalSistemas = 0
         totalSistemas = allTheGames.count
         let totalAnchuraMenu = ((totalSistemas+1) * 560)
+        
         //Parsear Sistemas
         scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         ///Carga desde allTheGames
+        
         var counter = 0
         let documentView = NSView(frame: NSRect(x: 0,y: 0,width: totalAnchuraMenu,height: 178))
         for consola in allTheGames {
@@ -271,14 +324,7 @@ class ViewController: NSViewController {
         }
         cuentaDec = CGFloat(botonactual)
         
-        // - MARK: cargar array de juegos-cores, juegos-shaders y systems-shaders, etc
         
-        let defaults = UserDefaults.standard
-        arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
-        arrayGamesShaders = (defaults.array(forKey: "juegosShaders")as? [[String]]) ?? []
-        arraySystemsShaders = (defaults.array(forKey: "systemsShaders")as? [[String]]) ?? []
-        arrayGamesBezels = (defaults.array(forKey: "juegosBezels")as? [[String]]) ?? []
-        arraySystemsBezels = (defaults.array(forKey: "systemsBezels")as? [[String]]) ?? []
         
         startWatchingForControllers()
         self.view.window?.makeFirstResponder(self.scrollMain)
@@ -286,7 +332,7 @@ class ViewController: NSViewController {
         SingletonState.shared.currentViewController = self
         SingletonState.shared.currentViewController!.view.window?.makeFirstResponder(SingletonState.shared.myscroller)
         
-       
+        
         
         
     }
@@ -355,12 +401,14 @@ class ViewController: NSViewController {
     @objc public func selecionSistema(_ sender: ButtonConsolas) {
         //GCController.stopWirelessControllerDiscovery()
         //NotificationCenter.default.removeObserver(self, name: .GCControllerDidConnect, object: nil)
+        
         if Int(sender.numeroJuegos!)! > 0 {
             //NotificationCenter.default.removeObserver(self)
             backStop()
             if backIsPlaying == true {
                 backStop()
             }
+            
             sistemaActual = sender.Fullname!
             nombresistemaactual = sender.Sistema!
             rompath = rutaApp + sender.RomsPath!
@@ -386,23 +434,23 @@ class ViewController: NSViewController {
     
     
     func backplay (tag: Int) {
-                let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
-                //backIsPlaying = true
-                if button?.videos?.count ?? 0 > 0 {
-                    let miVideo = button?.videos?.randomElement()
-                    if miVideo != "" {
-                        //print("Mivideo: \(miVideo)")
-                        let videoURL = URL(fileURLWithPath: miVideo!)
-                        let player2 = AVPlayer(url: videoURL)
-                        backPlayer.player = player2
-                        backPlayer.player!.play()
-                        backIsPlaying = true
-                        player2.actionAtItemEnd = .pause
-//                        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
-//                        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd2(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
-                    }
-                }
-     }
+        let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
+        //backIsPlaying = true
+        if button?.videos?.count ?? 0 > 0 {
+            let miVideo = button?.videos?.randomElement()
+            if miVideo != "" {
+                //print("Mivideo: \(miVideo)")
+                let videoURL = URL(fileURLWithPath: miVideo!)
+                let player2 = AVPlayer(url: videoURL)
+                backPlayer.player = player2
+                backPlayer.player!.play()
+                backIsPlaying = true
+                player2.actionAtItemEnd = .pause
+                NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
+                NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd2(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
+            }
+        }
+    }
     
     func backStop () {
         backPlayer.player?.pause()

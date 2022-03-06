@@ -16,10 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         // - MARK: Controllers
-        
-//        GCController.startWirelessControllerDiscovery()
-//        let controllers = GCController.controllers()
-//        print(controllers.count)
+       
         
     }
 

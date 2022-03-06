@@ -162,9 +162,18 @@ class SplashController: NSViewController {
             llenaSistemasIds()
             readRetroArchConfig ()
             shadersList ()
+            // - MARK: cargar array de juegos-cores, juegos-shaders y systems-shaders, etc
+            
+            let defaults = UserDefaults.standard
+            arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
+            arrayGamesShaders = (defaults.array(forKey: "juegosShaders")as? [[String]]) ?? []
+            arraySystemsShaders = (defaults.array(forKey: "systemsShaders")as? [[String]]) ?? []
+            arrayGamesBezels = (defaults.array(forKey: "juegosBezels")as? [[String]]) ?? []
+            arraySystemsBezels = (defaults.array(forKey: "systemsBezels")as? [[String]]) ?? []
             self.cuentaJuegosEnSistemas()
         }, completion:{
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                
                 self.view.window?.contentViewController = controller
             }
         })
