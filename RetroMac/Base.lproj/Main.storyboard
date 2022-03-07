@@ -810,23 +810,9 @@ Gw
                                 <rect key="frame" x="1657" y="1010" width="263" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             </progressIndicator>
-                            <popUpButton hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O8K-3R-FpD">
-                                <rect key="frame" x="922" y="526" width="78" height="25"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9AH-AG-yRc" id="IrD-Mf-EFn">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
-                                    <menu key="menu" id="SDp-zp-zRL">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="9AH-AG-yRc"/>
-                                            <menuItem title="Item 2" id="1vY-Pj-Eem"/>
-                                            <menuItem title="Item 3" id="dpf-gY-SIA"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                            </popUpButton>
                             <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kTh-SP-VQE">
-                                <rect key="frame" x="1034" y="689" width="80" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="1827" y="977" width="80" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="options" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="56i-Uk-A2A">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -840,6 +826,20 @@ Gw
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" id="sWx-wj-mk8"/>
                             </imageView>
+                            <popUpButton hidden="YES" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O8K-3R-FpD">
+                                <rect key="frame" x="1826" y="952" width="78" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9AH-AG-yRc" id="IrD-Mf-EFn">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="SDp-zp-zRL">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="9AH-AG-yRc"/>
+                                            <menuItem title="Item 2" id="1vY-Pj-Eem"/>
+                                            <menuItem title="Item 3" id="dpf-gY-SIA"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
                         </subviews>
                         <constraints>
                             <constraint firstItem="a3f-1P-Ihc" firstAttribute="width" secondItem="a3f-1P-Ihc" secondAttribute="height" multiplier="104:51" id="Fvd-Cr-CzW"/>
@@ -911,7 +911,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uGl-i7-Qn4">
-                                <rect key="frame" x="-2" y="273" width="515" height="71"/>
+                                <rect key="frame" x="-2" y="283" width="515" height="71"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" allowsUndo="NO" alignment="center" title="RetroMAC" id="xxn-qk-uXh">
                                     <font key="font" size="51" name="GB18030Bitmap"/>
@@ -936,12 +936,12 @@ Gw
             <objects>
                 <viewController title="Configuración" storyboardIdentifier="ConfigView" showSeguePresentationStyle="single" id="nsF-45-zou" customClass="ConfigViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="lLj-c3-IEJ">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="403"/>
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="533"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dfF-yl-fFz">
-                                <rect key="frame" x="18" y="357" width="414" height="23"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="18" y="490" width="414" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Ajustes ScreenScraper.fr" id="jiE-mZ-Wf6">
                                     <font key="font" size="13" name="Menlo-Bold"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -949,17 +949,26 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hNx-9R-AO3">
-                                <rect key="frame" x="18" y="197" width="414" height="23"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="18" y="329" width="414" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Otros ajustes" id="fAP-tK-oQ2">
                                     <font key="font" size="13" name="Menlo-Bold"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ot9-Xi-Q09">
+                                <rect key="frame" x="18" y="164" width="414" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Ajustes Netplay" id="qoP-mF-39i">
+                                    <font key="font" size="13" name="Menlo-Bold"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WuN-2t-lSV">
-                                <rect key="frame" x="18" y="154" width="414" height="23"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="18" y="286" width="414" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="En juegos/sistemas nuevos, buscar media en Local" id="rwi-pD-pYP">
                                     <font key="font" size="12" name="Menlo-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -967,17 +976,35 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gC1-jy-35D">
-                                <rect key="frame" x="18" y="114" width="414" height="23"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="18" y="246" width="414" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Habilitar Marcos en RetroArch" id="hUs-qz-UGX">
                                     <font key="font" size="12" name="Menlo-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4xi-3M-yMa">
+                                <rect key="frame" x="18" y="116" width="154" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Usuario / Nickname" id="WsR-9m-l2K">
+                                    <font key="font" size="12" name="Menlo-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dz6-AL-XuE">
+                                <rect key="frame" x="18" y="71" width="154" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Servidor Relay" id="QWL-jb-d9e">
+                                    <font key="font" size="12" name="Menlo-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0rv-0k-c5a">
-                                <rect key="frame" x="18" y="294" width="69" height="23"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="18" y="426" width="69" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Usuario:" id="Q0r-ln-7lY">
                                     <font key="font" size="13" name="Menlo-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -985,8 +1012,8 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="os2-4V-cJ1">
-                                <rect key="frame" x="18" y="246" width="75" height="23"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="18" y="378" width="75" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Password:" id="YGO-uY-5A5">
                                     <font key="font" size="13" name="Menlo-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -994,8 +1021,8 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2p8-WP-HhN">
-                                <rect key="frame" x="110" y="299" width="320" height="21"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="110" y="431" width="320" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="nombre de usuario" drawsBackground="YES" id="YqZ-ZO-BvG">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1003,8 +1030,8 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TeH-AC-JAM">
-                                <rect key="frame" x="110" y="251" width="320" height="21"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="110" y="383" width="320" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="password" drawsBackground="YES" id="AjI-hZ-cVj">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1012,8 +1039,8 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8K-wj-IsK">
-                                <rect key="frame" x="104" y="15" width="89" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="104" y="13" width="89" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <buttonCell key="cell" type="push" title="Guardar" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tke-gW-idL">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1023,8 +1050,8 @@ Gw
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KW5-Zd-RFi">
-                                <rect key="frame" x="263" y="15" width="67" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="263" y="13" width="67" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <buttonCell key="cell" type="push" title="Salir" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TPx-L0-b7A">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1034,16 +1061,16 @@ Gw
                                 </connections>
                             </button>
                             <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="0Tl-zP-JTa">
-                                <rect key="frame" x="388" y="158" width="42" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="388" y="288" width="42" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </switch>
                             <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="FSy-aB-Oec">
-                                <rect key="frame" x="388" y="118" width="42" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="388" y="248" width="42" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </switch>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6jE-sc-0b4">
-                                <rect key="frame" x="18" y="74" width="414" height="23"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="18" y="206" width="414" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Habilitar Shaders en RetroArch" id="Roh-kQ-Fqd">
                                     <font key="font" size="12" name="Menlo-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1051,17 +1078,52 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="aXe-i5-jtg">
-                                <rect key="frame" x="388" y="78" width="42" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="388" y="208" width="42" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </switch>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SbN-zP-4VL">
+                                <rect key="frame" x="220" y="73" width="208" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="madrid" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="2uW-qI-re0" id="BEn-zZ-pgr">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="kfa-PD-nT4">
+                                        <items>
+                                            <menuItem title="madrid" state="on" id="2uW-qI-re0">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="nyc" id="BhI-mm-iYc">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="saopaulo" id="shp-Bu-Gyz">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="singapore" id="hGS-X1-3Na">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cee-ds-jwi">
+                                <rect key="frame" x="223" y="122" width="201" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="l6n-2m-odi">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="configTxt" destination="cee-ds-jwi" id="neX-8z-72M"/>
                         <outlet property="guardarBtn" destination="K8K-wj-IsK" id="4cc-AS-UhU"/>
                         <outlet property="localSwitch" destination="0Tl-zP-JTa" id="fTM-YI-VRP"/>
                         <outlet property="marcosSwitch" destination="FSy-aB-Oec" id="rt8-D3-vXw"/>
                         <outlet property="passwordTxt" destination="TeH-AC-JAM" id="3gm-4Z-E4A"/>
                         <outlet property="salirBtn" destination="KW5-Zd-RFi" id="DV5-ut-xTD"/>
+                        <outlet property="serverList" destination="SbN-zP-4VL" id="eND-jL-9K3"/>
                         <outlet property="shadersSwitch" destination="aXe-i5-jtg" id="LXi-QF-V0B"/>
                         <outlet property="userTXT" destination="2p8-WP-HhN" id="EgR-PI-Rc1"/>
                         <segue destination="XfG-lQ-9wD" kind="show" id="63D-qW-YZX"/>
@@ -1070,7 +1132,7 @@ Gw
                 </viewController>
                 <customObject id="gmZ-Vd-4yB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-982" y="2313.5"/>
+            <point key="canvasLocation" x="-982" y="2378.5"/>
         </scene>
         <!--Net Play List Controller-->
         <scene sceneID="UhW-Rl-KcX">
@@ -1662,8 +1724,8 @@ Gw
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="LeI-Id-sQd"/>
-        <segue reference="63D-qW-YZX"/>
+        <segue reference="mXR-Hk-bfU"/>
+        <segue reference="rNI-hX-NhJ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>

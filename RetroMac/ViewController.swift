@@ -63,6 +63,7 @@ var arrayGamesShaders = [[String]]()
 var arraySystemsShaders = [[String]] ()
 var arrayGamesBezels = [[String]]()
 var arraySystemsBezels = [[String]]()
+var citraConfig = [String]()
 
 
 class ViewController: NSViewController {

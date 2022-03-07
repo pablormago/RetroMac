@@ -8,6 +8,7 @@
 
 import Foundation
 import GameController
+import Commands
 
 func llenaSistemasIds() {
     let nes = ["nes", "3"]
@@ -188,73 +189,73 @@ func llenaSistemasIds() {
 
 func NetPlayCores () {
     NetCores = [ ["81_libretro.dylib" , "81"],
-                ["blastem_libretro.dylib" , "BlastEm"],
-                ["bsnes_hd_beta_libretro.dylib" , "bsnes-hd beta"],
-                ["bsnes_libretro.dylib" , "bsnes"],
-                ["bsnes_mercury_accuracy_libretro.dylib" , "bsnes-mercury Accuracy"],
-                ["bsnes_mercury_balanced_libretro.dylib" , "bsnes-mercury Balanced"],
-                ["bsnes_mercury_performance_libretro.dylib" , "bsnes-mercury Performance"],
-                ["bsnes2014_accuracy_libretro.dylib" , "bsnes 2014 Accuracy"],
-                ["bsnes2014_balanced_libretro.dylib" , "bsnes 2014 Balanced"],
-                ["bsnes2014_cplusplus98_libretro.dylib" , "bsnes C++98 (v085)"],
-                ["bsnes2014_performance_libretro.dylib" , "bsnes-mercury Performance"],
-                ["cap32_libretro.dylib" , "Caprice32"],
-                ["desmume_libretro.dylib" , "DeSmuME"],
-                ["fbalpha_cps1_libretro.dylib" , "FB Alpha 2012 CPS-1"],
-                ["fbalpha_cps2_libretro.dylib" , "FB Alpha 2012 CPS-2"],
-                ["fbalpha_cps3_libretro.dylib" , "FB Alpha 2012 CPS-3"],
-                ["fbalpha2012_libretro.dylib" , "FB Alpha 2012"],
-                ["fbalpha2012_neogeo_libretro.dylib" , "FB Alpha 2012 Neo Geo"],
-                ["fbneo_libretro.dylib" , "FinalBurn Neo"],
-                ["fceumm_libretro.dylib" , "FCEUmm"],
-                ["gearsystem_libretro.dylib" , "Gearsystem"],
-                ["genesis_plus_gx_libretro.dylib" , "Genesis Plus GX"],
-                ["genesis_plus_gx_wide_libretro.dylib" , "Genesis Plus GX Wide"],
-                ["handy_libretro.dylib" , "Handy"],
-                ["higan_sfc_libretro.dylib" , "nSide (Super Famicom Accuracy)"],
-                ["mame_libretro.dylib" , "MAME (Git)"],
-                ["mame2003_libretro.dylib" , "MAME 2003 (0.78)"],
-                ["mame2003_plus_libretro.dylib" , "MAME 2003-Plus"],
-                ["mame2010_libretro.dylib" , "MAME 2010 (0.139)"],
-                ["mame2010_libretro.dylib" , "MAME 2010"],
-                ["mednafen_gba_libretro.dylib" , "Beetle GBA"],
-                ["mednafen_lynx_libretro.dylib" , "Beetle Lynx"],
-                ["mednafen_ngp_libretro.dylib" , "Beetle NeoPop"],
-                ["mednafen_pce_fast_libretro.dylib" , "Beetle PCE Fast"],
-                ["mednafen_pce_libretro.dylib" , "Beetle PCE"],
-                ["mednafen_pcfx_libretro.dylib" , "Beetle PC-FX"],
-                ["mednafen_snes_libretro.dylib" , "Beetle bsnes"],
-                ["mednafen_vb_libretro.dylib" , "Beetle VB"],
-                ["mednafen_wswan_libretro.dylib" , "Beetle WonderSwan"],
-                ["mesen_libretro.dylib" , "Mesen"],
-                ["mesen-s_libretro.dylib" , "Mesen-S"],
-                ["nestopia_libretro.dylib" , "Nestopia"],
-                ["np2kai_libretro.dylib" , "Neko Project II Kai"],
-                ["opera_libretro.dylib" , "Opera"],
-                ["parallel_n64_libretro.dylib" , "ParaLLEl N64"],
-                ["pcsx_rearmed_libretro.dylib" , "PCSX-ReARMed"],
-                ["picodrive_libretro.dylib" , "PicoDrive"],
-                ["potator_libretro.dylib" , "Potator"],
-                ["px68k_libretro.dylib" , "PX68k"],
-                ["quicknes_libretro.dylib" , "QuickNES"],
-                ["race_libretro.dylib" , "RACE"],
-                ["sameboy_libretro.dylib" , "SameBoy"],
-                ["snes9x_libretro.dylib" , "Snes9x"],
-                ["snes9x2002_libretro.dylib" , "Snes9x 2002"],
-                ["snes9x2005_libretro.dylib" , "Snes9x 2005"],
-                ["snes9x2005_plus_libretro.dylib" , "Snes9x 2005 Plus"],
-                ["snes9x2010_libretro.dylib" , "Snes9x 2010"],
-                ["stella_libretro.dylib" , "Stella"],
-                ["stella2014_libretro.dylib" , "Stella 2014"],
-                ["tgbdual_libretro.dylib" , "TGB Dual"],
-                ["theodore_libretro.dylib" , "theodore"],
-                ["vba_next_libretro.dylib" , "VBA Next"],
-                ["vbam_libretro.dylib" , "VBA-M"],
-                ["flycast_libretro.dylib", "Flycast"],
-                ["2048_libretro.dylib" , "2048"],
-                ["mgba_libretro.dylib" , "mGBA"],
-                ["mednafen_psx_hw_libretro.dylib" , "Beetle PSX HW"]
-]
+                 ["blastem_libretro.dylib" , "BlastEm"],
+                 ["bsnes_hd_beta_libretro.dylib" , "bsnes-hd beta"],
+                 ["bsnes_libretro.dylib" , "bsnes"],
+                 ["bsnes_mercury_accuracy_libretro.dylib" , "bsnes-mercury Accuracy"],
+                 ["bsnes_mercury_balanced_libretro.dylib" , "bsnes-mercury Balanced"],
+                 ["bsnes_mercury_performance_libretro.dylib" , "bsnes-mercury Performance"],
+                 ["bsnes2014_accuracy_libretro.dylib" , "bsnes 2014 Accuracy"],
+                 ["bsnes2014_balanced_libretro.dylib" , "bsnes 2014 Balanced"],
+                 ["bsnes2014_cplusplus98_libretro.dylib" , "bsnes C++98 (v085)"],
+                 ["bsnes2014_performance_libretro.dylib" , "bsnes-mercury Performance"],
+                 ["cap32_libretro.dylib" , "Caprice32"],
+                 ["desmume_libretro.dylib" , "DeSmuME"],
+                 ["fbalpha_cps1_libretro.dylib" , "FB Alpha 2012 CPS-1"],
+                 ["fbalpha_cps2_libretro.dylib" , "FB Alpha 2012 CPS-2"],
+                 ["fbalpha_cps3_libretro.dylib" , "FB Alpha 2012 CPS-3"],
+                 ["fbalpha2012_libretro.dylib" , "FB Alpha 2012"],
+                 ["fbalpha2012_neogeo_libretro.dylib" , "FB Alpha 2012 Neo Geo"],
+                 ["fbneo_libretro.dylib" , "FinalBurn Neo"],
+                 ["fceumm_libretro.dylib" , "FCEUmm"],
+                 ["gearsystem_libretro.dylib" , "Gearsystem"],
+                 ["genesis_plus_gx_libretro.dylib" , "Genesis Plus GX"],
+                 ["genesis_plus_gx_wide_libretro.dylib" , "Genesis Plus GX Wide"],
+                 ["handy_libretro.dylib" , "Handy"],
+                 ["higan_sfc_libretro.dylib" , "nSide (Super Famicom Accuracy)"],
+                 ["mame_libretro.dylib" , "MAME (Git)"],
+                 ["mame2003_libretro.dylib" , "MAME 2003 (0.78)"],
+                 ["mame2003_plus_libretro.dylib" , "MAME 2003-Plus"],
+                 ["mame2010_libretro.dylib" , "MAME 2010 (0.139)"],
+                 ["mame2010_libretro.dylib" , "MAME 2010"],
+                 ["mednafen_gba_libretro.dylib" , "Beetle GBA"],
+                 ["mednafen_lynx_libretro.dylib" , "Beetle Lynx"],
+                 ["mednafen_ngp_libretro.dylib" , "Beetle NeoPop"],
+                 ["mednafen_pce_fast_libretro.dylib" , "Beetle PCE Fast"],
+                 ["mednafen_pce_libretro.dylib" , "Beetle PCE"],
+                 ["mednafen_pcfx_libretro.dylib" , "Beetle PC-FX"],
+                 ["mednafen_snes_libretro.dylib" , "Beetle bsnes"],
+                 ["mednafen_vb_libretro.dylib" , "Beetle VB"],
+                 ["mednafen_wswan_libretro.dylib" , "Beetle WonderSwan"],
+                 ["mesen_libretro.dylib" , "Mesen"],
+                 ["mesen-s_libretro.dylib" , "Mesen-S"],
+                 ["nestopia_libretro.dylib" , "Nestopia"],
+                 ["np2kai_libretro.dylib" , "Neko Project II Kai"],
+                 ["opera_libretro.dylib" , "Opera"],
+                 ["parallel_n64_libretro.dylib" , "ParaLLEl N64"],
+                 ["pcsx_rearmed_libretro.dylib" , "PCSX-ReARMed"],
+                 ["picodrive_libretro.dylib" , "PicoDrive"],
+                 ["potator_libretro.dylib" , "Potator"],
+                 ["px68k_libretro.dylib" , "PX68k"],
+                 ["quicknes_libretro.dylib" , "QuickNES"],
+                 ["race_libretro.dylib" , "RACE"],
+                 ["sameboy_libretro.dylib" , "SameBoy"],
+                 ["snes9x_libretro.dylib" , "Snes9x"],
+                 ["snes9x2002_libretro.dylib" , "Snes9x 2002"],
+                 ["snes9x2005_libretro.dylib" , "Snes9x 2005"],
+                 ["snes9x2005_plus_libretro.dylib" , "Snes9x 2005 Plus"],
+                 ["snes9x2010_libretro.dylib" , "Snes9x 2010"],
+                 ["stella_libretro.dylib" , "Stella"],
+                 ["stella2014_libretro.dylib" , "Stella 2014"],
+                 ["tgbdual_libretro.dylib" , "TGB Dual"],
+                 ["theodore_libretro.dylib" , "theodore"],
+                 ["vba_next_libretro.dylib" , "VBA Next"],
+                 ["vbam_libretro.dylib" , "VBA-M"],
+                 ["flycast_libretro.dylib", "Flycast"],
+                 ["2048_libretro.dylib" , "2048"],
+                 ["mgba_libretro.dylib" , "mGBA"],
+                 ["mednafen_psx_hw_libretro.dylib" , "Beetle PSX HW"]
+    ]
 }
 
 func mamelista() -> Any{
@@ -908,16 +909,7 @@ func readRetroArchConfig () {
     let applicationSupportFolderURL = try! (FileManager.default.urls(for: .applicationSupportDirectory,
                                                                         in: .userDomainMask)).first
     let retroarchfolder = applicationSupportFolderURL?.appendingPathComponent("RetroArch/config/retroarch.cfg")
-    //    let kk = retroarchfolder?.path
-    //
-    //        do {
-    //        let data = try String(contentsOf: retroarchfolder!, encoding: .utf8)
-    //            let myStrings = data.components(separatedBy: .newlines)
-    //            print(myStrings)
-    //        } catch {
-    //            print(error)
-    //        }
-    //
+    
     let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
     
     // add a filename
@@ -983,15 +975,14 @@ func readRetroArchConfig () {
 
 func writeRetroArchConfig () {
     //"input_overlay_aspect_adjust_landscape = 0.130000"
-//    let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
-//    retroArchConfig[mifila!][1] = value
+    //    let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
+    //    retroArchConfig[mifila!][1] = value
     var mytext = String()
     mytext = ""
     for line in retroArchConfig {
         mytext = mytext + line[0] + " = \"" + line[1] + "\"\n"
         
     }
-    //print(mytext)
     let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
     let fileUrl = home?.appendingPathComponent("RetroArch/config/retroarch.cfg")
     try! mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
@@ -1007,6 +998,8 @@ func gameShader(shader: String) {
     let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
     let fileUrl = home?.appendingPathComponent("RetroArch/config/global.glslp")
     try! mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
+    
+    
 }
 
 func gameOverlay(game: String) {
@@ -1026,20 +1019,39 @@ func gameOverlay(game: String) {
             break
         }
     }
+    
+    if rutaoverlay == "" {
+        let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        if filaConsola != nil {
+            let sistemaABuscar = allTheGames[filaConsola!].sistema
+            let miruta = rutaApp + "/decorations/"
+            let fileManager = FileManager.default
+            let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: miruta as String)!
+            while let element = enumerator.nextObject() as? String {
+                if element.contains(sistemaABuscar + ".png") {
+                    rutaoverlay = miruta + element
+                    break
+                }
+            }
+        }
+    }
+    
     var myOverlayGame = "overlays = 1" + "\n"
     myOverlayGame = myOverlayGame + "overlay0_overlay = " + "\"\(rutaoverlay)\" \n"
     myOverlayGame = myOverlayGame + "overlay0_full_screen = true" + "\n"
-    myOverlayGame = myOverlayGame + "overlay0_descs = 0" + "\n"
-    myOverlayGame = myOverlayGame + "shaders = 1" + "\n"
-    myOverlayGame = myOverlayGame + "video_shader = \"/Users/pablojimenez/Documents/RetroMac/shaders/zfast_crt.glsl\"" + "\n"
-    myOverlayGame = myOverlayGame + "filter_linear0 = true"
+    myOverlayGame = myOverlayGame + "overlay0_descs = 0"
+    
+    //input_overlay_opacity = "1.000000" en retroarch config
     
     
     let path2 = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
     let url2 = NSURL(fileURLWithPath: path2)
     let pathComponent = url2.appendingPathComponent("RetroMac/custom_overlay.cfg")
     //let filePath = pathComponent?.path
+    
     try! myOverlayGame.write(to: pathComponent!, atomically: false, encoding: .utf8)
+    
+    
 }
 
 func noGameOverlay() {
@@ -1116,7 +1128,7 @@ func cargaPartidasNetplay () {
             
             var datosPartida: PartidaNetplay = PartidaNetplay(id: Int(subJson["id"].stringValue), username: subJson["username"].stringValue, country: subJson["country"].stringValue, game_Name: subJson["game_name"].stringValue, game_Crc: subJson["game_crc"].stringValue, core_Name: subJson["core_name"].stringValue, core_Version:  subJson["core_version"].stringValue, subsystem_Name: subJson["subsystem_name"].stringValue, retroarch_Version: subJson["retroarch_version"].stringValue, frontend: subJson["frontend"].stringValue, ip: subJson["ip"].stringValue, port: subJson["port"].stringValue, mitm_Ip: subJson["mitm_ip"].stringValue, mitm_Port: subJson["mitm_port"].stringValue, mitm_Session: subJson["mitm_session"].stringValue, host_Method: Int(subJson["host_method"].stringValue), has_Password: subJson["has_password"].stringValue, has_SpectatePassword: subJson["has_spectate_password"].stringValue, connectable: subJson["connectable"].stringValue, isRetroarch: subJson["is_retroarch"].stringValue, created: subJson["created"].stringValue, updated: subJson["updated"].stringValue, enabled: habilitado, comando: parametrosJuego.comandoGame, gamePath: parametrosJuego.rutaGame, isRelay: isRelay)
             netplayPlays.append(datosPartida)
-           
+            
         }
         
     }
@@ -1196,5 +1208,69 @@ func shadersList () {
         }
     }
     arrayShaders.sort(by: {($0[1] ) < ($1[1]) })
+}
+
+func readCitraConfig () {
+    let home = FileManager.default.homeDirectoryForCurrentUser
+    let fileUrl = home.appendingPathComponent(".config/citra-emu/qt-config.ini")
+    let fileManager = FileManager.default
+    if fileManager.fileExists(atPath: fileUrl.path) {
+        // make sure the file exists
+        guard FileManager.default.fileExists(atPath: (fileUrl.path)) else {
+            preconditionFailure("file expected at \(fileUrl.absoluteString) is missing")
+        }
+        
+        // open the file for reading
+        // note: user should be prompted the first time to allow reading from this location
+        guard let filePointer:UnsafeMutablePointer<FILE> = fopen(fileUrl.path,"r") else {
+            preconditionFailure("Could not open file at \(fileUrl.absoluteString)")
+        }
+        
+        // a pointer to a null-terminated, UTF-8 encoded sequence of bytes
+        var lineByteArrayPointer: UnsafeMutablePointer<CChar>? = nil
+        
+        // see the official Swift documentation for more information on the `defer` statement
+        // https://docs.swift.org/swift-book/ReferenceManual/Statements.html#grammar_defer-statement
+        defer {
+            // remember to close the file when done
+            fclose(filePointer)
+            
+            // The buffer should be freed by even if getline() failed.
+            lineByteArrayPointer?.deallocate()
+        }
+        
+        // the smallest multiple of 16 that will fit the byte array for this line
+        var lineCap: Int = 0
+        
+        // initial iteration
+        var bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
+        
+        
+        while (bytesRead > 0) {
+            
+            // note: this translates the sequence of bytes to a string using UTF-8 interpretation
+            let lineAsString = String.init(cString:lineByteArrayPointer!)
+            citraConfig.append(lineAsString)
+            bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
+        }
+    } else {
+        let home = Bundle.main.bundlePath
+        let baseCitra = "cp -r " + home +  "/Contents/Resources/Base/.config/citra-emu/ ~/.config/citra-emu/"
+        Commands.Bash.system("\(baseCitra)")
+        readCitraConfig()
+    }
+}
+
+func writeCitraConfig(){
+    
+    var mytext = String()
+    mytext = ""
+    for line in citraConfig {
+        mytext = mytext + line + "\n"
+    }
+    let home = FileManager.default.homeDirectoryForCurrentUser
+    let fileUrl = home.appendingPathComponent(".config/citra-emu/qt-config.ini")
+    try! mytext.write(to: fileUrl, atomically: false, encoding: .utf8)
+    
 }
 

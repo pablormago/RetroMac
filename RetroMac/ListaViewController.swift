@@ -302,25 +302,33 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         if comandojuego.contains("RetroArch") {
             gameShader(shader: "")
             noGameOverlay()
-            if checkBezels(juego: juegosXml[numero][0]) == true {
-                gameOverlay(game: nombredelarchivo)
+            let defaults = UserDefaults.standard
+            let shaders = defaults.integer(forKey: "Shaders")
+            if shaders == 1 {
+                let juegoABuscar = juegosXml[numero][0]
+                let miShader = checkShaders(juego: juegoABuscar)
+                gameShader(shader: miShader)
             }
+            let marcos = defaults.integer(forKey: "Marcos")
             
-            let juegoABuscar = juegosXml[numero][0]
-//            if arrayGamesShaders.firstIndex(where: {$0[0] == juegoABuscar}) != nil {
-//                guard let miFila = arrayGamesShaders.firstIndex(where: {$0[0] == juegoABuscar}) else { return  }
-//                let miShader = arrayGamesShaders[miFila][2]
-//                gameShader(shader: miShader)
-//            }
-            let miShader = checkShaders(juego: juegoABuscar)
-            gameShader(shader: miShader)
-            
+            if marcos == 1 {
+                if checkBezels(juego: juegosXml[numero][0]) == true {
+                    gameOverlay(game: nombredelarchivo)
+                }
+            }
         }
         
         if comandojuego.contains("citra-qt") {
-            let home = Bundle.main.bundlePath
-            let baseCitra = "cp -r " + home +  "/Contents/Resources/Base/.config/citra-emu/ ~/.config/citra-emu/"
-            Commands.Bash.system("\(baseCitra)")
+            let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
+            if mifilaconfig1 != nil {
+                citraConfig[mifilaconfig1!] = "fullscreen=true"
+            }
+            let mifilaconfig2 = citraConfig.firstIndex(where: {$0.contains("fullscreen\\default=")})
+            if mifilaconfig2 != nil {
+                citraConfig[mifilaconfig2!] = "fullscreen\\default=false"
+            }
+            
+            writeCitraConfig()
         }
         
         var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})

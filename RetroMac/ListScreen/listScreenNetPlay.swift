@@ -16,8 +16,10 @@ extension ListaViewController {
     
     func configNetplay () {
         editRetroArchConfig(param: "netplay_allow_pausing", value: "false")
-        editRetroArchConfig(param: "netplay_max_connections", value: "3")
-        editRetroArchConfig(param: "netplay_mitm_server", value: "madrid")
+        editRetroArchConfig(param: "netplay_max_connections", value: "6")
+        let defaults = UserDefaults.standard
+        let relayServer = defaults.string(forKey: "RelayServer") ?? "madrid"
+        editRetroArchConfig(param: "netplay_mitm_server", value: relayServer)
         //editRetroArchConfig(param: "netplay_nickname", value: "BoBMac")
         editRetroArchConfig(param: "netplay_use_mitm_server", value: "true")
         writeRetroArchConfig()

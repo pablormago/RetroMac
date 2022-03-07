@@ -277,7 +277,7 @@ extension ListaViewController {
         NSWorkspace.shared.openFile(miManual)
     }
     
-    func checkBezels (juego: String) -> Bool {
+    public func checkBezels (juego: String) -> Bool {
         var bezelsSystem = Bool ()
         var bezelsGame = Bool ()
         var bezels = Bool()
@@ -321,7 +321,7 @@ extension ListaViewController {
         return bezels
     }
     
-    func checkShaders (juego: String) -> String {
+    public func checkShaders (juego: String) -> String {
         var shader = String ()
         var shadersSystem = String()
         var shadersGame = String()

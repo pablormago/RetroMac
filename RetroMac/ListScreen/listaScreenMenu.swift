@@ -221,13 +221,9 @@ extension ListaViewController {
         arrayMenu.append(scrapItem)
         arrayMenu.append(gameItem)
         
-        if button?.cores != nil {
-            if button?.cores?.count ?? 0 > 1 {
-                arrayMenu.append(sistemaItem)
-            }
-            
-        }
+//
         
+        arrayMenu.append(sistemaItem)
         
         return arrayMenu
     }

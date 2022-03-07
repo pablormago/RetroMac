@@ -105,10 +105,12 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
     
     @objc func launchGame () {
         SingletonState.shared.myBackPlayer?.player?.pause()
-        
+        gameShader(shader: "")
+        noGameOverlay()
         let numero = (self.NetPlayTable.selectedRow)
         var micomando = netplayPlays[numero].comando!
         let mirom = "\"\(String(describing: netplayPlays[numero].gamePath!))\""
+        let miJuego = netplayPlays[numero].gamePath!
         var miIp = String()
         var miPuerto = String()
         var miRelay = Bool ()
@@ -131,7 +133,38 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
         
         // MARK: Empezamos a lanzar el juego
         let nombredelarchivo = mirom.replacingOccurrences(of: rutaApp , with: "")
-        gameOverlay(game: nombredelarchivo)
+        if micomando.contains("RetroArch") {
+            gameShader(shader: "")
+            noGameOverlay()
+            let defaults = UserDefaults.standard
+            let shaders = defaults.integer(forKey: "Shaders")
+            if shaders == 1 {
+                let juegoABuscar = miJuego
+                let miShader = checkShaders(juego: juegoABuscar)
+                gameShader(shader: miShader)
+            }
+            let marcos = defaults.integer(forKey: "Marcos")
+            
+            if marcos == 1 {
+                print(miJuego)
+                if checkBezels(juego: miJuego) == true {
+                    gameOverlay(game: nombredelarchivo)
+                }
+            }
+        }
+        
+        if micomando.contains("citra-qt") {
+            let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
+            if mifilaconfig1 != nil {
+                citraConfig[mifilaconfig1!] = "fullscreen=true"
+            }
+            let mifilaconfig2 = citraConfig.firstIndex(where: {$0.contains("fullscreen\\default=")})
+            if mifilaconfig2 != nil {
+                citraConfig[mifilaconfig2!] = "fullscreen\\default=false"
+            }
+            
+            writeCitraConfig()
+        }
         
         if miRelay == true {
             var parametros = "-C \"\(miIp)|\(miPuerto)|\(miSesion)\" -L"
@@ -152,5 +185,85 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
         
         
         
+    }
+    
+    public func checkShaders (juego: String) -> String {
+        var shader = String ()
+        var shadersSystem = String()
+        var shadersGame = String()
+        
+        let filaenSystem = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
+        if filaenSystem != nil {
+            shadersSystem = arraySystemsShaders[filaenSystem!][2]
+        } else {
+            shadersSystem = ""
+        }
+        let filaEnGame = arrayGamesShaders.firstIndex(where: {$0[0] == juego})
+        if filaEnGame != nil {
+            let miShader = arrayGamesShaders[filaEnGame!][2]
+            if miShader == "NINGUNO" {
+                shadersGame = ""
+            } else {
+                shadersGame = miShader
+            }
+            
+        }else {
+            shadersGame = shadersSystem
+        }
+        
+        if shadersSystem == shadersGame {
+            shader = shadersSystem
+        }
+        
+        if shadersSystem != shadersGame  {
+            shader = shadersGame
+        }
+        
+        //
+        return shader
+    }
+    
+    public func checkBezels (juego: String) -> Bool {
+        var bezelsSystem = Bool ()
+        var bezelsGame = Bool ()
+        var bezels = Bool()
+        // MARK: comprobamos si tiene puesto que se lancen los bezels en todos los juegos del sistema
+        let filaenSystem = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
+        if filaenSystem != nil {
+            print(arraySystemsBezels[filaenSystem!])
+            //Si está en el array es que está activado, sino es quer no lo está
+           bezelsSystem = true
+        } else {
+            bezelsSystem = false
+        }
+        
+        // MARK: comprobamos si el juego tiene puesto que se lance su bezel
+        let filaenGames = arrayGamesBezels.firstIndex(where: {$0[0] == juego})
+        if filaenGames == nil {
+            bezelsGame = bezelsSystem
+        } else {
+            let siONoGameBezel = arrayGamesBezels[filaenGames!][1]
+            if siONoGameBezel == "SI" {
+                bezelsGame = true
+            } else {
+                bezelsGame = false
+            }
+        }
+        
+        if bezelsSystem == true && bezelsGame == true {
+            bezels = true
+        }
+        if bezelsSystem == true && bezelsGame == false {
+            bezels = false
+        }
+        if bezelsSystem == false && bezelsGame == false {
+            bezels = false
+        }
+        if bezelsSystem == false && bezelsGame == true {
+            bezels = true
+        }
+        print("\(bezelsSystem) - \(bezelsGame)")
+        
+        return bezels
     }
 }

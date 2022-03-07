@@ -9,7 +9,7 @@
 import Cocoa
 
 class ConfigViewController: NSViewController {
-
+    
     @IBOutlet weak var userTXT: NSTextField!
     @IBOutlet weak var passwordTxt: NSTextField!
     @IBOutlet weak var guardarBtn: NSButton!
@@ -18,6 +18,8 @@ class ConfigViewController: NSViewController {
     @IBOutlet weak var marcosSwitch: NSSwitch!
     @IBOutlet weak var localSwitch: NSSwitch!
     
+    @IBOutlet weak var serverList: NSPopUpButton!
+    @IBOutlet weak var configTxt: NSTextField!
     @IBAction func guardar(_ sender: Any) {
         let defaults = UserDefaults.standard
         defaults.set(userTXT.stringValue, forKey: "SSUser")
@@ -37,7 +39,7 @@ class ConfigViewController: NSViewController {
             estadoMarcos = 1
             editRetroArchConfig(param: "input_overlay", value: "~/Documents/RetroMac/custom_overlay.cfg")
             editRetroArchConfig(param: "input_overlay_aspect_adjust_landscape", value: "0.130000")
-            editRetroArchConfig(param: "input_overlay_opacity", value: "0.700000")
+            editRetroArchConfig(param: "input_overlay_opacity", value: "1.000000")
         }else {
             estadoMarcos = 0
             editRetroArchConfig(param: "input_overlay", value: "")
@@ -51,8 +53,10 @@ class ConfigViewController: NSViewController {
         
         defaults.set(estadoLocal, forKey: "LocalMedia")
         defaults.set(estadoMarcos, forKey: "Marcos")
-        defaults.set(estadoMarcos, forKey: "Shaders")
-        
+        defaults.set(estadoShaders, forKey: "Shaders")
+        editRetroArchConfig(param: "netplay_nickname", value: configTxt.stringValue)
+        editRetroArchConfig(param: "netplay_mitm_server", value: serverList.selectedItem!.title)
+        defaults.set(serverList.selectedItem!.title, forKey: "RelayServer")
         writeRetroArchConfig()
         
         self.dismiss(self)
@@ -95,6 +99,30 @@ class ConfigViewController: NSViewController {
         }else {
             shadersSwitch.state = NSControl.StateValue.off
         }
+        var nickName = String()
+        let filaNick = retroArchConfig.firstIndex(where: {$0[0] == "netplay_nickname"})
+        if filaNick != nil {
+            nickName = retroArchConfig[filaNick!][1]
+        } else {
+            nickName = "RetroMac"
+        }
+        
+        let relayServer = defaults.string(forKey: "RelayServer") ?? ""
+        
+        configTxt.stringValue = nickName
+        if relayServer == "madrid" {
+            serverList.selectItem(at: 0)
+        }
+        if relayServer == "nyc" {
+            serverList.selectItem(at: 1)
+        }
+        if relayServer == "saopaulo" {
+            serverList.selectItem(at: 2)
+        }
+        if relayServer == "singapore" {
+            serverList.selectItem(at: 3)
+        }
+        
         
         
         // Do view setup here.
@@ -105,7 +133,7 @@ class ConfigViewController: NSViewController {
         
         let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
         retroArchConfig[mifila!][1] = value
-    
+        
     }
     
 }
