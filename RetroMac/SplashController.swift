@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-
+var cuentaGames = 0
 class SplashController: NSViewController {
     
     var version = "2.0"
@@ -233,6 +233,7 @@ class SplashController: NSViewController {
         
         
         DispatchQueue.background(background: {
+            
             titulosMame = mamelista() as! [[String]]
             llenaSistemasIds()
             readRetroArchConfig ()
@@ -248,10 +249,15 @@ class SplashController: NSViewController {
             arraySystemsBezels = (defaults.array(forKey: "systemsBezels")as? [[String]]) ?? []
             self.cuentaJuegosEnSistemas()
         }, completion:{
-            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-                
-                self.view.window?.contentViewController = controller
+            if cuentaGames > 0 {
+                if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                    
+                    self.view.window?.contentViewController = controller
+                }
+            } else {
+                self.noRoms()
             }
+            
         })
         
         
@@ -407,6 +413,7 @@ class SplashController: NSViewController {
         
         for consola in allTheGames {
             print("Consola: \(consola.fullname) Juegos: \(consola.games.count)")
+            cuentaGames += consola.games.count
         }
         datosdelsitema.sort(by: {($0[0] ) < ($1[0] ) })
         
@@ -418,4 +425,17 @@ class SplashController: NSViewController {
         return paths[0]
     }
     
+    func noRoms() {
+        
+        let alert = NSAlert()
+        alert.messageText = "¡¡No encontramos Juegos!!"
+        alert.informativeText = "Parece que RetroMac no encuentra Juegos. Revisa el archivo es_systems_mac.cfg en la carpeta /Documentos/RetroMAc y asegúrate de que tienes roms en las carpetas correspondientes. Revísalo bien y vuelve a abrir RetroMac"
+        alert.addButton(withTitle: "Aceptar")
+        alert.alertStyle = .critical
+        let modalResponse = alert.runModal()
+        if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn)   {
+            NSApplication.shared.terminate(self)
+            
+        }
+    }
 }

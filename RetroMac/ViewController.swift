@@ -290,6 +290,7 @@ class ViewController: NSViewController {
             counter += 1
         }
         cuantosSistemas = counter
+        
         ventana = "Principal"
         scrollMain.documentView = documentView
         
@@ -382,6 +383,9 @@ class ViewController: NSViewController {
         }
         
         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+        if button == nil {
+            noRoms()
+        }
         if button!.numeroJuegos == nil {
             button?.numeroJuegos = "0"
         }
@@ -463,6 +467,19 @@ class ViewController: NSViewController {
             // Update the view, if already loaded.
         }
     }
+    func noRoms() {
+        
+        let alert = NSAlert()
+        alert.messageText = "¡¡No encontramos Juegos!!"
+        alert.informativeText = "Parece que RetroMac no encuentra Juegos. Revisa el archivo es_systems_mac.cfg en la carpeta /Documentos/RetroMAc y asegúrate de que tienes roms en las carpetas correspondientes. Revísalo bien y vuelve a abrir RetroMac"
+        alert.addButton(withTitle: "Aceptar")
+        alert.alertStyle = .critical
+        let modalResponse = alert.runModal()
+        if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn)   {
+            NSApplication.shared.terminate(self)
+            
+        }
+    }
 }
 /// FINAL DE LA CLASE
 
@@ -529,6 +546,7 @@ func buscaVideo (juego: String, ruta: String) ->String {
     
     
 }
+
 
 
 class ButtonConsolas: NSButton {
