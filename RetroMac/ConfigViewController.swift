@@ -47,13 +47,17 @@ class ConfigViewController: NSViewController {
         
         if shadersSwitch.state.rawValue == 1 {
             estadoShaders = 1
+            //video_shader_enable = "true"
+            editRetroArchConfig(param: "video_shader_enable", value: "true")
         }else {
             estadoShaders = 0
+            editRetroArchConfig(param: "video_shader_enable", value: "false")
         }
         
         defaults.set(estadoLocal, forKey: "LocalMedia")
         defaults.set(estadoMarcos, forKey: "Marcos")
         defaults.set(estadoShaders, forKey: "Shaders")
+        
         editRetroArchConfig(param: "netplay_nickname", value: configTxt.stringValue)
         editRetroArchConfig(param: "netplay_mitm_server", value: serverList.selectedItem!.title)
         defaults.set(serverList.selectedItem!.title, forKey: "RelayServer")

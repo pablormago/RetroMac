@@ -36,6 +36,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
     }
     
     override func viewDidLoad() {
+        netplayPlays = []
         cargaPartidasNetplay ()
         print("*****ENTRO EN NETPLAY******")
         super.viewDidLoad()

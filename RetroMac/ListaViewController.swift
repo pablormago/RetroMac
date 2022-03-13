@@ -304,6 +304,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             noGameOverlay()
             let defaults = UserDefaults.standard
             let shaders = defaults.integer(forKey: "Shaders")
+            print("SHADERS \(shaders)")
             if shaders == 1 {
                 let juegoABuscar = juegosXml[numero][0]
                 let miShader = checkShaders(juego: juegoABuscar)

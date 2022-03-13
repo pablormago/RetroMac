@@ -179,11 +179,21 @@ extension ViewController {
                 //Configuracão do L1
                 gamepad.leftShoulder.pressedChangedHandler = {(button, value, pressed) in
                     print( "ExtendedGamepad - Left Shoulder")
+                    if pressed == true {
+                        if ventana == "Principal" {
+                            self.settingsButton.performClick(nil)
+                        }
+                    }
                 }
                 
                 //Configuracão do R1
                 gamepad.rightShoulder.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - Right Shoulder")
+                    if pressed == true {
+                        if ventana == "Principal" {
+                            self.netBtn.performClick(nil)
+                        }
+                    }
                 }
                 
             }
@@ -198,11 +208,14 @@ extension ViewController {
                 //Configuracão do L2
                 gamepad.leftTrigger.pressedChangedHandler = {(button, value, pressed) in
                     print( "ExtendedGamepad - Left Trigger")
+                    
+                    
                 }
                 
                 //Configuracão do R2
                 gamepad.rightTrigger.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - Right Trigger")
+                   
                 }
                 
             }
@@ -303,9 +316,45 @@ extension ViewController {
         
     public func launchGame(){
         let numero = (SingletonState.shared.mytable?.selectedRow)
+        let nombredelarchivo = SingletonState.shared.myJuegosXml![numero!][0].replacingOccurrences(of: rutaApp , with: "")
         let romXml = "\"\(SingletonState.shared.myJuegosXml![numero!][0])\""
         var rompathabuscar = SingletonState.shared.myJuegosXml![numero!][0]
         var comandojuego = SingletonState.shared.myJuegosXml![numero!][20]
+        
+        if comandojuego.contains("RetroArch") {
+            gameShader(shader: "")
+            noGameOverlay()
+            let defaults = UserDefaults.standard
+            let shaders = defaults.integer(forKey: "Shaders")
+            print("SHADERS \(shaders)")
+            if shaders == 1 {
+                let juegoABuscar = SingletonState.shared.myJuegosXml![numero!][0]
+                let miShader = checkShaders(juego: juegoABuscar)
+                gameShader(shader: miShader)
+            }
+            let marcos = defaults.integer(forKey: "Marcos")
+            
+            if marcos == 1 {
+                if checkBezels(juego: SingletonState.shared.myJuegosXml![numero!][0]) == true {
+                    gameOverlay(game: nombredelarchivo)
+                }
+            }
+        }
+        
+        if comandojuego.contains("citra-qt") {
+            let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
+            if mifilaconfig1 != nil {
+                citraConfig[mifilaconfig1!] = "fullscreen=true"
+            }
+            let mifilaconfig2 = citraConfig.firstIndex(where: {$0.contains("fullscreen\\default=")})
+            if mifilaconfig2 != nil {
+                citraConfig[mifilaconfig2!] = "fullscreen\\default=false"
+            }
+            
+            writeCitraConfig()
+        }
+        
+        
         var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
         if fila != nil {
             comandojuego = arrayGamesCores[fila!][1]
@@ -396,5 +445,84 @@ extension ViewController {
         }
     }
     
+    public func checkBezels (juego: String) -> Bool {
+        var bezelsSystem = Bool ()
+        var bezelsGame = Bool ()
+        var bezels = Bool()
+        // MARK: comprobamos si tiene puesto que se lancen los bezels en todos los juegos del sistema
+        let filaenSystem = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
+        if filaenSystem != nil {
+            print(arraySystemsBezels[filaenSystem!])
+            //Si está en el array es que está activado, sino es quer no lo está
+           bezelsSystem = true
+        } else {
+            bezelsSystem = false
+        }
+        
+        // MARK: comprobamos si el juego tiene puesto que se lance su bezel
+        let filaenGames = arrayGamesBezels.firstIndex(where: {$0[0] == juego})
+        if filaenGames == nil {
+            bezelsGame = bezelsSystem
+        } else {
+            let siONoGameBezel = arrayGamesBezels[filaenGames!][1]
+            if siONoGameBezel == "SI" {
+                bezelsGame = true
+            } else {
+                bezelsGame = false
+            }
+        }
+        
+        if bezelsSystem == true && bezelsGame == true {
+            bezels = true
+        }
+        if bezelsSystem == true && bezelsGame == false {
+            bezels = false
+        }
+        if bezelsSystem == false && bezelsGame == false {
+            bezels = false
+        }
+        if bezelsSystem == false && bezelsGame == true {
+            bezels = true
+        }
+        print("\(bezelsSystem) - \(bezelsGame)")
+        
+        return bezels
+    }
+    
+    public func checkShaders (juego: String) -> String {
+        var shader = String ()
+        var shadersSystem = String()
+        var shadersGame = String()
+        
+        let filaenSystem = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
+        if filaenSystem != nil {
+            shadersSystem = arraySystemsShaders[filaenSystem!][2]
+        } else {
+            shadersSystem = ""
+        }
+        let filaEnGame = arrayGamesShaders.firstIndex(where: {$0[0] == juego})
+        if filaEnGame != nil {
+            let miShader = arrayGamesShaders[filaEnGame!][2]
+            if miShader == "NINGUNO" {
+                shadersGame = ""
+            } else {
+                shadersGame = miShader
+            }
+            
+        }else {
+            shadersGame = shadersSystem
+        }
+        
+        if shadersSystem == shadersGame {
+            shader = shadersSystem
+        }
+        
+        if shadersSystem != shadersGame  {
+            shader = shadersGame
+        }
+        
+        //
+        return shader
+    }
 
 }

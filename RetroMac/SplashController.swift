@@ -10,7 +10,7 @@ import Cocoa
 var cuentaGames = 0
 class SplashController: NSViewController {
     
-    var version = "2.0"
+    var version = "2.1"
     @IBOutlet weak var botonFondo: NSButton!
     @IBOutlet weak var taskLabel: NSTextField!
     override func viewDidLoad() {
@@ -249,6 +249,7 @@ class SplashController: NSViewController {
             arraySystemsBezels = (defaults.array(forKey: "systemsBezels")as? [[String]]) ?? []
             self.cuentaJuegosEnSistemas()
         }, completion:{
+            print("Total: \(cuentaGames) juegos")
             if cuentaGames > 0 {
                 if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
                     

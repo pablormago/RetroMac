@@ -995,6 +995,7 @@ func gameShader(shader: String) {
     mytext = ""
     mytext = mytext + "shaders = \"1\"" + "\n"
     mytext = mytext + "shader0 = \"\(shader)\""
+    print(mytext)
     let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
     let fileUrl = home?.appendingPathComponent("RetroArch/config/global.glslp")
     try! mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
