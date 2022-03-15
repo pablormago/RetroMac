@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-var cuentaGames = 0
+
 class SplashController: NSViewController {
     
     var version = "2.1"
@@ -116,7 +116,7 @@ class SplashController: NSViewController {
             let filePath = pathComponent.path
             let fileManager = FileManager.default
             if fileManager.fileExists(atPath: filePath) {
-                //existeRetro = true
+                existeRetro = true
                 print("ESTÁ")
                 guard FileManager.default.fileExists(atPath: (filePath)) else {
                     preconditionFailure("file expected at \(filePath) is missing")
@@ -196,19 +196,19 @@ class SplashController: NSViewController {
                 } catch {
                     // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
                 }
-                do {
-                    guard let sourcePath = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg") else {
-                        return
-                    }
-                    
-                    //try str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
-                    let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-                    let sourceUrl = URL(fileURLWithPath: sourcePath)
-                    let destination = documentsDirectory.appendingPathComponent("RetroMac/es_systems_mac.cfg", isDirectory: false)
-                    try fileManager.copyItem(at: sourceUrl, to: destination)
-                } catch {
-                    // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
-                }
+//                do {
+//                    guard let sourcePath = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg") else {
+//                        return
+//                    }
+//
+//                    //try str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
+//                    let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+//                    let sourceUrl = URL(fileURLWithPath: sourcePath)
+//                    let destination = documentsDirectory.appendingPathComponent("RetroMac/es_systems_mac.cfg", isDirectory: false)
+//                    try fileManager.copyItem(at: sourceUrl, to: destination)
+//                } catch {
+//                    // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+//                }
             }
         } else {
             print("FILE PATH NOT AVAILABLE")
@@ -249,15 +249,13 @@ class SplashController: NSViewController {
             arraySystemsBezels = (defaults.array(forKey: "systemsBezels")as? [[String]]) ?? []
             self.cuentaJuegosEnSistemas()
         }, completion:{
-            print("Total: \(cuentaGames) juegos")
-            if cuentaGames > 0 {
+            
+            
                 if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
                     
                     self.view.window?.contentViewController = controller
                 }
-            } else {
-                self.noRoms()
-            }
+           
             
         })
         
@@ -414,7 +412,7 @@ class SplashController: NSViewController {
         
         for consola in allTheGames {
             print("Consola: \(consola.fullname) Juegos: \(consola.games.count)")
-            cuentaGames += consola.games.count
+            
         }
         datosdelsitema.sort(by: {($0[0] ) < ($1[0] ) })
         
@@ -426,17 +424,5 @@ class SplashController: NSViewController {
         return paths[0]
     }
     
-    func noRoms() {
-        
-        let alert = NSAlert()
-        alert.messageText = "¡¡No encontramos Juegos!!"
-        alert.informativeText = "Parece que RetroMac no encuentra Juegos. Revisa el archivo es_systems_mac.cfg en la carpeta /Documentos/RetroMAc y asegúrate de que tienes roms en las carpetas correspondientes. Revísalo bien y vuelve a abrir RetroMac"
-        alert.addButton(withTitle: "Aceptar")
-        alert.alertStyle = .critical
-        let modalResponse = alert.runModal()
-        if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn)   {
-            NSApplication.shared.terminate(self)
-            
-        }
-    }
+    
 }

@@ -816,9 +816,13 @@ DQ
                                     <action selector="abrirOpciones:" target="fL4-9U-n43" id="PDa-DD-bHb"/>
                                 </connections>
                             </button>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q6U-Nh-KQ0">
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Q6U-Nh-KQ0">
                                 <rect key="frame" x="722" y="899" width="476" height="160"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Q6U-Nh-KQ0" secondAttribute="height" multiplier="119:40" id="85Z-mz-afv"/>
+                                    <constraint firstAttribute="height" constant="160" id="Qon-vj-TVd"/>
+                                    <constraint firstAttribute="width" constant="476" id="afd-YW-JcC"/>
+                                </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" id="sWx-wj-mk8"/>
                             </imageView>
                             <popUpButton hidden="YES" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O8K-3R-FpD">
@@ -841,6 +845,8 @@ DQ
                             <constraint firstItem="S7L-bA-nsr" firstAttribute="centerY" secondItem="62j-uW-CLT" secondAttribute="centerY" id="J3b-UL-9er"/>
                             <constraint firstItem="O8K-3R-FpD" firstAttribute="centerY" secondItem="62j-uW-CLT" secondAttribute="centerY" id="Lbb-Pn-MH4"/>
                             <constraint firstItem="O8K-3R-FpD" firstAttribute="centerX" secondItem="62j-uW-CLT" secondAttribute="centerX" id="Lcx-tq-P6K"/>
+                            <constraint firstItem="Q6U-Nh-KQ0" firstAttribute="top" secondItem="62j-uW-CLT" secondAttribute="top" constant="21" id="R6K-cM-adg"/>
+                            <constraint firstItem="Q6U-Nh-KQ0" firstAttribute="centerX" secondItem="62j-uW-CLT" secondAttribute="centerX" id="fq4-1B-roz"/>
                             <constraint firstItem="S7L-bA-nsr" firstAttribute="centerX" secondItem="62j-uW-CLT" secondAttribute="centerX" id="id0-Bq-OjZ"/>
                             <constraint firstItem="a3f-1P-Ihc" firstAttribute="centerX" secondItem="62j-uW-CLT" secondAttribute="centerX" id="qmN-cd-jHK"/>
                             <constraint firstItem="a3f-1P-Ihc" firstAttribute="centerY" secondItem="62j-uW-CLT" secondAttribute="centerY" id="zuI-b1-yz3"/>

@@ -162,14 +162,18 @@ extension ViewController {
                 //Configuração do botão X
                 gamepad.buttonX.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - X")
+                    
                 }
                 
                 //Configuração do botão Y
                 gamepad.buttonY.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - y")
-                    if pressed == true {
-                        self.backToMain()
+                    if ventana == "Lista" {
+                        if pressed == true {
+                            self.backToMain()
+                        }
                     }
+                    
                 }
                 
             }
@@ -389,6 +393,7 @@ extension ViewController {
                 cuentaboton = botonactual
             }
         }
+        
     }
     
     public func nextGame () {
