@@ -214,10 +214,16 @@ extension ListaViewController {
     }
     func habilitarTabla2 (){
         abiertaLista = true
-        backButton.isEnabled = true
-        self.juegosTableView.isEnabled = true
-        self.view.window?.makeFirstResponder(self.juegosTableView)
-        self.infoLabel.stringValue = "SISTEMA ESCRAPEADO"
+        DispatchQueue.main.sync {
+            backButton.isEnabled = true
+            self.juegosTableView.isEnabled = true
+            self.juegosTableView.isEnabled = true
+            self.view.window?.makeFirstResponder(self.juegosTableView)
+            self.juegosTableView.isEnabled = true
+        }
+        
+        
+        
     }
     
     @objc func scrapearJuego (juego: String, sistema: String, nombrejuego: String, filajuego: Int){

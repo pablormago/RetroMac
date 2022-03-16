@@ -336,17 +336,6 @@ class SplashController: NSViewController {
                     }
                     
                     let migrupo = [miSistema, String(contador) , extensionescuenta, micomando, minombre, miPath]
-                    
-                    /// MARK - Datos de la Struct:
-                    //                struct Consola {
-                    //                    let sistema: String
-                    //                    let fullname: String
-                    //                    let command: String
-                    //                    let rompath: String
-                    //                    let platform: String
-                    //                    let extensions: String
-                    //                    let games: [Juego]
-                    //                }
                     let sistema1: Consola = Consola(sistema: miSistema, fullname: minombre, command: micomando, rompath: miPath, platform: miplataforma, extensions: extensionescuenta, games: juegosGamelistCarga(sistema: migrupo), videos: arrayVideos, cores: misCores)
                     allTheGames.append(sistema1)
                     datosdelsitema.append(migrupo)
