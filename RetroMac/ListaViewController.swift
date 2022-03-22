@@ -17,6 +17,7 @@ var juegosaescrapearensistema = Int()
 var juesgosEscrapeados = Int()
 var filaSeleccionada = Int()
 var contextMenu = NSMenu()
+var juegosXml = [[String]]()
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
@@ -115,7 +116,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }()
     
     var juegos = [String]()
-    var juegosXml = [[String]]()
+    //var juegosXml = [[String]]()
 //    var contextMenu = NSMenu()
     var keyIsDown = false
     var cuentaClicks = 0
@@ -135,7 +136,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         view.wantsLayer = true
         // change the background color of the layer
         view.layer?.backgroundColor = CGColor(red: 73/255, green: 74/255, blue: 77/255, alpha: 1)
-        
+       
         snapShot.wantsLayer = true
         snapShot.layer?.cornerRadius = 10.0
         snapShot.layer?.masksToBounds = true
@@ -172,8 +173,6 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             let indexSet = NSIndexSet(index: 0)
             juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
         }
-//        self.popButton.menu = contextMenu
-//        self.setupMenu()
         juegosTableView.doubleAction = #selector(onItemClicked)
         pdfImage.action = #selector(abrirPdf)
         favImagen.isHidden = true
@@ -191,7 +190,6 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                 favImagen.isHidden = false
             }
         }
-        //print("ROMPATH: \(rompath)")
         rutaTransformada = rompath
         SingletonState.shared.currentViewController? = self
         print("Tengo: \(GCController.controllers().count) Mandos")
@@ -227,12 +225,9 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     
     override func viewDidAppear() {
-        
+        super.viewDidAppear()
         print("LISTA APPEAR")
-        
-        
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
-        
         self.view.window?.setFrame(mirect, display: true)
         snapShot.wantsLayer = true
         snapShot.layer?.cornerRadius = 10.0
@@ -278,7 +273,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     
     override func viewWillAppear() {
-        //super.viewWillAppear()
+        super.viewWillAppear()
         
         //SingletonState.shared.myBackPlayer?.player?.pause()
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
@@ -287,6 +282,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         
     }
+    
     
     
     

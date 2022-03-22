@@ -8,17 +8,11 @@
 
 import Cocoa
 import Commands
-import AVKit
-import AVFoundation
-import GameController
 
 extension OptionsViewController {
     
     @objc func buscaJuego(){
-        //        if playingVideo == true {
-        //            SingletonState.shared.mySnapPlayer?.player?.pause()
-        //            snapPlayer.player?.pause()
-        //        }
+       
         infoLabel.isHidden = false
         escrapeandoSistema = false
         print("Escrapeo - 1")
@@ -39,7 +33,8 @@ extension OptionsViewController {
         let defaults = UserDefaults.standard
         let SSUser = defaults.string(forKey: "SSUser") ?? ""
         let SSPassword = defaults.string(forKey: "SSPassword") ?? ""
-        let numero = filaSeleccionada
+        let numero = columna
+        
         var nombre = ""
         var miputonombre = ""
         //Si el sistema es MAME
@@ -1250,36 +1245,79 @@ extension OptionsViewController {
     }
     
     func getSystemCores () {
-        let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController
-        let button = controller!.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-        var cuentaCores = button?.cores?.count
-        var numeroactivo = Int()
-        if button?.cores != nil {
-            let misCores = button?.cores
-            for a in 0..<cuentaCores! {
-                var core = misCores![a][1]
-                var tooltip = misCores![a][2]
-                var comando: String =  (button?.Comando)!
-                if comando.contains(core + "_libretro.dylib") {
-                    core = core + " ✅"
-                    numeroactivo = a
-                }
-                systemCoreList.menu?.addItem(withTitle: core, action: #selector(coresistema), keyEquivalent: "")
-                systemCoreList.menu?.items[a].toolTip = tooltip
-            }
-         }
         
-        systemCoreList.selectItem(at: numeroactivo)
+        let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        if filaConsola != nil {
+            let consola = allTheGames[filaConsola!]
+            var cuentaCores = consola.cores.count
+            var numeroactivo = Int()
+            if consola.cores != nil {
+                let misCores = consola.cores
+                for a in 0..<cuentaCores {
+                    var core = misCores[a][1]
+                    var tooltip = misCores[a][2]
+                    var comando: String =  (consola.command)
+                    if comando.contains(core + "_libretro.dylib") {
+                        core = core + " ✅"
+                        numeroactivo = a
+                    }
+                    systemCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
+                    systemCoreList.menu?.items[a].toolTip = tooltip
+                }
+             }
+            
+            systemCoreList.selectItem(at: numeroactivo)
+        }
+        
+    }
+    
+    func getSystemShaders() {
+        var shaderABuscar = String()
+        var activo = Int()
+        let filaArraySystemShaders = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
+        if filaArraySystemShaders == nil {
+            shaderABuscar = "Ninguno"
+        } else {
+            shaderABuscar = arraySystemsShaders[filaArraySystemShaders!][1]
+        }
+        var nombre = String()
+        if shaderABuscar == "Ninguno" {
+            systemShaderList.menu?.addItem(withTitle: "Ninguno ✅", action: nil, keyEquivalent: "")
+            systemShaderList.item(at: 0)?.toolTip = "Ninguno"
+            for a in 0..<arrayShaders.count{
+                let ruta = arrayShaders[a][0]
+                nombre = arrayShaders[a][1]
+                systemShaderList.menu?.addItem(withTitle: nombre, action: nil, keyEquivalent: "")
+                systemShaderList.menu?.items[a + 1].toolTip = ruta
+            }
+            systemShaderList.selectItem(at: 0)
+        } else {
+            systemShaderList.menu?.addItem(withTitle: "Ninguno", action: nil, keyEquivalent: "")
+            systemShaderList.item(at: 0)?.toolTip = "Ninguno"
+            for a in 0..<arrayShaders.count{
+                let ruta = arrayShaders[a][0]
+                nombre = arrayShaders[a][1]
+                if nombre == shaderABuscar {
+                    nombre = nombre + " ✅"
+                    activo = a
+                }
+                
+                systemShaderList.menu?.addItem(withTitle: nombre, action: nil, keyEquivalent: "")
+                systemShaderList.menu?.items[a + 1].toolTip = ruta
+            }
+            systemShaderList.selectItem(at: activo + 1)
+        }
+        
+        
+        
+        
     }
     
     @objc func coresistema (_ sender: NSMenuItem) {
         
         let newComand = sender.toolTip!
-        print(sistemaActual)
-        print(allTheGames[0].fullname)
-        var FilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        let FilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
         var FilaSystems = allTheSystems.firstIndex(where: {$0.nombrelargo == sistemaActual})
-        print(FilaSystems)
         allTheSystems[FilaSystems!].comando = newComand
         allTheGames[FilaAll!].command = newComand
         for a in 0..<allTheGames[FilaAll!].games.count {
@@ -1295,6 +1333,292 @@ extension OptionsViewController {
         
     }
     
+    func getGameCore(){
+        let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        if filaConsola != nil {
+            let consola = allTheGames[filaConsola!]
+            let cuentaCores = consola.cores.count
+            var numeroactivo = Int()
+            if consola.cores.count > 0 {
+                let misCores = consola.cores
+                let juegoABuscar = miJuegosXml[columna][0]
+                var coreAbuscar = String()
+                let filaGamesCores = arrayGamesCores.firstIndex(where: {$0[0] == juegoABuscar})
+                if filaGamesCores == nil {
+                    coreAbuscar = "Automático"
+                    gameCoreList.menu?.items[0].title = (gameCoreList.menu?.items[0].title)! + " ✅"
+                    gameCoreList.menu?.items[0].toolTip = "Automático"
+                    for a in 0..<cuentaCores {
+                        var core = misCores[a][1]
+                        let tooltip = misCores[a][2]
+                        gameCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
+                        gameCoreList.menu?.items[a + 1].toolTip = tooltip
+                    }
+                    gameCoreList.selectItem(at: 0)
+                } else {
+                    coreAbuscar = arrayGamesCores[filaGamesCores!][1]
+                    gameCoreList.menu?.items[0].toolTip = "Automático"
+                    for a in 0..<cuentaCores {
+                        var core = misCores[a][1]
+                        let tooltip = misCores[a][2]
+                        if coreAbuscar.contains(core + "_libretro.dylib") {
+                            core = core + " ✅"
+                            numeroactivo = a
+                        }
+                        gameCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
+                        gameCoreList.menu?.items[a + 1].toolTip = tooltip
+                    }
+                    gameCoreList.selectItem(at: numeroactivo + 1)
+                }
+                
+            }
+            
+            
+        }
+    }
     
+    func getGameShaders () {
+        var shaderABuscar = String()
+        let mijuego = juegosXml[columna][0]
+        let miFilaJuego = arrayGamesShaders.firstIndex(where: {$0[0] == mijuego})
+        var miShader = String()
+        var activo = Int()
+        
+        if miFilaJuego != nil {
+            miShader = arrayGamesShaders[miFilaJuego!][2] //La ruta del Shader
+        } else {
+            miShader = "Automático"
+        }
+        
+        if miShader == "Automático" {
+            gameShaderList.menu?.items[0].title = "Automático ✅"
+            
+            for a in 0..<arrayShaders.count{
+                let ruta = arrayShaders[a][0]
+                var nombre = arrayShaders[a][1]
+                gameShaderList.menu?.addItem(withTitle: nombre, action: nil, keyEquivalent: "")
+                gameShaderList.menu?.items[a + 2].toolTip = ruta
+            }
+            gameShaderList.selectItem(at: 0)
+        }
+        
+        if miShader == "Ninguno" {
+            gameShaderList.menu?.items[1].title = "Ninguno ✅"
+            for a in 0..<arrayShaders.count{
+                let ruta = arrayShaders[a][0]
+                var nombre = arrayShaders[a][1]
+                gameShaderList.menu?.addItem(withTitle: nombre, action: nil, keyEquivalent: "")
+                gameShaderList.menu?.items[a + 2].toolTip = ruta
+            }
+            gameShaderList.selectItem(at: 1)
+        }
+        
+        if (miShader != "Automático" && miShader != "Ninguno") {
+            for a in 0..<arrayShaders.count{
+                let ruta = arrayShaders[a][0]
+                var nombre = arrayShaders[a][1]
+                if ruta == miShader {
+                    nombre = nombre + " ✅"
+                    activo = a
+                }
+                gameShaderList.menu?.addItem(withTitle: nombre, action: nil, keyEquivalent: "")
+                gameShaderList.menu?.items[a + 2].toolTip = ruta
+            }
+            gameShaderList.selectItem(at: activo + 2)
+        }
+        gameShaderList.menu?.items[0].toolTip = "Automático"
+        gameShaderList.menu?.items[1].toolTip = "Ninguno"
+    }
+    
+    func getSystemBezels (){
+        let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        if filaConsola != nil {
+            let filaEnArrayBezels = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
+            if filaEnArrayBezels == nil {
+                systemBezelsList.item(at: 1)?.title = systemBezelsList.item(at: 1)!.title + " ✅"
+                systemBezelsList.selectItem(at: 1)
+            } else {
+                systemBezelsList.item(at: 0)?.title = systemBezelsList.item(at: 0)!.title + " ✅"
+                systemBezelsList.selectItem(at: 0)
+            }
+        }
+    }
+    
+    func getGameBezels (){
+        let miJuego = miJuegosXml[columna][0]
+        let filaEnArrayBezels = arrayGamesBezels.firstIndex(where: {$0[0] == miJuego})
+        if filaEnArrayBezels == nil {
+            gameBezelsList.item(at: 0)?.title = gameBezelsList.item(at: 0)!.title + " ✅"
+            gameBezelsList.selectItem(at: 0)
+        } else {
+            if arrayGamesBezels[filaEnArrayBezels!][1] == "Sí" {
+                gameBezelsList.item(at: 1)?.title = gameBezelsList.item(at: 1)!.title + " ✅"
+                gameBezelsList.selectItem(at: 1)
+            } else {
+                gameBezelsList.item(at: 2)?.title = gameBezelsList.item(at: 2)!.title + " ✅"
+                gameBezelsList.selectItem(at: 2)
+            }
+        }
+    }
+    
+    func saveOptions (){
+        // MARK: Cogemos los valores de las opciones del sistema:
+        let systemCore = systemCoreList.selectedItem?.toolTip!
+        let systemShader = systemShaderList.selectedItem?.toolTip!
+        let systemShaderName = systemShaderList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
+        let systemBezel = systemBezelsList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
+        
+        // MARK: Cogemos los valores de las opciones del juego:
+        let gameCore = gameCoreList.selectedItem?.toolTip!
+        let gameShader = gameShaderList.selectedItem?.toolTip!
+        let gameShaderName = gameShaderList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
+        let gameBezel = gameBezelsList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
+        
+        // MARK: guardamos el core del sistema:
+        let FilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        let FilaSystems = allTheSystems.firstIndex(where: {$0.nombrelargo == sistemaActual})
+        let newComand = systemCore
+        
+        allTheSystems[FilaSystems!].comando = newComand!
+        allTheGames[FilaAll!].command = newComand!
+        for a in 0..<allTheGames[FilaAll!].games.count {
+            allTheGames[FilaAll!].games[a].comando = newComand!
+        }
+        for numero in 0..<juegosXml.count {
+            juegosXml[numero][20] = newComand!
+        }
+        escribeSistemas()
+        // MARK: guardamos el shader del sistema, o ponemos "Ninguno"
+
+        let sistema = sistemaActual
+        let nombre = systemShaderName!.replacingOccurrences(of: " ✅", with: "")
+        let ruta = systemShader
+        let migrupo = [sistema , nombre, ruta!] as [String]
+        if nombre == "Ninguno" {
+            let filaABuscar = arraySystemsShaders.firstIndex(where: {$0[0] == sistema})
+            if filaABuscar != nil {
+                arraySystemsShaders.remove(at: filaABuscar!)
+                let defaults = UserDefaults.standard
+                defaults.set(arraySystemsShaders, forKey: "systemsShaders")
+            } else {
+                //NO hacemos nada
+            }
+
+        } else {
+            if arraySystemsShaders.firstIndex(where: {$0[0] == sistema}) != nil {
+                let filaABuscar = arraySystemsShaders.firstIndex(where: {$0[0] == sistema})
+                arraySystemsShaders[filaABuscar!][1] = nombre
+                arraySystemsShaders[filaABuscar!][2] = ruta!
+            } else {
+                arraySystemsShaders.append(migrupo)
+            }
+            let defaults = UserDefaults.standard
+            defaults.set(arraySystemsShaders, forKey: "systemsShaders")
+        }
+
+        //MARK: Guardamos el core del juego o ponemos automático
+        if gameCore == "Automático" {
+            let mipath = miJuegosXml[columna][0]
+            let filaArray = arrayGamesCores.firstIndex(where: {$0[0] == mipath})
+            if filaArray != nil {
+                arrayGamesCores.remove(at: filaArray!)
+                let defaults = UserDefaults.standard
+                defaults.set(arrayGamesCores, forKey: "juegosCores")
+            }else {
+                //No está en el array, no hacemos nada
+            }
+        } else {
+            let newComand = gameCore
+            let mipath = miJuegosXml[columna][0]
+            let migrupo = [mipath, newComand!]
+            let filaArray = arrayGamesCores.firstIndex(where: {$0[0] == mipath})
+            if filaArray != nil {
+                arrayGamesCores.remove(at: filaArray!)
+                arrayGamesCores.append(migrupo)
+
+            }else {
+                print("no está")
+                arrayGamesCores.append(migrupo)
+            }
+            let defaults = UserDefaults.standard
+            defaults.set(arrayGamesCores, forKey: "juegosCores")
+        }
+
+        //MARK: Guardamos el shader del juego o lo ponemos en Automático o Ninguno
+        if gameShader == "Automático" {
+            print("Automático")
+            let rutajuego = juegosXml[columna][0]
+            let filaABuscar = arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego})
+            if filaABuscar != nil {
+                arrayGamesShaders.remove(at: filaABuscar!)
+                let defaults = UserDefaults.standard
+                defaults.set(arrayGamesShaders, forKey: "juegosShaders")
+            } else {
+
+            }
+
+        }
+        if gameShader == "Ninguno" {
+            let rutajuego = juegosXml[columna][0]
+            let migrupo = [rutajuego, "Ninguno", "Ninguno"] as [String]
+            if arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego}) != nil {
+                let filaABuscar = arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego})
+                arrayGamesShaders[filaABuscar!][1] = "Ninguno"
+                arrayGamesShaders[filaABuscar!][2] = "Ninguno"
+            }else {
+                arrayGamesShaders.append(migrupo)
+            }
+            print(arrayGamesShaders)
+            let defaults = UserDefaults.standard
+            defaults.set(arrayGamesShaders, forKey: "juegosShaders")
+        }
+        if gameShader != "Automático" && gameShader != "Ninguno"{
+
+            print("NO Automático")
+            let rutajuego = juegosXml[columna][0]
+            let migrupo = [rutajuego, gameShaderName!, gameShader!] as [String]
+            print(migrupo)
+            if arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego}) != nil {
+                let filaABuscar = arrayGamesShaders.firstIndex(where: {$0[0] == rutajuego})
+                arrayGamesShaders.remove(at: filaABuscar!)
+                arrayGamesShaders.append(migrupo)
+                
+            }else {
+                arrayGamesShaders.append(migrupo)
+            }
+            print(arrayGamesShaders)
+            let defaults = UserDefaults.standard
+            defaults.set(arrayGamesShaders, forKey: "juegosShaders")
+        }
+        //MARK: Guardamos el valor de los bezels del sistema
+        if systemBezel == "Sí" {
+            let filaAbuscar = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
+            if filaAbuscar != nil {
+            } else {
+                let miGrupo = [sistema, "Sí"]
+                arraySystemsBezels.append(miGrupo)
+            }
+            
+            let defaults = UserDefaults.standard
+            defaults.set(arraySystemsBezels, forKey: "systemsBezels")
+        } else {
+            let filaAbuscar = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
+            if filaAbuscar != nil {
+                arraySystemsBezels.remove(at: filaAbuscar!)
+            } else {
+            }
+            let defaults = UserDefaults.standard
+            defaults.set(arraySystemsBezels, forKey: "systemsBezels")
+        }
+        
+        //MARK: Cargamos otra vez los arrays
+//        let defaults = UserDefaults.standard
+//        arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
+//        arrayGamesShaders = (defaults.array(forKey: "juegosShaders")as? [[String]]) ?? []
+//        arraySystemsShaders = (defaults.array(forKey: "systemsShaders")as? [[String]]) ?? []
+//        arrayGamesBezels = (defaults.array(forKey: "juegosBezels")as? [[String]]) ?? []
+//        arraySystemsBezels = (defaults.array(forKey: "systemsBezels")as? [[String]]) ?? []
+        self.dismiss(self)
+    }
     
 }

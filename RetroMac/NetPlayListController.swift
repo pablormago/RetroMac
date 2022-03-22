@@ -115,7 +115,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
         var miIp = String()
         var miPuerto = String()
         var miRelay = Bool ()
-        var rutaRetroMac = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+        let rutaRetroMac = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
         
         if netplayPlays[numero].mitm_Port != "" {
             miPuerto = netplayPlays[numero].mitm_Port ?? ""
@@ -168,7 +168,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
         }
         
         if miRelay == true {
-            var parametros = "-C \"\(miIp)|\(miPuerto)|\(miSesion)\" -L"
+            let parametros = "-C \"\(miIp)|\(miPuerto)|\(miSesion)\" -L"
             micomando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "%CORE%", with: rutaRetroMac).replacingOccurrences(of: "-L", with: parametros)
             var launchCommand = rutaRetroMac + micomando
             print("COMANDO: \(launchCommand)")
@@ -176,7 +176,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
             launchCommand = ""
         }
         if miRelay == false {
-            var parametros = "-C \(miIp)|\(miPuerto) -L"
+            let parametros = "-C \(miIp)|\(miPuerto) -L"
             micomando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "%CORE%", with: rutaRetroMac).replacingOccurrences(of: "-L", with: parametros)
             var launchCommand = rutaRetroMac + micomando
             print("COMANDO: \(launchCommand)")

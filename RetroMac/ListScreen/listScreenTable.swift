@@ -41,6 +41,8 @@ extension ListaViewController {
         
         //        //CARGAR IMAGENES Y VIDEOS
         let miFila = juegosTableView.selectedRow
+        columna = miFila
+        print(juegosXml[miFila])
         let miDesc = String(juegosXml[miFila][2]).replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\r", with: " ").replacingOccurrences(of: "\t", with: " ")
         let miMap = String(juegosXml[miFila][3])
         let miManual = String(juegosXml[miFila][4])

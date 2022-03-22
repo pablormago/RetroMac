@@ -285,7 +285,7 @@ extension ListaViewController {
         let filaenSystem = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
         if filaenSystem != nil {
             print(arraySystemsBezels[filaenSystem!])
-            //Si está en el array es que está activado, sino es quer no lo está
+            //Si está en el array es que está activado, sino es que no lo está
            bezelsSystem = true
         } else {
             bezelsSystem = false
@@ -297,7 +297,7 @@ extension ListaViewController {
             bezelsGame = bezelsSystem
         } else {
             let siONoGameBezel = arrayGamesBezels[filaenGames!][1]
-            if siONoGameBezel == "SI" {
+            if siONoGameBezel == "Sí" {
                 bezelsGame = true
             } else {
                 bezelsGame = false
@@ -335,7 +335,7 @@ extension ListaViewController {
         let filaEnGame = arrayGamesShaders.firstIndex(where: {$0[0] == juego})
         if filaEnGame != nil {
             let miShader = arrayGamesShaders[filaEnGame!][2]
-            if miShader == "NINGUNO" {
+            if miShader == "Ninguno" {
                 shadersGame = ""
             } else {
                 shadersGame = miShader

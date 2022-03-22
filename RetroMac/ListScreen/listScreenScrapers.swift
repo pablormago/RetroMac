@@ -46,7 +46,7 @@ extension ListaViewController {
         //Si el sistema es MAME
         if misystemid == "75" {
             
-            var juegoMame = self.juegosXml[numero][1]
+            var juegoMame = juegosXml[numero][1]
             if juegoMame.contains("/") {
                 let index2 = juegoMame.range(of: "/", options: .backwards)?.lowerBound
                 let substring2 = juegoMame.substring(from: index2! )
@@ -63,7 +63,7 @@ extension ListaViewController {
                 }
             }
         }else {
-            nombre = self.juegosXml[numero][1]
+            nombre = juegosXml[numero][1]
         }
         
         //
@@ -92,7 +92,7 @@ extension ListaViewController {
         
         nombre = nombre.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         
-        var nombreplano = self.juegosXml[numero][1].replacingOccurrences(of: " ", with: "")
+        var nombreplano = juegosXml[numero][1].replacingOccurrences(of: " ", with: "")
         
         var miId = String()
         var idSistema = String()
@@ -214,14 +214,9 @@ extension ListaViewController {
     }
     func habilitarTabla2 (){
         abiertaLista = true
-        DispatchQueue.main.sync {
             backButton.isEnabled = true
             self.juegosTableView.isEnabled = true
-            self.juegosTableView.isEnabled = true
             self.view.window?.makeFirstResponder(self.juegosTableView)
-            self.juegosTableView.isEnabled = true
-        }
-        
         
         
     }
@@ -257,13 +252,10 @@ extension ListaViewController {
         DispatchQueue.background(background: {
             // do something in background
             guard let url = URL(string: datasource) else {
-                
                 return
-                
             }
             
             guard let data = try? String(contentsOf: url) else {
-                
                 return
             }
             let newFeed = JSON(parseJSON: data)
@@ -527,7 +519,7 @@ extension ListaViewController {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.self.juegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -597,7 +589,7 @@ extension ListaViewController {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.self.juegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -659,7 +651,7 @@ extension ListaViewController {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.self.juegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -720,7 +712,7 @@ extension ListaViewController {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.juegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -781,7 +773,7 @@ extension ListaViewController {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.self.juegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -845,7 +837,7 @@ extension ListaViewController {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.self.juegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -911,7 +903,7 @@ extension ListaViewController {
                                                 self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(self.self.juegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -934,78 +926,78 @@ extension ListaViewController {
                 // do something in background
             }, completion:{
                 ///ACTUALIZAR EL ARRAY DE JUEGOS
-                self.self.juegosXml[filajuego][2] = descJuego.replacingOccurrences(of: "\n", with: " ")
-                self.self.juegosXml[filajuego][3] = self.self.juegosXml[filajuego][3]
+                juegosXml[filajuego][2] = descJuego.replacingOccurrences(of: "\n", with: " ")
+                juegosXml[filajuego][3] = juegosXml[filajuego][3]
                 if manualJuego != "" {
-                    self.self.juegosXml[filajuego][4] = rompath + "/media/" + nombrejuego + ".pdf"
+                    juegosXml[filajuego][4] = rompath + "/media/" + nombrejuego + ".pdf"
                 }else {
                     
-                    self.juegosXml[filajuego][4] = ""
+                    juegosXml[filajuego][4] = ""
                 }
-                self.juegosXml[filajuego][5] = self.juegosXml[filajuego][5]
+                juegosXml[filajuego][5] = juegosXml[filajuego][5]
                 if tittleshotJuego != "" {
-                    self.juegosXml[filajuego][6] = rompath + "/media/"  + nombrejuego + "_tittleshot.png"
+                    juegosXml[filajuego][6] = rompath + "/media/"  + nombrejuego + "_tittleshot.png"
                 }else {
-                    self.juegosXml[filajuego][6] = ""
+                    juegosXml[filajuego][6] = ""
                 }
                 if fanartJuego != "" {
-                    self.juegosXml[filajuego][7] = rompath + "/media/"  + nombrejuego + "_fanart.png"
+                    juegosXml[filajuego][7] = rompath + "/media/"  + nombrejuego + "_fanart.png"
                 }else {
-                    self.juegosXml[filajuego][7] = ""
+                    juegosXml[filajuego][7] = ""
                 }
                 if screenshotJuego != "" {
-                    self.juegosXml[filajuego][8] = rompath + "/media/" + nombrejuego + ".png"
-                    self.juegosXml[filajuego][9] = rompath + "/media/"  + nombrejuego + ".png"
+                    juegosXml[filajuego][8] = rompath + "/media/" + nombrejuego + ".png"
+                    juegosXml[filajuego][9] = rompath + "/media/"  + nombrejuego + ".png"
                 } else {
-                    self.juegosXml[filajuego][8] = ""
-                    self.juegosXml[filajuego][9] = ""
+                    juegosXml[filajuego][8] = ""
+                    juegosXml[filajuego][9] = ""
                 }
                 if videoJuego != "" {
-                    self.juegosXml[filajuego][10] = rompath + "/media/" + nombrejuego + ".mp4"
+                    juegosXml[filajuego][10] = rompath + "/media/" + nombrejuego + ".mp4"
                 } else {
-                    self.juegosXml[filajuego][10] = ""
+                    juegosXml[filajuego][10] = ""
                 }
                 if marqueeJuego != "" {
-                    self.juegosXml[filajuego][11] = rompath + "/media/"  + nombrejuego + "_marquee.png"
+                    juegosXml[filajuego][11] = rompath + "/media/"  + nombrejuego + "_marquee.png"
                 } else {
-                    self.juegosXml[filajuego][11] = ""
+                    juegosXml[filajuego][11] = ""
                 }
                 
-                self.juegosXml[filajuego][12] = fechaJuego
-                self.juegosXml[filajuego][13] = desarroladorJuego
-                self.juegosXml[filajuego][14] = desarroladorJuego
-                self.juegosXml[filajuego][15] = generoJuego
-                self.juegosXml[filajuego][16] = self.juegosXml[filajuego][16]
-                self.juegosXml[filajuego][17] = playersJuego
-                self.juegosXml[filajuego][18] = self.juegosXml[filajuego][18]
-                self.juegosXml[filajuego][19] = self.juegosXml[filajuego][19]
-                self.juegosXml[filajuego][23] = rompath + "/media/"  + nombrejuego + "_box.png"
+                juegosXml[filajuego][12] = fechaJuego
+                juegosXml[filajuego][13] = desarroladorJuego
+                juegosXml[filajuego][14] = desarroladorJuego
+                juegosXml[filajuego][15] = generoJuego
+                juegosXml[filajuego][16] = juegosXml[filajuego][16]
+                juegosXml[filajuego][17] = playersJuego
+                juegosXml[filajuego][18] = juegosXml[filajuego][18]
+                juegosXml[filajuego][19] = juegosXml[filajuego][19]
+                juegosXml[filajuego][23] = rompath + "/media/"  + nombrejuego + "_box.png"
                 self.xmlJuegosNuevos()
                 //DispatchQueue.main.sync {}
                 
                 
                 let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-                let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == self.juegosXml[filajuego][0]})
+                let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == juegosXml[filajuego][0]})
                 
                 
-                allTheGames[mifila!].games[mifilaJuego!].description = self.juegosXml[filajuego][2]
-                allTheGames[mifila!].games[mifilaJuego!].map = self.juegosXml[filajuego][3]
-                allTheGames[mifila!].games[mifilaJuego!].manual = self.juegosXml[filajuego][4]
-                allTheGames[mifila!].games[mifilaJuego!].tittleshot = self.juegosXml[filajuego][6]
-                allTheGames[mifila!].games[mifilaJuego!].fanart = self.juegosXml[filajuego][7]
-                allTheGames[mifila!].games[mifilaJuego!].thumbnail = self.juegosXml[filajuego][8]
-                allTheGames[mifila!].games[mifilaJuego!].image = self.juegosXml[filajuego][9]
-                allTheGames[mifila!].games[mifilaJuego!].video = self.juegosXml[filajuego][10]
-                allTheGames[mifila!].games[mifilaJuego!].marquee = self.juegosXml[filajuego][11]
-                allTheGames[mifila!].games[mifilaJuego!].releasedate = self.juegosXml[filajuego][12]
-                allTheGames[mifila!].games[mifilaJuego!].developer = self.juegosXml[filajuego][13]
-                allTheGames[mifila!].games[mifilaJuego!].publisher = self.juegosXml[filajuego][14]
-                allTheGames[mifila!].games[mifilaJuego!].genre = self.juegosXml[filajuego][15]
-                allTheGames[mifila!].games[mifilaJuego!].lang = self.juegosXml[filajuego][16]
-                allTheGames[mifila!].games[mifilaJuego!].players = self.juegosXml[filajuego][17]
-                allTheGames[mifila!].games[mifilaJuego!].rating = self.juegosXml[filajuego][18]
-                allTheGames[mifila!].games[mifilaJuego!].fav = self.juegosXml[filajuego][19]
-                allTheGames[mifila!].games[mifilaJuego!].box = self.juegosXml[filajuego][23]
+                allTheGames[mifila!].games[mifilaJuego!].description = juegosXml[filajuego][2]
+                allTheGames[mifila!].games[mifilaJuego!].map = juegosXml[filajuego][3]
+                allTheGames[mifila!].games[mifilaJuego!].manual = juegosXml[filajuego][4]
+                allTheGames[mifila!].games[mifilaJuego!].tittleshot = juegosXml[filajuego][6]
+                allTheGames[mifila!].games[mifilaJuego!].fanart = juegosXml[filajuego][7]
+                allTheGames[mifila!].games[mifilaJuego!].thumbnail = juegosXml[filajuego][8]
+                allTheGames[mifila!].games[mifilaJuego!].image = juegosXml[filajuego][9]
+                allTheGames[mifila!].games[mifilaJuego!].video = juegosXml[filajuego][10]
+                allTheGames[mifila!].games[mifilaJuego!].marquee = juegosXml[filajuego][11]
+                allTheGames[mifila!].games[mifilaJuego!].releasedate = juegosXml[filajuego][12]
+                allTheGames[mifila!].games[mifilaJuego!].developer = juegosXml[filajuego][13]
+                allTheGames[mifila!].games[mifilaJuego!].publisher = juegosXml[filajuego][14]
+                allTheGames[mifila!].games[mifilaJuego!].genre = juegosXml[filajuego][15]
+                allTheGames[mifila!].games[mifilaJuego!].lang = juegosXml[filajuego][16]
+                allTheGames[mifila!].games[mifilaJuego!].players = juegosXml[filajuego][17]
+                allTheGames[mifila!].games[mifilaJuego!].rating = juegosXml[filajuego][18]
+                allTheGames[mifila!].games[mifilaJuego!].fav = juegosXml[filajuego][19]
+                allTheGames[mifila!].games[mifilaJuego!].box = juegosXml[filajuego][23]
                 
                 
             })
@@ -1031,8 +1023,8 @@ extension ListaViewController {
         
         escrapeandoSistema = true
         //mkdir -p foo
-        var rutaacrear = rompath + "/media"
-        var comando = "mkdir -p \(rutaacrear)"
+        let rutaacrear = rompath + "/media"
+        let comando = "mkdir -p \(rutaacrear)"
         Commands.Bash.system("\(comando)")
         var misystemid = String()
         for sistema in systemsIds {
@@ -1042,7 +1034,7 @@ extension ListaViewController {
                 break
             }
         }
-        juegosaescrapearensistema = self.juegosXml.count
+        juegosaescrapearensistema = juegosXml.count
         
         let defaults = UserDefaults.standard
         let SSUser = defaults.string(forKey: "SSUser") ?? ""
@@ -1053,7 +1045,7 @@ extension ListaViewController {
         //Si el sistema es MAME
         if misystemid == "75" {
             
-            var juegoMame = self.juegosXml[numero][1]
+            var juegoMame = juegosXml[numero][1]
             if juegoMame.contains("/") {
                 let index2 = juegoMame.range(of: "/", options: .backwards)?.lowerBound
                 let substring2 = juegoMame.substring(from: index2! )
@@ -1062,17 +1054,17 @@ extension ListaViewController {
                 print("JUEGO /: \(juegoMame)")
             }
             for juego in titulosMame {
-                print("Tengo: \(juego[0])")
+                //print("Tengo: \(juego[0])")
                 if juego[0] == juegoMame {
-                    print("EL JUEGO: \(juego[0])")
+                    //print("EL JUEGO: \(juego[0])")
                     nombre = juego[1]
                     break
                 }
             }
         }else {
-            nombre = self.juegosXml[numero][1]
+            nombre = juegosXml[numero][1]
         }
-        //nombre = self.juegosXml[numerojuego][1]
+        //nombre = juegosXml[numerojuego][1]
         if nombre.contains("/") {
             let index2 = nombre.range(of: "/", options: .backwards)?.lowerBound
             let substring2 = nombre.substring(from: index2! )
@@ -1085,10 +1077,10 @@ extension ListaViewController {
         nombre = nombre.replacingOccurrences(of: "\\s(\\[.+\\]|\\(.+\\))", with: "", options: .regularExpression)
         nombre = nombre.replacingOccurrences(of: "\\s?\\[[\\w\\s]*\\]", with: "", options: .regularExpression)
         nombre = nombre.replacingOccurrences(of: ".", with: "")
-        miputonombre = nombre
+        miputonombre = nombre.trimmingCharacters(in: .whitespaces)
         nombre = nombre.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         
-        var nombreplano = self.juegosXml[numerojuego][1].replacingOccurrences(of: " ", with: "")
+        var nombreplano = juegosXml[numerojuego][1].replacingOccurrences(of: " ", with: "")
         
         var miId = String()
         var idSistema = String()
@@ -1187,7 +1179,7 @@ extension ListaViewController {
                 habilitarTabla()
             }
             if escrapeandoSistema == true {
-                if juesgosEscrapeados == self.juegosXml.count {
+                if juesgosEscrapeados == juegosXml.count {
                     habilitarTabla2()
                 }
             }
@@ -1202,15 +1194,15 @@ extension ListaViewController {
     @objc func escrapeartodos(){
         
         barraProgress.minValue = 0
-        juegosaEscrapear = Double(self.juegosXml.count)
-        barraProgress.maxValue = Double(self.juegosXml.count)
+        juegosaEscrapear = Double(juegosXml.count)
+        barraProgress.maxValue = Double(juegosXml.count)
         backButton.isEnabled = false
         abiertaLista = false
         juegosTableView.isEnabled = false
-        self.infoLabel.stringValue = "ESCRAPEANDO \(self.juegosXml.count) JUEGOS"
+        self.infoLabel.stringValue = "ESCRAPEANDO \(juegosXml.count) JUEGOS"
         DispatchQueue.background(delay: 0.0, background: {
-            self.juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
-            let kk = self.juegosXml.count
+            juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
+            let kk = juegosXml.count
             for a in 0..<kk {
                 self.buscaJuegoS(numerojuego: a)
                 
@@ -1230,7 +1222,7 @@ extension ListaViewController {
         let nuevoGamelist = rompath + "/gamelist.xml"
         let root = XMLElement(name: "gameList")
         let xml = XMLDocument(rootElement: root)
-        for juego in self.juegosXml {
+        for juego in juegosXml {
             let gameNode = XMLElement(name: "game")
             root.addChild(gameNode)
             let pathNode = XMLElement(name: "path", stringValue: rutaARelativa(ruta: juego[0]))
@@ -1284,7 +1276,7 @@ extension ListaViewController {
         }
         let xmlData = xml.xmlData(options: .nodePrettyPrint)
         
-        print("TOTAL: \(self.juegosXml.count) Juegos en Total")
+        print("TOTAL: \(juegosXml.count) Juegos en Total")
         do{
             try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
         }catch {}
@@ -1292,13 +1284,13 @@ extension ListaViewController {
     
     @objc func escrapearSistema() {
         var miFilaTable = 0
-        infoLabel.stringValue = "Escrapeando \(self.juegosXml.count) juegos"
+        infoLabel.stringValue = "Escrapeando \(juegosXml.count) juegos"
         
-        for game in self.juegosXml{
+        for game in juegosXml{
             let miSeleccion = NSIndexSet(index: miFilaTable)
             self.juegosTableView.selectRowIndexes(miSeleccion as IndexSet, byExtendingSelection: false)
             self.buscaJuego()
-            self.infoLabel.stringValue = "Escrapeados \(miFilaTable + 1) /\(self.juegosXml.count) Juegos"
+            self.infoLabel.stringValue = "Escrapeados \(miFilaTable + 1) /\(juegosXml.count) Juegos"
             miFilaTable += 1
         }
         

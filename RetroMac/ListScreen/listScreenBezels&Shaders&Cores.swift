@@ -109,7 +109,7 @@ extension ListaViewController {
         for a in 0..<(contextMenu.items[2].submenu?.items[1].submenu?.items.count)! {
             contextMenu.items[2].submenu?.items[1].submenu?.items[a].title = (contextMenu.items[2].submenu?.items[1].submenu?.items[a].title.replacingOccurrences(of: " ✅", with: ""))!
         }
-        contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "NINGUNO ✅"
+        contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "Ninguno ✅"
         print(arraySystemsShaders)
     }
     
@@ -124,7 +124,7 @@ extension ListaViewController {
             }
             
         } else {
-            contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "NINGUNO ✅"
+            contextMenu.items[2].submenu?.items[1].submenu?.items[0].title = "Ninguno ✅"
         }
     }
     
@@ -133,10 +133,10 @@ extension ListaViewController {
         let mijuego = juegosXml[mifila][0]
         let filaenArray = arrayGamesBezels.firstIndex(where: {$0[0] == mijuego})
         if filaenArray != nil {
-            arrayGamesBezels[filaenArray!][1] = "SI"
+            arrayGamesBezels[filaenArray!][1] = "Sí"
             
         } else {
-            let migrupo = [mijuego, "SI"]
+            let migrupo = [mijuego, "Sí"]
             arrayGamesBezels.append(migrupo)
         }
         
@@ -157,10 +157,10 @@ extension ListaViewController {
         let mijuego = juegosXml[mifila][0]
         let filaenArray = arrayGamesBezels.firstIndex(where: {$0[0] == mijuego})
         if filaenArray != nil {
-            arrayGamesBezels[filaenArray!][1] = "NO"
+            arrayGamesBezels[filaenArray!][1] = "No"
             
         } else {
-            let migrupo = [mijuego, "NO"]
+            let migrupo = [mijuego, "No"]
             arrayGamesBezels.append(migrupo)
         }
         
@@ -196,7 +196,7 @@ extension ListaViewController {
         if filaAbuscar != nil {
             
         } else {
-            let miGrupo = [sistema, "SI"]
+            let miGrupo = [sistema, "Sí"]
             arraySystemsBezels.append(miGrupo)
         }
         

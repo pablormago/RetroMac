@@ -64,6 +64,7 @@ var arraySystemsShaders = [[String]] ()
 var arrayGamesBezels = [[String]]()
 var arraySystemsBezels = [[String]]()
 var citraConfig = [String]()
+var pantallaJuegos = String()
 
 
 class ViewController: NSViewController {
@@ -81,7 +82,18 @@ class ViewController: NSViewController {
     @IBOutlet weak var tog1: NSSwitch!
     @IBOutlet weak var onOff: NSTextField!
     @IBOutlet weak var settingsButton: NSButton!
+    @IBOutlet weak var gridBtn: NSButton!
     
+    @IBAction func openGrid(_ sender: Any) {
+        
+        if let controller = self.storyboard?.instantiateController(withIdentifier: "GridView") as? GridScreen {
+            print("Grid")
+            backStop()
+            //SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+            
+        }
+        
+    }
     @IBAction func enterSystem(_ sender: Any) {
         if cuentaPrincipio  > 0 && ventana == "Principal" {
             print("ENTER LISTA TRUE")
@@ -333,7 +345,8 @@ class ViewController: NSViewController {
         SingletonState.shared.myscroller = self.scrollMain
         SingletonState.shared.currentViewController = self
         SingletonState.shared.currentViewController!.view.window?.makeFirstResponder(SingletonState.shared.myscroller)
-        
+        let defaults = UserDefaults.standard
+        pantallaJuegos = defaults.string(forKey: "PantallaJuegos") ?? "Lista"
         
         
         
@@ -424,12 +437,23 @@ class ViewController: NSViewController {
             botonactual = sender.tag
             abiertaLista = true
             cuentaPrincipio += 1
-            
-            if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ListaViewController {
-                print("ENTRO?")
-                SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
-                
+            juegosXml = []
+            if pantallaJuegos == "Lista" {
+                if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ListaViewController {
+                    print("Lista")
+                    SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+                    
+                }
+            } else if pantallaJuegos == "Cuadrícula" {
+                if let controller = self.storyboard?.instantiateController(withIdentifier: "GridView") as? GridScreen {
+                    print("Grid")
+                    backStop()
+                    SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+
+                }
             }
+            
+
         }
         
     }
@@ -438,15 +462,17 @@ class ViewController: NSViewController {
     
     func backplay (tag: Int) {
         let button = self.view.viewWithTag(Int(tag)) as? ButtonConsolas
-        //backIsPlaying = true
+        print("BACKPLAY")
+        backIsPlaying = true
         if button?.videos?.count ?? 0 > 0 {
             let miVideo = button?.videos?.randomElement()
+            print(miVideo)
             if miVideo != "" {
                 //print("Mivideo: \(miVideo)")
                 let videoURL = URL(fileURLWithPath: miVideo!)
                 let player2 = AVPlayer(url: videoURL)
-                backPlayer.player = player2
-                backPlayer.player!.play()
+                SingletonState.shared.myBackPlayer!.player = player2
+                SingletonState.shared.myBackPlayer!.player!.play()
                 backIsPlaying = true
                 player2.actionAtItemEnd = .pause
                 NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player2.currentItem)
@@ -456,7 +482,7 @@ class ViewController: NSViewController {
     }
     
     func backStop () {
-        backPlayer.player?.pause()
+        SingletonState.shared.myBackPlayer!.player?.pause()
     }
     
     

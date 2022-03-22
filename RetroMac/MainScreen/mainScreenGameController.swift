@@ -322,7 +322,7 @@ extension ViewController {
         let numero = (SingletonState.shared.mytable?.selectedRow)
         let nombredelarchivo = SingletonState.shared.myJuegosXml![numero!][0].replacingOccurrences(of: rutaApp , with: "")
         let romXml = "\"\(SingletonState.shared.myJuegosXml![numero!][0])\""
-        var rompathabuscar = SingletonState.shared.myJuegosXml![numero!][0]
+        let rompathabuscar = SingletonState.shared.myJuegosXml![numero!][0]
         var comandojuego = SingletonState.shared.myJuegosXml![numero!][20]
         
         if comandojuego.contains("RetroArch") {
@@ -359,12 +359,12 @@ extension ViewController {
         }
         
         
-        var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
+        let fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
         if fila != nil {
             comandojuego = arrayGamesCores[fila!][1]
         }
         
-        var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+        let micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
         //print(micomando.replacingOccurrences(of: "%ROM%", with: romXml))
         var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
         if playingVideo == true {
@@ -408,7 +408,7 @@ extension ViewController {
     }
     
     public func prevGame () {
-        var numero = Int((SingletonState.shared.mytable!.selectedRow))
+        let numero = Int((SingletonState.shared.mytable!.selectedRow))
         
         if numero > 0 {
             let indexSet = NSIndexSet(index: (SingletonState.shared.mytable!.selectedRow - 1))

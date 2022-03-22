@@ -105,15 +105,15 @@ extension ListaViewController {
         sistemaSubmenu.addItem(cambiarShaderItem)
         let sistemaShaders = NSMenu()
         
-        let borrarShaderItem = NSMenuItem(title: "NINGUNO", action: #selector(removeSystemShader), keyEquivalent: "")
+        let borrarShaderItem = NSMenuItem(title: "Ninguno", action: #selector(removeSystemShader), keyEquivalent: "")
         var miSystemShader = String()
         let mifilashader = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
         if mifilashader != nil {
             miSystemShader = arraySystemsShaders[mifilashader!][1]
         } else {
-            borrarShaderItem.title = "NINGUNO ✅"
+            borrarShaderItem.title = "Ninguno ✅"
         }
-        let tooltipSystem = "NINGUNO"
+        let tooltipSystem = "Ninguno"
         borrarShaderItem.toolTip = tooltipSystem
         sistemaShaders.addItem(borrarShaderItem)
         
@@ -189,12 +189,12 @@ extension ListaViewController {
             let shaderSubmenu = NSMenu()
             shaderMenu.submenu = shaderSubmenu
             
-            let shaderItemDefault = NSMenuItem(title: "NINGUNO", action: #selector(setShader), keyEquivalent: "")
-            let defaultTooltip = "NINGUNO"
+            let shaderItemDefault = NSMenuItem(title: "Ninguno", action: #selector(setShader), keyEquivalent: "")
+            let defaultTooltip = "Ninguno"
             shaderItemDefault.toolTip = defaultTooltip
             shaderSubmenu.addItem(shaderItemDefault)
             
-            let shaderItemAuto = NSMenuItem(title: "AUTOMÁTICO", action: #selector(autoShader), keyEquivalent: "")
+            let shaderItemAuto = NSMenuItem(title: "Automático", action: #selector(autoShader), keyEquivalent: "")
             let autoTooltip = ""
             shaderItemAuto.toolTip = autoTooltip
             shaderSubmenu.addItem(shaderItemAuto)
@@ -292,7 +292,7 @@ extension ListaViewController {
         let miRuta = juegosXml[mifila2][0]
         let miGameShaderFila = arrayGamesShaders.firstIndex(where: {$0[0] == miRuta})
         if miGameShaderFila != nil {
-            //Tiene Shader o NINGUNO
+            //Tiene Shader o Ninguno
             let miShader = arrayGamesShaders[miGameShaderFila!][1].replacingOccurrences(of: " ✅", with: "")
             let miFilaItem = contextMenu.items[1].submenu?.items[6].submenu?.items.firstIndex(where: {$0.title == miShader})
             if miFilaItem != nil {
@@ -300,7 +300,7 @@ extension ListaViewController {
             }
 
         } else {
-            contextMenu.items[1].submenu?.items[6].submenu?.items[1].title = "AUTOMÁTICO ✅"
+            contextMenu.items[1].submenu?.items[6].submenu?.items[1].title = "Automático ✅"
         }
         
         // MARK: Poner tick al bezel del juego :

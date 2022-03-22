@@ -15,8 +15,16 @@
 		2706122227CFD2560016B1EB /* listScreenFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706122127CFD2560016B1EB /* listScreenFunctions.swift */; };
 		2706122427CFD2D60016B1EB /* listScreenKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706122327CFD2D60016B1EB /* listScreenKeyboard.swift */; };
 		2706122627CFD39A0016B1EB /* listScreenNetPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706122527CFD39A0016B1EB /* listScreenNetPlay.swift */; };
+		2707C92C27E3AD8F00E96A46 /* GridScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2707C92B27E3AD8F00E96A46 /* GridScreen.swift */; };
 		2710342627C75DF100615B86 /* NetPlayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2710342527C75DF100615B86 /* NetPlayListController.swift */; };
 		271417972762516C009CA02D /* ListaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271417962762516C009CA02D /* ListaViewController.swift */; };
+		2718B9D927E3E326000B5DF7 /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2718B9D727E3E326000B5DF7 /* PhotoItem.swift */; };
+		2718B9DA27E3E326000B5DF7 /* PhotoItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2718B9D827E3E326000B5DF7 /* PhotoItem.xib */; };
+		2718B9DE27E3ED73000B5DF7 /* PhotoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2718B9DC27E3ED73000B5DF7 /* PhotoHelper.swift */; };
+		2718B9DF27E3ED73000B5DF7 /* PhotoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2718B9DD27E3ED73000B5DF7 /* PhotoInfo.swift */; };
+		2718B9E227E4A2B3000B5DF7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E7A30C276BB42D0087C67A /* AVFoundation.framework */; };
+		2718B9E427E4A2B4000B5DF7 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E7A30E276BB44D0087C67A /* AVKit.framework */; };
+		2718B9E627E4A2B6000B5DF7 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2718B9E027E4A2A9000B5DF7 /* GameController.framework */; };
 		2719BEEB279487F700929EE2 /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 2719BEEA279487F700929EE2 /* favorite.png */; };
 		272A6EA5278F4417005B0930 /* SplashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272A6EA4278F4416005B0930 /* SplashController.swift */; };
 		272A6EA8278F5EFE005B0930 /* retro.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 272A6EA6278F5EFD005B0930 /* retro.jpeg */; };
@@ -52,22 +60,7 @@
 		27E7A30727691F740087C67A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A30627691F740087C67A /* Base */; };
 		27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E7A3082769C39E0087C67A /* gameListParser.swift */; };
 		27E7A30B276B57810087C67A /* NoVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A30A276B54240087C67A /* NoVideo.mp4 */; };
-		27E7A30D276BB42D0087C67A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E7A30C276BB42D0087C67A /* AVFoundation.framework */; };
-		27E7A30F276BB44D0087C67A /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E7A30E276BB44D0087C67A /* AVKit.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		27E7A2FB2768A9CF0087C67A /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		270485E42785FA7A00375232 /* funciones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funciones.swift; sourceTree = "<group>"; };
@@ -78,8 +71,14 @@
 		2706122127CFD2560016B1EB /* listScreenFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listScreenFunctions.swift; sourceTree = "<group>"; };
 		2706122327CFD2D60016B1EB /* listScreenKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listScreenKeyboard.swift; sourceTree = "<group>"; };
 		2706122527CFD39A0016B1EB /* listScreenNetPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listScreenNetPlay.swift; sourceTree = "<group>"; };
+		2707C92B27E3AD8F00E96A46 /* GridScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridScreen.swift; sourceTree = "<group>"; };
 		2710342527C75DF100615B86 /* NetPlayListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetPlayListController.swift; sourceTree = "<group>"; };
 		271417962762516C009CA02D /* ListaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaViewController.swift; sourceTree = "<group>"; };
+		2718B9D727E3E326000B5DF7 /* PhotoItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
+		2718B9D827E3E326000B5DF7 /* PhotoItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoItem.xib; sourceTree = "<group>"; };
+		2718B9DC27E3ED73000B5DF7 /* PhotoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoHelper.swift; sourceTree = "<group>"; };
+		2718B9DD27E3ED73000B5DF7 /* PhotoInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoInfo.swift; sourceTree = "<group>"; };
+		2718B9E027E4A2A9000B5DF7 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
 		2719BEEA279487F700929EE2 /* favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorite.png; sourceTree = "<group>"; };
 		272A6EA4278F4416005B0930 /* SplashController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashController.swift; sourceTree = "<group>"; };
 		272A6EA6278F5EFD005B0930 /* retro.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = retro.jpeg; sourceTree = "<group>"; };
@@ -95,7 +94,7 @@
 		278980172757DCBE00414985 /* RetroMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RetroMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2789801A2757DCBE00414985 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2789801C2757DCBE00414985 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		2789801E2757DCC000414985 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2789801E2757DCC000414985 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = RetroMac/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		278980212757DCC000414985 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		278980232757DCC000414985 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		278980242757DCC000414985 /* RetroMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RetroMac.entitlements; sourceTree = "<group>"; };
@@ -130,8 +129,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27E7A30F276BB44D0087C67A /* AVKit.framework in Frameworks */,
-				27E7A30D276BB42D0087C67A /* AVFoundation.framework in Frameworks */,
+				2718B9E227E4A2B3000B5DF7 /* AVFoundation.framework in Frameworks */,
+				2718B9E427E4A2B4000B5DF7 /* AVKit.framework in Frameworks */,
+				2718B9E627E4A2B6000B5DF7 /* GameController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,10 +141,40 @@
 		172E95A680083F85F8FDBC1D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2718B9E027E4A2A9000B5DF7 /* GameController.framework */,
 				27E7A30E276BB44D0087C67A /* AVKit.framework */,
 				27E7A30C276BB42D0087C67A /* AVFoundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2707C92A27E3ACDB00E96A46 /* GridScreen */ = {
+			isa = PBXGroup;
+			children = (
+				2718B9DB27E3ED73000B5DF7 /* Photo Handling */,
+				2707C92B27E3AD8F00E96A46 /* GridScreen.swift */,
+			);
+			path = GridScreen;
+			sourceTree = "<group>";
+		};
+		2718B9D627E3E326000B5DF7 /* Photo Item */ = {
+			isa = PBXGroup;
+			children = (
+				2718B9D727E3E326000B5DF7 /* PhotoItem.swift */,
+				2718B9D827E3E326000B5DF7 /* PhotoItem.xib */,
+			);
+			name = "Photo Item";
+			path = "../../../Downloads/PhotosApp-master/PhotosApp/Photo Item";
+			sourceTree = "<group>";
+		};
+		2718B9DB27E3ED73000B5DF7 /* Photo Handling */ = {
+			isa = PBXGroup;
+			children = (
+				2718B9DC27E3ED73000B5DF7 /* PhotoHelper.swift */,
+				2718B9DD27E3ED73000B5DF7 /* PhotoInfo.swift */,
+			);
+			name = "Photo Handling";
+			path = "../../../../Downloads/PhotosApp-master/PhotosApp/Photo Handling";
 			sourceTree = "<group>";
 		};
 		27665BA027B6ED0B00262025 /* MainScreen */ = {
@@ -192,11 +222,6 @@
 		278980192757DCBE00414985 /* RetroMac */ = {
 			isa = PBXGroup;
 			children = (
-				2784A21727E22FA000F1272B /* RetroMacRelease.entitlements */,
-				27C4A87927D121130069990A /* optionsScreen */,
-				27665BA827B8E87A00262025 /* ListScreen */,
-				27665BA027B6ED0B00262025 /* MainScreen */,
-				27665B9C27B5A7F100262025 /* singleton.swift */,
 				2789801A2757DCBE00414985 /* AppDelegate.swift */,
 				279FBD51277350A700CD5586 /* Arrows */,
 				2789801E2757DCC000414985 /* Assets.xcassets */,
@@ -206,22 +231,29 @@
 				2719BEEA279487F700929EE2 /* favorite.png */,
 				270485E42785FA7A00375232 /* funciones.swift */,
 				27E7A3082769C39E0087C67A /* gameListParser.swift */,
+				2707C92A27E3ACDB00E96A46 /* GridScreen */,
 				279FBD7827739DAC00CD5586 /* icons.icns */,
 				278980232757DCC000414985 /* Info.plist */,
 				271417962762516C009CA02D /* ListaViewController.swift */,
+				27665BA827B8E87A00262025 /* ListScreen */,
 				27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */,
 				27E7A3022768B4B90087C67A /* logo.jpeg */,
 				278980202757DCC000414985 /* Main.storyboard */,
-				27C4A87727D10E800069990A /* OptionsViewController.swift */,
-				2710342527C75DF100615B86 /* NetPlayListController.swift */,
+				27665BA027B6ED0B00262025 /* MainScreen */,
 				2748C057278620FA002D633B /* mamelist.txt */,
+				2710342527C75DF100615B86 /* NetPlayListController.swift */,
 				27E7A30A276B54240087C67A /* NoVideo.mp4 */,
+				27C4A87927D121130069990A /* optionsScreen */,
+				27C4A87727D10E800069990A /* OptionsViewController.swift */,
 				27E6675F275A29B300B50AD6 /* parserSystems.swift */,
 				278A6299278364F70051BA13 /* pdf.png */,
+				2718B9D627E3E326000B5DF7 /* Photo Item */,
 				272A6EA6278F5EFD005B0930 /* retro.jpeg */,
 				272A6EA7278F5EFE005B0930 /* retro2.jpeg */,
 				278980242757DCC000414985 /* RetroMac.entitlements */,
+				2784A21727E22FA000F1272B /* RetroMacRelease.entitlements */,
 				274FEB152773321C007CE357 /* ScrollingTextView.swift */,
+				27665B9C27B5A7F100262025 /* singleton.swift */,
 				272A6EA4278F4416005B0930 /* SplashController.swift */,
 				27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */,
 				27E7A3042768E9BA0087C67A /* themes */,
@@ -273,7 +305,6 @@
 				278980142757DCBE00414985 /* Frameworks */,
 				278980152757DCBE00414985 /* Resources */,
 				9F947AC68DE57DED9BBF53E1 /* [CP] Embed Pods Frameworks */,
-				27E7A2FB2768A9CF0087C67A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -341,6 +372,7 @@
 				27ACE2FF279350DF00B2BB46 /* logo_retro.jpeg in Resources */,
 				27E7A3032768B4B90087C67A /* logo.jpeg in Resources */,
 				279FBD70277375AA00CD5586 /* borrar.png in Resources */,
+				2718B9DA27E3E326000B5DF7 /* PhotoItem.xib in Resources */,
 				27E7A2FF2768B40C0087C67A /* es_systems_mac.cfg in Resources */,
 				2748C058278620FA002D633B /* mamelist.txt in Resources */,
 			);
@@ -395,6 +427,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2718B9DF27E3ED73000B5DF7 /* PhotoInfo.swift in Sources */,
 				2710342627C75DF100615B86 /* NetPlayListController.swift in Sources */,
 				27665BA527B6EE4400262025 /* mainScreenGameController.swift in Sources */,
 				27C4A87827D10E800069990A /* OptionsViewController.swift in Sources */,
@@ -409,9 +442,12 @@
 				27665BA727B6EEB100262025 /* mainScreenKeyboard.swift in Sources */,
 				2706122227CFD2560016B1EB /* listScreenFunctions.swift in Sources */,
 				2789801D2757DCBE00414985 /* ViewController.swift in Sources */,
+				2707C92C27E3AD8F00E96A46 /* GridScreen.swift in Sources */,
 				272A6EA5278F4417005B0930 /* SplashController.swift in Sources */,
 				2706121E27CFD1160016B1EB /* listScreenBezels&Shaders&Cores.swift in Sources */,
+				2718B9D927E3E326000B5DF7 /* PhotoItem.swift in Sources */,
 				27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */,
+				2718B9DE27E3ED73000B5DF7 /* PhotoHelper.swift in Sources */,
 				27B58953277EF3F6006DBAB9 /* SwiftyJSON.swift in Sources */,
 				27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */,
 				2789801B2757DCBE00414985 /* AppDelegate.swift in Sources */,
@@ -491,6 +527,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = RetroMac;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -546,6 +583,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = RetroMac;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -582,7 +620,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RetroMac/RetroMacRelease.entitlements;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = XR75YD5JPH;
@@ -595,7 +633,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pablormago.RetroMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = retromac;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

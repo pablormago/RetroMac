@@ -10,7 +10,7 @@ import Cocoa
 
 var miJuegosXml = [[String]]()
 class OptionsViewController: NSViewController {
-
+    
     @IBOutlet weak var scrapSystemBtn: NSButton!
     @IBOutlet weak var systemCoreList: NSPopUpButton!
     @IBOutlet weak var systemShaderList: NSPopUpButton!
@@ -29,13 +29,11 @@ class OptionsViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("OPTIONS LOAD")
         // Do view setup here.
         
         //Cogemos el JuegosXml
-        if let controller = self.storyboard?.instantiateController(withIdentifier: "ListaView") as? ListaViewController {
-            miJuegosXml = controller.juegosXml
-        }
-        
+        miJuegosXml = juegosXml
         
         // MARK: Añadimos acciones a los botones
         
@@ -44,16 +42,24 @@ class OptionsViewController: NSViewController {
         aceptarBTN.action = #selector(cerrar)
         
         // MARK: LLenar Listas:
-        getSystemCores ()
+        getSystemCores()
+        getSystemShaders()
+        getGameCore()
+        getGameShaders()
+        getSystemBezels()
+        getGameBezels()
+        
     }
     @objc func escrapearSistema () {
         escrapeartodos()
     }
     
+    
+    
     @objc func cerrar() {
-        ventana = "Lista"
-        abiertaLista = true
-        
-        self.dismiss(self)
+        saveOptions()
+        ventana = "Grid"
+        myPlayer.player?.play()
+        //self.dismiss(self)
     }
 }

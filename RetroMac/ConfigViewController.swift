@@ -17,6 +17,7 @@ class ConfigViewController: NSViewController {
     @IBOutlet weak var shadersSwitch: NSSwitch!
     @IBOutlet weak var marcosSwitch: NSSwitch!
     @IBOutlet weak var localSwitch: NSSwitch!
+    @IBOutlet weak var listaPantalla: NSPopUpButton!
     
     @IBOutlet weak var serverList: NSPopUpButton!
     @IBOutlet weak var configTxt: NSTextField!
@@ -53,7 +54,9 @@ class ConfigViewController: NSViewController {
             estadoShaders = 0
             editRetroArchConfig(param: "video_shader_enable", value: "false")
         }
-        
+        let estadoPantalla = listaPantalla.selectedItem!.title
+        defaults.set(estadoPantalla, forKey: "PantallaJuegos")
+        pantallaJuegos = estadoPantalla
         defaults.set(estadoLocal, forKey: "LocalMedia")
         defaults.set(estadoMarcos, forKey: "Marcos")
         defaults.set(estadoShaders, forKey: "Shaders")
@@ -127,7 +130,13 @@ class ConfigViewController: NSViewController {
             serverList.selectItem(at: 3)
         }
         
-        
+        let pantallaJuegos = defaults.string(forKey: "PantallaJuegos") ?? "Lista"
+        if pantallaJuegos == "Lista" {
+            listaPantalla.selectItem(at: 0)
+        }
+        if pantallaJuegos == "Cuadrícula" {
+            listaPantalla.selectItem(at: 1)
+        }
         
         // Do view setup here.
         //SingletonState.shared.currentViewController = self

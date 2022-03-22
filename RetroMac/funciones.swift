@@ -368,7 +368,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
             let miPlayers = String(game.players)
             let miRating = String(game.rating)
             let miFav = String(game.fav)
-            let miBox = String(game.box)
+            let miBox = siRutaRelativa2(ruta:String(game.box))
             var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating, fav: miFav, comando: miComando, core: "", system: miSistema, box: miBox)
             
             datosJuego3 = [String(miJuego) , miNombre, miDescripcion, String(miMapa), String(miManual), miNews, String(miTittleShot), String(miFanArt), String(miThumbnail), String(miImage), String(miVideo), String(miMarquee), miReleaseData, miDeveloper, miPublisher, miGenre, miLang, miPlayers, miRating, miFav,  miComando, miBox]
@@ -645,7 +645,7 @@ func escribeSistemas () {
     //let url = URL (fileURLWithPath: pathXMLinterno!)
     let xmlData = xml.xmlData(options: .nodePrettyPrint)
     let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
-    var nuevoGamelist = rutaApp2 + "/systems_test.xml"
+    //var nuevoGamelist = rutaApp2 + "/systems_test.xml"
     do{
         try? xmlData.write(to: pathComponent!)
         print("EXITO")
@@ -1201,15 +1201,16 @@ func shadersList () {
     }
     while let element = enumerator.nextObject() as? String {
         if element.hasSuffix(".glsl") {
-            //print("\(folder!.path)/\(element)")
             let ruta = "\(folder!.path)/\(element)"
-            let nombre = ruta.replacingOccurrences(of: folder!.path, with: "")
+            let nombre = ruta.replacingOccurrences(of: folder!.path, with: "").replacingOccurrences(of: "/shaders_glsl", with: "")
             let migrupo = [ruta, nombre]
             arrayShaders.append(migrupo)
         }
     }
     arrayShaders.sort(by: {($0[1] ) < ($1[1]) })
 }
+
+
 
 func readCitraConfig () {
     let home = FileManager.default.homeDirectoryForCurrentUser
