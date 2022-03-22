@@ -764,7 +764,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RSZ-gn-uB6">
-                                            <rect key="frame" x="18" y="85" width="378" height="97"/>
+                                            <rect key="frame" x="14" y="61" width="647" height="97"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" alignment="center" title="Editar Nombre del Juego" id="zy3-sV-UWi">
                                                 <font key="font" size="16" name="GB18030Bitmap"/>
@@ -1522,11 +1522,11 @@ Gw
             <objects>
                 <viewController title="Opciones" storyboardIdentifier="OptionsView" id="zTe-pc-soV" customClass="OptionsViewController" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="yst-4Q-ldb">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="533"/>
+                        <rect key="frame" x="0.0" y="0.0" width="566" height="533"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rv3-Tt-p9p">
-                                <rect key="frame" x="0.0" y="506" width="500" height="27"/>
+                                <rect key="frame" x="0.0" y="506" width="566" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="center" title="OPCIONES" id="BdD-De-4lX">
                                     <font key="font" metaFont="systemBold" size="19"/>
@@ -1535,7 +1535,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n2u-xh-68e">
-                                <rect key="frame" x="0.0" y="477" width="500" height="19"/>
+                                <rect key="frame" x="35" y="477" width="500" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="left" title="OPCIONES DE SISTEMA (Consola)" id="dVz-Jd-NHk">
                                     <font key="font" metaFont="systemBold" size="12"/>
@@ -1544,7 +1544,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SUJ-sz-Cl8">
-                                <rect key="frame" x="0.0" y="307" width="500" height="19"/>
+                                <rect key="frame" x="35" y="307" width="500" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="left" title="OPCIONES DEL JUEGO" id="tYB-iw-qt3">
                                     <font key="font" metaFont="systemBold" size="12"/>
@@ -1553,7 +1553,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dcm-aA-Gcw">
-                                <rect key="frame" x="1" y="427" width="497" height="32"/>
+                                <rect key="frame" x="36" y="427" width="497" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Descargar Media de todo el Sistema (Consola)" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Fgs-hI-dWF">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1561,7 +1561,7 @@ Gw
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l2L-sA-C7a">
-                                <rect key="frame" x="1" y="227" width="497" height="32"/>
+                                <rect key="frame" x="36" y="227" width="497" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Cambiar Nombre" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="B6j-Oa-wT9">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1569,7 +1569,7 @@ Gw
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cta-OU-rHX">
-                                <rect key="frame" x="1" y="256" width="497" height="32"/>
+                                <rect key="frame" x="36" y="256" width="497" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Descargar Media del Juego" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MZU-c8-DmP">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1577,7 +1577,7 @@ Gw
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aAq-wo-7l1">
-                                <rect key="frame" x="1" y="197" width="497" height="32"/>
+                                <rect key="frame" x="36" y="197" width="497" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Añadir/Borrar Juego de Favoritos" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YnQ-3Y-wwu">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1585,7 +1585,7 @@ Gw
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="il5-aB-pPg">
-                                <rect key="frame" x="1" y="168" width="497" height="32"/>
+                                <rect key="frame" x="36" y="168" width="497" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Borrar Juego" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5P3-lM-rDh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1593,7 +1593,7 @@ Gw
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XKW-Va-7N9">
-                                <rect key="frame" x="1" y="43" width="497" height="32"/>
+                                <rect key="frame" x="36" y="43" width="497" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Iniciar Partida en Netplay como Host" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iUT-ji-6oV">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1601,7 +1601,7 @@ Gw
                                 </buttonCell>
                             </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zFw-WU-OL1">
-                                <rect key="frame" x="134" y="403" width="361" height="25"/>
+                                <rect key="frame" x="169" y="403" width="361" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="0Pp-dg-rs0">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1610,7 +1610,7 @@ Gw
                                 </popUpButtonCell>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="byG-79-23v">
-                                <rect key="frame" x="134" y="373" width="361" height="25"/>
+                                <rect key="frame" x="169" y="373" width="361" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="rQ1-cW-iSn">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1619,7 +1619,7 @@ Gw
                                 </popUpButtonCell>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QTa-zh-Wea">
-                                <rect key="frame" x="259" y="343" width="78" height="25"/>
+                                <rect key="frame" x="294" y="343" width="78" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Sí" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="vHn-nK-1YY" id="hXC-qc-FcT">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1633,7 +1633,7 @@ Gw
                                 </popUpButtonCell>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vka-xP-zZM">
-                                <rect key="frame" x="6" y="410" width="125" height="16"/>
+                                <rect key="frame" x="41" y="410" width="125" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Core por Defecto" id="i4I-9l-r8F">
                                     <font key="font" metaFont="system"/>
@@ -1642,7 +1642,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UgI-TX-kDM">
-                                <rect key="frame" x="134" y="140" width="361" height="25"/>
+                                <rect key="frame" x="169" y="140" width="361" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Automático" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ihl-8G-q4h" id="pDE-co-Xme">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1655,7 +1655,7 @@ Gw
                                 </popUpButtonCell>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ee1-8v-yr5">
-                                <rect key="frame" x="6" y="147" width="125" height="16"/>
+                                <rect key="frame" x="41" y="147" width="125" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Core por Defecto" id="agv-Rm-ff3">
                                     <font key="font" metaFont="system"/>
@@ -1664,7 +1664,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wfz-z0-gDE">
-                                <rect key="frame" x="6" y="380" width="125" height="16"/>
+                                <rect key="frame" x="41" y="380" width="125" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Shader por Defecto" id="az0-aS-yx5">
                                     <font key="font" metaFont="system"/>
@@ -1673,7 +1673,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13D-AA-aA6">
-                                <rect key="frame" x="134" y="109" width="361" height="25"/>
+                                <rect key="frame" x="169" y="109" width="361" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Automático" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Kl1-04-ISP" id="JHM-zF-f6r">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1687,7 +1687,7 @@ Gw
                                 </popUpButtonCell>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PTV-Kq-rFR">
-                                <rect key="frame" x="6" y="116" width="125" height="16"/>
+                                <rect key="frame" x="41" y="116" width="125" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Shader por Defecto" id="hb0-T2-yzI">
                                     <font key="font" metaFont="system"/>
@@ -1696,7 +1696,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aau-Fb-YDw">
-                                <rect key="frame" x="6" y="350" width="246" height="16"/>
+                                <rect key="frame" x="41" y="350" width="246" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Usar Bezels/Marcos en todos los juegos" id="evr-v3-X5A">
                                     <font key="font" metaFont="system"/>
@@ -1705,7 +1705,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FhR-bT-Y0q">
-                                <rect key="frame" x="211" y="78" width="167" height="25"/>
+                                <rect key="frame" x="246" y="78" width="167" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Automático" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="no4-im-Zkp" id="8JJ-Uu-AvA">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1720,7 +1720,7 @@ Gw
                                 </popUpButtonCell>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7EX-px-Btq">
-                                <rect key="frame" x="6" y="85" width="198" height="16"/>
+                                <rect key="frame" x="41" y="85" width="198" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Usar Bezels/Marcos en el Juego" id="QpE-ED-oU3">
                                     <font key="font" metaFont="system"/>
@@ -1729,24 +1729,38 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vBz-Eq-rqa">
-                                <rect key="frame" x="223" y="14" width="263" height="16"/>
+                                <rect key="frame" x="289" y="14" width="246" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="INFO" drawsBackground="YES" id="hme-hK-CrY">
+                                <textFieldCell key="cell" lineBreakMode="clipping" drawsBackground="YES" id="hme-hK-CrY">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <progressIndicator hidden="YES" fixedFrame="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="C2p-DO-OfT">
-                                <rect key="frame" x="223" y="27" width="263" height="20"/>
+                                <rect key="frame" x="289" y="27" width="263" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             </progressIndicator>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6CB-Ph-fC3">
-                                <rect key="frame" x="13" y="4" width="145" height="32"/>
+                                <rect key="frame" x="28" y="5" width="109" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="ACEPTAR" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1eG-M9-Uij">
+                                <buttonCell key="cell" type="push" title="SALIR" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1eG-M9-Uij">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pOp-Bn-8V3">
+                                <rect key="frame" x="146" y="5" width="110" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="GUARDAR" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lge-OW-49y">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
                                 </buttonCell>
                             </button>
                         </subviews>
@@ -1761,6 +1775,7 @@ Gw
                         <outlet property="gameBezelsList" destination="FhR-bT-Y0q" id="11Y-jk-X4C"/>
                         <outlet property="gameCoreList" destination="UgI-TX-kDM" id="7nF-55-I8x"/>
                         <outlet property="gameShaderList" destination="13D-AA-aA6" id="RWM-aY-ESd"/>
+                        <outlet property="guardarBtn" destination="pOp-Bn-8V3" id="AuJ-A8-bes"/>
                         <outlet property="infoLabel" destination="vBz-Eq-rqa" id="2j5-ht-wDS"/>
                         <outlet property="netplayBtn" destination="XKW-Va-7N9" id="Mes-ws-55S"/>
                         <outlet property="scrapSystemBtn" destination="dcm-aA-Gcw" id="pYT-O8-Y5l"/>
@@ -1771,7 +1786,7 @@ Gw
                 </viewController>
                 <customObject id="QwS-h3-ejm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="200" y="2211.5"/>
+            <point key="canvasLocation" x="167" y="2211.5"/>
         </scene>
         <!--GridScreen-->
         <scene sceneID="dXt-G9-YOC">
@@ -1786,10 +1801,22 @@ Gw
                                 <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" refusesFirstResponder="YES" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hXl-Qm-krG">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent"></string>
+                                    <string key="keyEquivalent"></string>
                                 </buttonCell>
                                 <connections>
                                     <action selector="lanzarJuegos:" target="DMA-IM-zx3" id="Rxq-kL-BXb"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QWP-qN-hSd">
+                                <rect key="frame" x="1182" y="663" width="75" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rBH-j6-Mzj">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent"></string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="openGameSettings:" target="DMA-IM-zx3" id="5Yu-9P-fTK"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="tcT-XG-cb3">
@@ -1804,6 +1831,54 @@ Gw
                                 </buttonCell>
                                 <connections>
                                     <action selector="backToMain:" target="DMA-IM-zx3" id="1Vl-QX-wng"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="k0t-Q7-hQe">
+                                <rect key="frame" x="40" y="434" width="79" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Ajustes" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="INH-DZ-gfc">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent"></string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="abrirAjustes:" target="DMA-IM-zx3" id="7kh-nZ-AVV"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="20" translatesAutoresizingMaskIntoConstraints="NO" id="U9A-6a-l4u">
+                                <rect key="frame" x="50" y="450" width="81" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Netplay" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TFj-Vy-G9d">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent"></string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="abrirNetplay:" target="DMA-IM-zx3" id="8Ya-gP-kPS"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="50" translatesAutoresizingMaskIntoConstraints="NO" id="y3z-vs-tvV">
+                                <rect key="frame" x="692" y="434" width="75" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="menos" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Cg3-oV-3hx">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent"></string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="menosSistena:" target="DMA-IM-zx3" id="mxg-XE-sho"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="60" translatesAutoresizingMaskIntoConstraints="NO" id="zME-xH-pOp">
+                                <rect key="frame" x="700" y="434" width="60" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="mas" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Zlm-Y9-CNn">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent"></string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="masSistema:" target="DMA-IM-zx3" id="Taj-eR-qmO"/>
                                 </connections>
                             </button>
                             <box boxType="custom" borderType="line" title="INFOBOX" translatesAutoresizingMaskIntoConstraints="NO" id="QuD-on-vVH">
@@ -1869,8 +1944,22 @@ Gw
                                                 <action selector="abrirBox3d:" target="DMA-IM-zx3" id="dGq-n6-hMt"/>
                                             </connections>
                                         </button>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QRW-j3-lNE">
+                                            <rect key="frame" x="8" y="139" width="128" height="12"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="a19-u5-n0s">
+                                                <font key="font" size="10" name="SFMono-Regular"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <action selector="consolaLabel:" target="DMA-IM-zx3" id="kRf-Nn-mkb"/>
+                                            </connections>
+                                        </textField>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="QRW-j3-lNE" firstAttribute="centerX" secondItem="rPx-4h-ywX" secondAttribute="centerX" id="2aD-7s-3nn"/>
+                                        <constraint firstItem="QRW-j3-lNE" firstAttribute="top" secondItem="Lsi-uQ-ChM" secondAttribute="bottom" constant="250" id="DgA-N0-vTT"/>
+                                        <constraint firstAttribute="trailing" secondItem="QRW-j3-lNE" secondAttribute="trailing" constant="10" id="Etm-oT-c2f"/>
                                         <constraint firstItem="Lsi-uQ-ChM" firstAttribute="leading" secondItem="rPx-4h-ywX" secondAttribute="leading" constant="41" id="PYI-wp-FaZ"/>
                                         <constraint firstItem="2MB-GL-NqO" firstAttribute="centerX" secondItem="La7-y1-9k9" secondAttribute="centerX" id="Scc-bM-UY7"/>
                                         <constraint firstItem="2MB-GL-NqO" firstAttribute="top" secondItem="Lsi-uQ-ChM" secondAttribute="bottom" constant="10" id="UeT-y8-bym"/>
@@ -1881,6 +1970,7 @@ Gw
                                         <constraint firstItem="La7-y1-9k9" firstAttribute="top" secondItem="rPx-4h-ywX" secondAttribute="top" constant="242" id="dLT-Qr-8b4"/>
                                         <constraint firstItem="La7-y1-9k9" firstAttribute="centerX" secondItem="rPx-4h-ywX" secondAttribute="centerX" id="fBl-7m-abI"/>
                                         <constraint firstItem="Lsi-uQ-ChM" firstAttribute="top" secondItem="T6x-zq-kbx" secondAttribute="bottom" constant="20" id="fsQ-yW-SQE"/>
+                                        <constraint firstItem="QRW-j3-lNE" firstAttribute="leading" secondItem="rPx-4h-ywX" secondAttribute="leading" constant="10" id="pjD-9c-eeG"/>
                                         <constraint firstItem="T6x-zq-kbx" firstAttribute="centerX" secondItem="rPx-4h-ywX" secondAttribute="centerX" constant="91" id="sGx-Wk-Lj9"/>
                                         <constraint firstItem="T6x-zq-kbx" firstAttribute="top" secondItem="rPx-4h-ywX" secondAttribute="top" constant="144" id="vvS-kO-KYP"/>
                                     </constraints>
@@ -1962,18 +2052,6 @@ Gw
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QWP-qN-hSd">
-                                <rect key="frame" x="1372" y="853" width="75" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rBH-j6-Mzj">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent"></string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="openGameSettings:" target="DMA-IM-zx3" id="5Yu-9P-fTK"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="CaC-ze-8Xs" firstAttribute="leading" secondItem="9mn-gT-gU3" secondAttribute="leading" constant="20" id="0xP-3k-VgF"/>
@@ -2003,14 +2081,19 @@ Gw
                     </view>
                     <connections>
                         <outlet property="abriBox3D" destination="ifV-YL-mko" id="dgA-vm-puB"/>
+                        <outlet property="ajustesBtn" destination="k0t-Q7-hQe" id="d5U-KS-7DE"/>
                         <outlet property="botonManual" destination="2MB-GL-NqO" id="vMI-kP-WHB"/>
                         <outlet property="box3DBtn" destination="ifV-YL-mko" id="Ma5-r4-czo"/>
                         <outlet property="collectionView" destination="dSW-2p-8on" id="SwA-W9-B9q"/>
+                        <outlet property="consolaLabel" destination="QRW-j3-lNE" id="YN0-hq-RGG"/>
                         <outlet property="gameLabel" destination="Ms9-dE-Hcx" id="BKY-jD-vf8"/>
                         <outlet property="gridSistemaLabel" destination="CaC-ze-8Xs" id="fMg-v5-TLK"/>
                         <outlet property="infoBox" destination="QuD-on-vVH" id="uu0-8J-FUI"/>
                         <outlet property="lanzarBtn" destination="l07-eS-MKj" id="Bps-hf-QVH"/>
                         <outlet property="logoSistema" destination="VlX-rB-O2a" id="REV-sG-iJJ"/>
+                        <outlet property="masBtn" destination="zME-xH-pOp" id="GK2-IV-VYy"/>
+                        <outlet property="menosBtn" destination="y3z-vs-tvV" id="Qvs-NA-XNh"/>
+                        <outlet property="netplayBtn" destination="U9A-6a-l4u" id="74e-Ek-vv8"/>
                         <outlet property="playersLabeñ" destination="La7-y1-9k9" id="c9v-Td-rbc"/>
                         <outlet property="ratingStars" destination="T6x-zq-kbx" id="kjn-m3-yCd"/>
                         <outlet property="returnBtn" destination="tcT-XG-cb3" id="LpM-uF-kb7"/>

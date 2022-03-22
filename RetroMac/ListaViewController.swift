@@ -18,6 +18,7 @@ var juesgosEscrapeados = Int()
 var filaSeleccionada = Int()
 var contextMenu = NSMenu()
 var juegosXml = [[String]]()
+var listado = NSTableView()
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
@@ -39,7 +40,16 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     @IBOutlet weak var screenshotImage: NSImageView!
     @IBOutlet weak var favImagen: NSButton!
     @IBOutlet weak var tituloTextField: NSTextField!
+    @IBOutlet weak var gameOptBtn: NSButton!
     
+    @IBAction func abrirGameOption(_ sender: Any) {
+        
+        lazy var sheetViewController: NSViewController = {
+            return self.storyboard!.instantiateController(withIdentifier: "OptionsView")
+            as! NSViewController
+        }()
+        SingletonState.shared.currentViewController?.presentAsSheet(sheetViewController)
+    }
     @IBOutlet weak var barraProgress: NSProgressIndicator!
     @IBAction func aceptarTitulo(_ sender: NSButton) {
         
@@ -117,13 +127,13 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     
     var juegos = [String]()
     //var juegosXml = [[String]]()
-//    var contextMenu = NSMenu()
+    //    var contextMenu = NSMenu()
     var keyIsDown = false
     var cuentaClicks = 0
     @IBAction func abrirOpciones(_ sender: Any) {
-    
+        
         SingletonState.shared.currentViewController?.presentAsSheet(sheetViewController)
-    
+        
     }
     
     override func viewDidLoad() {
@@ -136,7 +146,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         view.wantsLayer = true
         // change the background color of the layer
         view.layer?.backgroundColor = CGColor(red: 73/255, green: 74/255, blue: 77/255, alpha: 1)
-       
+        listado = juegosTableView
         snapShot.wantsLayer = true
         snapShot.layer?.cornerRadius = 10.0
         snapShot.layer?.masksToBounds = true
@@ -150,7 +160,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         print(sistemaActual)
         if fileDoesExist {
             print("HAY XML")
-             
+            
         }
         
         for consola in allTheGames {
@@ -166,7 +176,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         sistemaLabel.stringValue = sistemaActual
         juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
         /// FIN JUEGOS GAMELIST
-        self.popButton.menu = contextMenu
+        //self.popButton.menu = contextMenu
         self.setupMenu()
         //EL PROBLEMA ESTÁ AQUI
         if juegosXml.count > 0 {
@@ -262,10 +272,10 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         cuentaClicks = 1
         ventana = "Lista"
         self.view.menu = contextMenu
-//        if juegosXml.count > 0 {
-//            let indexSet = NSIndexSet(index: 0)
-//            SingletonState.shared.mytable!.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
-//        }
+        //        if juegosXml.count > 0 {
+        //            let indexSet = NSIndexSet(index: 0)
+        //            SingletonState.shared.mytable!.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+        //        }
         
         //nombresSystemaShaders()
         
@@ -294,7 +304,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let rompathabuscar = juegosXml[numero][0]
         var comandojuego = juegosXml[numero][20]
         
-       
+        
         if comandojuego.contains("RetroArch") {
             gameShader(shader: "")
             noGameOverlay()
@@ -351,7 +361,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         
         print("ENTER")
     }
-     
+    
 }
 
 extension DispatchQueue {

@@ -84,16 +84,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var settingsButton: NSButton!
     @IBOutlet weak var gridBtn: NSButton!
     
-    @IBAction func openGrid(_ sender: Any) {
-        
-        if let controller = self.storyboard?.instantiateController(withIdentifier: "GridView") as? GridScreen {
-            print("Grid")
-            backStop()
-            //SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
-            
-        }
-        
-    }
+    
     @IBAction func enterSystem(_ sender: Any) {
         if cuentaPrincipio  > 0 && ventana == "Principal" {
             print("ENTER LISTA TRUE")

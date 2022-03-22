@@ -11,7 +11,7 @@ import Commands
 
 extension OptionsViewController {
     
-    @objc func buscaJuego(){
+    @objc func buscaJuegoGrid(){
        
         infoLabel.isHidden = false
         escrapeandoSistema = false
@@ -40,7 +40,7 @@ extension OptionsViewController {
         //Si el sistema es MAME
         if misystemid == "75" {
             
-            var juegoMame = miJuegosXml[numero][1]
+            var juegoMame = juegosXml[numero][1]
             if juegoMame.contains("/") {
                 let index2 = juegoMame.range(of: "/", options: .backwards)?.lowerBound
                 let substring2 = juegoMame.substring(from: index2! )
@@ -57,7 +57,7 @@ extension OptionsViewController {
                 }
             }
         }else {
-            nombre = miJuegosXml[numero][1]
+            nombre = juegosXml[numero][1]
         }
         
         //
@@ -86,7 +86,7 @@ extension OptionsViewController {
         
         nombre = nombre.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         
-        var nombreplano = miJuegosXml[numero][1].replacingOccurrences(of: " ", with: "")
+        var nombreplano = juegosXml[numero][1].replacingOccurrences(of: " ", with: "")
         
         var miId = String()
         var idSistema = String()
@@ -124,10 +124,11 @@ extension OptionsViewController {
                         
                         if node == "jeux" {
                             
-                            for (tercero, subsubJson):(String, JSON) in object{
+                        outerLoop: for (tercero, subsubJson):(String, JSON) in object{
                                 //print(subsubJson["id"].stringValue)
                                 
                                 let cuantos = Int(subsubJson["noms"].count)
+                                print("NOMBRES: \(Int(subsubJson["noms"].count))")
                                 if cuantos > 0 {
                                     for i in 0...cuantos - 1 {
                                         var nombreEncontrado = subsubJson["noms"][i]["text"].rawString()!
@@ -138,7 +139,7 @@ extension OptionsViewController {
                                             print("COJONUDO")
                                             miId = subsubJson["id"].stringValue
                                             encontrada = true
-                                            break
+                                            break outerLoop
                                         }
                                         if nombreEncontrado == miputonombre {
                                             
@@ -313,9 +314,7 @@ extension OptionsViewController {
                                                 encuentra = true
                                                 
                                             }
-                                            //sistemaJuegoSS = sJson3["id"].stringValue
-                                            //print(index5)
-                                            //encuentra = true
+                                           
                                             
                                             if encuentra == true{
                                                 break
@@ -331,7 +330,7 @@ extension OptionsViewController {
                                         for (index5, sJson3):(String, JSON) in sJson {
                                             
                                             
-                                            if sJson3["type"].stringValue == "ss" {
+                                            if sJson3["type"].stringValue == "ss" || sJson3["type"].stringValue == "ss"{
                                                 screenshotJuego = sJson3["url"].stringValue
                                                 //print("Screenshot: \(screenshotJuego)")
                                                 
@@ -489,7 +488,7 @@ extension OptionsViewController {
                                                 //self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(miJuegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -559,7 +558,7 @@ extension OptionsViewController {
                                                 //self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(miJuegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -621,7 +620,7 @@ extension OptionsViewController {
                                                 //self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(miJuegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -682,7 +681,7 @@ extension OptionsViewController {
                                                 //self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(miJuegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -743,7 +742,7 @@ extension OptionsViewController {
                                                 //self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(miJuegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -807,7 +806,7 @@ extension OptionsViewController {
                                                 //self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(miJuegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -873,7 +872,7 @@ extension OptionsViewController {
                                                 //self.habilitarTabla2()
                                             }else {
                                                 
-                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(miJuegosXml.count)"
+                                                self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
                                                 
                                                 
                                             }
@@ -896,78 +895,78 @@ extension OptionsViewController {
                 // do something in background
             }, completion:{
                 ///ACTUALIZAR EL ARRAY DE JUEGOS
-                miJuegosXml[filajuego][2] = descJuego.replacingOccurrences(of: "\n", with: " ")
-                miJuegosXml[filajuego][3] = miJuegosXml[filajuego][3]
+                juegosXml[filajuego][2] = descJuego.replacingOccurrences(of: "\n", with: " ")
+                juegosXml[filajuego][3] = juegosXml[filajuego][3]
                 if manualJuego != "" {
-                    miJuegosXml[filajuego][4] = rompath + "/media/" + nombrejuego + ".pdf"
+                    juegosXml[filajuego][4] = rompath + "/media/" + nombrejuego + ".pdf"
                 }else {
                     
-                    miJuegosXml[filajuego][4] = ""
+                    juegosXml[filajuego][4] = ""
                 }
-                miJuegosXml[filajuego][5] = miJuegosXml[filajuego][5]
+                juegosXml[filajuego][5] = juegosXml[filajuego][5]
                 if tittleshotJuego != "" {
-                    miJuegosXml[filajuego][6] = rompath + "/media/"  + nombrejuego + "_tittleshot.png"
+                    juegosXml[filajuego][6] = rompath + "/media/"  + nombrejuego + "_tittleshot.png"
                 }else {
-                    miJuegosXml[filajuego][6] = ""
+                    juegosXml[filajuego][6] = ""
                 }
                 if fanartJuego != "" {
-                    miJuegosXml[filajuego][7] = rompath + "/media/"  + nombrejuego + "_fanart.png"
+                    juegosXml[filajuego][7] = rompath + "/media/"  + nombrejuego + "_fanart.png"
                 }else {
-                    miJuegosXml[filajuego][7] = ""
+                    juegosXml[filajuego][7] = ""
                 }
                 if screenshotJuego != "" {
-                    miJuegosXml[filajuego][8] = rompath + "/media/" + nombrejuego + ".png"
-                    miJuegosXml[filajuego][9] = rompath + "/media/"  + nombrejuego + ".png"
+                    juegosXml[filajuego][8] = rompath + "/media/" + nombrejuego + ".png"
+                    juegosXml[filajuego][9] = rompath + "/media/"  + nombrejuego + ".png"
                 } else {
-                    miJuegosXml[filajuego][8] = ""
-                    miJuegosXml[filajuego][9] = ""
+                    juegosXml[filajuego][8] = ""
+                    juegosXml[filajuego][9] = ""
                 }
                 if videoJuego != "" {
-                    miJuegosXml[filajuego][10] = rompath + "/media/" + nombrejuego + ".mp4"
+                    juegosXml[filajuego][10] = rompath + "/media/" + nombrejuego + ".mp4"
                 } else {
-                    miJuegosXml[filajuego][10] = ""
+                    juegosXml[filajuego][10] = ""
                 }
                 if marqueeJuego != "" {
-                    miJuegosXml[filajuego][11] = rompath + "/media/"  + nombrejuego + "_marquee.png"
+                    juegosXml[filajuego][11] = rompath + "/media/"  + nombrejuego + "_marquee.png"
                 } else {
-                    miJuegosXml[filajuego][11] = ""
+                    juegosXml[filajuego][11] = ""
                 }
                 
-                miJuegosXml[filajuego][12] = fechaJuego
-                miJuegosXml[filajuego][13] = desarroladorJuego
-                miJuegosXml[filajuego][14] = desarroladorJuego
-                miJuegosXml[filajuego][15] = generoJuego
-                miJuegosXml[filajuego][16] = miJuegosXml[filajuego][16]
-                miJuegosXml[filajuego][17] = playersJuego
-                miJuegosXml[filajuego][18] = miJuegosXml[filajuego][18]
-                miJuegosXml[filajuego][19] = miJuegosXml[filajuego][19]
-                miJuegosXml[filajuego][23] = rompath + "/media/"  + nombrejuego + "_box.png"
+                juegosXml[filajuego][12] = fechaJuego
+                juegosXml[filajuego][13] = desarroladorJuego
+                juegosXml[filajuego][14] = desarroladorJuego
+                juegosXml[filajuego][15] = generoJuego
+                juegosXml[filajuego][16] = juegosXml[filajuego][16]
+                juegosXml[filajuego][17] = playersJuego
+                juegosXml[filajuego][18] = juegosXml[filajuego][18]
+                juegosXml[filajuego][19] = juegosXml[filajuego][19]
+                juegosXml[filajuego][23] = rompath + "/media/"  + nombrejuego + "_box.png"
                 self.xmlJuegosNuevos()
                 //DispatchQueue.main.sync {}
                 
                 
                 let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-                let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == miJuegosXml[filajuego][0]})
+                let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == juegosXml[filajuego][0]})
                 
                 
-                allTheGames[mifila!].games[mifilaJuego!].description = miJuegosXml[filajuego][2]
-                allTheGames[mifila!].games[mifilaJuego!].map = miJuegosXml[filajuego][3]
-                allTheGames[mifila!].games[mifilaJuego!].manual = miJuegosXml[filajuego][4]
-                allTheGames[mifila!].games[mifilaJuego!].tittleshot = miJuegosXml[filajuego][6]
-                allTheGames[mifila!].games[mifilaJuego!].fanart = miJuegosXml[filajuego][7]
-                allTheGames[mifila!].games[mifilaJuego!].thumbnail = miJuegosXml[filajuego][8]
-                allTheGames[mifila!].games[mifilaJuego!].image = miJuegosXml[filajuego][9]
-                allTheGames[mifila!].games[mifilaJuego!].video = miJuegosXml[filajuego][10]
-                allTheGames[mifila!].games[mifilaJuego!].marquee = miJuegosXml[filajuego][11]
-                allTheGames[mifila!].games[mifilaJuego!].releasedate = miJuegosXml[filajuego][12]
-                allTheGames[mifila!].games[mifilaJuego!].developer = miJuegosXml[filajuego][13]
-                allTheGames[mifila!].games[mifilaJuego!].publisher = miJuegosXml[filajuego][14]
-                allTheGames[mifila!].games[mifilaJuego!].genre = miJuegosXml[filajuego][15]
-                allTheGames[mifila!].games[mifilaJuego!].lang = miJuegosXml[filajuego][16]
-                allTheGames[mifila!].games[mifilaJuego!].players = miJuegosXml[filajuego][17]
-                allTheGames[mifila!].games[mifilaJuego!].rating = miJuegosXml[filajuego][18]
-                allTheGames[mifila!].games[mifilaJuego!].fav = miJuegosXml[filajuego][19]
-                allTheGames[mifila!].games[mifilaJuego!].box = miJuegosXml[filajuego][23]
+                allTheGames[mifila!].games[mifilaJuego!].description = juegosXml[filajuego][2]
+                allTheGames[mifila!].games[mifilaJuego!].map = juegosXml[filajuego][3]
+                allTheGames[mifila!].games[mifilaJuego!].manual = juegosXml[filajuego][4]
+                allTheGames[mifila!].games[mifilaJuego!].tittleshot = juegosXml[filajuego][6]
+                allTheGames[mifila!].games[mifilaJuego!].fanart = juegosXml[filajuego][7]
+                allTheGames[mifila!].games[mifilaJuego!].thumbnail = juegosXml[filajuego][8]
+                allTheGames[mifila!].games[mifilaJuego!].image = juegosXml[filajuego][9]
+                allTheGames[mifila!].games[mifilaJuego!].video = juegosXml[filajuego][10]
+                allTheGames[mifila!].games[mifilaJuego!].marquee = juegosXml[filajuego][11]
+                allTheGames[mifila!].games[mifilaJuego!].releasedate = juegosXml[filajuego][12]
+                allTheGames[mifila!].games[mifilaJuego!].developer = juegosXml[filajuego][13]
+                allTheGames[mifila!].games[mifilaJuego!].publisher = juegosXml[filajuego][14]
+                allTheGames[mifila!].games[mifilaJuego!].genre = juegosXml[filajuego][15]
+                allTheGames[mifila!].games[mifilaJuego!].lang = juegosXml[filajuego][16]
+                allTheGames[mifila!].games[mifilaJuego!].players = juegosXml[filajuego][17]
+                allTheGames[mifila!].games[mifilaJuego!].rating = juegosXml[filajuego][18]
+                allTheGames[mifila!].games[mifilaJuego!].fav = juegosXml[filajuego][19]
+                allTheGames[mifila!].games[mifilaJuego!].box = juegosXml[filajuego][23]
                 
                 
             })
@@ -981,7 +980,7 @@ extension OptionsViewController {
         let nuevoGamelist = rompath + "/gamelist.xml"
         let root = XMLElement(name: "gameList")
         let xml = XMLDocument(rootElement: root)
-        for juego in miJuegosXml {
+        for juego in juegosXml {
             let gameNode = XMLElement(name: "game")
             root.addChild(gameNode)
             let pathNode = XMLElement(name: "path", stringValue: rutaARelativa(ruta: juego[0]))
@@ -1034,8 +1033,7 @@ extension OptionsViewController {
             gameNode.addChild(favNode)
         }
         let xmlData = xml.xmlData(options: .nodePrettyPrint)
-        
-        print("TOTAL: \(miJuegosXml.count) Juegos en Total")
+        print("TOTAL: \(juegosXml.count) Juegos en Total")
         do{
             try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
         }catch {}
@@ -1045,15 +1043,15 @@ extension OptionsViewController {
     @objc func escrapeartodos(){
         
         barraProgress.minValue = 0
-        juegosaEscrapear = Double(miJuegosXml.count)
-        barraProgress.maxValue = Double(miJuegosXml.count)
+        juegosaEscrapear = Double(juegosXml.count)
+        barraProgress.maxValue = Double(juegosXml.count)
         
         abiertaLista = false
         
-        self.infoLabel.stringValue = "ESCRAPEANDO \(miJuegosXml.count) JUEGOS"
+        self.infoLabel.stringValue = "ESCRAPEANDO \(juegosXml.count) JUEGOS"
         DispatchQueue.background(delay: 0.0, background: {
-            miJuegosXml.sort(by: {($0[1] ) < ($1[1] ) })
-            let kk = miJuegosXml.count
+            juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
+            let kk = juegosXml.count
             for a in 0..<kk {
                 self.buscaJuegoS(numerojuego: a)
                 
@@ -1094,7 +1092,7 @@ extension OptionsViewController {
                 break
             }
         }
-        juegosaescrapearensistema = miJuegosXml.count
+        juegosaescrapearensistema = juegosXml.count
         
         let defaults = UserDefaults.standard
         let SSUser = defaults.string(forKey: "SSUser") ?? ""
@@ -1105,7 +1103,7 @@ extension OptionsViewController {
         //Si el sistema es MAME
         if misystemid == "75" {
             
-            var juegoMame = miJuegosXml[numero][1]
+            var juegoMame = juegosXml[numero][1]
             if juegoMame.contains("/") {
                 let index2 = juegoMame.range(of: "/", options: .backwards)?.lowerBound
                 let substring2 = juegoMame.substring(from: index2! )
@@ -1122,9 +1120,9 @@ extension OptionsViewController {
                 }
             }
         }else {
-            nombre = miJuegosXml[numero][1]
+            nombre = juegosXml[numero][1]
         }
-        //nombre = miJuegosXml[numerojuego][1]
+        //nombre = juegosXml[numerojuego][1]
         if nombre.contains("/") {
             let index2 = nombre.range(of: "/", options: .backwards)?.lowerBound
             let substring2 = nombre.substring(from: index2! )
@@ -1140,7 +1138,7 @@ extension OptionsViewController {
         miputonombre = nombre
         nombre = nombre.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         
-        var nombreplano = miJuegosXml[numerojuego][1].replacingOccurrences(of: " ", with: "")
+        var nombreplano = juegosXml[numerojuego][1].replacingOccurrences(of: " ", with: "")
         
         var miId = String()
         var idSistema = String()
@@ -1236,11 +1234,19 @@ extension OptionsViewController {
                 //                habilitarTabla()
             }
             if escrapeandoSistema == true {
-                if juesgosEscrapeados == miJuegosXml.count {
+                if juesgosEscrapeados == juegosXml.count {
                     infoLabel.stringValue = "SISTEMA ESCRAPEADO"
                 }
             }
             
+        }
+    }
+    
+    func getFav(){
+        if juegosXml[columna][19] == "FAV" {
+            favGameBtn.title = "Borrar Juego de Favoritos"
+        } else {
+            favGameBtn.title = "Añadir Juego a Favoritos"
         }
     }
     
@@ -1307,31 +1313,9 @@ extension OptionsViewController {
             }
             systemShaderList.selectItem(at: activo + 1)
         }
-        
-        
-        
-        
     }
     
-    @objc func coresistema (_ sender: NSMenuItem) {
-        
-        let newComand = sender.toolTip!
-        let FilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        var FilaSystems = allTheSystems.firstIndex(where: {$0.nombrelargo == sistemaActual})
-        allTheSystems[FilaSystems!].comando = newComand
-        allTheGames[FilaAll!].command = newComand
-        for a in 0..<allTheGames[FilaAll!].games.count {
-            allTheGames[FilaAll!].games[a].comando = newComand
-        }
-        for numero in 0..<miJuegosXml.count {
-            miJuegosXml[numero][20] = newComand
-        }
-        escribeSistemas()
-        self.systemCoreList.removeAllItems()
-        getSystemCores ()
-        //
-        
-    }
+    
     
     func getGameCore(){
         let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
@@ -1341,7 +1325,7 @@ extension OptionsViewController {
             var numeroactivo = Int()
             if consola.cores.count > 0 {
                 let misCores = consola.cores
-                let juegoABuscar = miJuegosXml[columna][0]
+                let juegoABuscar = juegosXml[columna][0]
                 var coreAbuscar = String()
                 let filaGamesCores = arrayGamesCores.firstIndex(where: {$0[0] == juegoABuscar})
                 if filaGamesCores == nil {
@@ -1445,7 +1429,7 @@ extension OptionsViewController {
     }
     
     func getGameBezels (){
-        let miJuego = miJuegosXml[columna][0]
+        let miJuego = juegosXml[columna][0]
         let filaEnArrayBezels = arrayGamesBezels.firstIndex(where: {$0[0] == miJuego})
         if filaEnArrayBezels == nil {
             gameBezelsList.item(at: 0)?.title = gameBezelsList.item(at: 0)!.title + " ✅"
@@ -1518,7 +1502,7 @@ extension OptionsViewController {
 
         //MARK: Guardamos el core del juego o ponemos automático
         if gameCore == "Automático" {
-            let mipath = miJuegosXml[columna][0]
+            let mipath = juegosXml[columna][0]
             let filaArray = arrayGamesCores.firstIndex(where: {$0[0] == mipath})
             if filaArray != nil {
                 arrayGamesCores.remove(at: filaArray!)
@@ -1529,7 +1513,7 @@ extension OptionsViewController {
             }
         } else {
             let newComand = gameCore
-            let mipath = miJuegosXml[columna][0]
+            let mipath = juegosXml[columna][0]
             let migrupo = [mipath, newComand!]
             let filaArray = arrayGamesCores.firstIndex(where: {$0[0] == mipath})
             if filaArray != nil {
@@ -1590,7 +1574,7 @@ extension OptionsViewController {
             let defaults = UserDefaults.standard
             defaults.set(arrayGamesShaders, forKey: "juegosShaders")
         }
-        //MARK: Guardamos el valor de los bezels del sistema
+        //MARK: Guardamos el valor de los bezels del sistema:
         if systemBezel == "Sí" {
             let filaAbuscar = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
             if filaAbuscar != nil {
@@ -1611,14 +1595,469 @@ extension OptionsViewController {
             defaults.set(arraySystemsBezels, forKey: "systemsBezels")
         }
         
-        //MARK: Cargamos otra vez los arrays
-//        let defaults = UserDefaults.standard
-//        arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
-//        arrayGamesShaders = (defaults.array(forKey: "juegosShaders")as? [[String]]) ?? []
-//        arraySystemsShaders = (defaults.array(forKey: "systemsShaders")as? [[String]]) ?? []
-//        arrayGamesBezels = (defaults.array(forKey: "juegosBezels")as? [[String]]) ?? []
-//        arraySystemsBezels = (defaults.array(forKey: "systemsBezels")as? [[String]]) ?? []
-        self.dismiss(self)
+        //MARK: Guardamos el valor de los bezels del juego:
+        if gameBezel == "Automático"{
+            let mijuego = juegosXml[columna][0]
+            let filaenArray = arrayGamesBezels.firstIndex(where: {$0[0] == mijuego})
+            if filaenArray != nil {
+                arrayGamesBezels.remove(at: filaenArray!)
+            }
+            let defaults = UserDefaults.standard
+            defaults.set(arrayGamesBezels, forKey: "juegosBezels")
+        }
+        if gameBezel == "Sí" {
+            let mijuego = juegosXml[columna][0]
+            let filaenArray = arrayGamesBezels.firstIndex(where: {$0[0] == mijuego})
+            if filaenArray != nil {
+                arrayGamesBezels[filaenArray!][1] = "Sí"
+            } else {
+                let migrupo = [mijuego, "Sí"]
+                arrayGamesBezels.append(migrupo)
+            }
+            let defaults = UserDefaults.standard
+            defaults.set(arrayGamesBezels, forKey: "juegosBezels")
+        }
+        if gameBezel == "No" {
+            let mijuego = juegosXml[columna][0]
+            let filaenArray = arrayGamesBezels.firstIndex(where: {$0[0] == mijuego})
+            if filaenArray != nil {
+                arrayGamesBezels[filaenArray!][1] = "No"
+            } else {
+                let migrupo = [mijuego, "No"]
+                arrayGamesBezels.append(migrupo)
+            }
+            let defaults = UserDefaults.standard
+            defaults.set(arrayGamesBezels, forKey: "juegosBezels")
+        }
+        if ventana == "Grid" {
+            myCollectionView.reloadData()
+            let indexPath:IndexPath = IndexPath(item: columna, section: 0)
+            var set = Set<IndexPath>()
+            set.insert(indexPath)
+            myCollectionView.selectItems(at: set, scrollPosition: .top)
+        } else {
+            SingletonState.shared.mytable?.reloadData()
+        }
+        
+    }
+    
+    @objc func favoritos(){
+        if juegosXml[columna][19] == "FAV" {
+            unfavGames()
+        } else {
+            favGames()
+        }
+    }
+    
+    @objc func favGames(){
+        let mifila = columna
+        juegosXml[mifila][19] = "FAV"
+        let mifilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        let mifilaJuego = allTheGames[mifilaAll!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
+        allTheGames[mifilaAll!].games[mifilaJuego!].fav = "FAV"
+        xmlJuegosNuevos()
+        let miJuego = juegosXml[columna][0]
+        let miNombre = juegosXml[columna][1]
+        let miDescripcion = juegosXml[columna][2]
+        let miMapa = juegosXml[columna][3]
+        let miManual = juegosXml[columna][4]
+        let miNews = juegosXml[columna][5]
+        let miTittleShot = juegosXml[columna][6]
+        let miFanArt = juegosXml[columna][7]
+        let miThumbnail = juegosXml[columna][8]
+        let miImage = juegosXml[columna][9]
+        let miVideo = juegosXml[columna][10]
+        let miMarquee = juegosXml[columna][11]
+        let miReleaseData = juegosXml[columna][12]
+        let miDeveloper = juegosXml[columna][13]
+        let miPublisher = juegosXml[columna][14]
+        let miGenre = juegosXml[columna][15]
+        let miLang = juegosXml[columna][16]
+        let miPlayers = juegosXml[columna][17]
+        let miRating = juegosXml[columna][18]
+        let miFav = juegosXml[columna][19]
+        let miComando = juegosXml[columna][20]
+        let miCore = juegosXml[columna][21]
+        let miSystem = juegosXml[columna][22]
+        let miBox = juegosXml[columna][23]
+        
+        //Actualizar aaray de favoritos
+        
+        var datosDeMiJuego: Juego = Juego(path: String(miJuego), name: miNombre, description: miDescripcion, map: String(miMapa), manual: String(miManual), news: miNews, tittleshot: String(miTittleShot), fanart: String(miFanArt), thumbnail: String(miThumbnail), image: String(miImage), video: String(miVideo), marquee: String(miMarquee), releasedate: miReleaseData, developer: miDeveloper, publisher: miPublisher, genre: miGenre, lang: miLang, players: miPlayers, rating: miRating, fav: miFav, comando: miComando, core: miCore, system: miSystem, box: miBox)
+        
+        let mifilafav = allTheGames.firstIndex(where: {$0.fullname == "Favoritos"})
+        
+        allTheGames[mifilafav!].games.append(datosDeMiJuego)
+        //favImagen.isHidden = false
+        
+    }
+    @objc func unfavGames(){
+        if sistemaActual != "Favoritos" {
+            let mifila = columna
+            juegosXml[mifila][19] = ""
+            let mifilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+            let mifilaJuego = allTheGames[mifilaAll!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
+            allTheGames[mifilaAll!].games[mifilaJuego!].fav = ""
+            let mifilafav = allTheGames.firstIndex(where: {$0.fullname == "Favoritos"})
+            let miJuegoFav = allTheGames[mifilafav!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
+            allTheGames[mifilafav!].games.remove(at: miJuegoFav!)
+            xmlJuegosNuevos()
+            //favImagen.isHidden = true
+            //contextMenu.items[1].submenu?.items[2].isHidden = true
+            //contextMenu.items[1].submenu?.items[1].isHidden = false
+        }else {
+            
+            let mifila = columna
+            var miarray = [[String]]()
+            juegosXml[mifila][19] = ""
+            let miSystem = String(juegosXml[mifila][22])
+            let mifilaAll = allTheGames.firstIndex(where: {$0.sistema == miSystem})
+            let miRomPath = allTheGames[mifilaAll!].rompath
+            let mifilaJuego = allTheGames[mifilaAll!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
+            allTheGames[mifilaAll!].games[mifilaJuego!].fav = ""
+            for game in allTheGames[mifilaAll!].games {
+                
+                let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating, game.fav, game.comando, game.core]
+                miarray.append(mijuego)
+                
+            }
+            
+            let mifilafav = allTheGames.firstIndex(where: {$0.fullname == "Favoritos"})
+            let miJuegoFav = allTheGames[mifilafav!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
+            allTheGames[mifilafav!].games.remove(at: miJuegoFav!)
+            xmlJuegosNuevosFav(systema: miRomPath, arrayNuevo: miarray)
+            //let indexSet = NSIndexSet(index: columna)
+            //juegosTableView.removeRows(at: indexSet as IndexSet, withAnimation: .effectFade)
+            //favImagen.isHidden = true
+            
+            }
+        
+    }
+    func xmlJuegosNuevosFav(systema: String, arrayNuevo: [[String]]){
+        print("Crear XML añadiendo Juegos Nuevos")
+        let nuevoGamelist = rutaApp  + systema + "/gamelist.xml"
+        let root = XMLElement(name: "gameList")
+        let xml = XMLDocument(rootElement: root)
+        for juego in arrayNuevo {
+            let gameNode = XMLElement(name: "game")
+            root.addChild(gameNode)
+            let pathNode = XMLElement(name: "path", stringValue: rutaARelativa(ruta: juego[0]))
+            let filename = juego[1]
+            let name = (filename as NSString).deletingPathExtension
+            let nameNode = XMLElement(name: "name", stringValue: name)
+            let descNode = XMLElement(name: "desc", stringValue: juego[2])
+            let mapNode = XMLElement(name: "map", stringValue: juego[3])
+            let manualNode = XMLElement(name: "manual", stringValue: rutaARelativa(ruta: juego[4]))
+            let newsNode = XMLElement(name: "news",  stringValue: rutaARelativa(ruta: juego[5]))
+            let tittleshotNode = XMLElement(name: "tittleshot", stringValue: rutaARelativa(ruta: juego[6]))
+            let fanartNode = XMLElement(name: "fanart", stringValue: rutaARelativa(ruta: juego[7]))
+            let thumbnailNode = XMLElement(name: "thumbnail", stringValue: rutaARelativa(ruta: juego[8]))
+            //let imageNode = XMLElement(name: "image", stringValue: buscaImage(juego: juego[1]) )
+            let imageNode = XMLElement(name: "image", stringValue: rutaARelativa(ruta: juego[9]) )
+            //let videoNode = XMLElement(name: "video", stringValue: buscaVideo(juego: juego[1]) )
+            let videoNode = XMLElement(name: "video", stringValue: rutaARelativa(ruta: juego[10]) )
+            let marqueeNode = XMLElement(name: "marquee", stringValue: rutaARelativa(ruta: juego[11]))
+            let releasedateNode = XMLElement(name: "releasedate",  stringValue: juego[12])
+            let developerNode = XMLElement(name: "developer", stringValue: juego[13])
+            let publisherNode = XMLElement(name: "publisher", stringValue: juego[14])
+            let genreNode = XMLElement(name: "genre", stringValue: juego[15])
+            let langNode = XMLElement(name: "lang", stringValue: juego[16])
+            let playersNode = XMLElement(name: "players", stringValue: juego[17])
+            let ratingNode = XMLElement(name: "rating", stringValue: juego[18])
+            let favNode = XMLElement(name: "fav", stringValue: juego[19])
+            let coreNode = XMLElement(name: "core", stringValue: juego[21])
+            let boxNode = XMLElement(name: "box", stringValue: rutaARelativa(ruta: juego[23]))
+            ///AÑADIMOS LOS NODOS
+            gameNode.addChild(pathNode)
+            gameNode.addChild(nameNode)
+            gameNode.addChild(descNode)
+            gameNode.addChild(mapNode)
+            gameNode.addChild(manualNode)
+            gameNode.addChild(newsNode)
+            gameNode.addChild(tittleshotNode)
+            gameNode.addChild(fanartNode)
+            gameNode.addChild(thumbnailNode)
+            gameNode.addChild(imageNode)
+            gameNode.addChild(videoNode)
+            gameNode.addChild(marqueeNode)
+            gameNode.addChild(releasedateNode)
+            gameNode.addChild(developerNode)
+            gameNode.addChild(publisherNode)
+            gameNode.addChild(genreNode)
+            gameNode.addChild(langNode)
+            gameNode.addChild(playersNode)
+            gameNode.addChild(ratingNode)
+            gameNode.addChild(favNode)
+            //gameNode.addChild(coreNode)
+            gameNode.addChild(boxNode)
+        }
+        let xmlData = xml.xmlData(options: .nodePrettyPrint)
+        print("TOTAL: \(arrayNuevo.count) Juegos en Total")
+        do{
+            try? xmlData.write(to: URL(fileURLWithPath: nuevoGamelist))
+        }catch {}
+    }
+    
+    @objc func deleteGameGrid(){
+        let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
+        let indexSet = NSIndexSet(index: columna)
+        let miPath = juegosXml[columna][0]
+        juegosXml.remove(at: columna)
+        if ventana == "Grid" {
+            myCollectionView.reloadData()
+        } else {
+            listado.reloadData()
+        }
+        
+        
+        let fileDoesExist = FileManager.default.fileExists(atPath: miPath)
+        if fileDoesExist {
+            do {
+                let fileManager = FileManager.default
+                try fileManager.removeItem(atPath: miPath)
+                infoLabel.stringValue = "JUEGO BORRADO"
+                
+            }
+            catch {
+                print("Error")
+            }
+        }
+        xmlJuegosNuevos()
+        
+        allTheGames[mifila!].games.remove(at: mifilaJuego!)
+        if ventana == "Grid" {
+            myCollectionView.reloadData()
+        }
+        if ventana == "Lista" {
+            let indexSet = NSIndexSet(index: columna)
+            listado.reloadData()
+            listado.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+        }
+    }
+    
+    @objc func alertaBorrar(){
+        let a = NSAlert()
+        a.messageText = "¿Quieres borrar el Juego?"
+        a.informativeText = "😱😱 ¿Estás seguro de borrar el Juego? 😱😱 ¡¡🤯🤯 Se eliminará para siempre de tu disco duro 🤯🤯!!"
+        //   .alertFirstButtonReturn
+        a.addButton(withTitle: "Borrar")
+        
+        //   .alertSecondButtonReturn
+        a.addButton(withTitle: "Cancelar")
+        a.alertStyle = .warning
+        var w: NSWindow?
+        if let window = view.window{
+            w = window
+        }
+        else if let window = NSApplication.shared.windows.first{
+            w = window
+        }
+        if let window = w{
+            a.beginSheetModal(for: window){ (modalResponse) in
+                if modalResponse == .alertFirstButtonReturn {
+                    self.deleteGameGrid()
+                    
+                } else {
+                    print("CANCELADO")
+                }
+            }
+        }
+    }
+    
+    func cambiarTitulo(NewName: String){
+        let indexSet = NSIndexSet(index: columna)
+        juegosXml[columna][1] = NewName
+        let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
+        allTheGames[mifila!].games[mifilaJuego!].name = NewName
+        
+        xmlJuegosNuevos()
+        if ventana == "Grid" {
+            myCollectionView.reloadData()
+        } else {
+            listado.reloadData()
+        }
+        
+        
+        
+        
+    }
+    
+    @objc func alertaTitulo(){
+        let a = NSAlert()
+        a.messageText = "Cambiar Título del Juego"
+        //a.informativeText = "😱😱 ¿Estás seguro de borrar el Juego? 😱😱 ¡¡🤯🤯 Se eliminará para siempre de tu disco duro 🤯🤯!!"
+        
+        let inputTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
+        inputTextField.stringValue = juegosXml[columna][1]
+        a.accessoryView = inputTextField
+        
+        //   .alertFirstButtonReturn
+        a.addButton(withTitle: "Guardar")
+        
+        //   .alertSecondButtonReturn
+        a.addButton(withTitle: "Cancelar")
+        a.alertStyle = .warning
+        var w: NSWindow?
+        if let window = view.window{
+            w = window
+        }
+        else if let window = NSApplication.shared.windows.first{
+            w = window
+        }
+        if let window = w{
+            a.beginSheetModal(for: window){ (modalResponse) in
+                if modalResponse == .alertFirstButtonReturn {
+                    self.cambiarTitulo(NewName: inputTextField.stringValue)
+                    
+                } else {
+                    print("CANCELADO")
+                }
+            }
+        }
+    }
+    
+    func configNetplay () {
+        editRetroArchConfig(param: "netplay_allow_pausing", value: "false")
+        editRetroArchConfig(param: "netplay_max_connections", value: "6")
+        let defaults = UserDefaults.standard
+        let relayServer = defaults.string(forKey: "RelayServer") ?? "madrid"
+        editRetroArchConfig(param: "netplay_mitm_server", value: relayServer)
+        //editRetroArchConfig(param: "netplay_nickname", value: "BoBMac")
+        editRetroArchConfig(param: "netplay_use_mitm_server", value: "true")
+        writeRetroArchConfig()
+        
+        
+    }
+    
+    func editRetroArchConfig (param: String, value: String ) {
+        
+        let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
+        retroArchConfig[mifila!][1] = value
+    
+    }
+    
+    @objc func lanzarNetPlay() {
+        
+        let mifila = columna
+        let mirom = "\"\(juegosXml[mifila][0])\""
+        let nombredelarchivo = juegosXml[mifila][0].replacingOccurrences(of: rutaApp , with: "")
+        var comandojuego = juegosXml[mifila][20]
+        if comandojuego.contains("RetroArch") {
+            
+            gameShader(shader: "")
+            noGameOverlay()
+            let defaults = UserDefaults.standard
+            let shaders = defaults.integer(forKey: "Shaders")
+            print("SHADERS \(shaders)")
+            if shaders == 1 {
+                let juegoABuscar = juegosXml[columna][0]
+                let miShader = checkShaders(juego: juegoABuscar)
+                gameShader(shader: miShader)
+            }
+            let marcos = defaults.integer(forKey: "Marcos")
+            
+            if marcos == 1 {
+                if checkBezels(juego: juegosXml[columna][0]) == true {
+                    gameOverlay(game: nombredelarchivo)
+                }
+            }
+            var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+            
+            var comando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "-L", with: "-H -L")
+            if playingVideo == true {
+                SingletonState.shared.mySnapPlayer?.player?.pause()
+                myPlayer.player?.pause()
+            }
+            print(comando)
+            configNetplay()
+            
+            Commands.Bash.system("\(comando)")
+            comando=""
+            
+        }
+        
+    }
+    
+    public func checkShaders (juego: String) -> String {
+        var shader = String ()
+        var shadersSystem = String()
+        var shadersGame = String()
+        
+        let filaenSystem = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
+        if filaenSystem != nil {
+            shadersSystem = arraySystemsShaders[filaenSystem!][2]
+        } else {
+            shadersSystem = ""
+        }
+        let filaEnGame = arrayGamesShaders.firstIndex(where: {$0[0] == juego})
+        if filaEnGame != nil {
+            let miShader = arrayGamesShaders[filaEnGame!][2]
+            if miShader == "Ninguno" {
+                shadersGame = ""
+            } else {
+                shadersGame = miShader
+            }
+            
+        }else {
+            shadersGame = shadersSystem
+        }
+        
+        if shadersSystem == shadersGame {
+            shader = shadersSystem
+        }
+        
+        if shadersSystem != shadersGame  {
+            shader = shadersGame
+        }
+        
+        //
+        return shader
+    }
+    
+    public func checkBezels (juego: String) -> Bool {
+        var bezelsSystem = Bool ()
+        var bezelsGame = Bool ()
+        var bezels = Bool()
+        // MARK: comprobamos si tiene puesto que se lancen los bezels en todos los juegos del sistema
+        let filaenSystem = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
+        if filaenSystem != nil {
+            print(arraySystemsBezels[filaenSystem!])
+            //Si está en el array es que está activado, sino es quer no lo está
+            bezelsSystem = true
+        } else {
+            bezelsSystem = false
+        }
+        
+        // MARK: comprobamos si el juego tiene puesto que se lance su bezel
+        let filaenGames = arrayGamesBezels.firstIndex(where: {$0[0] == juego})
+        if filaenGames == nil {
+            bezelsGame = bezelsSystem
+        } else {
+            let siONoGameBezel = arrayGamesBezels[filaenGames!][1]
+            if siONoGameBezel == "Sí" {
+                bezelsGame = true
+            } else {
+                bezelsGame = false
+            }
+        }
+        
+        if bezelsSystem == true && bezelsGame == true {
+            bezels = true
+        }
+        if bezelsSystem == true && bezelsGame == false {
+            bezels = false
+        }
+        if bezelsSystem == false && bezelsGame == false {
+            bezels = false
+        }
+        if bezelsSystem == false && bezelsGame == true {
+            bezels = true
+        }
+        print("\(bezelsSystem) - \(bezelsGame)")
+        
+        return bezels
     }
     
 }

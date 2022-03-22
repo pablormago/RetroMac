@@ -17,16 +17,49 @@ var myPlayersLabel = NSTextField()
 var fila = Int()
 var columna = Int()
 var tempJuegosXml = [[String]]()
+var myCollectionView = NSCollectionView()
 class GridScreen: NSViewController {
-
+    
+    //MARK: Variables de clase
+    var keyIsDown = false
+    //var juegosXml = [[String]]()
+    var showSectionHeaders = false
+    var previewURL: URL?
+    let photoItemIdentifier: NSUserInterfaceItemIdentifier = NSUserInterfaceItemIdentifier(rawValue: "photoItemIdentifier")
+    
+    //MARK: Outlets
     @IBOutlet weak var botonManual: NSButton!
     @IBOutlet weak var scrollView: NSScrollView!
     @IBOutlet weak var logoSistema: NSImageView!
     @IBOutlet weak var collectionView: NSCollectionView!
     @IBOutlet weak var gridSistemaLabel: NSTextField!
-    
+    @IBOutlet weak var ajustesBtn: NSButton!
     @IBOutlet weak var box3DBtn: NSButton!
+    @IBOutlet weak var consolaLabel: NSTextField!
+    @IBOutlet weak var infoBox: NSBox!
+    @IBOutlet weak var gameLabel: NSTextField!
+    @IBOutlet weak var playersLabeñ: NSTextField!
+    @IBOutlet weak var ratingStars: NSLevelIndicator!
+    @IBOutlet weak var returnBtn: NSButton!
+    @IBOutlet weak var lanzarBtn: NSButton!
+    @IBOutlet weak var settingsBtn: NSButton!
+    @IBOutlet weak var netplayBtn: NSButton!
+    @IBOutlet weak var menosBtn: NSButton!
+    @IBOutlet weak var masBtn: NSButton!
     
+    //MARK: Actions
+    @IBAction func lanzarJuegos(_ sender: Any) {
+        launchGame()
+    }
+    @IBAction func abrirAjustes(_ sender: Any) {
+        lazy var sheetViewController: NSViewController = {
+            return self.storyboard!.instantiateController(withIdentifier: "ConfigView")
+            as! NSViewController
+        }()
+        
+        tempViewController = SingletonState.shared.currentViewController!
+        SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+    }
     @IBAction func abrirBox3d(_ sender: Any) {
         let miBox = String(juegosXml[columna][23])
         NSWorkspace.shared.openFile(miBox)
@@ -34,38 +67,89 @@ class GridScreen: NSViewController {
     @IBAction func openManual(_ sender: Any) {
         abrirPdf()
     }
-    @IBOutlet weak var settingsBtn: NSButton!
+    
     @IBAction func openGameSettings(_ sender: Any) {
-        lazy var sheetViewController: NSViewController = {
-                            return self.storyboard!.instantiateController(withIdentifier: "OptionsView")
-                            as! NSViewController
-                        }()
-        myPlayer.player?.pause()
-//        tempJuegosXml = []
-//        tempJuegosXml = juegosXml
+        if sistemaActual != "Favoritos" {
+            lazy var sheetViewController: NSViewController = {
+                return self.storyboard!.instantiateController(withIdentifier: "OptionsView")
+                as! NSViewController
+            }()
+            myPlayer.player?.pause()
+            tempViewController = SingletonState.shared.currentViewController!
+            SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+        }
         
-        tempViewController = SingletonState.shared.currentViewController!
+    }
+    
+    @IBAction func abrirNetplay(_ sender: Any) {
+        lazy var sheetViewController: NSViewController = {
+            return self.storyboard!.instantiateController(withIdentifier: "NetPlayList")
+            as! NSViewController
+        }()
         SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
     }
     
-    @IBOutlet weak var gameLabel: NSTextField!
-    @IBOutlet weak var playersLabeñ: NSTextField!
-    @IBOutlet weak var ratingStars: NSLevelIndicator!
-    @IBOutlet weak var returnBtn: NSButton!
-    @IBOutlet weak var lanzarBtn: NSButton!
-    @IBAction func lanzarJuegos(_ sender: Any) {
-        launchGame()
+    @IBAction func menosSistena(_ sender: Any) {
+        if botonactual > 1 {
+            print("Izquierda")
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                //self.view.window?.contentViewController = controller
+                abiertaLista = true
+                ventana = "Principal"
+                cuentaboton = botonactual
+                botonactual -= 1
+                juegosXml = []
+                contextMenu.items.removeAll()
+                let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                sistemaActual = button?.Fullname! ?? ""
+                nombresistemaactual = button!.Sistema ?? ""
+                //print(sistemaActual)
+                
+                controller.selecionSistema(button!)
+                
+                self.viewDidLoad()
+                self.viewDidAppear()
+                myCollectionView.reloadData()
+                if juegosXml.count > 0 {
+                    let indexPath:IndexPath = IndexPath(item: 0, section: 0)
+                    var set = Set<IndexPath>()
+                    set.insert(indexPath)
+                    myCollectionView.selectItems(at: set, scrollPosition: .top)
+                }
+            }
+        }
     }
-    
-    
-    
-    @IBOutlet weak var infoBox: NSBox!
-    var keyIsDown = false
-    //var juegosXml = [[String]]()
-    var showSectionHeaders = false
-    var previewURL: URL?
-    let photoItemIdentifier: NSUserInterfaceItemIdentifier = NSUserInterfaceItemIdentifier(rawValue: "photoItemIdentifier")
-    
+    @IBAction func masSistema(_ sender: Any) {
+        if botonactual < cuantosSistemas {
+            print("Derecha")
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                //self.view.window?.contentViewController = controller
+                abiertaLista = true
+                ventana = "Principal"
+                cuentaboton = botonactual
+                botonactual += 1
+                juegosXml = []
+                contextMenu.items.removeAll()
+                let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                sistemaActual = button?.Fullname! ?? ""
+                nombresistemaactual = button!.Sistema ?? ""
+                //print(sistemaActual)
+                
+                controller.selecionSistema(button!)
+                
+                self.viewDidLoad()
+                self.viewDidAppear()
+                myCollectionView.reloadData()
+                if juegosXml.count > 0 {
+                    let indexPath:IndexPath = IndexPath(item: 0, section: 0)
+                    var set = Set<IndexPath>()
+                    set.insert(indexPath)
+                    myCollectionView.selectItems(at: set, scrollPosition: .top)
+                }
+                
+            }
+        }
+    }
     
     
     override func viewDidLoad() {
@@ -88,10 +172,16 @@ class GridScreen: NSViewController {
         // Do view setup here.
         myRatingStar = ratingStars
         myPlayersLabel = playersLabeñ
-        
+        myCollectionView = collectionView
+        if sistemaActual == "Favoritos" {
+            consolaLabel.isHidden = false
+        } else {
+            consolaLabel.isHidden = true
+        }
+            
     }
     
-
+    
     override func viewDidAppear() {
         super.viewDidAppear()
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
@@ -112,7 +202,16 @@ class GridScreen: NSViewController {
         } else {
             botonManual.isHidden = true
         }
-        
+        let miBox = juegosXml[columna][23]
+        if miBox != "" {
+            let imagenURL = URL(fileURLWithPath: miBox)
+            var imagen = NSImage(contentsOf: imagenURL)
+            box3DBtn.image = imagen
+            box3DBtn.isHidden = false
+        } else {
+            box3DBtn.isHidden = true
+        }
+        consolaLabel.stringValue = juegosXml[0][22]
     }
     
     func configureCollectionView() {
@@ -128,10 +227,8 @@ class GridScreen: NSViewController {
         //configureGridLayout()
     }
     
-    func stop_and_play(){
-        
-    }
-
+    
+    
     func configureFlowLayout() {
         let flowLayout = NSCollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = 0.0
@@ -195,8 +292,8 @@ extension GridScreen: NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         
         guard let item = collectionView.makeItem(withIdentifier: photoItemIdentifier, for: indexPath) as? PhotoItem else { return NSCollectionViewItem() }
-//        let miRating = (Double(juegosXml[indexPath.item][18]) ?? 0 * 5)
-//        ratingStars.doubleValue = miRating
+        //        let miRating = (Double(juegosXml[indexPath.item][18]) ?? 0 * 5)
+        //        ratingStars.doubleValue = miRating
         let miVideo = juegosXml[indexPath.item][10]
         let imagenURL = URL(fileURLWithPath: juegosXml[indexPath.item][9])
         let imagen2 = NSImage(contentsOf: imagenURL)
@@ -204,8 +301,14 @@ extension GridScreen: NSCollectionViewDataSource {
         item.playerItem?.isHidden = true
         let videoURL = URL(fileURLWithPath: miVideo)
         let player = AVPlayer(url: videoURL)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemDidReachEnd(notification:)),
+                                               name: .AVPlayerItemDidPlayToEndTime,
+                                               object: player.currentItem)
         item.gameLabel.stringValue = juegosXml[indexPath.item][1]
         item.playerItem?.player = player
+        
         item.doubleClickActionHandler = { [weak self] in
             print("LANZA JUEGO")
             self!.launchGame()
@@ -217,11 +320,11 @@ extension GridScreen: NSCollectionViewDataSource {
     
     func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
         
-//        guard let view = collectionView.makeSupplementaryView(ofKind: NSCollectionView.elementKindSectionHeader, withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "HeaderView"), for: indexPath) as? HeaderView else { return NSView() }
+        //        guard let view = collectionView.makeSupplementaryView(ofKind: NSCollectionView.elementKindSectionHeader, withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "HeaderView"), for: indexPath) as? HeaderView else { return NSView() }
         
-//        guard photos[indexPath.section].count > 0, let url = photos[indexPath.section][0].url else { return NSView() }
+        //        guard photos[indexPath.section].count > 0, let url = photos[indexPath.section][0].url else { return NSView() }
         
-//        view.label.stringValue = url.deletingLastPathComponent().lastPathComponent + " (\(photos[indexPath.section].count))"
+        //        view.label.stringValue = url.deletingLastPathComponent().lastPathComponent + " (\(photos[indexPath.section].count))"
         return view
     }
 }
@@ -231,7 +334,7 @@ extension GridScreen: NSCollectionViewDataSource {
 // MARK: - NSCollectionViewDelegateFlowLayout
 extension GridScreen: NSCollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-
+        
         guard let indexPath = indexPaths.first else { return }
         columna = indexPath.item
         fila = indexPath.section
@@ -253,7 +356,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
         } else {
             box3DBtn.isHidden = true
         }
-        
+        consolaLabel.stringValue = juegosXml[columna][22]
     }
     
     
@@ -273,7 +376,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
             SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
             controller.view.window?.makeFirstResponder(controller.scrollMain)
             //snapPlayer.player?.pause()
-            abiertaLista = true
+            abiertaLista = false
             ventana = "Principal"
             cuentaboton = botonactual
         }
@@ -286,7 +389,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
         let rompathabuscar = juegosXml[numero][0]
         var comandojuego = juegosXml[numero][20]
         myPlayer.player?.pause()
-       
+        
         if comandojuego.contains("RetroArch") {
             gameShader(shader: "")
             noGameOverlay()
@@ -384,7 +487,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
         if filaenSystem != nil {
             print(arraySystemsBezels[filaenSystem!])
             //Si está en el array es que está activado, sino es quer no lo está
-           bezelsSystem = true
+            bezelsSystem = true
         } else {
             bezelsSystem = false
         }
@@ -423,6 +526,10 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
         let miManual = String(juegosXml[columna][4])
         NSWorkspace.shared.openFile(miManual)
     }
-    
+    @objc func playerItemDidReachEnd(notification: Notification) {
+        if let playerItem = notification.object as? AVPlayerItem {
+            playerItem.seek(to: CMTime.zero, completionHandler: nil)
+        }
+    }
     
 }

@@ -50,9 +50,8 @@ extension ListaViewController {
         }else if event.keyCode == 53 && abiertaLista == true {
             
             // MARK: Abrir Opciones
-            popButton.performClick(nil)
-//            filaSeleccionada = juegosTableView.selectedRow
-//            optionsButton.performClick(nil)
+            //popButton.performClick(nil)
+            
             
         }else if event.keyCode == 49 && abiertaLista == true {
             

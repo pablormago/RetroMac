@@ -11,6 +11,7 @@ import Cocoa
 var miJuegosXml = [[String]]()
 class OptionsViewController: NSViewController {
     
+    @IBOutlet weak var guardarBtn: NSButton!
     @IBOutlet weak var scrapSystemBtn: NSButton!
     @IBOutlet weak var systemCoreList: NSPopUpButton!
     @IBOutlet weak var systemShaderList: NSPopUpButton!
@@ -38,8 +39,13 @@ class OptionsViewController: NSViewController {
         // MARK: Añadimos acciones a los botones
         
         scrapSystemBtn.action = #selector(escrapearSistema)
-        scrapGameBtn.action = #selector(buscaJuego)
+        scrapGameBtn.action = #selector(buscaJuegoGrid)
         aceptarBTN.action = #selector(cerrar)
+        favGameBtn.action = #selector(favoritos)
+        delGameBtn.action = #selector(alertaBorrar)
+        guardarBtn.action = #selector(guardar)
+        changeGameNameBtn.action = #selector(alertaTitulo)
+        netplayBtn.action = #selector(netplayHost)
         
         // MARK: LLenar Listas:
         getSystemCores()
@@ -48,8 +54,13 @@ class OptionsViewController: NSViewController {
         getGameShaders()
         getSystemBezels()
         getGameBezels()
-        
+        getFav()
     }
+    
+    @objc func netplayHost() {
+        lanzarNetPlay()
+    }
+    
     @objc func escrapearSistema () {
         escrapeartodos()
     }
@@ -57,9 +68,18 @@ class OptionsViewController: NSViewController {
     
     
     @objc func cerrar() {
+        
+        ventana = "Grid"
+        myPlayer.player?.play()
+        self.dismiss(self)
+        listado.becomeFirstResponder()
+    }
+    
+    @objc func guardar(){
         saveOptions()
         ventana = "Grid"
         myPlayer.player?.play()
-        //self.dismiss(self)
+        self.dismiss(self)
+        listado.becomeFirstResponder()
     }
 }
