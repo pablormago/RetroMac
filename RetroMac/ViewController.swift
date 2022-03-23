@@ -65,7 +65,7 @@ var arrayGamesBezels = [[String]]()
 var arraySystemsBezels = [[String]]()
 var citraConfig = [String]()
 var pantallaJuegos = String()
-
+var ventanaModal = String()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -242,7 +242,7 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         ventana = "Principal"
-        
+        ventanaModal = "Ninguna"
         print("DID LOAD")
         //cargaPartidasNetplay ()
         cuenta = 0

@@ -27,6 +27,8 @@ class OptionsViewController: NSViewController {
     @IBOutlet weak var aceptarBTN: NSButton!
     @IBOutlet weak var infoLabel: NSTextField!
     @IBOutlet weak var barraProgress: NSProgressIndicator!
+    @IBOutlet weak var opcionesSistemaLabel: NSTextField!
+    @IBOutlet weak var opcionesJuegoLabel: NSTextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +37,7 @@ class OptionsViewController: NSViewController {
         
         //Cogemos el JuegosXml
         miJuegosXml = juegosXml
-        
+        ventanaModal = "Opciones"
         // MARK: Añadimos acciones a los botones
         
         scrapSystemBtn.action = #selector(escrapearSistema)
@@ -55,6 +57,7 @@ class OptionsViewController: NSViewController {
         getSystemBezels()
         getGameBezels()
         getFav()
+        getSystemAndGame()
     }
     
     @objc func netplayHost() {
@@ -71,6 +74,7 @@ class OptionsViewController: NSViewController {
         
         ventana = "Grid"
         myPlayer.player?.play()
+        ventanaModal = "Ninguna"
         self.dismiss(self)
         listado.becomeFirstResponder()
     }
@@ -79,6 +83,7 @@ class OptionsViewController: NSViewController {
         saveOptions()
         ventana = "Grid"
         myPlayer.player?.play()
+        ventanaModal = "Ninguna"
         self.dismiss(self)
         listado.becomeFirstResponder()
     }

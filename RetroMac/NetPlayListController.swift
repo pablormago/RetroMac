@@ -27,7 +27,8 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
     }
     
     @IBAction func cerrar(_ sender: Any) {
-        ventana = "Principal"
+        //ventana = "Principal"
+        ventanaModal = "Ninguna"
         self.dismiss(self)
     }
     
@@ -36,16 +37,25 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
     }
     
     override func viewDidLoad() {
-        netplayPlays = []
-        cargaPartidasNetplay ()
+        
         print("*****ENTRO EN NETPLAY******")
         super.viewDidLoad()
-        ventana = "Netplay"
+        netplayPlays = []
+        cargaPartidasNetplay ()
+        NetPlayTable.reloadData()
+        //ventana = "Netplay"
+        ventanaModal = "Neplay"
         NetPlayTable.doubleAction = #selector(launchGame)
         //cargaPartidasNetplay ()
         // Do view setup here.
     }
     
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        netplayPlays = []
+        cargaPartidasNetplay()
+        NetPlayTable.reloadData()
+    }
     
     
     func numberOfRows(in NetPlayTable: NSTableView) -> Int {

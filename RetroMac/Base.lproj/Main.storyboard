@@ -142,7 +142,7 @@ DQ
                                 <buttonCell key="cell" type="push" title="netplay" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="R1Y-Ku-qEs">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent"></string>
+                                    <string key="keyEquivalent"></string>
                                 </buttonCell>
                                 <connections>
                                     <action selector="openNetplay:" target="XfG-lQ-9wD" id="1Mx-AP-6fU"/>
@@ -1537,7 +1537,7 @@ Gw
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n2u-xh-68e">
                                 <rect key="frame" x="35" y="477" width="500" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="left" title="OPCIONES DE SISTEMA (Consola)" id="dVz-Jd-NHk">
+                                <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="left" title="OPCIONES DE SISTEMA:" id="dVz-Jd-NHk">
                                     <font key="font" metaFont="systemBold" size="12"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1546,7 +1546,7 @@ Gw
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SUJ-sz-Cl8">
                                 <rect key="frame" x="35" y="307" width="500" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="left" title="OPCIONES DEL JUEGO" id="tYB-iw-qt3">
+                                <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="left" title="OPCIONES DEL JUEGO:" id="tYB-iw-qt3">
                                     <font key="font" metaFont="systemBold" size="12"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1778,6 +1778,8 @@ DQ
                         <outlet property="guardarBtn" destination="pOp-Bn-8V3" id="AuJ-A8-bes"/>
                         <outlet property="infoLabel" destination="vBz-Eq-rqa" id="2j5-ht-wDS"/>
                         <outlet property="netplayBtn" destination="XKW-Va-7N9" id="Mes-ws-55S"/>
+                        <outlet property="opcionesJuegoLabel" destination="SUJ-sz-Cl8" id="aYq-G0-Dxq"/>
+                        <outlet property="opcionesSistemaLabel" destination="n2u-xh-68e" id="INI-u6-RgJ"/>
                         <outlet property="scrapSystemBtn" destination="dcm-aA-Gcw" id="pYT-O8-Y5l"/>
                         <outlet property="systemBezelsList" destination="QTa-zh-Wea" id="OTQ-Xc-ezZ"/>
                         <outlet property="systemCoreList" destination="zFw-WU-OL1" id="Osh-S7-fw1"/>

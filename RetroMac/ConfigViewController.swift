@@ -65,7 +65,7 @@ class ConfigViewController: NSViewController {
         editRetroArchConfig(param: "netplay_mitm_server", value: serverList.selectedItem!.title)
         defaults.set(serverList.selectedItem!.title, forKey: "RelayServer")
         writeRetroArchConfig()
-        
+        ventanaModal = "Ninguna"
         self.dismiss(self)
         
     }
@@ -74,13 +74,14 @@ class ConfigViewController: NSViewController {
         
         //print((self.view.window?.attachedSheet)
         //self.view.window?.endSheet(((self.view.window?.attachedSheet)!))
+        ventanaModal = "Ninguna"
         self.dismiss(self)
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        ventanaModal = "Config"
         let defaults = UserDefaults.standard
         userTXT.stringValue = defaults.string(forKey: "SSUser") ?? ""
         passwordTxt.stringValue = defaults.string(forKey: "SSPassword") ?? ""

@@ -1249,7 +1249,10 @@ extension OptionsViewController {
             favGameBtn.title = "Añadir Juego a Favoritos"
         }
     }
-    
+    func getSystemAndGame() {
+        opcionesSistemaLabel.stringValue = "OPCIONES DEL SISTEMA: \(sistemaActual)"
+        opcionesJuegoLabel.stringValue = "OPCIONES DEL JUEGO: \(juegosXml[columna][1])"
+    }
     func getSystemCores () {
         
         let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})

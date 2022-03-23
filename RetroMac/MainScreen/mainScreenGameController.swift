@@ -64,7 +64,7 @@ extension ViewController {
                 if pressed == true {
                     print("ExtendedGamepad - Up")
                     
-                    if ventana == "Lista" {
+                    if ventana == "Lista" && ventanaModal == "Ninguna" {
                         self.prevGame ()
                     }
                 }
@@ -75,7 +75,7 @@ extension ViewController {
             gamepad.dpad.down.pressedChangedHandler = {(button, value, pressed) in
                 print("ExtendedGamepad - Down")
                 if pressed == true {
-                    if ventana == "Lista" {
+                    if ventana == "Lista" && ventanaModal == "Ninguna"{
                         self.nextGame()
                     }
                     
@@ -87,11 +87,14 @@ extension ViewController {
             gamepad.dpad.left.pressedChangedHandler = {(button, value, pressed) in
                 print("ExtendedGamepad - Left")
                 if pressed == true {
-                    if cuentaPrincipio == 0 {
-                        self.menosSistema()
-                    }else {
-                        self.menosSistemaLista()
+                    if ventana == "Principal" && ventanaModal == "Ninguna" {
+                        if cuentaPrincipio == 0 {
+                            self.menosSistema()
+                        }else {
+                            self.menosSistemaLista()
+                        }
                     }
+                    
                  }
             }
             
@@ -99,11 +102,14 @@ extension ViewController {
             gamepad.dpad.right.pressedChangedHandler = {(button, value, pressed) in
                 print("ExtendedGamepad - Right")
                 if pressed == true {
-                    if cuentaPrincipio == 0 {
-                        self.masSistema()
-                    }else {
-                        self.masSistemaLista()
+                    if ventana == "Principal" && ventanaModal == "Ninguna" {
+                        if cuentaPrincipio == 0 {
+                            self.masSistema()
+                        }else {
+                            self.masSistemaLista()
+                        }
                     }
+                    
                 }
             }
             
@@ -120,24 +126,12 @@ extension ViewController {
                 gamepad.buttonA.pressedChangedHandler = {(button, value, pressed) in
                     print( "ExtendedGamepad - A")
                     if pressed == true {
-                        if cuentaPrincipio  > 0 && ventana == "Principal" {
-                            print("ENTER LISTA TRUE")
-                            let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
-                            sistemaActual = button?.Fullname! ?? ""
-                            //print(sistemaActual)
-                            if backIsPlaying == true {
-                                self.backPlayer.player?.pause()
-                                SingletonState.shared.myBackPlayer?.player?.pause()
-                            }
-                            if Int(button!.numeroJuegos!)! > 0 {
-                                self.selecionSistema(button!)
-                            }
-                            
-                        } else {
-                            if ventana == "Principal" {
-                                print("ENTER LISTA FALSE")
-                                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                        if ventana == "Principal" && ventanaModal == "Ninguna" {
+                            if cuentaPrincipio  > 0  {
+                                print("ENTER LISTA TRUE")
+                                let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
                                 sistemaActual = button?.Fullname! ?? ""
+                                //print(sistemaActual)
                                 if backIsPlaying == true {
                                     self.backPlayer.player?.pause()
                                     SingletonState.shared.myBackPlayer?.player?.pause()
@@ -145,10 +139,28 @@ extension ViewController {
                                 if Int(button!.numeroJuegos!)! > 0 {
                                     self.selecionSistema(button!)
                                 }
+                                
+                            } else {
+                                
+                                    print("ENTER LISTA FALSE")
+                                    let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                                    sistemaActual = button?.Fullname! ?? ""
+                                    if backIsPlaying == true {
+                                        self.backPlayer.player?.pause()
+                                        SingletonState.shared.myBackPlayer?.player?.pause()
+                                    }
+                                    if Int(button!.numeroJuegos!)! > 0 {
+                                        self.selecionSistema(button!)
+                                    }
+                                
                             }
                         }
-                        if ventana == "Lista" {
+                        
+                        if ventana == "Lista" && ventanaModal == "Ninguna"{
                             self.launchGame()
+                        }
+                        if ventana == "Grid"  && ventanaModal == "Ninguna"{
+                            self.launchGameGrid()
                         }
                     }
                     
@@ -157,24 +169,52 @@ extension ViewController {
                 //Configuração do botão B
                 gamepad.buttonB.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - B")
+                    if pressed == true {
+                        
+                    }
                 }
                 
                 //Configuração do botão X
                 gamepad.buttonX.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - X")
+                    if pressed == true {
+                        self.abrirNetplay()
+                    }
                     
                 }
                 
                 //Configuração do botão Y
                 gamepad.buttonY.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - y")
-                    if ventana == "Lista" {
+                    if ventana == "Lista" && ventanaModal == "Ninguna" {
+                        if pressed == true {
+                            self.backToMain()
+                        }
+                    }
+                    if ventana == "Grid" && ventanaModal == "Ninguna"{
                         if pressed == true {
                             self.backToMain()
                         }
                     }
                     
                 }
+                
+                //Configuración de Select
+                
+                gamepad.buttonOptions!.pressedChangedHandler = {(button, value, pressed) in
+                    print("ExtendedGamepad - Home")
+                    if pressed == true {
+                       // self.openOptions()
+                    }
+                }
+                
+                gamepad.buttonMenu.pressedChangedHandler = {(button, value, pressed) in
+                    if pressed == true {
+                        print("Start")
+                        //self.openAjustes()
+                    }
+                }
+                
                 
             }
             
@@ -184,9 +224,7 @@ extension ViewController {
                 gamepad.leftShoulder.pressedChangedHandler = {(button, value, pressed) in
                     print( "ExtendedGamepad - Left Shoulder")
                     if pressed == true {
-                        if ventana == "Principal" {
-                            self.settingsButton.performClick(nil)
-                        }
+                        
                     }
                 }
                 
@@ -194,9 +232,7 @@ extension ViewController {
                 gamepad.rightShoulder.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - Right Shoulder")
                     if pressed == true {
-                        if ventana == "Principal" {
-                            self.netBtn.performClick(nil)
-                        }
+                        
                     }
                 }
                 
@@ -212,14 +248,18 @@ extension ViewController {
                 //Configuracão do L2
                 gamepad.leftTrigger.pressedChangedHandler = {(button, value, pressed) in
                     print( "ExtendedGamepad - Left Trigger")
-                    
+                    if pressed == true {
+                        self.openOptions()
+                    }
                     
                 }
                 
                 //Configuracão do R2
                 gamepad.rightTrigger.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - Right Trigger")
-                   
+                    if pressed == true {
+                        self.openAjustes()
+                    }
                 }
                 
             }
@@ -393,6 +433,17 @@ extension ViewController {
                 cuentaboton = botonactual
             }
         }
+        if ventana == "Grid" {
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                myPlayer.player?.pause()
+                SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+                controller.view.window?.makeFirstResponder(controller.scrollMain)
+                //snapPlayer.player?.pause()
+                abiertaLista = false
+                ventana = "Principal"
+                cuentaboton = botonactual
+            }
+        }
         
     }
     
@@ -529,5 +580,92 @@ extension ViewController {
         //
         return shader
     }
-
+    public func launchGameGrid() {
+        let numero = columna
+        let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
+        let romXml = "\"\(juegosXml[numero][0])\""
+        let rompathabuscar = juegosXml[numero][0]
+        var comandojuego = juegosXml[numero][20]
+        myPlayer.player?.pause()
+        
+        if comandojuego.contains("RetroArch") {
+            gameShader(shader: "")
+            noGameOverlay()
+            let defaults = UserDefaults.standard
+            let shaders = defaults.integer(forKey: "Shaders")
+            print("SHADERS \(shaders)")
+            if shaders == 1 {
+                let juegoABuscar = juegosXml[numero][0]
+                let miShader = checkShaders(juego: juegoABuscar)
+                gameShader(shader: miShader)
+            }
+            let marcos = defaults.integer(forKey: "Marcos")
+            
+            if marcos == 1 {
+                if checkBezels(juego: juegosXml[numero][0]) == true {
+                    gameOverlay(game: nombredelarchivo)
+                }
+            }
+        }
+        
+        if comandojuego.contains("citra-qt") {
+            let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
+            if mifilaconfig1 != nil {
+                citraConfig[mifilaconfig1!] = "fullscreen=true"
+            }
+            let mifilaconfig2 = citraConfig.firstIndex(where: {$0.contains("fullscreen\\default=")})
+            if mifilaconfig2 != nil {
+                citraConfig[mifilaconfig2!] = "fullscreen\\default=false"
+            }
+            
+            writeCitraConfig()
+        }
+        
+        var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
+        if fila != nil {
+            comandojuego = arrayGamesCores[fila!][1]
+            print("CORE CUSTOM")
+        } else {
+            print("CORE DEFAULT")
+        }
+        
+        var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+        var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
+        print(comando)
+        Commands.Bash.system("\(comando)")
+        comando=""
+        myPlayer.player?.play()
+    }
+    
+    public func openOptions(){
+        if ventana == "Grid" && ventanaModal == "Ninguna"{
+            lazy var sheetViewController: NSViewController = {
+                return self.storyboard!.instantiateController(withIdentifier: "OptionsView")
+                as! NSViewController
+            }()
+            myPlayer.player?.pause()
+            tempViewController = SingletonState.shared.currentViewController!
+            SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+        }
+    }
+    public func openAjustes(){
+        if ventanaModal == "Ninguna"{
+            lazy var sheetViewController: NSViewController = {
+                return self.storyboard!.instantiateController(withIdentifier: "ConfigView")
+                as! NSViewController
+            }()
+            
+            SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+        }
+    }
+    public func abrirNetplay(){
+        if ventanaModal == "Ninguna" {
+            lazy var sheetViewController: NSViewController = {
+                return self.storyboard!.instantiateController(withIdentifier: "NetPlayList")
+                as! NSViewController
+            }()
+            SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+        }
+        
+    }
 }
