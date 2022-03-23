@@ -110,6 +110,99 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
         juegosTableView.performClick(nil)
     }
+    @IBAction func lanzarJuego(_ sender: Any) {
+        onItemClicked()
+    }
+    @IBAction func abrirAjustes(_ sender: Any) {
+        if ventanaModal == "Ninguna"{
+            lazy var sheetViewController: NSViewController = {
+                return self.storyboard!.instantiateController(withIdentifier: "ConfigView")
+                as! NSViewController
+            }()
+            
+            SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+        }
+    }
+    @IBAction func abrirNetplay(_ sender: Any) {
+        if ventanaModal == "Ninguna" {
+            lazy var sheetViewController: NSViewController = {
+                return self.storyboard!.instantiateController(withIdentifier: "NetPlayList")
+                as! NSViewController
+            }()
+            SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+        }
+    }
+    @IBAction func menosSistema(_ sender: Any) {
+        if botonactual > 1 {
+            print("Izquierda")
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                //self.view.window?.contentViewController = controller
+                abiertaLista = true
+                ventana = "Principal"
+                cuentaboton = botonactual
+                botonactual -= 1
+                juegosXml = []
+                contextMenu.items.removeAll()
+                let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                sistemaActual = button?.Fullname! ?? ""
+                nombresistemaactual = button!.Sistema ?? ""
+                //print(sistemaActual)
+                
+                controller.selecionSistema(button!)
+                
+                self.viewDidLoad()
+                self.viewDidAppear()
+                juegosTableView.reloadData()
+                if juegosXml.count > 0 {
+                    let indexSet = NSIndexSet(index: 0)
+                    juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                }
+            }
+        }
+    }
+    @IBAction func masSistema(_ sender: Any) {
+        if botonactual < cuantosSistemas {
+            print("Derecha")
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                //self.view.window?.contentViewController = controller
+                abiertaLista = true
+                ventana = "Principal"
+                cuentaboton = botonactual
+                botonactual += 1
+                juegosXml = []
+                contextMenu.items.removeAll()
+                let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                sistemaActual = button?.Fullname! ?? ""
+                nombresistemaactual = button!.Sistema ?? ""
+                //print(sistemaActual)
+                
+                controller.selecionSistema(button!)
+                
+                self.viewDidLoad()
+                self.viewDidAppear()
+                juegosTableView.reloadData()
+                if juegosXml.count > 0 {
+                    let indexSet = NSIndexSet(index: 0)
+                    juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                }
+                
+            }
+        }
+    }
+    @IBAction func volverAlMenu(_ sender: Any) {
+        if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+            if playingVideo == true {
+                SingletonState.shared.mySnapPlayer?.player?.pause()
+            }
+           
+            SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+            snapPlayer.player?.pause()
+            abiertaLista = true
+            ventana = "Principal"
+            cuentaboton = botonactual
+            
+        }
+    }
     @IBOutlet weak var borrarBox: NSBox!
     @IBOutlet weak var pdfImage: NSButton!
     @IBOutlet weak var infoLabel: NSTextField!
@@ -271,7 +364,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         SingletonState.shared.mySnapPlayer = self.snapPlayer
         cuentaClicks = 1
         ventana = "Lista"
-        self.view.menu = contextMenu
+        //self.view.menu = contextMenu
         //        if juegosXml.count > 0 {
         //            let indexSet = NSIndexSet(index: 0)
         //            SingletonState.shared.mytable!.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)

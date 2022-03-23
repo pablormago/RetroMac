@@ -14,10 +14,14 @@ var tempViewController = NSViewController()
 var myPlayer = AVPlayerView()
 var myRatingStar = NSLevelIndicator()
 var myPlayersLabel = NSTextField()
+var myGameLabel = NSTextField()
 var fila = Int()
 var columna = Int()
 var tempJuegosXml = [[String]]()
 var myCollectionView = NSCollectionView()
+var myBotonManual = NSButton()
+var myBox3DButton = NSButton()
+var myConsolaLabel = NSTextField()
 class GridScreen: NSViewController {
     
     //MARK: Variables de clase
@@ -169,10 +173,17 @@ class GridScreen: NSViewController {
         lanzarBtn.becomeFirstResponder()
         infoBox.title = "Título"
         ratingStars.frameRotation = 90
-        // Do view setup here.
+        
+        //MARK: Hacemos globales los controles
+        
         myRatingStar = ratingStars
         myPlayersLabel = playersLabeñ
         myCollectionView = collectionView
+        myGameLabel = gameLabel
+        myBotonManual = botonManual
+        myBox3DButton = box3DBtn
+        myConsolaLabel = consolaLabel
+        
         if sistemaActual == "Favoritos" {
             consolaLabel.isHidden = false
         } else {
@@ -180,7 +191,14 @@ class GridScreen: NSViewController {
         }
             
     }
-    
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
+        self.view.window?.setFrame(mirect, display: true)
+        
+        
+        
+    }
     
     override func viewDidAppear() {
         super.viewDidAppear()

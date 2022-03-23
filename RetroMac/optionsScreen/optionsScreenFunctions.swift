@@ -12,7 +12,7 @@ import Commands
 extension OptionsViewController {
     
     @objc func buscaJuegoGrid(){
-       
+       escrapeando = true
         infoLabel.isHidden = false
         escrapeandoSistema = false
         print("Escrapeo - 1")
@@ -105,6 +105,7 @@ extension OptionsViewController {
                     abiertaLista = true
                     //self.juegosTableView.isEnabled = true
                     self.infoLabel.stringValue = "ERROR de conexión"
+                    escrapeando = false
                     //self.view.window?.makeFirstResponder(self.juegosTableView)
                     
                 }
@@ -178,6 +179,7 @@ extension OptionsViewController {
                 DispatchQueue.main.sync {
                     self.infoLabel.stringValue = "Juego no encontrado"
                     abiertaLista = true
+                    escrapeando = false
                     //self.juegosTableView.isEnabled = true
                     //self.view.window?.makeFirstResponder(self.juegosTableView)
                 }
@@ -480,12 +482,14 @@ extension OptionsViewController {
                                         if escrapeandoSistema == false {
                                             //self.habilitarTabla()
                                             self.infoLabel.stringValue = "JUEGO ESCRAPEADO"
+                                            escrapeando = false
                                         }else{
                                             
                                             self.barraProgress.increment(by: 1)
                                             
                                             if self.barraProgress.doubleValue == juegosaEscrapear {
-                                                //self.habilitarTabla2()
+                                                escrapeando = false
+                                                self.infoLabel.stringValue = "ESCRAPEO TERMINADO"
                                             }else {
                                                 
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
@@ -548,14 +552,13 @@ extension OptionsViewController {
                                     if cuentadescarga == cuenta {
                                         if escrapeandoSistema == false {
                                             self.infoLabel.stringValue = "JUEGO ESCRAPEADO"
+                                            escrapeando = false
                                         }else{
                                             
                                             self.barraProgress.increment(by: 1)
-                                            
-                                            
-                                            
                                             if self.barraProgress.doubleValue == juegosaEscrapear {
-                                                //self.habilitarTabla2()
+                                                escrapeando = false
+                                                self.infoLabel.stringValue = "ESCRAPEO TERMINADO"
                                             }else {
                                                 
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
@@ -610,6 +613,7 @@ extension OptionsViewController {
                                     if cuentadescarga == cuenta {
                                         if escrapeandoSistema == false {
                                             self.infoLabel.stringValue = "JUEGO ESCRAPEADO"
+                                            escrapeando = false
                                         }else{
                                             
                                             self.barraProgress.increment(by: 1)
@@ -617,7 +621,8 @@ extension OptionsViewController {
                                             
                                             
                                             if self.barraProgress.doubleValue == juegosaEscrapear {
-                                                //self.habilitarTabla2()
+                                                escrapeando = false
+                                                self.infoLabel.stringValue = "ESCRAPEO TERMINADO"
                                             }else {
                                                 
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
@@ -671,6 +676,7 @@ extension OptionsViewController {
                                     if cuentadescarga == cuenta {
                                         if escrapeandoSistema == false {
                                             self.infoLabel.stringValue = "JUEGO ESCRAPEADO"
+                                            escrapeando = false
                                         }else{
                                             
                                             self.barraProgress.increment(by: 1)
@@ -678,7 +684,8 @@ extension OptionsViewController {
                                             
                                             
                                             if self.barraProgress.doubleValue == juegosaEscrapear {
-                                                //self.habilitarTabla2()
+                                                escrapeando = false
+                                                self.infoLabel.stringValue = "ESCRAPEO TERMINADO"
                                             }else {
                                                 
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
@@ -732,6 +739,7 @@ extension OptionsViewController {
                                     if cuentadescarga == cuenta {
                                         if escrapeandoSistema == false {
                                             self.infoLabel.stringValue = "JUEGO ESCRAPEADO"
+                                            escrapeando = false
                                         }else{
                                             
                                             self.barraProgress.increment(by: 1)
@@ -739,7 +747,8 @@ extension OptionsViewController {
                                             
                                             
                                             if self.barraProgress.doubleValue == juegosaEscrapear {
-                                                //self.habilitarTabla2()
+                                                escrapeando = false
+                                                self.infoLabel.stringValue = "ESCRAPEO TERMINADO"
                                             }else {
                                                 
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
@@ -796,6 +805,7 @@ extension OptionsViewController {
                                     if cuentadescarga == cuenta {
                                         if escrapeandoSistema == false {
                                             self.infoLabel.stringValue = "JUEGO ESCRAPEADO"
+                                            escrapeando = false
                                         }else{
                                             
                                             self.barraProgress.increment(by: 1)
@@ -803,7 +813,8 @@ extension OptionsViewController {
                                             
                                             
                                             if self.barraProgress.doubleValue == juegosaEscrapear{
-                                                //self.habilitarTabla2()
+                                                escrapeando = false
+                                                self.infoLabel.stringValue = "ESCRAPEO TERMINADO"
                                             }else {
                                                 
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
@@ -862,6 +873,7 @@ extension OptionsViewController {
                                     if cuentadescarga == cuenta {
                                         if escrapeandoSistema == false {
                                             self.infoLabel.stringValue = "JUEGO ESCRAPEADO"
+                                            escrapeando = false
                                         }else{
                                             
                                             self.barraProgress.increment(by: 1)
@@ -869,7 +881,8 @@ extension OptionsViewController {
                                             
                                             
                                             if self.barraProgress.doubleValue == juegosaEscrapear{
-                                                //self.habilitarTabla2()
+                                                escrapeando = false
+                                                self.infoLabel.stringValue = "ESCRAPEO TERMINADO"
                                             }else {
                                                 
                                                 self.infoLabel.stringValue = "Escrapeados \(Int(self.barraProgress.doubleValue)) juegos de \(juegosXml.count)"
@@ -1074,11 +1087,12 @@ extension OptionsViewController {
         
         print("Escrapeo - 1")
         abiertaLista = false
+        
         DispatchQueue.main.sync {
             
             self.infoLabel.isHidden = false
         }
-        
+        escrapeando = true
         escrapeandoSistema = true
         //mkdir -p foo
         var rutaacrear = rompath + "/media"

@@ -71,20 +71,25 @@ class OptionsViewController: NSViewController {
     
     
     @objc func cerrar() {
+        if escrapeando == false {
+            ventana = "Grid"
+            myPlayer.player?.play()
+            ventanaModal = "Ninguna"
+            self.dismiss(self)
+            listado.becomeFirstResponder()
+        }
         
-        ventana = "Grid"
-        myPlayer.player?.play()
-        ventanaModal = "Ninguna"
-        self.dismiss(self)
-        listado.becomeFirstResponder()
     }
     
     @objc func guardar(){
-        saveOptions()
-        ventana = "Grid"
-        myPlayer.player?.play()
-        ventanaModal = "Ninguna"
-        self.dismiss(self)
-        listado.becomeFirstResponder()
+        if escrapeando == false {
+            saveOptions()
+            ventana = "Grid"
+            myPlayer.player?.play()
+            ventanaModal = "Ninguna"
+            self.dismiss(self)
+            listado.becomeFirstResponder()
+        }
+        
     }
 }

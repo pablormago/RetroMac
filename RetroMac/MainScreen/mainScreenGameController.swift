@@ -67,6 +67,20 @@ extension ViewController {
                     if ventana == "Lista" && ventanaModal == "Ninguna" {
                         self.prevGame ()
                     }
+                    if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                        if columna >= 3 {
+                            let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
+                            var set1 = Set<IndexPath>()
+                            set1.insert(indexPath1)
+                            myCollectionView.deselectItems(at: set1)
+                            let indexPath:IndexPath = IndexPath(item: columna - 3, section: 0)
+                            var set = Set<IndexPath>()
+                            set.insert(indexPath)
+                            myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
+                            columna = columna - 3
+                            self.actualizaMediaGrid ()
+                        }
+                    }
                 }
                 
             }
@@ -78,7 +92,20 @@ extension ViewController {
                     if ventana == "Lista" && ventanaModal == "Ninguna"{
                         self.nextGame()
                     }
-                    
+                    if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                        if columna <= juegosXml.count - 4 {
+                            let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
+                            var set1 = Set<IndexPath>()
+                            set1.insert(indexPath1)
+                            myCollectionView.deselectItems(at: set1)
+                            let indexPath:IndexPath = IndexPath(item: columna + 3, section: 0)
+                            var set = Set<IndexPath>()
+                            set.insert(indexPath)
+                            myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
+                            columna = columna + 3
+                            self.actualizaMediaGrid ()
+                        }
+                    }
                 }
                 
              }
@@ -92,6 +119,20 @@ extension ViewController {
                             self.menosSistema()
                         }else {
                             self.menosSistemaLista()
+                        }
+                    }
+                    if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                        if columna > 0 && juegosXml.count >= 1 {
+                            let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
+                            var set1 = Set<IndexPath>()
+                            set1.insert(indexPath1)
+                            myCollectionView.deselectItems(at: set1)
+                            let indexPath:IndexPath = IndexPath(item: columna - 1, section: 0)
+                            var set = Set<IndexPath>()
+                            set.insert(indexPath)
+                            myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
+                            columna = columna - 1
+                            self.actualizaMediaGrid ()
                         }
                     }
                     
@@ -109,7 +150,20 @@ extension ViewController {
                             self.masSistemaLista()
                         }
                     }
-                    
+                    if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                        if columna < juegosXml.count - 1 {
+                            let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
+                            var set1 = Set<IndexPath>()
+                            set1.insert(indexPath1)
+                            myCollectionView.deselectItems(at: set1)
+                            let indexPath:IndexPath = IndexPath(item: columna + 1, section: 0)
+                            var set = Set<IndexPath>()
+                            set.insert(indexPath)
+                            myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
+                            columna = columna + 1
+                            self.actualizaMediaGrid ()
+                        }
+                    }
                 }
             }
             
@@ -667,5 +721,30 @@ extension ViewController {
             SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
         }
         
+    }
+    public func actualizaMediaGrid (){
+        myRatingStar.doubleValue = (Double(juegosXml[columna][18]) ?? 0) * 5
+        myPlayersLabel.stringValue = juegosXml[columna][17]
+        myGameLabel.stringValue = juegosXml[columna][1]
+        if juegosXml[columna][4] != "" {
+            myBotonManual.isHidden = false
+        } else {
+            myBotonManual.isHidden = true
+        }
+        let miBox = juegosXml[columna][23]
+        if miBox != "" {
+            let imagenURL = URL(fileURLWithPath: miBox)
+            var imagen = NSImage(contentsOf: imagenURL)
+            myBox3DButton.image = imagen
+            myBox3DButton.isHidden = false
+        } else {
+            myBox3DButton.isHidden = true
+        }
+        myConsolaLabel.stringValue = juegosXml[columna][22]
+        if sistemaActual == "Favoritos" {
+            myConsolaLabel.isHidden = false
+        } else {
+            myConsolaLabel.isHidden = true
+        }
     }
 }

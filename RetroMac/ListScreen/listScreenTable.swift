@@ -164,7 +164,7 @@ extension ListaViewController {
         scrollDescripText.string = miDesc
         abiertaLista = true
         
-        itemsPorJuego()
+        //itemsPorJuego()
         
         
         

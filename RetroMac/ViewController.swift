@@ -66,6 +66,7 @@ var arraySystemsBezels = [[String]]()
 var citraConfig = [String]()
 var pantallaJuegos = String()
 var ventanaModal = String()
+var escrapeando = false
 
 class ViewController: NSViewController {
     var sistema = ""
