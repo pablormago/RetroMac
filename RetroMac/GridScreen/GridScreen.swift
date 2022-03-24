@@ -22,6 +22,9 @@ var myCollectionView = NSCollectionView()
 var myBotonManual = NSButton()
 var myBox3DButton = NSButton()
 var myConsolaLabel = NSTextField()
+var myMasBtn = NSButton()
+var myMenosBtn = NSButton()
+var myKKController = NSViewController()
 class GridScreen: NSViewController {
     
     //MARK: Variables de clase
@@ -160,6 +163,7 @@ class GridScreen: NSViewController {
         super.viewDidLoad()
         print(ancho)
         print(alto)
+        ventanaModal = "Alguna"
         view.wantsLayer = true
         view.layer?.backgroundColor = CGColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1)
         scrollView.wantsLayer = true
@@ -170,10 +174,11 @@ class GridScreen: NSViewController {
         configureCollectionView()
         returnBtn.action = #selector(backFunc)
         //collectionView.becomeFirstResponder()
-        lanzarBtn.becomeFirstResponder()
+        //lanzarBtn.becomeFirstResponder()
         infoBox.title = "Título"
         ratingStars.frameRotation = 90
-        
+        //keyIsDown = false
+        myKKController = self
         //MARK: Hacemos globales los controles
         
         myRatingStar = ratingStars
@@ -183,13 +188,15 @@ class GridScreen: NSViewController {
         myBotonManual = botonManual
         myBox3DButton = box3DBtn
         myConsolaLabel = consolaLabel
+        myMasBtn = masBtn
+        myMenosBtn = menosBtn
         
         if sistemaActual == "Favoritos" {
             consolaLabel.isHidden = false
         } else {
             consolaLabel.isHidden = true
         }
-            
+        
     }
     override func viewWillAppear() {
         super.viewWillAppear()
@@ -230,6 +237,20 @@ class GridScreen: NSViewController {
             box3DBtn.isHidden = true
         }
         consolaLabel.stringValue = juegosXml[0][22]
+        cuentaCargaGrid += 1
+        if cuentaCargaGrid == 1 {
+            NSEvent.addLocalMonitorForEvents(matching: .keyUp) { (myEvent) -> NSEvent? in
+                self.keyUp(with: myEvent)
+                return myEvent
+            }
+            
+            NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (myEvent) -> NSEvent? in
+                self.keyDown(with: myEvent)
+                return myEvent
+            }
+        }
+        
+        ventanaModal = "Ninguna"
     }
     
     func configureCollectionView() {
@@ -327,9 +348,12 @@ extension GridScreen: NSCollectionViewDataSource {
         item.gameLabel.stringValue = juegosXml[indexPath.item][1]
         item.playerItem?.player = player
         
+        
         item.doubleClickActionHandler = { [weak self] in
             print("LANZA JUEGO")
             self!.launchGame()
+            
+            
         }
         
         return item
@@ -548,6 +572,36 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
         if let playerItem = notification.object as? AVPlayerItem {
             playerItem.seek(to: CMTime.zero, completionHandler: nil)
         }
+    }
+    
+    override func keyDown(with myEvent: NSEvent) {
+        
+        if keyIsDown == true {
+            return
+        }
+        keyIsDown = true
+        
+        if myEvent.keyCode == 51 && ventana == "Grid" && ventanaModal == "Ninguna" {
+            
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                myPlayer.player?.pause()
+                SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
+                controller.view.window?.makeFirstResponder(controller.scrollMain)
+                //snapPlayer.player?.pause()
+                abiertaLista = false
+                ventana = "Principal"
+                cuentaboton = botonactual
+            }
+            print("Vuelvo")
+        }
+        if myEvent.keyCode == 36 && ventana == "Grid" && ventanaModal == "Ninguna" {
+            print("LANZO")
+            launchGame()
+            
+        }
+    }
+    override func keyUp(with myEvent: NSEvent) {
+        keyIsDown = false
     }
     
 }

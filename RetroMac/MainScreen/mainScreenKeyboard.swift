@@ -226,7 +226,7 @@ extension ViewController {
     
     func masSistemaListaKeys (){
         if Int(cuentaDec) < cuantosSistemas {
-            cuentaDec += 0.5
+            cuentaDec += 1
             if let screen = NSScreen.main {
                 let rect = screen.frame
                 let width = rect.size.width
@@ -278,7 +278,7 @@ extension ViewController {
     
     func menosSistemaListaKeys(){
         if cuentaDec > 1 {
-            cuentaDec -= 0.5
+            cuentaDec -= 1
             if let screen = NSScreen.main {
                 let rect = screen.frame
                 let width = rect.size.width

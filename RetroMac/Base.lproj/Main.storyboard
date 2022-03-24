@@ -403,30 +403,6 @@ DQ
                                     <action selector="abrirNetplay:" target="fL4-9U-n43" id="cRq-yG-tz6"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="110" translatesAutoresizingMaskIntoConstraints="NO" id="oXQ-DF-SFr">
-                                <rect key="frame" x="40" y="300" width="113" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="atrasSistema" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XQr-k5-jgu">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent"></string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="menosSistema:" target="fL4-9U-n43" id="shb-X8-0fu"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="117" translatesAutoresizingMaskIntoConstraints="NO" id="oAn-rB-usw">
-                                <rect key="frame" x="80" y="434" width="128" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="delanteSistema" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tdc-wd-BPe">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent"></string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="masSistema:" target="fL4-9U-n43" id="MeS-hU-GIv"/>
-                                </connections>
-                            </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" tag="123" translatesAutoresizingMaskIntoConstraints="NO" id="N7j-d1-iR9">
                                 <rect key="frame" x="80" y="480" width="71" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -439,6 +415,30 @@ Gw
                                 </buttonCell>
                                 <connections>
                                     <action selector="volverAlMenu:" target="fL4-9U-n43" id="UJB-aM-IKr"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="123" translatesAutoresizingMaskIntoConstraints="NO" id="7zX-fr-bzg">
+                                <rect key="frame" x="40" y="434" width="75" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="menos" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aV4-Mi-W90">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent"></string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="msnSistema:" target="fL4-9U-n43" id="LRZ-yM-MGH"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="123" translatesAutoresizingMaskIntoConstraints="NO" id="uux-T5-CbM">
+                                <rect key="frame" x="80" y="434" width="60" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="mas" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0HJ-dY-ymR">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent"></string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="msSistema:" target="fL4-9U-n43" id="Bi3-TZ-WB2"/>
                                 </connections>
                             </button>
                             <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="50" horizontalPageScroll="10" verticalLineScroll="50" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" findBarPosition="belowContent" translatesAutoresizingMaskIntoConstraints="NO" id="S23-0k-76Q">
@@ -955,6 +955,8 @@ Gw
                         <outlet property="juegosTableView" destination="TtI-VK-hG3" id="cHy-k2-X50"/>
                         <outlet property="logoImage" destination="2Kr-vN-IHV" id="8AN-7T-Dj1"/>
                         <outlet property="logoSistema" destination="Q6U-Nh-KQ0" id="fgT-jv-bqh"/>
+                        <outlet property="mnsBtn" destination="7zX-fr-bzg" id="f7E-zS-N3X"/>
+                        <outlet property="msBtn" destination="uux-T5-CbM" id="ioB-EE-arL"/>
                         <outlet property="optionsButton" destination="kTh-SP-VQE" id="GWi-0b-2ij"/>
                         <outlet property="pdfImage" destination="G9C-SA-fXz" id="ffC-kV-YeW"/>
                         <outlet property="playersLabel" destination="9di-AP-8Zb" id="bcJ-ip-wUB"/>
@@ -1872,6 +1874,20 @@ DQ
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="9mn-gT-gU3">
                         <rect key="frame" x="0.0" y="0.0" width="1440" height="900"/>
                         <subviews>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="41" translatesAutoresizingMaskIntoConstraints="NO" id="tcT-XG-cb3">
+                                <rect key="frame" x="13" y="428" width="75" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2km-3v-wOA">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="backToMain:" target="DMA-IM-zx3" id="1Vl-QX-wng"/>
+                                </connections>
+                            </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="l07-eS-MKj">
                                 <rect key="frame" x="683" y="433" width="75" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1893,20 +1909,6 @@ DQ
                                 </buttonCell>
                                 <connections>
                                     <action selector="openGameSettings:" target="DMA-IM-zx3" id="5Yu-9P-fTK"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="tcT-XG-cb3">
-                                <rect key="frame" x="13" y="428" width="75" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2km-3v-wOA">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="backToMain:" target="DMA-IM-zx3" id="1Vl-QX-wng"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="k0t-Q7-hQe">
@@ -2061,7 +2063,7 @@ Gw
                                     <rect key="frame" x="1" y="1" width="1265" height="658"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <collectionView selectable="YES" id="dSW-2p-8on">
+                                        <collectionView selectable="YES" allowsEmptySelection="NO" id="dSW-2p-8on">
                                             <rect key="frame" x="0.0" y="0.0" width="1265" height="658"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="DFQ-LN-urU">

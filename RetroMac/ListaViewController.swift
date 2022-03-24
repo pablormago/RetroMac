@@ -19,6 +19,9 @@ var filaSeleccionada = Int()
 var contextMenu = NSMenu()
 var juegosXml = [[String]]()
 var listado = NSTableView()
+var myAtrasBtn = NSButton()
+var myDelanteBtn = NSButton()
+
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
@@ -26,6 +29,64 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     //override func becomeFirstResponder() -> Bool { return true }
     //override func resignFirstResponder() -> Bool { return true }
     
+    @IBAction func msSistema(_ sender: Any) {
+        print("MAS")
+        if botonactual < cuantosSistemas {
+            print("Derecha")
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                //self.view.window?.contentViewController = controller
+                abiertaLista = true
+                ventana = "Principal"
+                cuentaboton = botonactual
+                botonactual += 1
+                juegosXml = []
+                contextMenu.items.removeAll()
+                let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                sistemaActual = button?.Fullname! ?? ""
+                nombresistemaactual = button!.Sistema ?? ""
+                //print(sistemaActual)
+                
+                controller.selecionSistema(button!)
+                
+                self.viewDidLoad()
+                self.viewDidAppear()
+                juegosTableView.reloadData()
+                if juegosXml.count > 0 {
+                    let indexSet = NSIndexSet(index: 0)
+                    juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                }
+                
+            }
+        }
+    }
+    @IBOutlet weak var msBtn: NSButton!
+    @IBAction func msnSistema(_ sender: Any) {
+        print("MENOS")
+        if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+            //self.view.window?.contentViewController = controller
+            abiertaLista = true
+            ventana = "Principal"
+            cuentaboton = botonactual
+            botonactual -= 1
+            juegosXml = []
+            contextMenu.items.removeAll()
+            let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+            sistemaActual = button?.Fullname! ?? ""
+            nombresistemaactual = button!.Sistema ?? ""
+            //print(sistemaActual)
+            
+            controller.selecionSistema(button!)
+            
+            self.viewDidLoad()
+            self.viewDidAppear()
+            juegosTableView.reloadData()
+            if juegosXml.count > 0 {
+                let indexSet = NSIndexSet(index: 0)
+                juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+            }
+        }
+    }
+    @IBOutlet weak var mnsBtn: NSButton!
     @IBOutlet weak var logoSistema: NSImageView!
     @IBOutlet weak var optionsButton: NSButton!
     @IBOutlet weak var popButton: NSPopUpButton!
@@ -132,69 +193,13 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
         }
     }
-    @IBAction func menosSistema(_ sender: Any) {
-        if botonactual > 1 {
-            print("Izquierda")
-            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-                //self.view.window?.contentViewController = controller
-                abiertaLista = true
-                ventana = "Principal"
-                cuentaboton = botonactual
-                botonactual -= 1
-                juegosXml = []
-                contextMenu.items.removeAll()
-                let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                sistemaActual = button?.Fullname! ?? ""
-                nombresistemaactual = button!.Sistema ?? ""
-                //print(sistemaActual)
-                
-                controller.selecionSistema(button!)
-                
-                self.viewDidLoad()
-                self.viewDidAppear()
-                juegosTableView.reloadData()
-                if juegosXml.count > 0 {
-                    let indexSet = NSIndexSet(index: 0)
-                    juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
-                }
-            }
-        }
-    }
-    @IBAction func masSistema(_ sender: Any) {
-        if botonactual < cuantosSistemas {
-            print("Derecha")
-            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-                //self.view.window?.contentViewController = controller
-                abiertaLista = true
-                ventana = "Principal"
-                cuentaboton = botonactual
-                botonactual += 1
-                juegosXml = []
-                contextMenu.items.removeAll()
-                let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                sistemaActual = button?.Fullname! ?? ""
-                nombresistemaactual = button!.Sistema ?? ""
-                //print(sistemaActual)
-                
-                controller.selecionSistema(button!)
-                
-                self.viewDidLoad()
-                self.viewDidAppear()
-                juegosTableView.reloadData()
-                if juegosXml.count > 0 {
-                    let indexSet = NSIndexSet(index: 0)
-                    juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
-                }
-                
-            }
-        }
-    }
+    //
     @IBAction func volverAlMenu(_ sender: Any) {
         if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
             if playingVideo == true {
                 SingletonState.shared.mySnapPlayer?.player?.pause()
             }
-           
+            
             SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
             snapPlayer.player?.pause()
             abiertaLista = true
@@ -203,6 +208,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             
         }
     }
+    
     @IBOutlet weak var borrarBox: NSBox!
     @IBOutlet weak var pdfImage: NSButton!
     @IBOutlet weak var infoLabel: NSTextField!
@@ -246,6 +252,8 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         snapPlayer.wantsLayer = true
         snapPlayer.layer!.cornerRadius = 10.0
         snapPlayer.layer!.masksToBounds = true
+        myAtrasBtn = mnsBtn
+        myDelanteBtn = msBtn
         // Do view setup here.
         
         ///Juegos GAMELIST
@@ -364,13 +372,6 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         SingletonState.shared.mySnapPlayer = self.snapPlayer
         cuentaClicks = 1
         ventana = "Lista"
-        //self.view.menu = contextMenu
-        //        if juegosXml.count > 0 {
-        //            let indexSet = NSIndexSet(index: 0)
-        //            SingletonState.shared.mytable!.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
-        //        }
-        
-        //nombresSystemaShaders()
         
     }
     

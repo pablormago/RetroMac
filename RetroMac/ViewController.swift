@@ -67,6 +67,8 @@ var citraConfig = [String]()
 var pantallaJuegos = String()
 var ventanaModal = String()
 var escrapeando = false
+var cuentaCargaGrid = 0
+var cuentaCarga = 0
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -189,15 +191,19 @@ class ViewController: NSViewController {
         //let pathLogo = Bundle.main.url(forResource: "logo_retro", withExtension: "jpeg")
         let imagen = NSImage(contentsOf: pathLogo!)!
         myImage.image = imagen
-        NSEvent.addLocalMonitorForEvents(matching: .keyUp) { (aEvent) -> NSEvent? in
-            self.keyUp(with: aEvent)
-            return aEvent
+        cuentaCarga += 1
+        if cuentaCarga == 1 {
+            NSEvent.addLocalMonitorForEvents(matching: .keyUp) { (aEvent) -> NSEvent? in
+                self.keyUp(with: aEvent)
+                return aEvent
+            }
+            
+            NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (aEvent) -> NSEvent? in
+                self.keyDown(with: aEvent)
+                return aEvent
+            }
         }
         
-        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (aEvent) -> NSEvent? in
-            self.keyDown(with: aEvent)
-            return aEvent
-        }
         
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
         self.view.window?.setFrame(mirect, display: true)
@@ -506,7 +512,7 @@ func copiarBase(){
     Commands.Bash.system("\(baseRetro)")
     Commands.Bash.system("\(baseAppSupport)")
     let baseCitra = "cp -r " + home +  "/Contents/Resources/Base/.config/citra-emu ~/.config/citra-emu"
-    Commands.Bash.system("\(baseCitra)")
+    //Commands.Bash.system("\(baseCitra)")
     
 }
 

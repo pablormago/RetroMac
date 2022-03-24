@@ -224,7 +224,9 @@ extension ViewController {
                 gamepad.buttonB.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - B")
                     if pressed == true {
-                        
+                        if ventana == "Grid" && ventanaModal == "Ninguna" {
+                            self.openOptions()
+                        }
                     }
                 }
                 
@@ -278,7 +280,12 @@ extension ViewController {
                 gamepad.leftShoulder.pressedChangedHandler = {(button, value, pressed) in
                     print( "ExtendedGamepad - Left Shoulder")
                     if pressed == true {
-                        
+                        if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                            myMenosBtn.performClick(nil)
+                        }
+                        if ventana == "Lista" && ventanaModal == "Ninguna" {
+                            myAtrasBtn.performClick(nil)
+                        }
                     }
                 }
                 
@@ -286,7 +293,12 @@ extension ViewController {
                 gamepad.rightShoulder.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - Right Shoulder")
                     if pressed == true {
-                        
+                        if ventana == "Grid" && ventanaModal == "Ninguna" {
+                            myMasBtn.performClick(nil)
+                        }
+                        if ventana == "Lista" && ventanaModal == "Ninguna" {
+                            myDelanteBtn.performClick(nil)
+                        }
                     }
                 }
                 
@@ -303,7 +315,8 @@ extension ViewController {
                 gamepad.leftTrigger.pressedChangedHandler = {(button, value, pressed) in
                     print( "ExtendedGamepad - Left Trigger")
                     if pressed == true {
-                        self.openOptions()
+                        self.openAjustes()
+                        
                     }
                     
                 }
@@ -312,7 +325,7 @@ extension ViewController {
                 gamepad.rightTrigger.pressedChangedHandler = {(button, value, pressed) in
                     print("ExtendedGamepad - Right Trigger")
                     if pressed == true {
-                        self.openAjustes()
+                        
                     }
                 }
                 
