@@ -2066,8 +2066,9 @@ Gw
                                         <collectionView selectable="YES" allowsEmptySelection="NO" id="dSW-2p-8on">
                                             <rect key="frame" x="0.0" y="0.0" width="1265" height="658"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                            <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="DFQ-LN-urU">
+                                            <collectionViewFlowLayout key="collectionViewLayout" id="DFQ-LN-urU">
                                                 <size key="itemSize" width="50" height="50"/>
+                                                <edgeInsets key="sectionInset" left="10" right="10" top="10" bottom="10"/>
                                             </collectionViewFlowLayout>
                                             <color key="primaryBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </collectionView>

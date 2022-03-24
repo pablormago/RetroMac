@@ -101,6 +101,7 @@ class GridScreen: NSViewController {
             print("Izquierda")
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
                 //self.view.window?.contentViewController = controller
+                myPlayer.player?.pause()
                 abiertaLista = true
                 ventana = "Principal"
                 cuentaboton = botonactual
@@ -131,6 +132,7 @@ class GridScreen: NSViewController {
             print("Derecha")
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
                 //self.view.window?.contentViewController = controller
+                myPlayer.player?.pause()
                 abiertaLista = true
                 ventana = "Principal"
                 cuentaboton = botonactual
@@ -273,7 +275,7 @@ class GridScreen: NSViewController {
         flowLayout.minimumInteritemSpacing = 0.0
         flowLayout.minimumLineSpacing = 0.0
         flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
-        collectionView.collectionViewLayout = flowLayout
+        //collectionView.collectionViewLayout = flowLayout
     }
     
     func arrayJuegos (){
