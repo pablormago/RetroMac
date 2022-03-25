@@ -72,7 +72,7 @@ class OptionsViewController: NSViewController {
     
     @objc func cerrar() {
         if escrapeando == false {
-            ventana = "Grid"
+            //ventana = "Grid"
             myPlayer.player?.play()
             ventanaModal = "Ninguna"
             self.dismiss(self)
@@ -84,7 +84,7 @@ class OptionsViewController: NSViewController {
     @objc func guardar(){
         if escrapeando == false {
             saveOptions()
-            ventana = "Grid"
+            //ventana = "Grid"
             myPlayer.player?.play()
             ventanaModal = "Ninguna"
             self.dismiss(self)

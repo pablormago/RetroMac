@@ -21,6 +21,7 @@ var juegosXml = [[String]]()
 var listado = NSTableView()
 var myAtrasBtn = NSButton()
 var myDelanteBtn = NSButton()
+var myOptionBtn = NSButton()
 
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
@@ -257,6 +258,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         snapPlayer.layer!.masksToBounds = true
         myAtrasBtn = mnsBtn
         myDelanteBtn = msBtn
+        //myOptionBtn = gameOptBtn
         // Do view setup here.
         
         ///Juegos GAMELIST

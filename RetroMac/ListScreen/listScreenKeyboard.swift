@@ -32,7 +32,7 @@ extension ListaViewController {
             
             
             
-        }else if event.keyCode == 51 && ventana == "Lista" {
+        }else if (event.keyCode == 51 && ventana == "Lista") || (event.keyCode == 53 && ventana == "Lista") {
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
                 if playingVideo == true {
                     SingletonState.shared.mySnapPlayer?.player?.pause()

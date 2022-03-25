@@ -227,6 +227,10 @@ extension ViewController {
                         if ventana == "Grid" && ventanaModal == "Ninguna" {
                             self.openOptions()
                         }
+                        if ventana == "Lista" && ventanaModal == "Ninguna" {
+                            print("OPTIONS")
+                            self.openOptions()
+                        }
                     }
                 }
                 
@@ -713,6 +717,16 @@ extension ViewController {
             myPlayer.player?.pause()
             tempViewController = SingletonState.shared.currentViewController!
             SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+        }
+        if ventana == "Lista" && ventanaModal == "Ninguna"{
+            lazy var sheetViewController: NSViewController = {
+                return self.storyboard!.instantiateController(withIdentifier: "OptionsView")
+                as! NSViewController
+            }()
+            //myPlayer.player?.pause()
+            //tempViewController = SingletonState.shared.currentViewController!
+            SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+            listado.becomeFirstResponder()
         }
     }
     public func openAjustes(){
