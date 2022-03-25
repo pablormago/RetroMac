@@ -61,30 +61,33 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     @IBOutlet weak var msBtn: NSButton!
     @IBAction func msnSistema(_ sender: Any) {
-        print("MENOS")
-        if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-            //self.view.window?.contentViewController = controller
-            abiertaLista = true
-            ventana = "Principal"
-            cuentaboton = botonactual
-            botonactual -= 1
-            juegosXml = []
-            contextMenu.items.removeAll()
-            let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-            sistemaActual = button?.Fullname! ?? ""
-            nombresistemaactual = button!.Sistema ?? ""
-            //print(sistemaActual)
-            
-            controller.selecionSistema(button!)
-            
-            self.viewDidLoad()
-            self.viewDidAppear()
-            juegosTableView.reloadData()
-            if juegosXml.count > 0 {
-                let indexSet = NSIndexSet(index: 0)
-                juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+        if botonactual > 1 {
+            print("MENOS")
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                //self.view.window?.contentViewController = controller
+                abiertaLista = true
+                ventana = "Principal"
+                cuentaboton = botonactual
+                botonactual -= 1
+                juegosXml = []
+                contextMenu.items.removeAll()
+                let button = controller.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                sistemaActual = button?.Fullname! ?? ""
+                nombresistemaactual = button!.Sistema ?? ""
+                //print(sistemaActual)
+                
+                controller.selecionSistema(button!)
+                
+                self.viewDidLoad()
+                self.viewDidAppear()
+                juegosTableView.reloadData()
+                if juegosXml.count > 0 {
+                    let indexSet = NSIndexSet(index: 0)
+                    juegosTableView.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+                }
             }
         }
+        
     }
     @IBOutlet weak var mnsBtn: NSButton!
     @IBOutlet weak var logoSistema: NSImageView!

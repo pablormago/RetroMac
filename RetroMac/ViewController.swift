@@ -69,7 +69,7 @@ var ventanaModal = String()
 var escrapeando = false
 var cuentaCargaGrid = 0
 var cuentaCarga = 0
-
+var cuentaCargaGame = 0
 class ViewController: NSViewController {
     var sistema = ""
     var comandoexe = ""
@@ -211,6 +211,9 @@ class ViewController: NSViewController {
         print("DID APPEAR")
         
         
+        
+
+        
         if let screen = NSScreen.main {
             let rect = screen.frame
             let width = rect.size.width
@@ -335,10 +338,12 @@ class ViewController: NSViewController {
             
         }
         cuentaDec = CGFloat(botonactual)
-        
-        
-        
-        startWatchingForControllers()
+        cuentaCargaGame += 1
+        //MARK: Probar esto:
+        if cuentaCargaGame == 1 {
+            startWatchingForControllers()
+        }
+        //startWatchingForControllers()
         self.view.window?.makeFirstResponder(self.scrollMain)
         SingletonState.shared.myscroller = self.scrollMain
         SingletonState.shared.currentViewController = self

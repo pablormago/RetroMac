@@ -51,6 +51,7 @@
 		279FBD7927739DAC00CD5586 /* icons.icns in Resources */ = {isa = PBXBuildFile; fileRef = 279FBD7827739DAC00CD5586 /* icons.icns */; };
 		27ACE2FF279350DF00B2BB46 /* logo_retro.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */; };
 		27B58953277EF3F6006DBAB9 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */; };
+		27C3A90327ED9EB400B770F6 /* Ayuda.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 27C3A90227ED9EB400B770F6 /* Ayuda.pdf */; };
 		27C4A87827D10E800069990A /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C4A87727D10E800069990A /* OptionsViewController.swift */; };
 		27C4A87B27D121480069990A /* optionsScreenFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C4A87A27D121470069990A /* optionsScreenFunctions.swift */; };
 		27E66760275A29B300B50AD6 /* parserSystems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E6675F275A29B300B50AD6 /* parserSystems.swift */; };
@@ -109,6 +110,7 @@
 		279FBD7827739DAC00CD5586 /* icons.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icons.icns; path = ../../icons.icns; sourceTree = "<group>"; };
 		27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo_retro.jpeg; sourceTree = "<group>"; };
 		27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = "../../../Downloads/SwiftyJSON-master/Source/SwiftyJSON/SwiftyJSON.swift"; sourceTree = "<group>"; };
+		27C3A90227ED9EB400B770F6 /* Ayuda.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Ayuda.pdf; path = ../../../Downloads/Ayuda.pdf; sourceTree = "<group>"; };
 		27C4A87727D10E800069990A /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		27C4A87A27D121470069990A /* optionsScreenFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = optionsScreenFunctions.swift; sourceTree = "<group>"; };
 		27E6675F275A29B300B50AD6 /* parserSystems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parserSystems.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				2707C92A27E3ACDB00E96A46 /* GridScreen */,
 				279FBD7827739DAC00CD5586 /* icons.icns */,
 				278980232757DCC000414985 /* Info.plist */,
+				27C3A90227ED9EB400B770F6 /* Ayuda.pdf */,
 				271417962762516C009CA02D /* ListaViewController.swift */,
 				27665BA827B8E87A00262025 /* ListScreen */,
 				27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */,
@@ -369,6 +372,7 @@
 				279FBD7927739DAC00CD5586 /* icons.icns in Resources */,
 				279FBD6F277375AA00CD5586 /* entrar.png in Resources */,
 				279FBD57277350C900CD5586 /* up.png in Resources */,
+				27C3A90327ED9EB400B770F6 /* Ayuda.pdf in Resources */,
 				27ACE2FF279350DF00B2BB46 /* logo_retro.jpeg in Resources */,
 				27E7A3032768B4B90087C67A /* logo.jpeg in Resources */,
 				279FBD70277375AA00CD5586 /* borrar.png in Resources */,
