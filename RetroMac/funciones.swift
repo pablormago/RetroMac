@@ -1276,3 +1276,112 @@ func writeCitraConfig(){
     
 }
 
+func downloadEmulators() {
+    let arquitectura: String = CPUType()
+    var rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+    var isDir:ObjCBool = true
+    var theProjectPath = "\(rutaApp)/Emuladores_Mac/"
+    if !FileManager.default.fileExists(atPath: theProjectPath, isDirectory: &isDir) {
+        print("No Está")
+        DispatchQueue.main.sync {
+            etiqueta.stringValue = "Descargando RetroArch y los Cores"
+        }
+            var comando = "cd \(rutaApp) && mkdir -p Emuladores_Mac && cd \(rutaApp)/Emuladores_Mac && mkdir -p Descargas && mkdir -p Retroarch && mkdir -p Citra && mkdir -p cores && mkdir -p Dolphin && mkdir -p Pcsx2 && mkdir -p RPCS3 && mkdir -p Xemu"
+        Commands.Bash.system("\(comando)")
+        var sufijo = "_libretro.dylib.zip"
+        arrayCoresRetroArch = ["81","2048","a5200","arduous","atari800","bk","blastem","bluemsx","bsnes2014_accuracy","bsnes2014_balanced","bsnes2014_performance","bsnes_cplusplus98","bsnes_hd_beta","bsnes","bsnes_mercury_accuracy","bsnes_mercury_balanced","bsnes_mercury_performance","cannonball","cap32","cdi2015","chailove","craft","crocods","daphne","desmume2015","desmume","dinothawr","dolphin","dosbox_core","dosbox_pure","dosbox_svn","duckstation","easyrpg","ecwolf","fbalpha2012_cps1","fbalpha2012_cps2","fbalpha2012_cps3","fbalpha2012","fbalpha2012_neogeo","fbneo","fceumm","ffmpeg","fixgb","flycast","fmsx","freechaf","freeintv","frodo","fuse","gambatte","gearboy","gearcoleco","gearsystem","genesis_plus_gx","genesis_plus_gx_wide","gme","gong","gpsp","gw","handy","hatari","higan_sfc","ishiiruka","jaxe","jumpnbump","lowresnx","lutro","mame2000","mame2003","mame2003_plus","mame2010","mame","mednafen_gba","mednafen_lynx","mednafen_ngp","mednafen_pce_fast","mednafen_pce","mednafen_pcfx","mednafen_psx_hw","mednafen_psx","mednafen_saturn","mednafen_snes","mednafen_supergrafx","mednafen_vb","mednafen_wswan","melonds","mesen-s","mesen","mgba","minivmac","mrboom","mu","nekop2","neocd","nestopia","np2kai","nxengine","o2em","oberon","openlara","opera","parallel_n64","pcsx_rearmed","picodrive","play","pocketcdg","pokemini","potator","ppsspp","prboom","prosystem","puae","px68k","quasi88","quicknes","race","reminiscence","remotejoy","retro8","same_cdi","sameboy","sameduck","scummvm","smsplus","snes9x2002","snes9x2005","snes9x2005_plus","snes9x2010","snes9x","squirreljme","stella2014","stella","superbroswar","swanstation","test","tgbdual","theodore","thepowdertoy","tic80","tyrquake","uzem","vaporspec","vba_next","vbam","vecx","vemulator","vice_x64","vice_x64sc","vice_x128","vice_xcbm2","vice_xcbm5x0","vice_xpet","vice_xplus4","vice_xscpu64","vice_xvic","virtualjaguar","vitaquake2-rogue","vitaquake2-xatrix","vitaquake2-zaero","vitaquake2","wasm4","x1","xrick","yabause"]
+        
+        if arquitectura == "X86" {
+            print("X86")
+            comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O http://buildbot.libretro.com/nightly/apple/osx/x86_64/RetroArch.dmg && hdiutil attach RetroArch.dmg && cd /Volumes/RetroArch && cp -r RetroArch.app  \(rutaApp)/Emuladores_Mac/Retroarch/RetroArch.app && hdiutil detach /Volumes/RetroArch"
+            Commands.Bash.system("\(comando)")
+            for micore in arrayCoresRetroArch {
+                comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O http://buildbot.libretro.com/nightly/apple/osx/x86_64/latest/\(micore)\(sufijo) "
+                Commands.Bash.system("\(comando)")
+            }
+        }else {
+            print("ARM")
+            comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O https://buildbot.libretro.com/nightly/apple/osx/universal/RetroArch_Metal.dmg && hdiutil attach RetroArch_Metal.dmg && cd /Volumes/RetroArch && cp -r RetroArch.app  \(rutaApp)/Emuladores_Mac/Retroarch/RetroArch.app && hdiutil detach /Volumes/RetroArch"
+            Commands.Bash.system("\(comando)")
+            for micore in arrayCoresRetroArch {
+                comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O http://http://buildbot.libretro.com/nightly/apple/osx/arm64/latest/\(micore)\(sufijo) "
+                Commands.Bash.system("\(comando)")
+            }
+        }
+             comando = "hdiutil detach /Volumes/RetroArch"
+        Commands.Bash.system("\(comando)")
+        DispatchQueue.main.sync {
+            etiqueta.stringValue = "Extrayendo Cores"
+        }
+        for micore in arrayCoresRetroArch {
+            comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/\(micore)_libretro.dylib.zip -d \(rutaApp)/Emuladores_Mac/cores"
+            Commands.Bash.system("\(comando)")
+        }
+        
+        //MARK: Descarga de los demás emuladores
+        DispatchQueue.main.sync {
+            etiqueta.stringValue = "Descargando Emuladores y Bezels"
+        }
+            comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O https://dl.dropboxusercontent.com/s/idh4xs33q7lirgd/citra.zip && curl -O https://dl.dropboxusercontent.com/s/kt6xtt8659fnm6w/xemu.zip && curl -O https://dl.dropboxusercontent.com/s/4sbah891m0lyt1q/RPCS3.zip && curl -O https://dl.dropboxusercontent.com/s/j97h97knmox69lp/PCSX2.zip && curl -O https://dl.dropboxusercontent.com/s/4agfvkrgsfd9tr9/Dolphin.zip && curl -O https://dl.dropboxusercontent.com/s/ia1zw7uzdkxcy5k/decorations.zip"
+        Commands.Bash.system("\(comando)")
+        
+        //MARK: Descomprimir emuladores en Emuladores_Mac
+        DispatchQueue.main.sync {
+            etiqueta.stringValue = "Extrayendo todo..."
+        }
+        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/citra.zip -d \(rutaApp)/Emuladores_Mac/Citra"
+        Commands.Bash.system("\(comando)")
+        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/xemu.zip -d \(rutaApp)/Emuladores_Mac/Xemu"
+        Commands.Bash.system("\(comando)")
+        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/RPCS3.zip -d \(rutaApp)/Emuladores_Mac/RPCS3"
+        Commands.Bash.system("\(comando)")
+        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/PCSX2.zip -d \(rutaApp)/Emuladores_Mac/Pcsx2"
+        Commands.Bash.system("\(comando)")
+        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/Dolphin.zip -d \(rutaApp)/Emuladores_Mac/Dolphin"
+        Commands.Bash.system("\(comando)")
+        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/decorations.zip -d \(rutaApp)"
+        Commands.Bash.system("\(comando)")
+    }
+    
+}
+
+func CPUType1() ->Int {
+    
+    var cputype = UInt32(0)
+    var size = cputype.bitWidth
+    
+    let result = sysctlbyname("hw.cputype", &cputype, &size, nil, 0)
+    if result == -1 {
+        if (errno == ENOENT){
+            return 0
+        }
+        return -1
+    }
+    return Int(cputype)
+}
+
+
+let CPU_ARCH_MASK          = 0xff      // mask for architecture bits
+
+let CPU_TYPE_X86           = cpu_type_t(7)
+let CPU_TYPE_ARM           = cpu_type_t(12)
+
+func CPUType() ->String {
+    
+    let type: Int = CPUType1()
+    if type == -1 {
+        return "error in CPU type"
+    }
+    
+    let cpu_arch = type & CPU_ARCH_MASK
+    
+    if cpu_arch == CPU_TYPE_X86{
+        return "X86"
+    }
+    
+    if cpu_arch == CPU_TYPE_ARM{
+        return "ARM"
+    }
+    
+    return "unknown"
+}

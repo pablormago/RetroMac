@@ -277,6 +277,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
                     juegosXml.append(mijuego)
                     
                 }
+            break
             }
         }
         sistemaLabel.stringValue = sistemaActual

@@ -70,6 +70,15 @@ var escrapeando = false
 var cuentaCargaGrid = 0
 var cuentaCarga = 0
 var cuentaCargaGame = 0
+var xmlRutasRaw = [String]()
+var xmlRutasUnique = [[String]]()
+var minLevel = Int()
+var maxLevel = Int()
+var rawJuegosXml = [[String]]()
+var nivelActual = Int()
+var testJuegosXml = [[String]]()
+var arrayCoresRetroArch = [String]()
+
 class ViewController: NSViewController {
     var sistema = ""
     var comandoexe = ""
@@ -666,4 +675,10 @@ struct PartidaNetplay {
     let comando: String?
     let gamePath: String?
     let isRelay: String?
+}
+
+extension String {
+    func numberOfOccurrencesOf(string: String) ->Int {
+        return self.components(separatedBy: string).count - 1
+    }
 }

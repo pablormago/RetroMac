@@ -8,6 +8,7 @@
 
 import Cocoa
 
+var etiqueta = NSTextField()
 class SplashController: NSViewController {
     
     var version = "2.1"
@@ -15,6 +16,7 @@ class SplashController: NSViewController {
     @IBOutlet weak var taskLabel: NSTextField!
     override func viewDidLoad() {
         super.viewDidLoad()
+        etiqueta = taskLabel
         let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
         let path2 =  rutaApp2 +  "/BOBwin.exe"
         let fileDoesExist = FileManager.default.fileExists(atPath: path2)
@@ -231,9 +233,11 @@ class SplashController: NSViewController {
         myGroup.notify(queue: DispatchQueue.main) {
         }
         
+        // MARK: Comprobar la Carpeta Emuladores_Mac
+        
         
         DispatchQueue.background(background: {
-            
+            downloadEmulators()
             titulosMame = mamelista() as! [[String]]
             llenaSistemasIds()
             readRetroArchConfig ()

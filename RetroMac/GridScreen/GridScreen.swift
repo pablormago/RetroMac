@@ -25,6 +25,7 @@ var myConsolaLabel = NSTextField()
 var myMasBtn = NSButton()
 var myMenosBtn = NSButton()
 var myKKController = NSViewController()
+
 class GridScreen: NSViewController {
     
     //MARK: Variables de clase
@@ -172,6 +173,7 @@ class GridScreen: NSViewController {
         scrollView.layer?.cornerRadius = 5
         //collectionView.isHidden = true
         SingletonState.shared.currentViewController? = self
+        filtradoPaso1()
         arrayJuegos ()
         configureCollectionView()
         returnBtn.action = #selector(backFunc)
@@ -283,14 +285,22 @@ class GridScreen: NSViewController {
             if consola.sistema == nombresistemaactual {
                 for game in consola.games {
                     //print(game)
+//                    let rutaJuegoRaw = game.path as NSString
+//                    let rutaJuego = rutaJuegoRaw.deletingLastPathComponent
+//                    let filaNivel = xmlRutasUnique.firstIndex(where: {$0[1] == "0"})
+//                    let rutaABuscar = xmlRutasUnique[filaNivel!][0]
+                    
                     let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating, game.fav, game.comando, game.core, game.system, game.box]
+                    
                     juegosXml.append(mijuego)
                     
                 }
+            break
             }
         }
         gridSistemaLabel.stringValue = sistemaActual
         juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
+        
         
         let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
         if filaConsola != nil {
