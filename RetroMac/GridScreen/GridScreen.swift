@@ -164,8 +164,6 @@ class GridScreen: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(ancho)
-        print(alto)
         ventanaModal = "Alguna"
         view.wantsLayer = true
         view.layer?.backgroundColor = CGColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1)

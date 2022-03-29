@@ -1274,7 +1274,8 @@ extension OptionsViewController {
             let consola = allTheGames[filaConsola!]
             var cuentaCores = consola.cores.count
             var numeroactivo = Int()
-            if consola.cores != nil {
+            print(consola.cores)
+            if consola.cores != [] {
                 let misCores = consola.cores
                 for a in 0..<cuentaCores {
                     var core = misCores[a][1]
@@ -1287,7 +1288,11 @@ extension OptionsViewController {
                     systemCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
                     systemCoreList.menu?.items[a].toolTip = tooltip
                 }
-             }
+            } else {
+                systemCoreList.menu?.addItem(withTitle: "Automático ✅", action: nil, keyEquivalent: "")
+                numeroactivo = 0
+                systemCoreList.menu?.items[0].toolTip = consola.command
+            }
             
             systemCoreList.selectItem(at: numeroactivo)
         }
@@ -1372,6 +1377,11 @@ extension OptionsViewController {
                     gameCoreList.selectItem(at: numeroactivo + 1)
                 }
                 
+            } else {
+                //gameCoreList.menu?.addItem(withTitle: "Automático ✅", action: nil, keyEquivalent: "")
+                gameCoreList.menu?.items[0].title = "Automático ✅"
+                gameCoreList.menu?.items[0].toolTip = "Automático"
+                gameCoreList.selectItem(at: 0)
             }
             
             
@@ -1470,7 +1480,7 @@ extension OptionsViewController {
         let systemBezel = systemBezelsList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
         
         // MARK: Cogemos los valores de las opciones del juego:
-        let gameCore = gameCoreList.selectedItem?.toolTip!
+        let gameCore = gameCoreList.selectedItem?.toolTip! ?? ""
         let gameShader = gameShaderList.selectedItem?.toolTip!
         let gameShaderName = gameShaderList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
         let gameBezel = gameBezelsList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
@@ -1531,7 +1541,7 @@ extension OptionsViewController {
         } else {
             let newComand = gameCore
             let mipath = juegosXml[columna][0]
-            let migrupo = [mipath, newComand!]
+            let migrupo = [mipath, newComand]
             let filaArray = arrayGamesCores.firstIndex(where: {$0[0] == mipath})
             if filaArray != nil {
                 arrayGamesCores.remove(at: filaArray!)
