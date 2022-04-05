@@ -198,9 +198,10 @@ extension ViewController {
     func masSistemaKeys () {
         cuentaclicks += 1
         if cuentaclicks == 2 {
+            cuentaclicks = 0
             if botonactual < cuantosSistemas {
                 botonactual += 1
-                cuentaclicks = 0
+                
                 if let screen = NSScreen.main {
                     let rect = screen.frame
                     let width = rect.size.width
@@ -247,10 +248,12 @@ extension ViewController {
     
     func menosSistemaKeys(){
         cuentaclicks += 1
+        print(cuentaclicks)
         if cuentaclicks == 2 {
+            cuentaclicks = 0
             if botonactual > 1 {
                 botonactual -= 1
-                cuentaclicks = 0
+                
                 if let screen = NSScreen.main {
                     let rect = screen.frame
                     let width = rect.size.width

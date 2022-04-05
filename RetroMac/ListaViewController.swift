@@ -394,8 +394,6 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     
-    
-    
     @objc public func onItemClicked() {
         //SingletonState.shared.myBackPlayer?.player?.pause()
         let numero = (self.juegosTableView.selectedRow)

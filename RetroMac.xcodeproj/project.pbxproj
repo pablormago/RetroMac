@@ -18,6 +18,7 @@
 		2707C92C27E3AD8F00E96A46 /* GridScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2707C92B27E3AD8F00E96A46 /* GridScreen.swift */; };
 		2710342627C75DF100615B86 /* NetPlayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2710342527C75DF100615B86 /* NetPlayListController.swift */; };
 		271417972762516C009CA02D /* ListaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271417962762516C009CA02D /* ListaViewController.swift */; };
+		2718A97F27F70A0E00CB4E99 /* optionsScreenGridFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2718A97E27F70A0E00CB4E99 /* optionsScreenGridFunctions.swift */; };
 		2718B9D927E3E326000B5DF7 /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2718B9D727E3E326000B5DF7 /* PhotoItem.swift */; };
 		2718B9DA27E3E326000B5DF7 /* PhotoItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2718B9D827E3E326000B5DF7 /* PhotoItem.xib */; };
 		2718B9DE27E3ED73000B5DF7 /* PhotoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2718B9DC27E3ED73000B5DF7 /* PhotoHelper.swift */; };
@@ -76,6 +77,7 @@
 		2707C92B27E3AD8F00E96A46 /* GridScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridScreen.swift; sourceTree = "<group>"; };
 		2710342527C75DF100615B86 /* NetPlayListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetPlayListController.swift; sourceTree = "<group>"; };
 		271417962762516C009CA02D /* ListaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaViewController.swift; sourceTree = "<group>"; };
+		2718A97E27F70A0E00CB4E99 /* optionsScreenGridFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = optionsScreenGridFunctions.swift; sourceTree = "<group>"; };
 		2718B9D727E3E326000B5DF7 /* PhotoItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
 		2718B9D827E3E326000B5DF7 /* PhotoItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoItem.xib; sourceTree = "<group>"; };
 		2718B9DC27E3ED73000B5DF7 /* PhotoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoHelper.swift; sourceTree = "<group>"; };
@@ -229,12 +231,13 @@
 				2789801A2757DCBE00414985 /* AppDelegate.swift */,
 				279FBD51277350A700CD5586 /* Arrows */,
 				2789801E2757DCC000414985 /* Assets.xcassets */,
+				27C3A90427EDB3E100B770F6 /* Ayuda.pdf */,
 				27E7A30627691F740087C67A /* Base */,
 				27670275277E127900E43E7D /* ConfigViewController.swift */,
 				27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */,
 				2719BEEA279487F700929EE2 /* favorite.png */,
-				270485E42785FA7A00375232 /* funciones.swift */,
 				273FF8B727EE0F270051EF7F /* Filtros.swift */,
+				270485E42785FA7A00375232 /* funciones.swift */,
 				27E7A3082769C39E0087C67A /* gameListParser.swift */,
 				2707C92A27E3ACDB00E96A46 /* GridScreen */,
 				279FBD7827739DAC00CD5586 /* icons.icns */,
@@ -242,7 +245,6 @@
 				271417962762516C009CA02D /* ListaViewController.swift */,
 				27665BA827B8E87A00262025 /* ListScreen */,
 				27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */,
-				27C3A90427EDB3E100B770F6 /* Ayuda.pdf */,
 				27E7A3022768B4B90087C67A /* logo.jpeg */,
 				278980202757DCC000414985 /* Main.storyboard */,
 				27665BA027B6ED0B00262025 /* MainScreen */,
@@ -286,6 +288,7 @@
 			isa = PBXGroup;
 			children = (
 				27C4A87A27D121470069990A /* optionsScreenFunctions.swift */,
+				2718A97E27F70A0E00CB4E99 /* optionsScreenGridFunctions.swift */,
 			);
 			path = optionsScreen;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 				2710342627C75DF100615B86 /* NetPlayListController.swift in Sources */,
 				273FF8B827EE0F270051EF7F /* Filtros.swift in Sources */,
 				27665BA527B6EE4400262025 /* mainScreenGameController.swift in Sources */,
+				2718A97F27F70A0E00CB4E99 /* optionsScreenGridFunctions.swift in Sources */,
 				27C4A87827D10E800069990A /* OptionsViewController.swift in Sources */,
 				2706122027CFD2030016B1EB /* listScreenTable.swift in Sources */,
 				27C4A87B27D121480069990A /* optionsScreenFunctions.swift in Sources */,

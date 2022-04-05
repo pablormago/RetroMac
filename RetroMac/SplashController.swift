@@ -198,19 +198,7 @@ class SplashController: NSViewController {
                 } catch {
                     // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
                 }
-//                do {
-//                    guard let sourcePath = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg") else {
-//                        return
-//                    }
-//
-//                    //try str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
-//                    let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-//                    let sourceUrl = URL(fileURLWithPath: sourcePath)
-//                    let destination = documentsDirectory.appendingPathComponent("RetroMac/es_systems_mac.cfg", isDirectory: false)
-//                    try fileManager.copyItem(at: sourceUrl, to: destination)
-//                } catch {
-//                    // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
-//                }
+
             }
         } else {
             print("FILE PATH NOT AVAILABLE")

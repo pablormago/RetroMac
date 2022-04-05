@@ -12,15 +12,16 @@ import Commands
 extension OptionsViewController {
     
     @objc func buscaJuegoGrid(){
-       escrapeando = true
+        escrapeando = true
         infoLabel.isHidden = false
         escrapeandoSistema = false
         print("Escrapeo - 1")
         infoLabel.stringValue = "Buscando Juego..."
         //mkdir -p foo
-        var rutaacrear = rompath + "/media"
-        var comando = "mkdir -p \(rutaacrear)"
+        let rutaacrear = rompath + "/media"
+        let comando = "mkdir -p \(rutaacrear)"
         Commands.Bash.system("\(comando)")
+        
         var misystemid = String()
         for sistema in systemsIds {
             
@@ -34,7 +35,8 @@ extension OptionsViewController {
         let SSUser = defaults.string(forKey: "SSUser") ?? ""
         let SSPassword = defaults.string(forKey: "SSPassword") ?? ""
         let numero = columna
-        
+        var laRuta = String()
+        laRuta = juegosXml[columna][0]
         var nombre = ""
         var miputonombre = ""
         //Si el sistema es MAME
@@ -126,29 +128,32 @@ extension OptionsViewController {
                         if node == "jeux" {
                             
                         outerLoop: for (tercero, subsubJson):(String, JSON) in object{
-                                //print(subsubJson["id"].stringValue)
-                                
-                                let cuantos = Int(subsubJson["noms"].count)
-                                print("NOMBRES: \(Int(subsubJson["noms"].count))")
-                                if cuantos > 0 {
-                                    for i in 0...cuantos - 1 {
-                                        var nombreEncontrado = subsubJson["noms"][i]["text"].rawString()!
-                                        print("Encuentro: \(nombreEncontrado)")
-                                        print("Buscaba: \(miputonombre)")
+                            //print(subsubJson["id"].stringValue)
+                            
+                            let cuantos = Int(subsubJson["noms"].count)
+                            print("NOMBRES: \(Int(subsubJson["noms"].count))")
+                            if cuantos > 0 {
+                                for i in 0...cuantos - 1 {
+                                    var nombreEncontrado = subsubJson["noms"][i]["text"].rawString()!
+                                    print("Encuentro: \(nombreEncontrado)")
+                                    print("Buscaba: \(miputonombre)")
+                                    
+                                    if miputonombre.caseInsensitiveCompare(nombreEncontrado) ==
+                                        ComparisonResult.orderedSame {
+                                        nombreEscrapeado = ""
+                                        nombreEscrapeado = nombreEncontrado
+                                        print("COJONUDO")
+                                        miId = subsubJson["id"].stringValue
+                                        encontrada = true
+                                        break outerLoop
+                                    }
+                                    if nombreEncontrado == miputonombre {
                                         
-                                        if miputonombre.caseInsensitiveCompare(nombreEncontrado) == ComparisonResult.orderedSame {
-                                            print("COJONUDO")
-                                            miId = subsubJson["id"].stringValue
-                                            encontrada = true
-                                            break outerLoop
-                                        }
-                                        if nombreEncontrado == miputonombre {
-                                            
-                                        }
                                     }
                                 }
-                                
                             }
+                            
+                        }
                         }
                         if encontrada == true {break}
                     }
@@ -165,10 +170,14 @@ extension OptionsViewController {
                 print("ID: \(miId)")
                 //DispatchQueue.main.sync {
                 print(idSistema)
-                
                 DispatchQueue.main.sync {
                     self.infoLabel.stringValue = "Juego ENCONTRADO, escrapeando..."
-                    self.scrapearJuego(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numero)
+                    if ventana == "Lista" {
+                        self.scrapearJuego(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numero)
+                    } else if ventana == "Grid" {
+                        self.scrapearJuegoGrid(juego: miId, sistema: misystemid, nombrejuego: nombreplano, filajuego: numero, RutaJuego: laRuta)
+                    }
+                    
                 }
                 
                 
@@ -316,7 +325,7 @@ extension OptionsViewController {
                                                 encuentra = true
                                                 
                                             }
-                                           
+                                            
                                             
                                             if encuentra == true{
                                                 break
@@ -1056,25 +1065,59 @@ extension OptionsViewController {
     @objc func escrapeartodos(){
         
         barraProgress.minValue = 0
-        juegosaEscrapear = Double(juegosXml.count)
-        barraProgress.maxValue = Double(juegosXml.count)
+        if ventana == "Lista" {
+            juegosaEscrapear = Double(juegosXml.count)
+            barraProgress.maxValue = Double(juegosXml.count)
+            self.infoLabel.stringValue = "ESCRAPEANDO \(juegosXml.count) JUEGOS"
+        } else if ventana == "Grid" {
+            juegosaEscrapear = Double(rawJuegosXml.count)
+            barraProgress.maxValue = Double(rawJuegosXml.count)
+            self.infoLabel.stringValue = "ESCRAPEANDO \(rawJuegosXml.count) JUEGOS"
+        }
+        
         
         abiertaLista = false
         
-        self.infoLabel.stringValue = "ESCRAPEANDO \(juegosXml.count) JUEGOS"
-        DispatchQueue.background(delay: 0.0, background: {
-            juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
-            let kk = juegosXml.count
-            for a in 0..<kk {
-                self.buscaJuegoS(numerojuego: a)
-                
-                if a == (kk - 1) {
-                    abiertaLista = true
-                }else{
-                    abiertaLista = false
+        if ventana == "Lista" {
+            DispatchQueue.background(delay: 0.0, background: {
+                juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
+                let kk = juegosXml.count
+                for a in 0..<kk {
+                    if ventana == "Lista" {
+                        self.buscaJuegoS(numerojuego: a)
+                    } else if ventana == "Grid" {
+                        self.buscaJuegoSGrid(numerojuego: a)
+                    }
+                    
+                    
+                    if a == (kk - 1) {
+                        abiertaLista = true
+                    }else{
+                        abiertaLista = false
+                    }
                 }
-            }
-        })
+            })
+        } else if ventana == "Grid" {
+            DispatchQueue.background(delay: 0.0, background: {
+                rawJuegosXml.sort(by: {($0[1] ) < ($1[1] ) })
+                let kk = rawJuegosXml.count
+                for a in 0..<kk {
+                    if ventana == "Lista" {
+                        self.buscaJuegoS(numerojuego: a)
+                    } else if ventana == "Grid" {
+                        self.buscaJuegoSGrid(numerojuego: a)
+                    }
+                    
+                    
+                    if a == (kk - 1) {
+                        abiertaLista = true
+                    }else{
+                        abiertaLista = false
+                    }
+                }
+            })
+        }
+        
         
         
     }
@@ -1196,6 +1239,8 @@ extension OptionsViewController {
                                     print("Buscaba: \(miputonombre)")
                                     
                                     if miputonombre.caseInsensitiveCompare(nombreEncontrado) == ComparisonResult.orderedSame {
+                                        nombreEscrapeado = ""
+                                        nombreEscrapeado = nombreEncontrado
                                         print("COJONUDO")
                                         miId = subsubJson["id"].stringValue
                                         encontrada = true
@@ -1268,124 +1313,180 @@ extension OptionsViewController {
         opcionesJuegoLabel.stringValue = "OPCIONES DEL JUEGO: \(juegosXml[columna][1])"
     }
     func getSystemCores () {
-        
-        let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        if filaConsola != nil {
-            let consola = allTheGames[filaConsola!]
-            var cuentaCores = consola.cores.count
-            var numeroactivo = Int()
-            print(consola.cores)
-            if consola.cores != [] {
-                let misCores = consola.cores
-                for a in 0..<cuentaCores {
-                    var core = misCores[a][1]
-                    var tooltip = misCores[a][2]
-                    var comando: String =  (consola.command)
-                    if comando.contains(core + "_libretro.dylib") {
-                        core = core + " ✅"
-                        numeroactivo = a
+        if sistemaActual != "Favoritos" {
+            let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+            if filaConsola != nil {
+                let consola = allTheGames[filaConsola!]
+                var cuentaCores = consola.cores.count
+                var numeroactivo = Int()
+                print(consola.cores)
+                if consola.cores != [] {
+                    let misCores = consola.cores
+                    for a in 0..<cuentaCores {
+                        var core = misCores[a][1]
+                        var tooltip = misCores[a][2]
+                        var comando: String =  (consola.command)
+                        if comando.contains(core + "_libretro.dylib") {
+                            core = core + " ✅"
+                            numeroactivo = a
+                        }
+                        systemCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
+                        systemCoreList.menu?.items[a].toolTip = tooltip
                     }
-                    systemCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
-                    systemCoreList.menu?.items[a].toolTip = tooltip
+                } else {
+                    systemCoreList.menu?.addItem(withTitle: "Automático ✅", action: nil, keyEquivalent: "")
+                    numeroactivo = 0
+                    systemCoreList.menu?.items[0].toolTip = consola.command
                 }
-            } else {
-                systemCoreList.menu?.addItem(withTitle: "Automático ✅", action: nil, keyEquivalent: "")
-                numeroactivo = 0
-                systemCoreList.menu?.items[0].toolTip = consola.command
+                
+                systemCoreList.selectItem(at: numeroactivo)
             }
-            
-            systemCoreList.selectItem(at: numeroactivo)
         }
+        
         
     }
     
     func getSystemShaders() {
-        var shaderABuscar = String()
-        var activo = Int()
-        let filaArraySystemShaders = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
-        if filaArraySystemShaders == nil {
-            shaderABuscar = "Ninguno"
-        } else {
-            shaderABuscar = arraySystemsShaders[filaArraySystemShaders!][1]
-        }
-        var nombre = String()
-        if shaderABuscar == "Ninguno" {
-            systemShaderList.menu?.addItem(withTitle: "Ninguno ✅", action: nil, keyEquivalent: "")
-            systemShaderList.item(at: 0)?.toolTip = "Ninguno"
-            for a in 0..<arrayShaders.count{
-                let ruta = arrayShaders[a][0]
-                nombre = arrayShaders[a][1]
-                systemShaderList.menu?.addItem(withTitle: nombre, action: nil, keyEquivalent: "")
-                systemShaderList.menu?.items[a + 1].toolTip = ruta
+        if sistemaActual != "Favoritos" {
+            var shaderABuscar = String()
+            var activo = Int()
+            let filaArraySystemShaders = arraySystemsShaders.firstIndex(where: {$0[0] == sistemaActual})
+            if filaArraySystemShaders == nil {
+                shaderABuscar = "Ninguno"
+            } else {
+                shaderABuscar = arraySystemsShaders[filaArraySystemShaders!][1]
             }
-            systemShaderList.selectItem(at: 0)
-        } else {
-            systemShaderList.menu?.addItem(withTitle: "Ninguno", action: nil, keyEquivalent: "")
-            systemShaderList.item(at: 0)?.toolTip = "Ninguno"
-            for a in 0..<arrayShaders.count{
-                let ruta = arrayShaders[a][0]
-                nombre = arrayShaders[a][1]
-                if nombre == shaderABuscar {
-                    nombre = nombre + " ✅"
-                    activo = a
+            var nombre = String()
+            if shaderABuscar == "Ninguno" {
+                systemShaderList.menu?.addItem(withTitle: "Ninguno ✅", action: nil, keyEquivalent: "")
+                systemShaderList.item(at: 0)?.toolTip = "Ninguno"
+                for a in 0..<arrayShaders.count{
+                    let ruta = arrayShaders[a][0]
+                    nombre = arrayShaders[a][1]
+                    systemShaderList.menu?.addItem(withTitle: nombre, action: nil, keyEquivalent: "")
+                    systemShaderList.menu?.items[a + 1].toolTip = ruta
                 }
-                
-                systemShaderList.menu?.addItem(withTitle: nombre, action: nil, keyEquivalent: "")
-                systemShaderList.menu?.items[a + 1].toolTip = ruta
+                systemShaderList.selectItem(at: 0)
+            } else {
+                systemShaderList.menu?.addItem(withTitle: "Ninguno", action: nil, keyEquivalent: "")
+                systemShaderList.item(at: 0)?.toolTip = "Ninguno"
+                for a in 0..<arrayShaders.count{
+                    let ruta = arrayShaders[a][0]
+                    nombre = arrayShaders[a][1]
+                    if nombre == shaderABuscar {
+                        nombre = nombre + " ✅"
+                        activo = a
+                    }
+                    
+                    systemShaderList.menu?.addItem(withTitle: nombre, action: nil, keyEquivalent: "")
+                    systemShaderList.menu?.items[a + 1].toolTip = ruta
+                }
+                systemShaderList.selectItem(at: activo + 1)
             }
-            systemShaderList.selectItem(at: activo + 1)
         }
+        
     }
     
     
     
     func getGameCore(){
-        let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        if filaConsola != nil {
-            let consola = allTheGames[filaConsola!]
-            let cuentaCores = consola.cores.count
-            var numeroactivo = Int()
-            if consola.cores.count > 0 {
-                let misCores = consola.cores
-                let juegoABuscar = juegosXml[columna][0]
-                var coreAbuscar = String()
-                let filaGamesCores = arrayGamesCores.firstIndex(where: {$0[0] == juegoABuscar})
-                if filaGamesCores == nil {
-                    coreAbuscar = "Automático"
-                    gameCoreList.menu?.items[0].title = (gameCoreList.menu?.items[0].title)! + " ✅"
-                    gameCoreList.menu?.items[0].toolTip = "Automático"
-                    for a in 0..<cuentaCores {
-                        var core = misCores[a][1]
-                        let tooltip = misCores[a][2]
-                        gameCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
-                        gameCoreList.menu?.items[a + 1].toolTip = tooltip
-                    }
-                    gameCoreList.selectItem(at: 0)
-                } else {
-                    coreAbuscar = arrayGamesCores[filaGamesCores!][1]
-                    gameCoreList.menu?.items[0].toolTip = "Automático"
-                    for a in 0..<cuentaCores {
-                        var core = misCores[a][1]
-                        let tooltip = misCores[a][2]
-                        if coreAbuscar.contains(core + "_libretro.dylib") {
-                            core = core + " ✅"
-                            numeroactivo = a
+        if sistemaActual != "Favoritos"  {
+            let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+            if filaConsola != nil {
+                let consola = allTheGames[filaConsola!]
+                let cuentaCores = consola.cores.count
+                var numeroactivo = Int()
+                if consola.cores.count > 0 {
+                    let misCores = consola.cores
+                    let juegoABuscar = juegosXml[columna][0]
+                    var coreAbuscar = String()
+                    let filaGamesCores = arrayGamesCores.firstIndex(where: {$0[0] == juegoABuscar})
+                    if filaGamesCores == nil {
+                        coreAbuscar = "Automático"
+                        gameCoreList.menu?.items[0].title = (gameCoreList.menu?.items[0].title)! + " ✅"
+                        gameCoreList.menu?.items[0].toolTip = "Automático"
+                        for a in 0..<cuentaCores {
+                            var core = misCores[a][1]
+                            let tooltip = misCores[a][2]
+                            gameCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
+                            gameCoreList.menu?.items[a + 1].toolTip = tooltip
                         }
-                        gameCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
-                        gameCoreList.menu?.items[a + 1].toolTip = tooltip
+                        gameCoreList.selectItem(at: 0)
+                    } else {
+                        coreAbuscar = arrayGamesCores[filaGamesCores!][1]
+                        gameCoreList.menu?.items[0].toolTip = "Automático"
+                        for a in 0..<cuentaCores {
+                            var core = misCores[a][1]
+                            let tooltip = misCores[a][2]
+                            if coreAbuscar.contains(core + "_libretro.dylib") {
+                                core = core + " ✅"
+                                numeroactivo = a
+                            }
+                            gameCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
+                            gameCoreList.menu?.items[a + 1].toolTip = tooltip
+                        }
+                        gameCoreList.selectItem(at: numeroactivo + 1)
                     }
-                    gameCoreList.selectItem(at: numeroactivo + 1)
+                    
+                } else {
+                    //gameCoreList.menu?.addItem(withTitle: "Automático ✅", action: nil, keyEquivalent: "")
+                    gameCoreList.menu?.items[0].title = "Automático ✅"
+                    gameCoreList.menu?.items[0].toolTip = "Automático"
+                    gameCoreList.selectItem(at: 0)
                 }
                 
-            } else {
-                //gameCoreList.menu?.addItem(withTitle: "Automático ✅", action: nil, keyEquivalent: "")
-                gameCoreList.menu?.items[0].title = "Automático ✅"
-                gameCoreList.menu?.items[0].toolTip = "Automático"
-                gameCoreList.selectItem(at: 0)
+                
             }
-            
-            
+        } else {
+            let miSystem = juegosXml[columna][22]
+            let filaConsola = allTheGames.firstIndex(where: {$0.sistema == miSystem})
+            if filaConsola != nil {
+                let consola = allTheGames[filaConsola!]
+                let cuentaCores = consola.cores.count
+                var numeroactivo = Int()
+                if consola.cores.count > 0 {
+                    let misCores = consola.cores
+                    let juegoABuscar = juegosXml[columna][0]
+                    var coreAbuscar = String()
+                    let filaGamesCores = arrayGamesCores.firstIndex(where: {$0[0] == juegoABuscar})
+                    if filaGamesCores == nil {
+                        coreAbuscar = "Automático"
+                        gameCoreList.menu?.items[0].title = (gameCoreList.menu?.items[0].title)! + " ✅"
+                        gameCoreList.menu?.items[0].toolTip = "Automático"
+                        for a in 0..<cuentaCores {
+                            var core = misCores[a][1]
+                            let tooltip = misCores[a][2]
+                            gameCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
+                            gameCoreList.menu?.items[a + 1].toolTip = tooltip
+                        }
+                        gameCoreList.selectItem(at: 0)
+                    } else {
+                        coreAbuscar = arrayGamesCores[filaGamesCores!][1]
+                        gameCoreList.menu?.items[0].toolTip = "Automático"
+                        for a in 0..<cuentaCores {
+                            var core = misCores[a][1]
+                            let tooltip = misCores[a][2]
+                            if coreAbuscar.contains(core + "_libretro.dylib") {
+                                core = core + " ✅"
+                                numeroactivo = a
+                            }
+                            gameCoreList.menu?.addItem(withTitle: core, action: nil, keyEquivalent: "")
+                            gameCoreList.menu?.items[a + 1].toolTip = tooltip
+                        }
+                        gameCoreList.selectItem(at: numeroactivo + 1)
+                    }
+                    
+                } else {
+                    //gameCoreList.menu?.addItem(withTitle: "Automático ✅", action: nil, keyEquivalent: "")
+                    gameCoreList.menu?.items[0].title = "Automático ✅"
+                    gameCoreList.menu?.items[0].toolTip = "Automático"
+                    gameCoreList.selectItem(at: 0)
+                }
+                
+                
+            }
         }
+        
     }
     
     func getGameShaders () {
@@ -1442,17 +1543,20 @@ extension OptionsViewController {
     }
     
     func getSystemBezels (){
-        let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        if filaConsola != nil {
-            let filaEnArrayBezels = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
-            if filaEnArrayBezels == nil {
-                systemBezelsList.item(at: 1)?.title = systemBezelsList.item(at: 1)!.title + " ✅"
-                systemBezelsList.selectItem(at: 1)
-            } else {
-                systemBezelsList.item(at: 0)?.title = systemBezelsList.item(at: 0)!.title + " ✅"
-                systemBezelsList.selectItem(at: 0)
+        if sistemaActual !=  "Favoritos" {
+            let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+            if filaConsola != nil {
+                let filaEnArrayBezels = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
+                if filaEnArrayBezels == nil {
+                    systemBezelsList.item(at: 1)?.title = systemBezelsList.item(at: 1)!.title + " ✅"
+                    systemBezelsList.selectItem(at: 1)
+                } else {
+                    systemBezelsList.item(at: 0)?.title = systemBezelsList.item(at: 0)!.title + " ✅"
+                    systemBezelsList.selectItem(at: 0)
+                }
             }
         }
+        
     }
     
     func getGameBezels (){
@@ -1478,6 +1582,7 @@ extension OptionsViewController {
         let systemShader = systemShaderList.selectedItem?.toolTip!
         let systemShaderName = systemShaderList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
         let systemBezel = systemBezelsList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
+        let sistema = sistemaActual
         
         // MARK: Cogemos los valores de las opciones del juego:
         let gameCore = gameCoreList.selectedItem?.toolTip! ?? ""
@@ -1486,47 +1591,50 @@ extension OptionsViewController {
         let gameBezel = gameBezelsList.selectedItem?.title.replacingOccurrences(of: " ✅", with: "")
         
         // MARK: guardamos el core del sistema:
-        let FilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        let FilaSystems = allTheSystems.firstIndex(where: {$0.nombrelargo == sistemaActual})
-        let newComand = systemCore
-        
-        allTheSystems[FilaSystems!].comando = newComand!
-        allTheGames[FilaAll!].command = newComand!
-        for a in 0..<allTheGames[FilaAll!].games.count {
-            allTheGames[FilaAll!].games[a].comando = newComand!
-        }
-        for numero in 0..<juegosXml.count {
-            juegosXml[numero][20] = newComand!
-        }
-        escribeSistemas()
-        // MARK: guardamos el shader del sistema, o ponemos "Ninguno"
-
-        let sistema = sistemaActual
-        let nombre = systemShaderName!.replacingOccurrences(of: " ✅", with: "")
-        let ruta = systemShader
-        let migrupo = [sistema , nombre, ruta!] as [String]
-        if nombre == "Ninguno" {
-            let filaABuscar = arraySystemsShaders.firstIndex(where: {$0[0] == sistema})
-            if filaABuscar != nil {
-                arraySystemsShaders.remove(at: filaABuscar!)
+        if sistemaActual != "Favoritos" {
+            let FilaAll = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+            let FilaSystems = allTheSystems.firstIndex(where: {$0.nombrelargo == sistemaActual})
+            let newComand = systemCore
+            
+            allTheSystems[FilaSystems!].comando = newComand!
+            allTheGames[FilaAll!].command = newComand!
+            for a in 0..<allTheGames[FilaAll!].games.count {
+                allTheGames[FilaAll!].games[a].comando = newComand!
+            }
+            for numero in 0..<juegosXml.count {
+                juegosXml[numero][20] = newComand!
+            }
+            escribeSistemas()
+            // MARK: guardamos el shader del sistema, o ponemos "Ninguno"
+            
+            
+            let nombre = systemShaderName!.replacingOccurrences(of: " ✅", with: "")
+            let ruta = systemShader
+            let migrupo = [sistema , nombre, ruta!] as [String]
+            if nombre == "Ninguno" {
+                let filaABuscar = arraySystemsShaders.firstIndex(where: {$0[0] == sistema})
+                if filaABuscar != nil {
+                    arraySystemsShaders.remove(at: filaABuscar!)
+                    let defaults = UserDefaults.standard
+                    defaults.set(arraySystemsShaders, forKey: "systemsShaders")
+                } else {
+                    //NO hacemos nada
+                }
+                
+            } else {
+                if arraySystemsShaders.firstIndex(where: {$0[0] == sistema}) != nil {
+                    let filaABuscar = arraySystemsShaders.firstIndex(where: {$0[0] == sistema})
+                    arraySystemsShaders[filaABuscar!][1] = nombre
+                    arraySystemsShaders[filaABuscar!][2] = ruta!
+                } else {
+                    arraySystemsShaders.append(migrupo)
+                }
                 let defaults = UserDefaults.standard
                 defaults.set(arraySystemsShaders, forKey: "systemsShaders")
-            } else {
-                //NO hacemos nada
             }
-
-        } else {
-            if arraySystemsShaders.firstIndex(where: {$0[0] == sistema}) != nil {
-                let filaABuscar = arraySystemsShaders.firstIndex(where: {$0[0] == sistema})
-                arraySystemsShaders[filaABuscar!][1] = nombre
-                arraySystemsShaders[filaABuscar!][2] = ruta!
-            } else {
-                arraySystemsShaders.append(migrupo)
-            }
-            let defaults = UserDefaults.standard
-            defaults.set(arraySystemsShaders, forKey: "systemsShaders")
         }
-
+        
+        
         //MARK: Guardamos el core del juego o ponemos automático
         if gameCore == "Automático" {
             let mipath = juegosXml[columna][0]
@@ -1546,7 +1654,7 @@ extension OptionsViewController {
             if filaArray != nil {
                 arrayGamesCores.remove(at: filaArray!)
                 arrayGamesCores.append(migrupo)
-
+                
             }else {
                 print("no está")
                 arrayGamesCores.append(migrupo)
@@ -1554,7 +1662,7 @@ extension OptionsViewController {
             let defaults = UserDefaults.standard
             defaults.set(arrayGamesCores, forKey: "juegosCores")
         }
-
+        
         //MARK: Guardamos el shader del juego o lo ponemos en Automático o Ninguno
         if gameShader == "Automático" {
             print("Automático")
@@ -1565,9 +1673,9 @@ extension OptionsViewController {
                 let defaults = UserDefaults.standard
                 defaults.set(arrayGamesShaders, forKey: "juegosShaders")
             } else {
-
+                
             }
-
+            
         }
         if gameShader == "Ninguno" {
             let rutajuego = juegosXml[columna][0]
@@ -1584,7 +1692,7 @@ extension OptionsViewController {
             defaults.set(arrayGamesShaders, forKey: "juegosShaders")
         }
         if gameShader != "Automático" && gameShader != "Ninguno"{
-
+            
             print("NO Automático")
             let rutajuego = juegosXml[columna][0]
             let migrupo = [rutajuego, gameShaderName!, gameShader!] as [String]
@@ -1602,25 +1710,28 @@ extension OptionsViewController {
             defaults.set(arrayGamesShaders, forKey: "juegosShaders")
         }
         //MARK: Guardamos el valor de los bezels del sistema:
-        if systemBezel == "Sí" {
-            let filaAbuscar = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
-            if filaAbuscar != nil {
+        if sistemaActual != "Favoritos" {
+            if systemBezel == "Sí" {
+                let filaAbuscar = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
+                if filaAbuscar != nil {
+                } else {
+                    let miGrupo = [sistema, "Sí"]
+                    arraySystemsBezels.append(miGrupo)
+                }
+                
+                let defaults = UserDefaults.standard
+                defaults.set(arraySystemsBezels, forKey: "systemsBezels")
             } else {
-                let miGrupo = [sistema, "Sí"]
-                arraySystemsBezels.append(miGrupo)
+                let filaAbuscar = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
+                if filaAbuscar != nil {
+                    arraySystemsBezels.remove(at: filaAbuscar!)
+                } else {
+                }
+                let defaults = UserDefaults.standard
+                defaults.set(arraySystemsBezels, forKey: "systemsBezels")
             }
-            
-            let defaults = UserDefaults.standard
-            defaults.set(arraySystemsBezels, forKey: "systemsBezels")
-        } else {
-            let filaAbuscar = arraySystemsBezels.firstIndex(where: {$0[0] == sistemaActual})
-            if filaAbuscar != nil {
-                arraySystemsBezels.remove(at: filaAbuscar!)
-            } else {
-            }
-            let defaults = UserDefaults.standard
-            defaults.set(arraySystemsBezels, forKey: "systemsBezels")
         }
+        
         
         //MARK: Guardamos el valor de los bezels del juego:
         if gameBezel == "Automático"{
@@ -1673,6 +1784,11 @@ extension OptionsViewController {
             unfavGames()
         } else {
             favGames()
+        }
+        if juegosXml[columna][19] == "FAV" {
+            favGameBtn.title = "Borrar Juego de Favoritos"
+        } else {
+            favGameBtn.title = "Añadir Juego a Favoritos"
         }
     }
     
@@ -1729,9 +1845,6 @@ extension OptionsViewController {
             let miJuegoFav = allTheGames[mifilafav!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
             allTheGames[mifilafav!].games.remove(at: miJuegoFav!)
             xmlJuegosNuevos()
-            //favImagen.isHidden = true
-            //contextMenu.items[1].submenu?.items[2].isHidden = true
-            //contextMenu.items[1].submenu?.items[1].isHidden = false
         }else {
             
             let mifila = columna
@@ -1744,7 +1857,7 @@ extension OptionsViewController {
             allTheGames[mifilaAll!].games[mifilaJuego!].fav = ""
             for game in allTheGames[mifilaAll!].games {
                 
-                let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating, game.fav, game.comando, game.core]
+                let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating, game.fav, game.comando, game.core, game.system, game.box]
                 miarray.append(mijuego)
                 
             }
@@ -1753,11 +1866,13 @@ extension OptionsViewController {
             let miJuegoFav = allTheGames[mifilafav!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
             allTheGames[mifilafav!].games.remove(at: miJuegoFav!)
             xmlJuegosNuevosFav(systema: miRomPath, arrayNuevo: miarray)
-            //let indexSet = NSIndexSet(index: columna)
-            //juegosTableView.removeRows(at: indexSet as IndexSet, withAnimation: .effectFade)
-            //favImagen.isHidden = true
-            
+            if ventana == "Lista" {
+                listado.reloadData()
             }
+            if ventana == "Grid" {
+                myCollectionView.reloadData()
+            }
+        }
         
     }
     func xmlJuegosNuevosFav(systema: String, arrayNuevo: [[String]]){
@@ -1826,41 +1941,85 @@ extension OptionsViewController {
     }
     
     @objc func deleteGameGrid(){
-        let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
-        let indexSet = NSIndexSet(index: columna)
-        let miPath = juegosXml[columna][0]
-        juegosXml.remove(at: columna)
-        if ventana == "Grid" {
-            myCollectionView.reloadData()
-        } else {
-            listado.reloadData()
-        }
-        
-        
-        let fileDoesExist = FileManager.default.fileExists(atPath: miPath)
-        if fileDoesExist {
-            do {
-                let fileManager = FileManager.default
-                try fileManager.removeItem(atPath: miPath)
-                infoLabel.stringValue = "JUEGO BORRADO"
-                
-            }
-            catch {
-                print("Error")
-            }
-        }
-        xmlJuegosNuevos()
-        
-        allTheGames[mifila!].games.remove(at: mifilaJuego!)
-        if ventana == "Grid" {
-            myCollectionView.reloadData()
-        }
         if ventana == "Lista" {
+            let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+            let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
             let indexSet = NSIndexSet(index: columna)
-            listado.reloadData()
-            listado.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+            let miPath = juegosXml[columna][0]
+            juegosXml.remove(at: columna)
+            if ventana == "Grid" {
+                myCollectionView.reloadData()
+            } else {
+                listado.reloadData()
+            }
+            
+            
+            let fileDoesExist = FileManager.default.fileExists(atPath: miPath)
+            if fileDoesExist {
+                do {
+                    let fileManager = FileManager.default
+                    try fileManager.removeItem(atPath: miPath)
+                    infoLabel.stringValue = "JUEGO BORRADO"
+                    
+                }
+                catch {
+                    print("Error")
+                }
+            }
+            xmlJuegosNuevos()
+            
+            allTheGames[mifila!].games.remove(at: mifilaJuego!)
+            if ventana == "Grid" {
+                myCollectionView.reloadData()
+            }
+            if ventana == "Lista" {
+                let indexSet = NSIndexSet(index: columna)
+                listado.reloadData()
+                listado.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+            }
+        } else if ventana == "Grid" {
+            let mifila = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+            let mifilaJuego = allTheGames[mifila!].games.firstIndex(where: {$0.path == juegosXml[columna][0]})
+            let indexSet = NSIndexSet(index: columna)
+            let miPath = testJuegosXml[columna][0]
+            testJuegosXml.remove(at: columna)
+            let filaRaw = rawJuegosXml.firstIndex(where: {$0[0] == miPath})
+            if filaRaw != nil {
+                rawJuegosXml.remove(at: filaRaw!)
+            }
+            if ventana == "Grid" {
+                myCollectionView.reloadData()
+            } else {
+                listado.reloadData()
+            }
+            
+            
+            let fileDoesExist = FileManager.default.fileExists(atPath: miPath)
+            if fileDoesExist {
+                do {
+                    let fileManager = FileManager.default
+                    try fileManager.removeItem(atPath: miPath)
+                    infoLabel.stringValue = "JUEGO BORRADO"
+                    
+                }
+                catch {
+                    print("Error")
+                }
+            }
+            xmlJuegosNuevosGrid()
+            
+            allTheGames[mifila!].games.remove(at: mifilaJuego!)
+            if ventana == "Grid" {
+                juegosXml = testJuegosXml
+                myCollectionView.reloadData()
+            }
+            if ventana == "Lista" {
+                let indexSet = NSIndexSet(index: columna)
+                listado.reloadData()
+                listado.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
+            }
         }
+        
     }
     
     @objc func alertaBorrar(){
@@ -1962,7 +2121,7 @@ extension OptionsViewController {
         
         let mifila = retroArchConfig.firstIndex(where: {$0[0] == param})
         retroArchConfig[mifila!][1] = value
-    
+        
     }
     
     @objc func lanzarNetPlay() {
@@ -1989,6 +2148,10 @@ extension OptionsViewController {
                 if checkBezels(juego: juegosXml[columna][0]) == true {
                     gameOverlay(game: nombredelarchivo)
                 }
+            }
+            var fila = arrayGamesCores.firstIndex(where: {$0[0] == juegosXml[columna][0]})
+            if fila != nil {
+                comandojuego = arrayGamesCores[fila!][1]
             }
             var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
             

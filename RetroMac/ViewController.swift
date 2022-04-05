@@ -78,6 +78,7 @@ var rawJuegosXml = [[String]]()
 var nivelActual = Int()
 var testJuegosXml = [[String]]()
 var arrayCoresRetroArch = [String]()
+var nombreEscrapeado = String()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -249,8 +250,12 @@ class ViewController: NSViewController {
         cuentaDec = CGFloat(botonactual)
         self.view.window?.makeFirstResponder(self.scrollMain)
         scrollMain.wantsLayer = true
-        scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.85)
-        
+        scrollMain.layer?.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 0.75)
+        scrollMain.shadow = NSShadow()
+        scrollMain.layer!.shadowOpacity = 1.0
+        scrollMain.layer!.shadowColor = NSColor.black.cgColor
+        scrollMain.layer!.shadowOffset = NSMakeSize(5, 5)
+        scrollMain.layer!.shadowRadius = 20
         
         
     }

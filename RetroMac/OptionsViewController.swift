@@ -58,6 +58,15 @@ class OptionsViewController: NSViewController {
         getGameBezels()
         getFav()
         getSystemAndGame()
+        
+        // MARK: Capamos bontones para favoritos
+        
+        if sistemaActual == "Favoritos" {
+            scrapSystemBtn.isEnabled = false
+            scrapGameBtn.isEnabled = false
+            delGameBtn.isEnabled = false
+            changeGameNameBtn.isEnabled = false
+        }
     }
     
     @objc func netplayHost() {
@@ -67,8 +76,6 @@ class OptionsViewController: NSViewController {
     @objc func escrapearSistema () {
         escrapeartodos()
     }
-    
-    
     
     @objc func cerrar() {
         if escrapeando == false {

@@ -25,12 +25,11 @@ var myConsolaLabel = NSTextField()
 var myMasBtn = NSButton()
 var myMenosBtn = NSButton()
 var myKKController = NSViewController()
-
+var tieneVideo = Bool()
 class GridScreen: NSViewController {
     
     //MARK: Variables de clase
     var keyIsDown = false
-    //var juegosXml = [[String]]()
     var showSectionHeaders = false
     var previewURL: URL?
     let photoItemIdentifier: NSUserInterfaceItemIdentifier = NSUserInterfaceItemIdentifier(rawValue: "photoItemIdentifier")
@@ -77,7 +76,7 @@ class GridScreen: NSViewController {
     }
     
     @IBAction func openGameSettings(_ sender: Any) {
-        if sistemaActual != "Favoritos" {
+       
             lazy var sheetViewController: NSViewController = {
                 return self.storyboard!.instantiateController(withIdentifier: "OptionsView")
                 as! NSViewController
@@ -85,7 +84,7 @@ class GridScreen: NSViewController {
             myPlayer.player?.pause()
             tempViewController = SingletonState.shared.currentViewController!
             SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
-        }
+        
         
     }
     
@@ -171,8 +170,15 @@ class GridScreen: NSViewController {
         scrollView.layer?.cornerRadius = 5
         //collectionView.isHidden = true
         SingletonState.shared.currentViewController? = self
-        filtradoPaso1()
-        arrayJuegos ()
+        if sistemaActual != "Favoritos" {
+            filtradoPaso1()
+            juegosXml = testJuegosXml
+        } else {
+            arrayJuegos ()
+        }
+        
+        //arrayJuegos ()
+        getLogo()
         configureCollectionView()
         returnBtn.action = #selector(backFunc)
         //collectionView.becomeFirstResponder()
@@ -238,6 +244,14 @@ class GridScreen: NSViewController {
         } else {
             box3DBtn.isHidden = true
         }
+        if juegosXml[0][10] == "" {
+            tieneVideo = false
+            myPlayer.isHidden = true
+        } else {
+            tieneVideo = true
+            myPlayer.isHidden = false
+            myPlayer.player?.play()
+        }
         consolaLabel.stringValue = juegosXml[0][22]
         cuentaCargaGrid += 1
         if cuentaCargaGrid == 1 {
@@ -282,44 +296,17 @@ class GridScreen: NSViewController {
         for consola in allTheGames {
             if consola.sistema == nombresistemaactual {
                 for game in consola.games {
-                    //print(game)
-//                    let rutaJuegoRaw = game.path as NSString
-//                    let rutaJuego = rutaJuegoRaw.deletingLastPathComponent
-//                    let filaNivel = xmlRutasUnique.firstIndex(where: {$0[1] == "0"})
-//                    let rutaABuscar = xmlRutasUnique[filaNivel!][0]
-                    
                     let mijuego = [game.path, game.name, game.description, game.map, game.manual, game.news, game.tittleshot, game.fanart,game.thumbnail,game.image, game.video, game.marquee, game.releasedate, game.developer, game.publisher, game.genre, game.lang, game.players, game.rating, game.fav, game.comando, game.core, game.system, game.box]
                     
                     juegosXml.append(mijuego)
                     
                 }
-            break
+                break
             }
         }
         gridSistemaLabel.stringValue = sistemaActual
         juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
-        
-        
-        let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
-        if filaConsola != nil {
-            let sistemaABuscar = allTheGames[filaConsola!].sistema
-            let home = Bundle.main.bundlePath
-            let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + sistemaABuscar + ".png")!
-            logoSistema.imageScaling = .scaleProportionallyDown
-            let path =  home +  "/Contents/Resources/themes/default/logos/" + sistemaABuscar + ".png"
-            let fileDoesExist = FileManager.default.fileExists(atPath: path)
-            if fileDoesExist {
-                logoSistema.isHidden = false
-                gridSistemaLabel.isHidden = true
-                logoSistema.image = imagen2
-            }else {
-                logoSistema.isHidden = true
-                gridSistemaLabel.isHidden = false
-            }
-            
-        }
-        
-        
+         
     }
     
     
@@ -341,8 +328,7 @@ extension GridScreen: NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         
         guard let item = collectionView.makeItem(withIdentifier: photoItemIdentifier, for: indexPath) as? PhotoItem else { return NSCollectionViewItem() }
-        //        let miRating = (Double(juegosXml[indexPath.item][18]) ?? 0 * 5)
-        //        ratingStars.doubleValue = miRating
+        
         let miVideo = juegosXml[indexPath.item][10]
         let imagenURL = URL(fileURLWithPath: juegosXml[indexPath.item][9])
         let imagen2 = NSImage(contentsOf: imagenURL)
@@ -350,13 +336,15 @@ extension GridScreen: NSCollectionViewDataSource {
         item.playerItem?.isHidden = true
         let videoURL = URL(fileURLWithPath: miVideo)
         let player = AVPlayer(url: videoURL)
+        item.playerItem?.player = player
+        
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(playerItemDidReachEnd(notification:)),
                                                name: .AVPlayerItemDidPlayToEndTime,
                                                object: player.currentItem)
         item.gameLabel.stringValue = juegosXml[indexPath.item][1]
-        item.playerItem?.player = player
+        
         
         
         item.doubleClickActionHandler = { [weak self] in
@@ -402,12 +390,29 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
         let miBox = juegosXml[indexPath.item][23]
         if miBox != "" {
             let imagenURL = URL(fileURLWithPath: miBox)
-            var imagen = NSImage(contentsOf: imagenURL)
+            let imagen = NSImage(contentsOf: imagenURL)
             box3DBtn.image = imagen
             box3DBtn.isHidden = false
         } else {
             box3DBtn.isHidden = true
         }
+
+        if juegosXml[columna][10] == "" {
+            tieneVideo = false
+            print("Mi Vídeo: \(juegosXml[columna][10])")
+            myPlayer.isHidden = true
+        } else {
+            tieneVideo = true
+            print("Mi Vídeo: \(juegosXml[columna][10])")
+            myPlayer.isHidden = false
+            myPlayer.player?.play()
+            NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: myPlayer.player?.currentItem)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(playerItemDidReachEnd(notification:)),
+                                                   name: .AVPlayerItemDidPlayToEndTime,
+                                                   object: myPlayer.player?.currentItem)
+        }
+        
         consolaLabel.stringValue = juegosXml[columna][22]
     }
     
@@ -428,7 +433,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
             SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
             controller.view.window?.makeFirstResponder(controller.scrollMain)
             //snapPlayer.player?.pause()
-            abiertaLista = false
+            abiertaLista = true
             ventana = "Principal"
             cuentaboton = botonactual
         }
@@ -436,62 +441,78 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
     
     @objc func launchGame() {
         let numero = columna
-        let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
-        let romXml = "\"\(juegosXml[numero][0])\""
-        let rompathabuscar = juegosXml[numero][0]
-        var comandojuego = juegosXml[numero][20]
-        myPlayer.player?.pause()
-        
-        if comandojuego.contains("RetroArch") {
-            gameShader(shader: "")
-            noGameOverlay()
-            let defaults = UserDefaults.standard
-            let shaders = defaults.integer(forKey: "Shaders")
-            print("SHADERS \(shaders)")
-            if shaders == 1 {
-                let juegoABuscar = juegosXml[numero][0]
-                let miShader = checkShaders(juego: juegoABuscar)
-                gameShader(shader: miShader)
-            }
-            let marcos = defaults.integer(forKey: "Marcos")
+        //MARK: Prueba de gestión de niveles
+        let nivel = juegosXml[columna][0]
+        rutaBase = nivel
+        print("TIPO: \(juegosXml[columna][22])")
+        if juegosXml[columna][22] == "Carpeta" {
+            print("SUBO")
+            subirNivel()
+        }
+        else if juegosXml[columna][22] == "Volver" {
+            print("BAJO")
+            bajarNivel()
+        } else if juegosXml[columna][22] != "Carpeta" && juegosXml[columna][22] != "Volver" {
+            let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
+            let romXml = "\"\(juegosXml[numero][0])\""
+            let rompathabuscar = juegosXml[numero][0]
+            var comandojuego = juegosXml[numero][20]
+            myPlayer.player?.pause()
             
-            if marcos == 1 {
-                if checkBezels(juego: juegosXml[numero][0]) == true {
-                    gameOverlay(game: nombredelarchivo)
+            if comandojuego.contains("RetroArch") {
+                gameShader(shader: "")
+                noGameOverlay()
+                let defaults = UserDefaults.standard
+                let shaders = defaults.integer(forKey: "Shaders")
+                print("SHADERS \(shaders)")
+                if shaders == 1 {
+                    let juegoABuscar = juegosXml[numero][0]
+                    let miShader = checkShaders(juego: juegoABuscar)
+                    gameShader(shader: miShader)
+                }
+                let marcos = defaults.integer(forKey: "Marcos")
+                
+                if marcos == 1 {
+                    if checkBezels(juego: juegosXml[numero][0]) == true {
+                        gameOverlay(game: nombredelarchivo)
+                    }
                 }
             }
-        }
-        
-        if comandojuego.contains("citra-qt") {
-            let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
-            if mifilaconfig1 != nil {
-                citraConfig[mifilaconfig1!] = "fullscreen=true"
-            }
-            let mifilaconfig2 = citraConfig.firstIndex(where: {$0.contains("fullscreen\\default=")})
-            if mifilaconfig2 != nil {
-                citraConfig[mifilaconfig2!] = "fullscreen\\default=false"
+            
+            if comandojuego.contains("citra-qt") {
+                let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
+                if mifilaconfig1 != nil {
+                    citraConfig[mifilaconfig1!] = "fullscreen=true"
+                }
+                let mifilaconfig2 = citraConfig.firstIndex(where: {$0.contains("fullscreen\\default=")})
+                if mifilaconfig2 != nil {
+                    citraConfig[mifilaconfig2!] = "fullscreen\\default=false"
+                }
+                
+                writeCitraConfig()
             }
             
-            writeCitraConfig()
+            var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
+            if fila != nil {
+                comandojuego = arrayGamesCores[fila!][1]
+                print("CORE CUSTOM")
+            } else {
+                print("CORE DEFAULT")
+            }
+            
+            var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+            var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
+            print(comando)
+            Commands.Bash.system("\(comando)")
+            comando=""
+            myPlayer.player?.play()
+            
+            
+            print("ENTER")
         }
         
-        var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
-        if fila != nil {
-            comandojuego = arrayGamesCores[fila!][1]
-            print("CORE CUSTOM")
-        } else {
-            print("CORE DEFAULT")
-        }
-        
-        var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
-        var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
-        print(comando)
-        Commands.Bash.system("\(comando)")
-        comando=""
-        myPlayer.player?.play()
         
         
-        print("ENTER")
     }
     
     public func checkShaders (juego: String) -> String {
@@ -598,7 +619,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
                 SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
                 controller.view.window?.makeFirstResponder(controller.scrollMain)
                 //snapPlayer.player?.pause()
-                abiertaLista = false
+                abiertaLista = true
                 ventana = "Principal"
                 cuentaboton = botonactual
             }
@@ -613,5 +634,27 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
     override func keyUp(with myEvent: NSEvent) {
         keyIsDown = false
     }
+    
+    func getLogo() {
+        let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
+        if filaConsola != nil {
+            let sistemaABuscar = allTheGames[filaConsola!].sistema
+            let home = Bundle.main.bundlePath
+            let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + sistemaABuscar + ".png")!
+            logoSistema.imageScaling = .scaleProportionallyDown
+            let path =  home +  "/Contents/Resources/themes/default/logos/" + sistemaABuscar + ".png"
+            let fileDoesExist = FileManager.default.fileExists(atPath: path)
+            if fileDoesExist {
+                logoSistema.isHidden = false
+                gridSistemaLabel.isHidden = true
+                logoSistema.image = imagen2
+            }else {
+                logoSistema.isHidden = true
+                gridSistemaLabel.isHidden = false
+            }
+            
+        }
+    }
+    
     
 }
