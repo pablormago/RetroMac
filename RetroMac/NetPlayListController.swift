@@ -29,6 +29,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
     @IBAction func cerrar(_ sender: Any) {
         //ventana = "Principal"
         ventanaModal = "Ninguna"
+        myPlayer.player?.play()
         self.dismiss(self)
     }
     
@@ -43,6 +44,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
         netplayPlays = []
         cargaPartidasNetplay ()
         NetPlayTable.reloadData()
+        myPlayer.player?.pause()
         //ventana = "Netplay"
         ventanaModal = "Neplay"
         NetPlayTable.doubleAction = #selector(launchGame)

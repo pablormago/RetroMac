@@ -10,6 +10,7 @@ import Cocoa
 import Commands
 import AVKit
 import AVFoundation
+import GameController
 var tempViewController = NSViewController()
 var myPlayer = AVPlayerView()
 var myRatingStar = NSLevelIndicator()
@@ -74,7 +75,6 @@ class GridScreen: NSViewController {
     @IBAction func openManual(_ sender: Any) {
         abrirPdf()
     }
-    
     @IBAction func openGameSettings(_ sender: Any) {
        
             lazy var sheetViewController: NSViewController = {
@@ -87,7 +87,6 @@ class GridScreen: NSViewController {
         
         
     }
-    
     @IBAction func abrirNetplay(_ sender: Any) {
         lazy var sheetViewController: NSViewController = {
             return self.storyboard!.instantiateController(withIdentifier: "NetPlayList")
@@ -95,7 +94,6 @@ class GridScreen: NSViewController {
         }()
         SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
     }
-    
     @IBAction func menosSistena(_ sender: Any) {
         if botonactual > 1 {
             print("Izquierda")
@@ -160,7 +158,6 @@ class GridScreen: NSViewController {
         }
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         ventanaModal = "Alguna"
@@ -204,8 +201,8 @@ class GridScreen: NSViewController {
         } else {
             consolaLabel.isHidden = true
         }
-        
     }
+    
     override func viewWillAppear() {
         super.viewWillAppear()
         let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
@@ -282,8 +279,6 @@ class GridScreen: NSViewController {
         //configureGridLayout()
     }
     
-    
-    
     func configureFlowLayout() {
         let flowLayout = NSCollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = 0.0
@@ -308,9 +303,7 @@ class GridScreen: NSViewController {
         juegosXml.sort(by: {($0[1] ) < ($1[1] ) })
          
     }
-    
-    
-    
+     
 }
 
 
@@ -440,8 +433,8 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
     }
     
     @objc func launchGame() {
+        
         let numero = columna
-        //MARK: Prueba de gestión de niveles
         let nivel = juegosXml[columna][0]
         rutaBase = nivel
         print("TIPO: \(juegosXml[columna][22])")
@@ -550,7 +543,6 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
         //
         return shader
     }
-    
     public func checkBezels (juego: String) -> Bool {
         var bezelsSystem = Bool ()
         var bezelsGame = Bool ()
@@ -655,6 +647,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
             
         }
     }
+    
     
     
 }

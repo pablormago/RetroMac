@@ -79,6 +79,7 @@ var nivelActual = Int()
 var testJuegosXml = [[String]]()
 var arrayCoresRetroArch = [String]()
 var nombreEscrapeado = String()
+var openEmu = Bool()
 
 class ViewController: NSViewController {
     var sistema = ""
@@ -264,11 +265,11 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
         ventana = "Principal"
         ventanaModal = "Ninguna"
         print("DID LOAD")
         //cargaPartidasNetplay ()
+        openEmu = false
         cuenta = 0
         mainController = self
         SingletonState.shared.mySystemLabel = sistemaLabel
@@ -487,7 +488,7 @@ class ViewController: NSViewController {
             if miVideo != "" {
                 //print("Mivideo: \(miVideo)")
                 let videoURL = URL(fileURLWithPath: miVideo!)
-                let player2 = AVPlayer(url: videoURL)
+                var player2 = AVPlayer(url: videoURL)
                 SingletonState.shared.myBackPlayer!.player = player2
                 SingletonState.shared.myBackPlayer!.player!.play()
                 backIsPlaying = true

@@ -13,422 +13,452 @@ import Commands
 import AVKit
 import AVFoundation
 extension ViewController {
- 
-        // MARK: GamePad
-        
-        func startWatchingForControllers() {
-            // Subscribe for the notes
-            let ctr = NotificationCenter.default
-            ctr.addObserver(forName: .GCControllerDidConnect, object: nil, queue: .main) {[weak self] note in
-                if let ctrl = note.object as? GCController {
-                    self?.add(ctrl)
+    
+    // MARK: GamePad
+    
+    func startWatchingForControllers() {
+        // Subscribe for the notes
+        let ctr = NotificationCenter.default
+        ctr.addObserver(forName: .GCControllerDidConnect, object: nil, queue: .main) {[weak self] note in
+            if let ctrl = note.object as? GCController {
+                self?.add(ctrl)
+                if #available(macOS 11.3, *) {
+                    GCController.shouldMonitorBackgroundEvents = false
+                } else {
+                    // Fallback on earlier versions
                 }
+                
             }
-            ctr.addObserver(forName: .GCControllerDidDisconnect, object: nil, queue: .main) {[weak self] note in
-                if let ctrl = note.object as? GCController {
-                    self?.remove(ctrl)
-                }
-            }
-            // and kick off discovery
-            GCController.startWirelessControllerDiscovery(completionHandler: {})
         }
+        ctr.addObserver(forName: .GCControllerDidDisconnect, object: nil, queue: .main) {[weak self] note in
+            if let ctrl = note.object as? GCController {
+                self?.remove(ctrl)
+            }
+        }
+        if #available(macOS 11.0, *) {
+            ctr.addObserver(forName: .GCControllerDidBecomeCurrent, object: nil, queue: .main) {[weak self] note in
+                if let ctrl = note.object as? GCController {
+                    print("CURRENT")
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+        if #available(macOS 11.0, *) {
+            ctr.addObserver(forName: .GCControllerDidStopBeingCurrent, object: nil, queue: .main) {[weak self] note in
+                if let ctrl = note.object as? GCController {
+                    print("UNCURRENT")
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+        // and kick off discovery
+        if #available(macOS 11.3, *) {
+            GCController.shouldMonitorBackgroundEvents = false
+        } else {
+            // Fallback on earlier versions
+        }
+        GCController.startWirelessControllerDiscovery(completionHandler: {})
+    }
+    
+    func stopWatchingForControllers() {
+        // Same as the first, 'cept in reverse!
+        GCController.stopWirelessControllerDiscovery()
         
-        func stopWatchingForControllers() {
-            // Same as the first, 'cept in reverse!
-            GCController.stopWirelessControllerDiscovery()
+        let ctr = NotificationCenter.default
+        ctr.removeObserver(self, name: .GCControllerDidConnect, object: nil)
+        ctr.removeObserver(self, name: .GCControllerDidDisconnect, object: nil)
+    }
+    
+    func add(_ controller: GCController) {
+        let name = String(describing:controller.vendorName!)
+        
+        if let extendedGamepad = controller.extendedGamepad  {
             
-            let ctr = NotificationCenter.default
-            ctr.removeObserver(self, name: .GCControllerDidConnect, object: nil)
-            ctr.removeObserver(self, name: .GCControllerDidDisconnect, object: nil)
-        }
-        
-        func add(_ controller: GCController) {
-            let name = String(describing:controller.vendorName)
-            if let extendedGamepad = controller.extendedGamepad {
-                print("connect extended \(name)")
+            print("connect extended \(name)")
+            
                 configureDPadButtons(extendedGamepad)
                 configureDiamondButtons(extendedGamepad)
                 configureShoulderButtons(extendedGamepad)
                 configureTriggers(extendedGamepad)
                 return
-            } else if let gamepad = controller.microGamepad {
-                print("connect micro (name)")
-            } else {
-                print("Huh? (name)")
-            }
+            
+            
+        } else if let gamepad = controller.microGamepad {
+            print("connect micro \(name)")
+        } else {
+            print("Huh? (name)")
         }
-        public func configureDPadButtons(_ gamepad : GCExtendedGamepad) {
-            
-            //Configuracão do direcional para cima
-            gamepad.dpad.up.pressedChangedHandler = {(button, value, pressed) in
-                if pressed == true {
-                    print("ExtendedGamepad - Up")
-                    
-                    if ventana == "Lista" && ventanaModal == "Ninguna" {
-                        self.prevGame ()
-                    }
-                    if ventana == "Grid"  && ventanaModal == "Ninguna" {
-                        if columna >= 3 {
-                            let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
-                            var set1 = Set<IndexPath>()
-                            set1.insert(indexPath1)
-                            myCollectionView.deselectItems(at: set1)
-                            let indexPath:IndexPath = IndexPath(item: columna - 3, section: 0)
-                            var set = Set<IndexPath>()
-                            set.insert(indexPath)
-                            myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
-                            columna = columna - 3
-                            self.actualizaMediaGrid ()
-                        }
-                    }
-                }
+    }
+    
+    public func configureDPadButtons(_ gamepad : GCExtendedGamepad) {
+        
+        //Configuracão do direcional para cima
+        gamepad.dpad.up.pressedChangedHandler = {(button, value, pressed) in
+            if pressed == true {
+                print("ExtendedGamepad - Up")
                 
-            }
-            
-            //Configuracão do direcional para baixo
-            gamepad.dpad.down.pressedChangedHandler = {(button, value, pressed) in
-                print("ExtendedGamepad - Down")
-                if pressed == true {
-                    if ventana == "Lista" && ventanaModal == "Ninguna"{
-                        self.nextGame()
-                    }
-                    if ventana == "Grid"  && ventanaModal == "Ninguna" {
-                        if columna <= juegosXml.count - 4 {
-                            let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
-                            var set1 = Set<IndexPath>()
-                            set1.insert(indexPath1)
-                            myCollectionView.deselectItems(at: set1)
-                            let indexPath:IndexPath = IndexPath(item: columna + 3, section: 0)
-                            var set = Set<IndexPath>()
-                            set.insert(indexPath)
-                            myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
-                            columna = columna + 3
-                            self.actualizaMediaGrid ()
-                        }
-                    }
+                if ventana == "Lista" && ventanaModal == "Ninguna" {
+                    self.prevGame ()
                 }
-                
-             }
-            
-            //Configuracão do direcional para a esquerda
-            gamepad.dpad.left.pressedChangedHandler = {(button, value, pressed) in
-                print("ExtendedGamepad - Left")
-                if pressed == true {
-                    if ventana == "Principal" && ventanaModal == "Ninguna" {
-                        if cuentaPrincipio == 0 {
-                            self.menosSistema()
-                        }else {
-                            self.menosSistemaLista()
-                        }
-                    }
-                    if ventana == "Grid"  && ventanaModal == "Ninguna" {
-                        if columna > 0 && juegosXml.count >= 1 {
-                            let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
-                            var set1 = Set<IndexPath>()
-                            set1.insert(indexPath1)
-                            myCollectionView.deselectItems(at: set1)
-                            let indexPath:IndexPath = IndexPath(item: columna - 1, section: 0)
-                            var set = Set<IndexPath>()
-                            set.insert(indexPath)
-                            myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
-                            columna = columna - 1
-                            self.actualizaMediaGrid ()
-                        }
-                    }
-                    
-                 }
-            }
-            
-            //Configuracão do direcional para a direita
-            gamepad.dpad.right.pressedChangedHandler = {(button, value, pressed) in
-                print("ExtendedGamepad - Right")
-                if pressed == true {
-                    if ventana == "Principal" && ventanaModal == "Ninguna" {
-                        if cuentaPrincipio == 0 {
-                            self.masSistema()
-                        }else {
-                            self.masSistemaLista()
-                        }
-                    }
-                    if ventana == "Grid"  && ventanaModal == "Ninguna" {
-                        if columna < juegosXml.count - 1 {
-                            let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
-                            var set1 = Set<IndexPath>()
-                            set1.insert(indexPath1)
-                            myCollectionView.deselectItems(at: set1)
-                            let indexPath:IndexPath = IndexPath(item: columna + 1, section: 0)
-                            var set = Set<IndexPath>()
-                            set.insert(indexPath)
-                            myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
-                            columna = columna + 1
-                            self.actualizaMediaGrid ()
-                        }
+                if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                    if columna >= 3 {
+                        let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
+                        var set1 = Set<IndexPath>()
+                        set1.insert(indexPath1)
+                        myCollectionView.deselectItems(at: set1)
+                        let indexPath:IndexPath = IndexPath(item: columna - 3, section: 0)
+                        var set = Set<IndexPath>()
+                        set.insert(indexPath)
+                        myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
+                        columna = columna - 3
+                        self.actualizaMediaGrid ()
                     }
                 }
             }
             
         }
         
-        /*
-             Método para configurar os botões A,B,X e Y do(s) controle(s) do tipo GCExtendedGamepad.
-                - Parameters:
-                    - gamepad: Gamepad para configuração dos botões.
-             */
-            public func configureDiamondButtons(_ gamepad: GCExtendedGamepad) {
-                
-                //Configuração do botão A
-                gamepad.buttonA.pressedChangedHandler = {(button, value, pressed) in
-                    print( "ExtendedGamepad - A")
-                    if pressed == true {
-                        if ventana == "Principal" && ventanaModal == "Ninguna" {
-                            if cuentaPrincipio  > 0  {
-                                print("ENTER LISTA TRUE")
-                                let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
-                                sistemaActual = button?.Fullname! ?? ""
-                                //print(sistemaActual)
-                                if backIsPlaying == true {
-                                    self.backPlayer.player?.pause()
-                                    SingletonState.shared.myBackPlayer?.player?.pause()
-                                }
-                                if Int(button!.numeroJuegos!)! > 0 {
-                                    self.selecionSistema(button!)
-                                }
-                                
-                            } else {
-                                
-                                    print("ENTER LISTA FALSE")
-                                    let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                                    sistemaActual = button?.Fullname! ?? ""
-                                    if backIsPlaying == true {
-                                        self.backPlayer.player?.pause()
-                                        SingletonState.shared.myBackPlayer?.player?.pause()
-                                    }
-                                    if Int(button!.numeroJuegos!)! > 0 {
-                                        self.selecionSistema(button!)
-                                    }
-                                
-                            }
-                        }
-                        
-                        if ventana == "Lista" && ventanaModal == "Ninguna"{
-                            self.launchGame()
-                        }
-                        if ventana == "Grid"  && ventanaModal == "Ninguna"{
-                            self.launchGameGrid()
-                        }
-                    }
-                    
+        //Configuracão do direcional para baixo
+        gamepad.dpad.down.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Down")
+            if pressed == true {
+                if ventana == "Lista" && ventanaModal == "Ninguna"{
+                    self.nextGame()
                 }
-                
-                //Configuração do botão B
-                gamepad.buttonB.pressedChangedHandler = {(button, value, pressed) in
-                    print("ExtendedGamepad - B")
-                    if pressed == true {
-                        if ventana == "Grid" && ventanaModal == "Ninguna" {
-                            self.openOptions()
-                        }
-                        if ventana == "Lista" && ventanaModal == "Ninguna" {
-                            print("OPTIONS")
-                            self.openOptions()
-                        }
+                if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                    if columna <= juegosXml.count - 4 {
+                        let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
+                        var set1 = Set<IndexPath>()
+                        set1.insert(indexPath1)
+                        myCollectionView.deselectItems(at: set1)
+                        let indexPath:IndexPath = IndexPath(item: columna + 3, section: 0)
+                        var set = Set<IndexPath>()
+                        set.insert(indexPath)
+                        myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
+                        columna = columna + 3
+                        self.actualizaMediaGrid ()
                     }
                 }
-                
-                //Configuração do botão X
-                gamepad.buttonX.pressedChangedHandler = {(button, value, pressed) in
-                    print("ExtendedGamepad - X")
-                    if pressed == true {
-                        self.abrirNetplay()
-                    }
-                    
-                }
-                
-                //Configuração do botão Y
-                gamepad.buttonY.pressedChangedHandler = {(button, value, pressed) in
-                    print("ExtendedGamepad - y")
-                    if ventana == "Lista" && ventanaModal == "Ninguna" {
-                        if pressed == true {
-                            self.backToMain()
-                        }
-                    }
-                    if ventana == "Grid" && ventanaModal == "Ninguna"{
-                        if pressed == true {
-                            self.backToMain()
-                        }
-                    }
-                    
-                }
-                
-                //Configuración de Select
-                
-                gamepad.buttonOptions!.pressedChangedHandler = {(button, value, pressed) in
-                    print("ExtendedGamepad - Home")
-                    if pressed == true {
-                       // self.openOptions()
-                    }
-                }
-                
-                gamepad.buttonMenu.pressedChangedHandler = {(button, value, pressed) in
-                    if pressed == true {
-                        print("Start")
-                        //self.openAjustes()
-                    }
-                }
-                
-                
             }
             
-        public func configureShoulderButtons(_ gamepad: GCExtendedGamepad) {
-                
-                //Configuracão do L1
-                gamepad.leftShoulder.pressedChangedHandler = {(button, value, pressed) in
-                    print( "ExtendedGamepad - Left Shoulder")
-                    if pressed == true {
-                        if ventana == "Grid"  && ventanaModal == "Ninguna" {
-                            myMenosBtn.performClick(nil)
-                        }
-                        if ventana == "Lista" && ventanaModal == "Ninguna" {
-                            myAtrasBtn.performClick(nil)
-                        }
+        }
+        
+        //Configuracão do direcional para a esquerda
+        gamepad.dpad.left.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Left")
+            if pressed == true {
+                if ventana == "Principal" && ventanaModal == "Ninguna" {
+                    if cuentaPrincipio == 0 {
+                        self.menosSistema()
+                    }else {
+                        self.menosSistemaLista()
                     }
                 }
-                
-                //Configuracão do R1
-                gamepad.rightShoulder.pressedChangedHandler = {(button, value, pressed) in
-                    print("ExtendedGamepad - Right Shoulder")
-                    if pressed == true {
-                        if ventana == "Grid" && ventanaModal == "Ninguna" {
-                            myMasBtn.performClick(nil)
-                        }
-                        if ventana == "Lista" && ventanaModal == "Ninguna" {
-                            myDelanteBtn.performClick(nil)
-                        }
+                if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                    if columna > 0 && juegosXml.count >= 1 {
+                        let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
+                        var set1 = Set<IndexPath>()
+                        set1.insert(indexPath1)
+                        myCollectionView.deselectItems(at: set1)
+                        let indexPath:IndexPath = IndexPath(item: columna - 1, section: 0)
+                        var set = Set<IndexPath>()
+                        set.insert(indexPath)
+                        myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
+                        columna = columna - 1
+                        self.actualizaMediaGrid ()
                     }
                 }
                 
             }
-            
-            /**
-             Método para configurar os botões de trigger(L2 e R2) do(s) controle(s) do tipo GCExtendedGamepad.
-                - Parameters:
-                    - gamepad: Gamepad para configuração dos botões.
-             */
-            public func configureTriggers(_ gamepad: GCExtendedGamepad) {
-                
-                //Configuracão do L2
-                gamepad.leftTrigger.pressedChangedHandler = {(button, value, pressed) in
-                    print( "ExtendedGamepad - Left Trigger")
-                    if pressed == true {
-                        self.openAjustes()
-                        
+        }
+        
+        //Configuracão do direcional para a direita
+        gamepad.dpad.right.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Right")
+            if pressed == true {
+                if ventana == "Principal" && ventanaModal == "Ninguna" {
+                    if cuentaPrincipio == 0 {
+                        self.masSistema()
+                    }else {
+                        self.masSistemaLista()
                     }
-                    
                 }
+                if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                    if columna < juegosXml.count - 1 {
+                        let indexPath1:IndexPath = IndexPath(item: columna , section: 0)
+                        var set1 = Set<IndexPath>()
+                        set1.insert(indexPath1)
+                        myCollectionView.deselectItems(at: set1)
+                        let indexPath:IndexPath = IndexPath(item: columna + 1, section: 0)
+                        var set = Set<IndexPath>()
+                        set.insert(indexPath)
+                        myCollectionView.selectItems(at: set, scrollPosition: .centeredVertically)
+                        columna = columna + 1
+                        self.actualizaMediaGrid ()
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    public func configureDiamondButtons(_ gamepad: GCExtendedGamepad) {
+        
+        gamepad.buttonA.pressedChangedHandler = {(button, value, pressed) in
+            
+            print( "ExtendedGamepad - A")
+            if pressed == true {
                 
-                //Configuracão do R2
-                gamepad.rightTrigger.pressedChangedHandler = {(button, value, pressed) in
-                    print("ExtendedGamepad - Right Trigger")
-                    if pressed == true {
+                if ventana == "Principal" && ventanaModal == "Ninguna" {
+                    if cuentaPrincipio  > 0  {
+                        print("ENTER LISTA TRUE")
+                        let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
+                        sistemaActual = button?.Fullname! ?? ""
+                        //print(sistemaActual)
+                        if backIsPlaying == true {
+                            self.backPlayer.player?.pause()
+                            SingletonState.shared.myBackPlayer?.player?.pause()
+                        }
+                        if Int(button!.numeroJuegos!)! > 0 {
+                            self.selecionSistema(button!)
+                        }
+                        
+                    } else {
+                        
+                        print("ENTER LISTA FALSE")
+                        let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                        sistemaActual = button?.Fullname! ?? ""
+                        if backIsPlaying == true {
+                            self.backPlayer.player?.pause()
+                            SingletonState.shared.myBackPlayer?.player?.pause()
+                        }
+                        if Int(button!.numeroJuegos!)! > 0 {
+                            self.selecionSistema(button!)
+                        }
                         
                     }
                 }
                 
+                else if ventana == "Lista" && ventanaModal == "Ninguna"{
+                    self.launchGame()
+                }
+                else if ventana == "Grid"  && ventanaModal == "Ninguna"  {
+                    self.launchGameGrid()
+                }
             }
-        
-        func remove(_ controller: GCController) {
             
         }
-        public func masSistema() {
-            if botonactual < cuantosSistemas {
-                botonactual += 1
+        
+        //Configuração do botão B
+        gamepad.buttonB.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - B")
+            if pressed == true {
+                if ventana == "Grid" && ventanaModal == "Ninguna" {
+                    self.openOptions()
+                }
+                if ventana == "Lista" && ventanaModal == "Ninguna" {
+                    print("OPTIONS")
+                    self.openOptions()
+                }
+            }
+        }
+        
+        //Configuração do botão X
+        gamepad.buttonX.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - X")
+            if pressed == true {
+                self.abrirNetplay()
+            }
+            
+        }
+        
+        //Configuração do botão Y
+        gamepad.buttonY.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - y")
+            if ventana == "Lista" && ventanaModal == "Ninguna" {
+                if pressed == true {
+                    self.backToMain()
+                }
+            }
+            if ventana == "Grid" && ventanaModal == "Ninguna"{
+                if pressed == true {
+                    self.backToMain()
+                }
+            }
+            
+        }
+        
+        //Configuración de Select
+        
+        gamepad.buttonOptions!.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Home")
+            if pressed == true {
+                // self.openOptions()
+            }
+        }
+        
+        gamepad.buttonMenu.pressedChangedHandler = {(button, value, pressed) in
+            if pressed == true {
+                print("Start")
+                //self.openAjustes()
+            }
+        }
+        
+        //Configuração do botão A
+        
+        
+        
+    }
+    
+    public func configureShoulderButtons(_ gamepad: GCExtendedGamepad) {
+        
+        //Configuracão do L1
+        gamepad.leftShoulder.pressedChangedHandler = {(button, value, pressed) in
+            print( "ExtendedGamepad - Left Shoulder")
+            if pressed == true {
+                if ventana == "Grid"  && ventanaModal == "Ninguna" {
+                    myMenosBtn.performClick(nil)
+                }
+                if ventana == "Lista" && ventanaModal == "Ninguna" {
+                    myAtrasBtn.performClick(nil)
+                }
+            }
+        }
+        
+        //Configuracão do R1
+        gamepad.rightShoulder.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Right Shoulder")
+            if pressed == true {
+                if ventana == "Grid" && ventanaModal == "Ninguna" {
+                    myMasBtn.performClick(nil)
+                }
+                if ventana == "Lista" && ventanaModal == "Ninguna" {
+                    myDelanteBtn.performClick(nil)
+                }
+            }
+        }
+        
+    }
+    
+    public func configureTriggers(_ gamepad: GCExtendedGamepad) {
+        
+        //Configuracão do L2
+        gamepad.leftTrigger.pressedChangedHandler = {(button, value, pressed) in
+            print( "ExtendedGamepad - Left Trigger")
+            if pressed == true {
+                self.openAjustes()
                 
-                if let screen = NSScreen.main {
-                    let rect = screen.frame
-                    let width = rect.size.width
-                    let mitadPantalla = Int (width / 2)
-                    anchuraPantall = Int(width)
-                    cuentaboton = botonactual
-                    let trozoamover = (560 * botonactual) - 280
-                    let cachito = trozoamover - mitadPantalla
-                    //print(botonactual)
-                    scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                    scrollMain.isHidden = false
-                    print ("CUENTABOTON: \(cuentaboton)")
-                    print ("BOTONACTUAL: \(botonactual)")
-                    let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                    SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                    
-                    backplay (tag: botonactual)
-                }
             }
+            
         }
         
-        public func menosSistema(){
-            if botonactual > 1 {
-                botonactual -= 1
-                
-                if let screen = NSScreen.main {
-                    let rect = screen.frame
-                    let width = rect.size.width
-                    let mitadPantalla = Int (width / 2)
-                    anchuraPantall = Int(width)
-                    cuentaboton = botonactual
-                    let trozoamover = (560 * botonactual) - 280
-                    let cachito = trozoamover - mitadPantalla
-                    //print(botonactual)
-                    scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                    scrollMain.isHidden = false
-                    print ("CUENTABOTON: \(cuentaboton)")
-                    print ("BOTONACTUAL: \(botonactual)")
-                    let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                    SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                    
-                    backplay (tag: botonactual)
-                }
+        //Configuracão do R2
+        gamepad.rightTrigger.pressedChangedHandler = {(button, value, pressed) in
+            print("ExtendedGamepad - Right Trigger")
+            if pressed == true {
                 
             }
         }
         
-        public func masSistemaLista() {
-            if Int(cuentaDec) < cuantosSistemas {
-                cuentaDec += 1
-                if let screen = NSScreen.main {
-                    let rect = screen.frame
-                    let width = rect.size.width
-                    let mitadPantalla = Int (width / 2)
-                    anchuraPantall = Int(width)
-                    cuentaboton = botonactual
-                    let trozoamover = (560 * Int(cuentaDec)) - 280
-                    let cachito = trozoamover - mitadPantalla
-                    SingletonState.shared.myscroller!.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                    let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                    SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                    backplay (tag: Int(cuentaDec))
-                    
-                    
-                }
+    }
+    
+    func remove(_ controller: GCController) {
+        
+    }
+    
+    public func masSistema() {
+        if botonactual < cuantosSistemas {
+            botonactual += 1
+            
+            if let screen = NSScreen.main {
+                let rect = screen.frame
+                let width = rect.size.width
+                let mitadPantalla = Int (width / 2)
+                anchuraPantall = Int(width)
+                cuentaboton = botonactual
+                let trozoamover = (560 * botonactual) - 280
+                let cachito = trozoamover - mitadPantalla
+                //print(botonactual)
+                scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
+                scrollMain.isHidden = false
+                print ("CUENTABOTON: \(cuentaboton)")
+                print ("BOTONACTUAL: \(botonactual)")
+                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                
+                backplay (tag: botonactual)
             }
         }
-        
-        public func menosSistemaLista() {
-            if cuentaDec > 1 {
-                cuentaDec -= 1
-                if let screen = NSScreen.main {
-                    let rect = screen.frame
-                    let width = rect.size.width
-                    let mitadPantalla = Int (width / 2)
-                    anchuraPantall = Int(width)
-                    cuentaboton = botonactual
-                    let trozoamover = (560 * Int(cuentaDec)) - 280
-                    let cachito = trozoamover - mitadPantalla
-                    SingletonState.shared.myscroller!.contentView.scroll(to: CGPoint(x: cachito, y: 0))
-                    let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                    SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
-                    backplay (tag: Int(cuentaDec))
-                }
+    }
+    
+    public func menosSistema(){
+        if botonactual > 1 {
+            botonactual -= 1
+            
+            if let screen = NSScreen.main {
+                let rect = screen.frame
+                let width = rect.size.width
+                let mitadPantalla = Int (width / 2)
+                anchuraPantall = Int(width)
+                cuentaboton = botonactual
+                let trozoamover = (560 * botonactual) - 280
+                let cachito = trozoamover - mitadPantalla
+                //print(botonactual)
+                scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
+                scrollMain.isHidden = false
+                print ("CUENTABOTON: \(cuentaboton)")
+                print ("BOTONACTUAL: \(botonactual)")
+                let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                
+                backplay (tag: botonactual)
+            }
+            
+        }
+    }
+    
+    public func masSistemaLista() {
+        if Int(cuentaDec) < cuantosSistemas {
+            cuentaDec += 1
+            if let screen = NSScreen.main {
+                let rect = screen.frame
+                let width = rect.size.width
+                let mitadPantalla = Int (width / 2)
+                anchuraPantall = Int(width)
+                cuentaboton = botonactual
+                let trozoamover = (560 * Int(cuentaDec)) - 280
+                let cachito = trozoamover - mitadPantalla
+                SingletonState.shared.myscroller!.contentView.scroll(to: CGPoint(x: cachito, y: 0))
+                let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                backplay (tag: Int(cuentaDec))
+                
+                
             }
         }
-        
+    }
+    
+    public func menosSistemaLista() {
+        if cuentaDec > 1 {
+            cuentaDec -= 1
+            if let screen = NSScreen.main {
+                let rect = screen.frame
+                let width = rect.size.width
+                let mitadPantalla = Int (width / 2)
+                anchuraPantall = Int(width)
+                cuentaboton = botonactual
+                let trozoamover = (560 * Int(cuentaDec)) - 280
+                let cachito = trozoamover - mitadPantalla
+                SingletonState.shared.myscroller!.contentView.scroll(to: CGPoint(x: cachito, y: 0))
+                let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                backplay (tag: Int(cuentaDec))
+            }
+        }
+    }
+    
     public func launchGame(){
         let numero = (SingletonState.shared.mytable?.selectedRow)
         let nombredelarchivo = SingletonState.shared.myJuegosXml![numero!][0].replacingOccurrences(of: rutaApp , with: "")
@@ -483,9 +513,10 @@ extension ViewController {
             SingletonState.shared.mySnapPlayer?.player?.pause()
         }
         print(comando)
+        desactivaBotones()
         Commands.Bash.system("\(comando)")
         comando=""
-        
+        activaBotones()
         let indexSet = NSIndexSet(index: (SingletonState.shared.mytable!.selectedRow + -1))
         let indexSet2 = NSIndexSet(index: SingletonState.shared.mytable!.selectedRow )
         SingletonState.shared.mytable!.selectRowIndexes(indexSet as IndexSet, byExtendingSelection: false)
@@ -510,7 +541,7 @@ extension ViewController {
                 SingletonState.shared.currentViewController?.view.window?.contentViewController = controller
                 controller.view.window?.makeFirstResponder(controller.scrollMain)
                 //snapPlayer.player?.pause()
-                abiertaLista = false
+                abiertaLista = true
                 ventana = "Principal"
                 cuentaboton = botonactual
             }
@@ -581,7 +612,7 @@ extension ViewController {
         if filaenSystem != nil {
             print(arraySystemsBezels[filaenSystem!])
             //Si está en el array es que está activado, sino es quer no lo está
-           bezelsSystem = true
+            bezelsSystem = true
         } else {
             bezelsSystem = false
         }
@@ -651,61 +682,81 @@ extension ViewController {
         //
         return shader
     }
+    
     public func launchGameGrid() {
-        let numero = columna
-        let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
-        let romXml = "\"\(juegosXml[numero][0])\""
-        let rompathabuscar = juegosXml[numero][0]
-        var comandojuego = juegosXml[numero][20]
-        myPlayer.player?.pause()
         
-        if comandojuego.contains("RetroArch") {
-            gameShader(shader: "")
-            noGameOverlay()
-            let defaults = UserDefaults.standard
-            let shaders = defaults.integer(forKey: "Shaders")
-            print("SHADERS \(shaders)")
-            if shaders == 1 {
-                let juegoABuscar = juegosXml[numero][0]
-                let miShader = checkShaders(juego: juegoABuscar)
-                gameShader(shader: miShader)
-            }
-            let marcos = defaults.integer(forKey: "Marcos")
+        
+        let numero = columna
+        let nivel = juegosXml[columna][0]
+        rutaBase = nivel
+        print("TIPO: \(juegosXml[columna][22])")
+        if juegosXml[columna][22] == "Carpeta" {
+            print("SUBO")
+            subirNivel()
+        }
+        else if juegosXml[columna][22] == "Volver" {
+            print("BAJO")
+            bajarNivel()
+        } else if juegosXml[columna][22] != "Carpeta" && juegosXml[columna][22] != "Volver" {
+            let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
+            let romXml = "\"\(juegosXml[numero][0])\""
+            let rompathabuscar = juegosXml[numero][0]
+            var comandojuego = juegosXml[numero][20]
+            myPlayer.player?.pause()
             
-            if marcos == 1 {
-                if checkBezels(juego: juegosXml[numero][0]) == true {
-                    gameOverlay(game: nombredelarchivo)
+            if comandojuego.contains("RetroArch") {
+                gameShader(shader: "")
+                noGameOverlay()
+                let defaults = UserDefaults.standard
+                let shaders = defaults.integer(forKey: "Shaders")
+                print("SHADERS \(shaders)")
+                if shaders == 1 {
+                    let juegoABuscar = juegosXml[numero][0]
+                    let miShader = checkShaders(juego: juegoABuscar)
+                    gameShader(shader: miShader)
+                }
+                let marcos = defaults.integer(forKey: "Marcos")
+                
+                if marcos == 1 {
+                    if checkBezels(juego: juegosXml[numero][0]) == true {
+                        gameOverlay(game: nombredelarchivo)
+                    }
                 }
             }
-        }
-        
-        if comandojuego.contains("citra-qt") {
-            let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
-            if mifilaconfig1 != nil {
-                citraConfig[mifilaconfig1!] = "fullscreen=true"
-            }
-            let mifilaconfig2 = citraConfig.firstIndex(where: {$0.contains("fullscreen\\default=")})
-            if mifilaconfig2 != nil {
-                citraConfig[mifilaconfig2!] = "fullscreen\\default=false"
+            
+            if comandojuego.contains("citra-qt") {
+                let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
+                if mifilaconfig1 != nil {
+                    citraConfig[mifilaconfig1!] = "fullscreen=true"
+                }
+                let mifilaconfig2 = citraConfig.firstIndex(where: {$0.contains("fullscreen\\default=")})
+                if mifilaconfig2 != nil {
+                    citraConfig[mifilaconfig2!] = "fullscreen\\default=false"
+                }
+                
+                writeCitraConfig()
             }
             
-            writeCitraConfig()
+            var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
+            if fila != nil {
+                comandojuego = arrayGamesCores[fila!][1]
+                print("CORE CUSTOM")
+            } else {
+                print("CORE DEFAULT")
+            }
+            
+            var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+            var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
+            print(comando)
+            self.desactivaBotones()
+            Commands.Bash.system("\(comando)")
+            self.activaBotones()
+            comando=""
+            myPlayer.player?.play()
+            print("ENTER")
+            
         }
         
-        var fila = arrayGamesCores.firstIndex(where: {$0[0] == rompathabuscar})
-        if fila != nil {
-            comandojuego = arrayGamesCores[fila!][1]
-            print("CORE CUSTOM")
-        } else {
-            print("CORE DEFAULT")
-        }
-        
-        var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
-        var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
-        print(comando)
-        Commands.Bash.system("\(comando)")
-        comando=""
-        myPlayer.player?.play()
     }
     
     public func openOptions(){
@@ -729,6 +780,7 @@ extension ViewController {
             listado.becomeFirstResponder()
         }
     }
+    
     public func openAjustes(){
         if ventanaModal == "Ninguna"{
             lazy var sheetViewController: NSViewController = {
@@ -739,6 +791,7 @@ extension ViewController {
             SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
         }
     }
+    
     public func abrirNetplay(){
         if ventanaModal == "Ninguna" {
             lazy var sheetViewController: NSViewController = {
@@ -746,10 +799,13 @@ extension ViewController {
                 as! NSViewController
             }()
             SingletonState.shared.currentViewController?.presentAsModalWindow(sheetViewController)
+            myPlayer.player?.pause()
         }
         
     }
+    
     public func actualizaMediaGrid (){
+        print("VIDEO: \(juegosXml[columna][10])")
         myRatingStar.doubleValue = (Double(juegosXml[columna][18]) ?? 0) * 5
         myPlayersLabel.stringValue = juegosXml[columna][17]
         myGameLabel.stringValue = juegosXml[columna][1]
@@ -772,6 +828,52 @@ extension ViewController {
             myConsolaLabel.isHidden = false
         } else {
             myConsolaLabel.isHidden = true
+        }
+        if juegosXml[columna][10] == "" {
+            tieneVideo = false
+            myPlayer.isHidden = true
+        } else {
+            tieneVideo = true
+            myPlayer.isHidden = false
+            myPlayer.player?.play()
+        }
+    }
+    
+    func desactivaBotones (){
+        for controller in GCController.controllers() {
+            controller.extendedGamepad!.dpad.up.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.dpad.down.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.dpad.left.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.dpad.right.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.buttonA.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.buttonB.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.buttonX.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.buttonY.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.leftShoulder.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.rightShoulder.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.leftTrigger.pressedChangedHandler = {(button, value, pressed) in
+            }
+            controller.extendedGamepad!.rightTrigger.pressedChangedHandler = {(button, value, pressed) in
+            }
+        }
+    }
+    
+    func activaBotones () {
+        for controller in GCController.controllers() {
+            configureDPadButtons(controller.extendedGamepad!)
+            configureDiamondButtons(controller.extendedGamepad!)
+            configureShoulderButtons(controller.extendedGamepad!)
+            configureTriggers(controller.extendedGamepad!)
         }
     }
 }
