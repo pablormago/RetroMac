@@ -7,6 +7,15 @@ target 'RetroMac' do
 
   # Pods for RetroMac
 pod 'Commands',        '~> 0.6.0'
-workspace 'RetroMac'	 
+workspace 'RetroMac'
 
+end
+
+# Xcode 26 ya no incluye libarclite: forzamos los Pods a macOS 10.13+ para no necesitarlo
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '10.13'
+    end
+  end
 end

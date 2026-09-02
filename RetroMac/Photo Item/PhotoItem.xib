@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11134" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11134"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="PhotoItem" customModuleProvider="target">
+            <connections>
+                <outlet property="gameLabel" destination="lbl1" id="conn-lbl"/>
+                <outlet property="imageView" destination="img1" id="conn-img"/>
+                <outlet property="view" destination="view1" id="conn-view"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="view1">
+            <rect key="frame" x="0.0" y="0.0" width="415" height="327"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="img1">
+                    <rect key="frame" x="20" y="56" width="375" height="251"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="imgcell1"/>
+                </imageView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lbl1">
+                    <rect key="frame" x="20" y="16" width="375" height="28"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" alignment="center" title="Game" id="lblcell1">
+                        <font key="font" metaFont="systemBold" size="18"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="img1" firstAttribute="top" secondItem="view1" secondAttribute="top" constant="20" id="c1"/>
+                <constraint firstItem="img1" firstAttribute="leading" secondItem="view1" secondAttribute="leading" constant="20" id="c2"/>
+                <constraint firstItem="view1" firstAttribute="trailing" secondItem="img1" secondAttribute="trailing" constant="20" id="c3"/>
+                <constraint firstItem="lbl1" firstAttribute="top" secondItem="img1" secondAttribute="bottom" constant="12" id="c4"/>
+                <constraint firstItem="lbl1" firstAttribute="leading" secondItem="view1" secondAttribute="leading" constant="20" id="c5"/>
+                <constraint firstItem="view1" firstAttribute="trailing" secondItem="lbl1" secondAttribute="trailing" constant="20" id="c6"/>
+                <constraint firstItem="view1" firstAttribute="bottom" secondItem="lbl1" secondAttribute="bottom" constant="16" id="c7"/>
+            </constraints>
+        </customView>
+    </objects>
+</document>

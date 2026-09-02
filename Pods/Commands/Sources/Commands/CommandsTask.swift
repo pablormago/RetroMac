@@ -12,7 +12,8 @@ public extension Commands {
 }
 
 public extension Commands.Task {
-  @discardableResult
+    @available(macOS 10.10, *)
+    @discardableResult
   static func run(_ request: Commands.Request) -> Commands.Result {
     let process = prepare(request)
     
@@ -47,7 +48,8 @@ public extension Commands.Task {
     }
   }
   
-  static func system(_ request: Commands.Request,
+    @available(macOS 10.10, *)
+    static func system(_ request: Commands.Request,
                      output: ((String) -> Void)?,
                      errorOutput: ((String) -> Void)?) {
     let process = prepare(request)
@@ -92,7 +94,8 @@ public extension Commands.Task {
     }
   }
   
-  static func system(_ request: Commands.Request) {
+    @available(macOS 10.10, *)
+    static func system(_ request: Commands.Request) {
     let process = prepare(request)
     do {
       try run(process)
@@ -134,7 +137,8 @@ public extension Commands.Task {
 }
 
 private extension Commands.Task {
-  static func fileHandleData(fileHandle: FileHandle) throws -> String? {
+    @available(macOS 10.10, *)
+    static func fileHandleData(fileHandle: FileHandle) throws -> String? {
     var outputData: Data?
     if #available(macOS 10.15.4, *) {
         outputData = try fileHandle.readDataToEndOfFile()

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -113,15 +113,15 @@
 		279FBD6C277375AA00CD5586 /* entrar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = entrar.png; sourceTree = "<group>"; };
 		279FBD6D277375AA00CD5586 /* borrar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = borrar.png; sourceTree = "<group>"; };
 		279FBD6E277375AA00CD5586 /* sp_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sp_bar.png; sourceTree = "<group>"; };
-		279FBD7827739DAC00CD5586 /* icons.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icons.icns; path = ../../icons.icns; sourceTree = "<group>"; };
+		279FBD7827739DAC00CD5586 /* icons.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icons.icns; sourceTree = "<group>"; };
 		27ACE2FE279350DF00B2BB46 /* logo_retro.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo_retro.jpeg; sourceTree = "<group>"; };
-		27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = "../../../Downloads/SwiftyJSON-master/Source/SwiftyJSON/SwiftyJSON.swift"; sourceTree = "<group>"; };
-		27C3A90427EDB3E100B770F6 /* Ayuda.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Ayuda.pdf; path = ../../../Downloads/Ayuda.pdf; sourceTree = "<group>"; };
+		27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		27C3A90427EDB3E100B770F6 /* Ayuda.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Ayuda.pdf; sourceTree = "<group>"; };
 		27C4A87727D10E800069990A /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		27C4A87A27D121470069990A /* optionsScreenFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = optionsScreenFunctions.swift; sourceTree = "<group>"; };
 		27E6675F275A29B300B50AD6 /* parserSystems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parserSystems.swift; sourceTree = "<group>"; };
 		27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = es_systems_mac.cfg; sourceTree = "<group>"; };
-		27E7A3022768B4B90087C67A /* logo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = logo.jpeg; path = ../../../Downloads/logo.jpeg; sourceTree = "<group>"; };
+		27E7A3022768B4B90087C67A /* logo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpeg; sourceTree = "<group>"; };
 		27E7A3042768E9BA0087C67A /* themes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = themes; sourceTree = "<group>"; };
 		27E7A30627691F740087C67A /* Base */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base; sourceTree = "<group>"; };
 		27E7A3082769C39E0087C67A /* gameListParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gameListParser.swift; sourceTree = "<group>"; };
@@ -172,8 +172,7 @@
 				2718B9D727E3E326000B5DF7 /* PhotoItem.swift */,
 				2718B9D827E3E326000B5DF7 /* PhotoItem.xib */,
 			);
-			name = "Photo Item";
-			path = "../../../Downloads/PhotosApp-master/PhotosApp/Photo Item";
+			path = "Photo Item";
 			sourceTree = "<group>";
 		};
 		2718B9DB27E3ED73000B5DF7 /* Photo Handling */ = {
@@ -182,8 +181,7 @@
 				2718B9DC27E3ED73000B5DF7 /* PhotoHelper.swift */,
 				2718B9DD27E3ED73000B5DF7 /* PhotoInfo.swift */,
 			);
-			name = "Photo Handling";
-			path = "../../../../Downloads/PhotosApp-master/PhotosApp/Photo Handling";
+			path = "Photo Handling";
 			sourceTree = "<group>";
 		};
 		27665BA027B6ED0B00262025 /* MainScreen */ = {
@@ -539,7 +537,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -595,7 +593,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
@@ -613,9 +611,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RetroMac/RetroMac.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = XR75YD5JPH;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = XR75YD5JPH;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = RetroMac/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

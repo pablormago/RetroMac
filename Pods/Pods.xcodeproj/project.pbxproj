@@ -414,7 +414,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MODULEMAP_FILE = "Target Support Files/Commands/Commands.modulemap";
 				PRODUCT_MODULE_NAME = Commands;
 				PRODUCT_NAME = Commands;
@@ -591,7 +591,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MODULEMAP_FILE = "Target Support Files/Commands/Commands.modulemap";
 				PRODUCT_MODULE_NAME = Commands;
 				PRODUCT_NAME = Commands;

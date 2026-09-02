@@ -20,20 +20,23 @@ extension Commands {
 }
 
 public extension Commands.Alias {
-  @discardableResult
+    @available(macOS 10.10, *)
+    @discardableResult
   func run(_ arguments: Commands.Arguments? = nil,
            environment: Commands.ENV? = Commands.ENV.global) -> Commands.Result {
     let request = prepare(arguments, environment: environment)
     return Commands.Task.run(request)
   }
   
-  func system(_ arguments: Commands.Arguments? = nil,
+    @available(macOS 10.10, *)
+    func system(_ arguments: Commands.Arguments? = nil,
               environment: Commands.ENV? = Commands.ENV.global) {
     let request = prepare(arguments, environment: environment)
     Commands.Task.system(request)
   }
   
-  func system(_ arguments: Commands.Arguments? = nil,
+    @available(macOS 10.10, *)
+    func system(_ arguments: Commands.Arguments? = nil,
               environment: Commands.ENV? = Commands.ENV.global,
               output: ((String) -> Void)?,
               errorOutput: ((String) -> Void)?) {

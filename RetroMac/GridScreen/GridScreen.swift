@@ -50,6 +50,7 @@ class GridScreen: NSViewController {
     @IBOutlet weak var ratingStars: NSLevelIndicator!
     @IBOutlet weak var returnBtn: NSButton!
     @IBOutlet weak var lanzarBtn: NSButton!
+
     @IBOutlet weak var settingsBtn: NSButton!
     @IBOutlet weak var netplayBtn: NSButton!
     @IBOutlet weak var menosBtn: NSButton!

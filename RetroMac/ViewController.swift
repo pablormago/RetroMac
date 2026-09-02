@@ -103,27 +103,27 @@ class ViewController: NSViewController {
         if cuentaPrincipio  > 0 && ventana == "Principal" {
             print("ENTER LISTA TRUE")
             let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
-            sistemaActual = button?.Fullname! ?? ""
+            sistemaActual = button?.Fullname ?? ""
             //print(sistemaActual)
             if backIsPlaying == true {
                 self.backPlayer.player?.pause()
                 SingletonState.shared.myBackPlayer?.player?.pause()
             }
-            if Int(button!.numeroJuegos!)! > 0 {
-                self.selecionSistema(button!)
+            if let button = button, let num = Int(button.numeroJuegos ?? "0"), num > 0 {
+                self.selecionSistema(button)
             }
-            
+
         } else {
             if ventana == "Principal" {
                 print("ENTER LISTA FALSE")
                 let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                sistemaActual = button?.Fullname! ?? ""
+                sistemaActual = button?.Fullname ?? ""
                 if backIsPlaying == true {
                     self.backPlayer.player?.pause()
                     SingletonState.shared.myBackPlayer?.player?.pause()
                 }
-                if Int(button!.numeroJuegos!)! > 0 {
-                    self.selecionSistema(button!)
+                if let button = button, let num = Int(button.numeroJuegos ?? "0"), num > 0 {
+                    self.selecionSistema(button)
                 }
             }
         }
@@ -413,12 +413,16 @@ class ViewController: NSViewController {
             //button?.highlight(true)
         }
         
-        let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-        
-        if button!.numeroJuegos == nil {
-            button?.numeroJuegos = "0"
+        guard let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas else {
+            // Sin sistemas cargados (config vacía / sin juegos): evitamos el crash.
+            sistemaLabel.stringValue = ""
+            return
         }
-        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos! ?? "0") Juegos "
+
+        if button.numeroJuegos == nil {
+            button.numeroJuegos = "0"
+        }
+        sistemaLabel.stringValue = "\(button.Fullname ?? ""): \(button.numeroJuegos ?? "0") Juegos "
         
         
         
