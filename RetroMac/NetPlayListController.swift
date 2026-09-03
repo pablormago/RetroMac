@@ -166,7 +166,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
             }
         }
         
-        if micomando.contains("citra-qt") {
+        if micomando.contains("azahar") {
             let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
             if mifilaconfig1 != nil {
                 citraConfig[mifilaconfig1!] = "fullscreen=true"
@@ -184,7 +184,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
             micomando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "%CORE%", with: rutaRetroMac).replacingOccurrences(of: "-L", with: parametros)
             var launchCommand = rutaRetroMac + micomando
             print("COMANDO: \(launchCommand)")
-            Commands.Bash.system("\(launchCommand)")
+            lanzarJuegoYcerrarTerminal(launchCommand)
             launchCommand = ""
         }
         if miRelay == false {
@@ -192,7 +192,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
             micomando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "%CORE%", with: rutaRetroMac).replacingOccurrences(of: "-L", with: parametros)
             var launchCommand = rutaRetroMac + micomando
             print("COMANDO: \(launchCommand)")
-            Commands.Bash.system("\(launchCommand)")
+            lanzarJuegoYcerrarTerminal(launchCommand)
             launchCommand = ""
         }
         

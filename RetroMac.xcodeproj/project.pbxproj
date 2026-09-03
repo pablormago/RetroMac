@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -62,8 +62,10 @@
 		27E7A3032768B4B90087C67A /* logo.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A3022768B4B90087C67A /* logo.jpeg */; };
 		27E7A3052768E9BB0087C67A /* themes in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A3042768E9BA0087C67A /* themes */; };
 		27E7A30727691F740087C67A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A30627691F740087C67A /* Base */; };
+		2F23693E30493F6F00965E2E /* decorations in Resources */ = {isa = PBXBuildFile; fileRef = 2F23693D30493F6F00965E2E /* decorations */; };
 		27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E7A3082769C39E0087C67A /* gameListParser.swift */; };
 		27E7A30B276B57810087C67A /* NoVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A30A276B54240087C67A /* NoVideo.mp4 */; };
+		2F23529130493DE300965E2E /* 7zz in Resources */ = {isa = PBXBuildFile; fileRef = 2F23529030493DE300965E2E /* 7zz */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,13 +126,16 @@
 		27E7A3022768B4B90087C67A /* logo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpeg; sourceTree = "<group>"; };
 		27E7A3042768E9BA0087C67A /* themes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = themes; sourceTree = "<group>"; };
 		27E7A30627691F740087C67A /* Base */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base; sourceTree = "<group>"; };
+		2F23693D30493F6F00965E2E /* decorations */ = {isa = PBXFileReference; lastKnownFileType = folder; path = decorations; sourceTree = "<group>"; };
 		27E7A3082769C39E0087C67A /* gameListParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gameListParser.swift; sourceTree = "<group>"; };
 		27E7A30A276B54240087C67A /* NoVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = NoVideo.mp4; sourceTree = "<group>"; };
 		27E7A30C276BB42D0087C67A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		27E7A30E276BB44D0087C67A /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		2F23529030493DE300965E2E /* 7zz */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = 7zz; sourceTree = "<group>"; };
 		3664690054A650E22D9452DE /* Pods-RetroMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetroMac.debug.xcconfig"; path = "Target Support Files/Pods-RetroMac/Pods-RetroMac.debug.xcconfig"; sourceTree = "<group>"; };
 		38605995764ED1091BD68F2B /* Pods-RetroMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetroMac.release.xcconfig"; path = "Target Support Files/Pods-RetroMac/Pods-RetroMac.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
 
 /* Begin PBXFrameworksBuildPhase section */
 		278980142757DCBE00414985 /* Frameworks */ = {
@@ -215,6 +220,8 @@
 				B4F8AD097037BB2A5D747E55 /* Pods */,
 				278980182757DCBE00414985 /* Products */,
 				278980192757DCBE00414985 /* RetroMac */,
+				2F23529030493DE300965E2E /* 7zz */,
+				2F23693D30493F6F00965E2E /* decorations */,
 			);
 			sourceTree = "<group>";
 		};
@@ -369,7 +376,9 @@
 				27E7A3052768E9BB0087C67A /* themes in Resources */,
 				278A629A278364F80051BA13 /* pdf.png in Resources */,
 				272A6EA9278F5EFE005B0930 /* retro2.jpeg in Resources */,
+				2F23529130493DE300965E2E /* 7zz in Resources */,
 				27E7A30727691F740087C67A /* Base in Resources */,
+				2F23693E30493F6F00965E2E /* decorations in Resources */,
 				272A6EA8278F5EFE005B0930 /* retro.jpeg in Resources */,
 				279FBD56277350C900CD5586 /* down.png in Resources */,
 				2789801F2757DCC000414985 /* Assets.xcassets in Resources */,
@@ -422,9 +431,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RetroMac/Pods-RetroMac-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RetroMac/Pods-RetroMac-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

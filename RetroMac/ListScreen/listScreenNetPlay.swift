@@ -55,8 +55,8 @@ extension ListaViewController {
             }
             print(comando)
             configNetplay()
-            
-            Commands.Bash.system("\(comando)")
+
+            lanzarJuegoYcerrarTerminal(comando)
             comando=""
             
         }

@@ -69,13 +69,13 @@ class SplashController: NSViewController {
         
         ///COMPROBAR QUE EXISTE CONFIG
         ///
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let documentsDirectory = paths[0]
-        let docURL = URL(string: documentsDirectory)!
-        let dataPath = docURL.appendingPathComponent("RetroMac")
-        if !FileManager.default.fileExists(atPath: dataPath.absoluteString) {
+        // Usamos la API de URL de FileManager y `.path` (NO `URL(string:)` + `.absoluteString`,
+        // que fallaba/percent-encodeaba con espacios y generaba rutas mal formadas).
+        let dataPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("RetroMac")
+        if !FileManager.default.fileExists(atPath: dataPath.path) {
             do {
-                try FileManager.default.createDirectory(atPath: dataPath.absoluteString, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(at: dataPath, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 print(error.localizedDescription);
             }
@@ -86,13 +86,15 @@ class SplashController: NSViewController {
         if let pathComponent = url2.appendingPathComponent("/RetroMac/es_systems_mac.cfg") {
             let filePath = pathComponent.path
             let fileManager = FileManager.default
-            if fileManager.fileExists(atPath: filePath) {
+            // Válido = existe, no vacío y parsea (contiene <system>). Un cfg de 0 bytes
+            // o corrupto hacía que la app arrancara sin ningún sistema.
+            if cfgEsValido(filePath) {
                 existeconfig = true
                 print("ESTÁ")
-                
+
             } else {
                 existeconfig = false
-                print("NO ESTÁ")
+                print("NO ESTÁ (o vacío) — recopiando el cfg del bundle")
                 do {
                     guard let sourcePath = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg") else {
                         return
@@ -100,6 +102,10 @@ class SplashController: NSViewController {
                     let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
                     let sourceUrl = URL(fileURLWithPath: sourcePath)
                     let destination = documentsDirectory.appendingPathComponent("RetroMac/es_systems_mac.cfg", isDirectory: false)
+                    // Si existe pero está vacío/corrupto, lo borramos antes de copiar el bueno.
+                    if fileManager.fileExists(atPath: destination.path) {
+                        try? fileManager.removeItem(at: destination)
+                    }
                     try fileManager.copyItem(at: sourceUrl, to: destination)
                 } catch {
                     // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
@@ -162,30 +168,19 @@ class SplashController: NSViewController {
                     
                 }else {
                     existeRetro = false
+                    // Cambio de versión: actualizamos RetroMac.txt, pero NO pisamos el cfg del
+                    // usuario (contiene sus selecciones de core por sistema, escritas por
+                    // escribeSistemas). Solo lo recopiamos del bundle si falta o no es válido.
                     let str = version
                     let filename = getDocumentsDirectory().appendingPathComponent("/Retroarch/RetroMac.txt")
-                    
-                    do {
-                        try str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
-                    } catch {
-                        // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+                    try? str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
+
+                    let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let destination = documentsDirectory.appendingPathComponent("RetroMac/es_systems_mac.cfg", isDirectory: false)
+                    if !cfgEsValido(destination.path), let sourcePath = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg") {
+                        try? FileManager.default.removeItem(at: destination)
+                        try? fileManager.copyItem(at: URL(fileURLWithPath: sourcePath), to: destination)
                     }
-                    do {
-                        guard let sourcePath = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg") else {
-                            return
-                        }
-                        
-                        //try str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
-                        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-                        let sourceUrl = URL(fileURLWithPath: sourcePath)
-                        let destination = documentsDirectory.appendingPathComponent("RetroMac/es_systems_mac.cfg", isDirectory: false)
-                        try FileManager.default.removeItem(at: destination)
-                        try fileManager.copyItem(at: sourceUrl, to: destination)
-                    } catch {
-                        print("ERROR")
-                        // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
-                    }
-                    
                 }
             } else {
                 existeRetro = false
@@ -205,7 +200,7 @@ class SplashController: NSViewController {
         }
         
         
-        let Xemu = "/users/Shared/Xemu"
+        let Xemu = "/Users/Shared/Xemu"
         let myGroup = DispatchGroup()
         myGroup.enter()
         //// Do your task

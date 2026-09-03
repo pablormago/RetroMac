@@ -67,7 +67,7 @@ extension ViewController {
 //                        print ("CUENTABOTON: \(cuentaboton)")
 //                        print ("BOTONACTUAL: \(botonactual)")
 //                        let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-//                        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+//                        sistemaLabel.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
 //                        backplay (tag: botonactual)
 //                    }
 //                }
@@ -92,7 +92,7 @@ extension ViewController {
 //                        print ("CUENTABOTON: \(cuentaboton)")
 //                        print ("BOTONACTUAL: \(botonactual)")
 //                        let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-//                        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+//                        sistemaLabel.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
 //                        backplay (tag: botonactual)
 //                    }
 //
@@ -148,7 +148,7 @@ extension ViewController {
 //                        //                            let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
 //                        //                            sistemaLabel.stringValue = button!.numeroJuegos! + " juegos"
 //                        let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-//                        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+//                        sistemaLabel.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
 //                        backplay (tag: Int(cuentaDec))
 //
 //
@@ -176,7 +176,7 @@ extension ViewController {
 //                        scrollMain.contentView.scroll(to: CGPoint(x: cachito, y: 0))
 //
 //                        let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-//                        sistemaLabel.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+//                        sistemaLabel.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
 //
 //                        backplay (tag: Int(cuentaDec))
 //
@@ -216,7 +216,7 @@ extension ViewController {
                     print ("CUENTABOTON: \(cuentaboton)")
                     print ("BOTONACTUAL: \(botonactual)")
                     let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                    SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                    SingletonState.shared.mySystemLabel?.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
                     
                     backplay (tag: botonactual)
                 }
@@ -238,7 +238,7 @@ extension ViewController {
                 let cachito = trozoamover - mitadPantalla
                 SingletonState.shared.myscroller!.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
                 backplay (tag: Int(cuentaDec))
                 
                 
@@ -268,7 +268,7 @@ extension ViewController {
                     print ("CUENTABOTON: \(cuentaboton)")
                     print ("BOTONACTUAL: \(botonactual)")
                     let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                    SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                    SingletonState.shared.mySystemLabel?.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
                     
                     backplay (tag: botonactual)
                 }
@@ -292,7 +292,7 @@ extension ViewController {
                 let cachito = trozoamover - mitadPantalla
                 SingletonState.shared.myscroller!.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
                 backplay (tag: Int(cuentaDec))
             }
         }

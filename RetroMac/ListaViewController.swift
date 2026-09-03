@@ -344,8 +344,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     override func viewDidAppear() {
         super.viewDidAppear()
         print("LISTA APPEAR")
-        let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
-        self.view.window?.setFrame(mirect, display: true)
+        self.view.window?.maximizarAreaVisible()
         snapShot.wantsLayer = true
         snapShot.layer?.cornerRadius = 10.0
         
@@ -386,8 +385,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         super.viewWillAppear()
         
         //SingletonState.shared.myBackPlayer?.player?.pause()
-        let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
-        self.view.window?.setFrame(mirect, display: true)
+        self.view.window?.maximizarAreaVisible()
         sistemaLabel.stringValue = sistemaActual
         
         
@@ -423,7 +421,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             }
         }
         
-        if comandojuego.contains("citra-qt") {
+        if comandojuego.contains("azahar") {
             let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
             if mifilaconfig1 != nil {
                 citraConfig[mifilaconfig1!] = "fullscreen=true"
@@ -449,7 +447,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             snapPlayer.player?.pause()
         }
         print(comando)
-        Commands.Bash.system("\(comando)")
+        lanzarJuegoYcerrarTerminal(comando)
         comando=""
         
         let indexSet = NSIndexSet(index: (juegosTableView.selectedRow + -1))

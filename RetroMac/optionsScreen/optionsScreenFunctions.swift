@@ -2162,8 +2162,8 @@ extension OptionsViewController {
             }
             print(comando)
             configNetplay()
-            
-            Commands.Bash.system("\(comando)")
+
+            lanzarJuegoYcerrarTerminal(comando)
             comando=""
             
         }

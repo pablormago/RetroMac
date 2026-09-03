@@ -206,17 +206,12 @@ class GridScreen: NSViewController {
     
     override func viewWillAppear() {
         super.viewWillAppear()
-        let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
-        self.view.window?.setFrame(mirect, display: true)
-        
-        
-        
+        self.view.window?.maximizarAreaVisible()
     }
-    
+
     override func viewDidAppear() {
         super.viewDidAppear()
-        let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
-        self.view.window?.setFrame(mirect, display: true)
+        self.view.window?.maximizarAreaVisible()
         let indexPath:IndexPath = IndexPath(item: 0, section: 0)
         var set = Set<IndexPath>()
         set.insert(indexPath)
@@ -473,7 +468,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
                 }
             }
             
-            if comandojuego.contains("citra-qt") {
+            if comandojuego.contains("azahar") {
                 let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
                 if mifilaconfig1 != nil {
                     citraConfig[mifilaconfig1!] = "fullscreen=true"
@@ -497,7 +492,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
             var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
             var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
             print(comando)
-            Commands.Bash.system("\(comando)")
+            lanzarJuegoYcerrarTerminal(comando)
             comando=""
             myPlayer.player?.play()
             

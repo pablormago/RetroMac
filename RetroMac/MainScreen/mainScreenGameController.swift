@@ -215,29 +215,29 @@ extension ViewController {
                     if cuentaPrincipio  > 0  {
                         print("ENTER LISTA TRUE")
                         let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
-                        sistemaActual = button?.Fullname! ?? ""
+                        sistemaActual = button?.Fullname ?? ""
                         //print(sistemaActual)
                         if backIsPlaying == true {
                             self.backPlayer.player?.pause()
                             SingletonState.shared.myBackPlayer?.player?.pause()
                         }
-                        if Int(button!.numeroJuegos!)! > 0 {
-                            self.selecionSistema(button!)
+                        if let button = button, let num = Int(button.numeroJuegos ?? "0"), num > 0 {
+                            self.selecionSistema(button)
                         }
-                        
+
                     } else {
-                        
+
                         print("ENTER LISTA FALSE")
                         let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                        sistemaActual = button?.Fullname! ?? ""
+                        sistemaActual = button?.Fullname ?? ""
                         if backIsPlaying == true {
                             self.backPlayer.player?.pause()
                             SingletonState.shared.myBackPlayer?.player?.pause()
                         }
-                        if Int(button!.numeroJuegos!)! > 0 {
-                            self.selecionSistema(button!)
+                        if let button = button, let num = Int(button.numeroJuegos ?? "0"), num > 0 {
+                            self.selecionSistema(button)
                         }
-                        
+
                     }
                 }
                 
@@ -386,7 +386,7 @@ extension ViewController {
                 print ("CUENTABOTON: \(cuentaboton)")
                 print ("BOTONACTUAL: \(botonactual)")
                 let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
                 
                 backplay (tag: botonactual)
             }
@@ -411,7 +411,7 @@ extension ViewController {
                 print ("CUENTABOTON: \(cuentaboton)")
                 print ("BOTONACTUAL: \(botonactual)")
                 let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
                 
                 backplay (tag: botonactual)
             }
@@ -432,7 +432,7 @@ extension ViewController {
                 let cachito = trozoamover - mitadPantalla
                 SingletonState.shared.myscroller!.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
                 backplay (tag: Int(cuentaDec))
                 
                 
@@ -453,7 +453,7 @@ extension ViewController {
                 let cachito = trozoamover - mitadPantalla
                 SingletonState.shared.myscroller!.contentView.scroll(to: CGPoint(x: cachito, y: 0))
                 let button = self.view.viewWithTag(Int(cuentaDec)) as? ButtonConsolas
-                SingletonState.shared.mySystemLabel?.stringValue = "\(button!.Fullname!): \(button!.numeroJuegos!) Juegos "
+                SingletonState.shared.mySystemLabel?.stringValue = "\(button?.Fullname ?? ""): \(button?.numeroJuegos ?? "0") Juegos"
                 backplay (tag: Int(cuentaDec))
             }
         }
@@ -486,7 +486,7 @@ extension ViewController {
             }
         }
         
-        if comandojuego.contains("citra-qt") {
+        if comandojuego.contains("azahar") {
             let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
             if mifilaconfig1 != nil {
                 citraConfig[mifilaconfig1!] = "fullscreen=true"
@@ -514,7 +514,7 @@ extension ViewController {
         }
         print(comando)
         desactivaBotones()
-        Commands.Bash.system("\(comando)")
+        lanzarJuegoYcerrarTerminal(comando)
         comando=""
         activaBotones()
         let indexSet = NSIndexSet(index: (SingletonState.shared.mytable!.selectedRow + -1))
@@ -574,27 +574,27 @@ extension ViewController {
         if cuentaPrincipio  > 0 && ventana == "Principal" {
             print("ENTER LISTA TRUE")
             let button = self.view.viewWithTag(Int(self.cuentaDec)) as? ButtonConsolas
-            sistemaActual = button?.Fullname! ?? ""
+            sistemaActual = button?.Fullname ?? ""
             //print(sistemaActual)
             if backIsPlaying == true {
                 self.backPlayer.player?.pause()
                 SingletonState.shared.myBackPlayer?.player?.pause()
             }
-            if Int(button!.numeroJuegos!)! > 0 {
-                self.selecionSistema(button!)
+            if let button = button, let num = Int(button.numeroJuegos ?? "0"), num > 0 {
+                self.selecionSistema(button)
             }
-            
+
         } else {
             if ventana == "Principal" {
                 print("ENTER LISTA FALSE")
                 let button = self.view.viewWithTag(Int(botonactual)) as? ButtonConsolas
-                sistemaActual = button?.Fullname! ?? ""
+                sistemaActual = button?.Fullname ?? ""
                 if backIsPlaying == true {
                     self.backPlayer.player?.pause()
                     SingletonState.shared.myBackPlayer?.player?.pause()
                 }
-                if Int(button!.numeroJuegos!)! > 0 {
-                    self.selecionSistema(button!)
+                if let button = button, let num = Int(button.numeroJuegos ?? "0"), num > 0 {
+                    self.selecionSistema(button)
                 }
             }
         }
@@ -724,7 +724,7 @@ extension ViewController {
                 }
             }
             
-            if comandojuego.contains("citra-qt") {
+            if comandojuego.contains("azahar") {
                 let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
                 if mifilaconfig1 != nil {
                     citraConfig[mifilaconfig1!] = "fullscreen=true"
@@ -749,7 +749,7 @@ extension ViewController {
             var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
             print(comando)
             self.desactivaBotones()
-            Commands.Bash.system("\(comando)")
+            lanzarJuegoYcerrarTerminal(comando)
             self.activaBotones()
             comando=""
             myPlayer.player?.play()

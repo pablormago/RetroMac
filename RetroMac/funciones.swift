@@ -1058,12 +1058,15 @@ func gameOverlay(game: String) {
 func noGameOverlay() {
     
     
+    // Ruta del shader relativa al usuario actual (antes hardcodeada a /Users/pablojimenez/...).
+    let shaderPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        + "/RetroMac/shaders/zfast_crt.glsl"
     var myOverlayGame = "overlays = 1" + "\n"
     myOverlayGame = myOverlayGame + "overlay0_overlay = " + "\"\" \n"
     myOverlayGame = myOverlayGame + "overlay0_full_screen = true" + "\n"
     myOverlayGame = myOverlayGame + "overlay0_descs = 0" + "\n"
     myOverlayGame = myOverlayGame + "shaders = 1" + "\n"
-    myOverlayGame = myOverlayGame + "video_shader = \"/Users/pablojimenez/Documents/RetroMac/shaders/zfast_crt.glsl\"" + "\n"
+    myOverlayGame = myOverlayGame + "video_shader = \"\(shaderPath)\"" + "\n"
     myOverlayGame = myOverlayGame + "filter_linear0 = true"
     
     
@@ -1214,7 +1217,7 @@ func shadersList () {
 
 func readCitraConfig () {
     let home = FileManager.default.homeDirectoryForCurrentUser
-    let fileUrl = home.appendingPathComponent(".config/citra-emu/qt-config.ini")
+    let fileUrl = home.appendingPathComponent("Library/Application Support/Azahar/config/qt-config.ini")
     let fileManager = FileManager.default
     if fileManager.fileExists(atPath: fileUrl.path) {
         // make sure the file exists
@@ -1256,24 +1259,169 @@ func readCitraConfig () {
             bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
         }
     } else {
-        let home = Bundle.main.bundlePath
-        let baseCitra = "cp -r " + home +  "/Contents/Resources/Base/.config/citra-emu/ ~/.config/citra-emu/"
-        Commands.Bash.system("\(baseCitra)")
-        readCitraConfig()
+        // Azahar aún no ha creado su qt-config.ini (nunca se ha lanzado). No copiamos
+        // ninguna config de Citra (evita bucle y clobber); Azahar la crea en su 1er arranque.
+        citraConfig = []
     }
 }
 
 func writeCitraConfig(){
-    
+    // Si no leímos config (Azahar aún no la creó), NO escribimos: evita dejar un
+    // qt-config.ini vacío que pisaría el de Azahar.
+    guard !citraConfig.isEmpty else { return }
     var mytext = String()
     mytext = ""
     for line in citraConfig {
         mytext = mytext + line + "\n"
     }
     let home = FileManager.default.homeDirectoryForCurrentUser
-    let fileUrl = home.appendingPathComponent(".config/citra-emu/qt-config.ini")
-    try! mytext.write(to: fileUrl, atomically: false, encoding: .utf8)
-    
+    let fileUrl = home.appendingPathComponent("Library/Application Support/Azahar/config/qt-config.ini")
+    try? mytext.write(to: fileUrl, atomically: false, encoding: .utf8)
+}
+
+/// Devuelve el conjunto de cores realmente referenciados por el cfg de sistemas
+/// (los `core="…"` de los `<emu>` + los `…_libretro.dylib` de los `<command>`), deduplicado.
+/// Así se descargan solo los cores que la app puede ofrecer/lanzar, no 200 hardcodeados.
+/// El cfg de sistemas es válido si existe, no está vacío y parsea (contiene <system>).
+func cfgEsValido(_ path: String) -> Bool {
+    guard let s = try? String(contentsOfFile: path, encoding: .utf8), !s.isEmpty else { return false }
+    return s.contains("<system>")
+}
+
+func coresDelCfg() -> [String] {
+    let docs = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+    let rutaUsuario = docs + "/RetroMac/es_systems_mac.cfg"
+    var contenido = (try? String(contentsOfFile: rutaUsuario, encoding: .utf8)) ?? ""
+    if contenido.isEmpty, let bundlePath = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg") {
+        contenido = (try? String(contentsOfFile: bundlePath, encoding: .utf8)) ?? ""
+    }
+    if contenido.isEmpty { return [] }
+
+    var cores = Set<String>()
+    let rango = NSRange(contenido.startIndex..., in: contenido)
+    func recoger(_ patron: String) {
+        guard let re = try? NSRegularExpression(pattern: patron) else { return }
+        re.enumerateMatches(in: contenido, range: rango) { m, _, _ in
+            if let m = m, let r = Range(m.range(at: 1), in: contenido) {
+                cores.insert(String(contenido[r]))
+            }
+        }
+    }
+    recoger("core=\"([^\"]+)\"")              // <emu core="...">
+    recoger("([A-Za-z0-9_]+)_libretro\\.dylib") // ..._libretro.dylib de <command>
+    return Array(cores).sorted()
+}
+
+// MARK: - Descarga desde fuentes OFICIALES (GitHub Releases API + Dolphin)
+
+/// GET síncrono con User-Agent (la API de GitHub exige User-Agent o devuelve 403).
+func httpGETsync(_ urlStr: String) -> Data? {
+    guard let url = URL(string: urlStr) else { return nil }
+    var req = URLRequest(url: url)
+    req.setValue("RetroMac", forHTTPHeaderField: "User-Agent")
+    req.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+    req.timeoutInterval = 30
+    var resultado: Data?
+    let sem = DispatchSemaphore(value: 0)
+    URLSession.shared.dataTask(with: req) { data, _, _ in resultado = data; sem.signal() }.resume()
+    _ = sem.wait(timeout: .now() + 35)
+    return resultado
+}
+
+/// URL de descarga del asset de macOS del último release de un repo de GitHub.
+func githubUltimoAsset(repo: String, contiene patron: String) -> String? {
+    guard let data = httpGETsync("https://api.github.com/repos/\(repo)/releases/latest"),
+          let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let assets = json["assets"] as? [[String: Any]] else { return nil }
+    for a in assets {
+        if let name = a["name"] as? String, name.contains(patron),
+           let url = a["browser_download_url"] as? String { return url }
+    }
+    return nil
+}
+
+/// URL del .dmg universal de Dolphin desde su API de builds propia.
+func dolphinUltimoDmg() -> String? {
+    guard let data = httpGETsync("https://dolphin-emu.org/update/latest/beta"),
+          let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let arts = json["artifacts"] as? [[String: Any]] else { return nil }
+    if let mac = arts.first(where: { ($0["system"] as? String)?.contains("macOS") ?? false }),
+       let url = mac["url"] as? String { return url }
+    return arts.first?["url"] as? String
+}
+
+/// Última versión STABLE de RetroArch del buildbot (fallback a 1.22.2 si no se puede resolver).
+func retroArchStableVersion() -> String {
+    guard let data = httpGETsync("https://buildbot.libretro.com/stable/"),
+          let html = String(data: data, encoding: .utf8),
+          let re = try? NSRegularExpression(pattern: "(\\d+)\\.(\\d+)\\.(\\d+)/") else { return "1.22.2" }
+    var mejor = (0, 0, 0)
+    re.enumerateMatches(in: html, range: NSRange(html.startIndex..., in: html)) { m, _, _ in
+        guard let m = m,
+              let r1 = Range(m.range(at: 1), in: html),
+              let r2 = Range(m.range(at: 2), in: html),
+              let r3 = Range(m.range(at: 3), in: html) else { return }
+        let v = (Int(html[r1]) ?? 0, Int(html[r2]) ?? 0, Int(html[r3]) ?? 0)
+        if v > mejor { mejor = v }
+    }
+    return mejor == (0, 0, 0) ? "1.22.2" : "\(mejor.0).\(mejor.1).\(mejor.2)"
+}
+
+enum FormatoDescarga { case zip, tarxz, sevenz, dmg }
+
+/// Si tras extraer la `.app` quedó anidada dentro de una única carpeta wrapper
+/// (p.ej. `azahar-macos-universal-2126.0/Azahar.app`), sube su contenido a `destino`
+/// para que quede `destino/Azahar.app` (como espera el cfg y el chequeo de reparación).
+func aplanarSiAnidado(_ destino: String) {
+    let fm = FileManager.default
+    guard let items = try? fm.contentsOfDirectory(atPath: destino) else { return }
+    let visibles = items.filter { !$0.hasPrefix(".") }
+    if visibles.contains(where: { $0.hasSuffix(".app") }) { return }   // ya hay .app directa
+    let subdirs = visibles.filter {
+        var d: ObjCBool = false
+        return fm.fileExists(atPath: "\(destino)/\($0)", isDirectory: &d) && d.boolValue
+    }
+    guard subdirs.count == 1 else { return }                            // solo si hay un único wrapper
+    let wrapper = "\(destino)/\(subdirs[0])"
+    for hijo in (try? fm.contentsOfDirectory(atPath: wrapper)) ?? [] {
+        try? fm.moveItem(atPath: "\(wrapper)/\(hijo)", toPath: "\(destino)/\(hijo)")
+    }
+    try? fm.removeItem(atPath: wrapper)
+}
+
+/// Descarga `url` a Descargas y la extrae en `destino` según el formato.
+/// .7z usa el binario `7zz` empaquetado en Contents/Resources (macOS no trae 7z).
+func descargarYExtraer(url: String, formato: FormatoDescarga, destino: String, etiquetaTexto: String) {
+    DispatchQueue.main.sync { etiqueta.stringValue = etiquetaTexto }
+    let rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+    let descargas = "\(rutaApp)/Emuladores_Mac/Descargas"
+    let fichero = (url as NSString).lastPathComponent
+    let archivo = "\(descargas)/\(fichero)"
+    Commands.Bash.system("mkdir -p \"\(descargas)\" && mkdir -p \"\(destino)\" && cd \"\(descargas)\" && curl -L -f --retry 3 --retry-delay 2 -O \"\(url)\"")
+    let sevenZip = Bundle.main.bundlePath + "/Contents/Resources/7zz"
+    switch formato {
+    case .zip:
+        Commands.Bash.system("unzip -o \"\(archivo)\" -d \"\(destino)\"")
+    case .tarxz:
+        Commands.Bash.system("tar -xf \"\(archivo)\" -C \"\(destino)\"")
+    case .sevenz:
+        // chmod +x por si el empaquetado quitó el bit de ejecución al binario 7zz.
+        Commands.Bash.system("chmod +x \"\(sevenZip)\" 2>/dev/null; \"\(sevenZip)\" x \"\(archivo)\" -o\"\(destino)\" -y")
+    case .dmg:
+        let punto = "/Volumes/RetroMacDMG"
+        Commands.Bash.system("hdiutil detach \"\(punto)\" 2>/dev/null; hdiutil attach \"\(archivo)\" -nobrowse -mountpoint \"\(punto)\" && cp -R \"\(punto)\"/*.app \"\(destino)/\" && hdiutil detach \"\(punto)\"")
+    }
+    // Muchos archivos traen una carpeta wrapper versionada: subimos la .app a `destino`.
+    aplanarSiAnidado(destino)
+    // Verificación mínima: avisamos si el destino quedó sin ninguna .app.
+    if (try? FileManager.default.contentsOfDirectory(atPath: destino))?.contains(where: { $0.hasSuffix(".app") }) != true {
+        print("⚠️ descarga/extracción incompleta en \(destino) (\(fichero))")
+    }
+}
+
+/// ¿La carpeta contiene alguna .app? Se usa para bajar solo los emuladores que falten.
+func carpetaTieneApp(_ ruta: String) -> Bool {
+    return (try? FileManager.default.contentsOfDirectory(atPath: ruta))?.contains { $0.hasSuffix(".app") } ?? false
 }
 
 func downloadEmulators() {
@@ -1281,68 +1429,88 @@ func downloadEmulators() {
     var rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
     var isDir:ObjCBool = true
     var theProjectPath = "\(rutaApp)/Emuladores_Mac/"
-    if !FileManager.default.fileExists(atPath: theProjectPath, isDirectory: &isDir) {
-        print("No Está")
+        // Auto-reparación: ya NO es todo-o-nada. Creamos las carpetas y luego bajamos SOLO
+        // lo que falte (RetroArch, cada core, cada emulador, bezels).
+        _ = theProjectPath; _ = isDir
         DispatchQueue.main.sync {
-            etiqueta.stringValue = "Descargando RetroArch y los Cores"
+            etiqueta.stringValue = "Comprobando emuladores y cores…"
         }
-            var comando = "cd \(rutaApp) && mkdir -p Emuladores_Mac && cd \(rutaApp)/Emuladores_Mac && mkdir -p Descargas && mkdir -p Retroarch && mkdir -p Citra && mkdir -p cores && mkdir -p Dolphin && mkdir -p Pcsx2 && mkdir -p RPCS3 && mkdir -p Xemu"
+        var comando = "cd \(rutaApp) && mkdir -p Emuladores_Mac && cd \(rutaApp)/Emuladores_Mac && mkdir -p Descargas && mkdir -p Retroarch && mkdir -p Azahar && mkdir -p cores && mkdir -p Dolphin && mkdir -p Pcsx2 && mkdir -p RPCS3 && mkdir -p Xemu"
         Commands.Bash.system("\(comando)")
-        var sufijo = "_libretro.dylib.zip"
-        arrayCoresRetroArch = ["81","2048","a5200","arduous","atari800","bk","blastem","bluemsx","bsnes2014_accuracy","bsnes2014_balanced","bsnes2014_performance","bsnes_cplusplus98","bsnes_hd_beta","bsnes","bsnes_mercury_accuracy","bsnes_mercury_balanced","bsnes_mercury_performance","cannonball","cap32","cdi2015","chailove","craft","crocods","daphne","desmume2015","desmume","dinothawr","dolphin","dosbox_core","dosbox_pure","dosbox_svn","duckstation","easyrpg","ecwolf","fbalpha2012_cps1","fbalpha2012_cps2","fbalpha2012_cps3","fbalpha2012","fbalpha2012_neogeo","fbneo","fceumm","ffmpeg","fixgb","flycast","fmsx","freechaf","freeintv","frodo","fuse","gambatte","gearboy","gearcoleco","gearsystem","genesis_plus_gx","genesis_plus_gx_wide","gme","gong","gpsp","gw","handy","hatari","higan_sfc","ishiiruka","jaxe","jumpnbump","lowresnx","lutro","mame2000","mame2003","mame2003_plus","mame2010","mame","mednafen_gba","mednafen_lynx","mednafen_ngp","mednafen_pce_fast","mednafen_pce","mednafen_pcfx","mednafen_psx_hw","mednafen_psx","mednafen_saturn","mednafen_snes","mednafen_supergrafx","mednafen_vb","mednafen_wswan","melonds","mesen-s","mesen","mgba","minivmac","mrboom","mu","nekop2","neocd","nestopia","np2kai","nxengine","o2em","oberon","openlara","opera","parallel_n64","pcsx_rearmed","picodrive","play","pocketcdg","pokemini","potator","ppsspp","prboom","prosystem","puae","px68k","quasi88","quicknes","race","reminiscence","remotejoy","retro8","same_cdi","sameboy","sameduck","scummvm","smsplus","snes9x2002","snes9x2005","snes9x2005_plus","snes9x2010","snes9x","squirreljme","stella2014","stella","superbroswar","swanstation","test","tgbdual","theodore","thepowdertoy","tic80","tyrquake","uzem","vaporspec","vba_next","vbam","vecx","vemulator","vice_x64","vice_x64sc","vice_x128","vice_xcbm2","vice_xcbm5x0","vice_xpet","vice_xplus4","vice_xscpu64","vice_xvic","virtualjaguar","vitaquake2-rogue","vitaquake2-xatrix","vitaquake2-zaero","vitaquake2","wasm4","x1","xrick","yabause"]
+        let sufijo = "_libretro.dylib.zip"
+        let coresDir = "\(rutaApp)/Emuladores_Mac/cores"
+        // Cores derivados del cfg (los que la app puede ofrecer/lanzar). Si el cfg no se pudo
+        // leer, caemos a la lista completa hardcodeada como red de seguridad.
+        arrayCoresRetroArch = coresDelCfg()
+        if arrayCoresRetroArch.isEmpty { arrayCoresRetroArch = ["81","2048","a5200","arduous","atari800","bk","blastem","bluemsx","bsnes2014_accuracy","bsnes2014_balanced","bsnes2014_performance","bsnes_cplusplus98","bsnes_hd_beta","bsnes","bsnes_mercury_accuracy","bsnes_mercury_balanced","bsnes_mercury_performance","cannonball","cap32","cdi2015","chailove","craft","crocods","daphne","desmume2015","desmume","dinothawr","dolphin","dosbox_core","dosbox_pure","dosbox_svn","duckstation","easyrpg","ecwolf","fbalpha2012_cps1","fbalpha2012_cps2","fbalpha2012_cps3","fbalpha2012","fbalpha2012_neogeo","fbneo","fceumm","ffmpeg","fixgb","flycast","fmsx","freechaf","freeintv","frodo","fuse","gambatte","gearboy","gearcoleco","gearsystem","genesis_plus_gx","genesis_plus_gx_wide","gme","gong","gpsp","gw","handy","hatari","higan_sfc","ishiiruka","jaxe","jumpnbump","lowresnx","lutro","mame2000","mame2003","mame2003_plus","mame2010","mame","mednafen_gba","mednafen_lynx","mednafen_ngp","mednafen_pce_fast","mednafen_pce","mednafen_pcfx","mednafen_psx_hw","mednafen_psx","mednafen_saturn","mednafen_snes","mednafen_supergrafx","mednafen_vb","mednafen_wswan","melonds","mesen-s","mesen","mgba","minivmac","mrboom","mu","nekop2","neocd","nestopia","np2kai","nxengine","o2em","oberon","openlara","opera","parallel_n64","pcsx_rearmed","picodrive","play","pocketcdg","pokemini","potator","ppsspp","prboom","prosystem","puae","px68k","quasi88","quicknes","race","reminiscence","remotejoy","retro8","same_cdi","sameboy","sameduck","scummvm","smsplus","snes9x2002","snes9x2005","snes9x2005_plus","snes9x2010","snes9x","squirreljme","stella2014","stella","superbroswar","swanstation","test","tgbdual","theodore","thepowdertoy","tic80","tyrquake","uzem","vaporspec","vba_next","vbam","vecx","vemulator","vice_x64","vice_x64sc","vice_x128","vice_xcbm2","vice_xcbm5x0","vice_xpet","vice_xplus4","vice_xscpu64","vice_xvic","virtualjaguar","vitaquake2-rogue","vitaquake2-xatrix","vitaquake2-zaero","vitaquake2","wasm4","x1","xrick","yabause"] }
         
-        if arquitectura == "X86" {
-            print("X86")
-            comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O http://buildbot.libretro.com/nightly/apple/osx/x86_64/RetroArch.dmg && hdiutil attach RetroArch.dmg && cd /Volumes/RetroArch && cp -r RetroArch.app  \(rutaApp)/Emuladores_Mac/Retroarch/RetroArch.app && hdiutil detach /Volumes/RetroArch"
-            Commands.Bash.system("\(comando)")
-            for micore in arrayCoresRetroArch {
-                comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O http://buildbot.libretro.com/nightly/apple/osx/x86_64/latest/\(micore)\(sufijo) "
-                Commands.Bash.system("\(comando)")
-            }
-        }else {
-            print("ARM")
-            comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O https://buildbot.libretro.com/nightly/apple/osx/universal/RetroArch_Metal.dmg && hdiutil attach RetroArch_Metal.dmg && cd /Volumes/RetroArch && cp -r RetroArch.app  \(rutaApp)/Emuladores_Mac/Retroarch/RetroArch.app && hdiutil detach /Volumes/RetroArch"
-            Commands.Bash.system("\(comando)")
-            for micore in arrayCoresRetroArch {
-                comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O http://http://buildbot.libretro.com/nightly/apple/osx/arm64/latest/\(micore)\(sufijo) "
-                Commands.Bash.system("\(comando)")
-            }
+        // RetroArch: STABLE universal, solo si falta (auto-reparación).
+        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Retroarch") {
+            let versionRA = retroArchStableVersion()
+            descargarYExtraer(url: "https://buildbot.libretro.com/stable/\(versionRA)/apple/osx/universal/RetroArch_Metal.dmg",
+                              formato: .dmg, destino: "\(rutaApp)/Emuladores_Mac/Retroarch",
+                              etiquetaTexto: "Descargando RetroArch \(versionRA)")
         }
-             comando = "hdiutil detach /Volumes/RetroArch"
-        Commands.Bash.system("\(comando)")
-        DispatchQueue.main.sync {
-            etiqueta.stringValue = "Extrayendo Cores"
-        }
+
+        // Cores: solo los que falten, con reintentos (bajar+extraer por core).
+        let archCore = (arquitectura == "X86") ? "x86_64" : "arm64"
+        DispatchQueue.main.sync { etiqueta.stringValue = "Comprobando cores…" }
         for micore in arrayCoresRetroArch {
-            comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/\(micore)_libretro.dylib.zip -d \(rutaApp)/Emuladores_Mac/cores"
+            if FileManager.default.fileExists(atPath: "\(coresDir)/\(micore)_libretro.dylib") { continue }
+            comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -L -f --retry 3 --retry-delay 2 -O https://buildbot.libretro.com/nightly/apple/osx/\(archCore)/latest/\(micore)\(sufijo)"
+            Commands.Bash.system("\(comando)")
+            comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/\(micore)_libretro.dylib.zip -d \(coresDir)"
             Commands.Bash.system("\(comando)")
         }
         
-        //MARK: Descarga de los demás emuladores
+        //MARK: Emuladores desde fuentes OFICIALES (GitHub Releases API + Dolphin)
         DispatchQueue.main.sync {
-            etiqueta.stringValue = "Descargando Emuladores y Bezels"
+            etiqueta.stringValue = "Descargando Emuladores"
         }
-            comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -O https://dl.dropboxusercontent.com/s/idh4xs33q7lirgd/citra.zip && curl -O https://dl.dropboxusercontent.com/s/kt6xtt8659fnm6w/xemu.zip && curl -O https://dl.dropboxusercontent.com/s/4sbah891m0lyt1q/RPCS3.zip && curl -O https://dl.dropboxusercontent.com/s/j97h97knmox69lp/PCSX2.zip && curl -O https://dl.dropboxusercontent.com/s/4agfvkrgsfd9tr9/Dolphin.zip && curl -O https://dl.dropboxusercontent.com/s/ia1zw7uzdkxcy5k/decorations.zip"
-        Commands.Bash.system("\(comando)")
-        
-        //MARK: Descomprimir emuladores en Emuladores_Mac
-        DispatchQueue.main.sync {
-            etiqueta.stringValue = "Extrayendo todo..."
+        // Emuladores oficiales: cada uno SOLO si falta (auto-reparación).
+        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Xemu"),
+           let u = githubUltimoAsset(repo: "xemu-project/xemu", contiene: "macos-universal.zip") {
+            descargarYExtraer(url: u, formato: .zip, destino: "\(rutaApp)/Emuladores_Mac/Xemu", etiquetaTexto: "Descargando xemu")
         }
-        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/citra.zip -d \(rutaApp)/Emuladores_Mac/Citra"
-        Commands.Bash.system("\(comando)")
-        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/xemu.zip -d \(rutaApp)/Emuladores_Mac/Xemu"
-        Commands.Bash.system("\(comando)")
-        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/RPCS3.zip -d \(rutaApp)/Emuladores_Mac/RPCS3"
-        Commands.Bash.system("\(comando)")
-        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/PCSX2.zip -d \(rutaApp)/Emuladores_Mac/Pcsx2"
-        Commands.Bash.system("\(comando)")
-        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/Dolphin.zip -d \(rutaApp)/Emuladores_Mac/Dolphin"
-        Commands.Bash.system("\(comando)")
-        comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/decorations.zip -d \(rutaApp)"
-        Commands.Bash.system("\(comando)")
-    }
-    
+        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Pcsx2"),
+           let u = githubUltimoAsset(repo: "PCSX2/pcsx2", contiene: "macos-Qt.tar.xz") {
+            descargarYExtraer(url: u, formato: .tarxz, destino: "\(rutaApp)/Emuladores_Mac/Pcsx2", etiquetaTexto: "Descargando PCSX2")
+        }
+        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/RPCS3"),
+           let u = githubUltimoAsset(repo: "RPCS3/rpcs3-binaries-mac", contiene: "_macos.7z") {
+            descargarYExtraer(url: u, formato: .sevenz, destino: "\(rutaApp)/Emuladores_Mac/RPCS3", etiquetaTexto: "Descargando RPCS3")
+        }
+        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Dolphin"),
+           let u = dolphinUltimoDmg() {
+            descargarYExtraer(url: u, formato: .dmg, destino: "\(rutaApp)/Emuladores_Mac/Dolphin", etiquetaTexto: "Descargando Dolphin")
+        }
+        // Azahar (sucesor de Citra, 3DS) — universal .zip → Emuladores_Mac/Azahar/
+        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Azahar"),
+           let u = githubUltimoAsset(repo: "azahar-emu/azahar", contiene: "macos-universal") {
+            descargarYExtraer(url: u, formato: .zip, destino: "\(rutaApp)/Emuladores_Mac/Azahar", etiquetaTexto: "Descargando Azahar (3DS)")
+        }
+        // (cfg del 3DS, fullscreen y config ya migrados a Azahar: Azahar.app/azahar +
+        //  ~/Library/Application Support/Azahar/config/qt-config.ini + contains("azahar")).
+
+        //MARK: Bezels desde el bundle (sin Dropbox), solo si aún no están.
+        if !FileManager.default.fileExists(atPath: "\(rutaApp)/decorations") {
+            let decoracionesBundle = Bundle.main.bundlePath + "/Contents/Resources/decorations"
+            if FileManager.default.fileExists(atPath: decoracionesBundle) {
+                DispatchQueue.main.sync { etiqueta.stringValue = "Instalando Bezels" }
+                Commands.Bash.system("cp -R \"\(decoracionesBundle)\" \"\(rutaApp)/decorations\"")
+            } else {
+                print("⚠️ No hay 'decorations' en el bundle; los bezels no se instalarán.")
+            }
+        }
+
+        // Limpieza: si todos los emuladores quedaron instalados, borramos Descargas
+        // (zips/dmg/7z ya extraídos, ~cientos de MB). Si falta alguno, la conservamos
+        // para no re-descargar de cero en el próximo intento.
+        let emus = ["Retroarch", "Xemu", "Pcsx2", "RPCS3", "Dolphin", "Azahar"]
+        let todoInstalado = emus.allSatisfy { carpetaTieneApp("\(rutaApp)/Emuladores_Mac/\($0)") }
+        if todoInstalado {
+            try? FileManager.default.removeItem(atPath: "\(rutaApp)/Emuladores_Mac/Descargas")
+        }
 }
 
 func CPUType1() ->Int {

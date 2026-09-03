@@ -216,9 +216,8 @@ class ViewController: NSViewController {
         }
         
         
-        let mirect = NSRect(x: 0, y: 0, width: ancho, height: alto)
-        self.view.window?.setFrame(mirect, display: true)
-        
+        self.view.window?.maximizarAreaVisible()
+
         print("DID APPEAR")
         
         
@@ -226,7 +225,7 @@ class ViewController: NSViewController {
 
         
         if let screen = NSScreen.main {
-            let rect = screen.frame
+            let rect = screen.visibleFrame
             let width = rect.size.width
             let mitadPantalla = Int (width / 2)
             anchuraPantall = Int(width)
@@ -324,7 +323,7 @@ class ViewController: NSViewController {
         
         ///Fin carga desde allTheGames
         if let screen = NSScreen.main {
-            let rect = screen.frame
+            let rect = screen.visibleFrame
             let width = rect.size.width
             let height = rect.size.height
             ancho = width
@@ -389,7 +388,7 @@ class ViewController: NSViewController {
         
         //self.view.window?.styleMask = [.titled,.closable, .fullSizeContentView, .resizable]
         if let screen = NSScreen.main {
-            let rect = screen.frame
+            let rect = screen.visibleFrame
             let width = rect.size.width
             let mitadPantalla = Int (width / 2)
             anchuraPantall = Int(width)
@@ -440,7 +439,7 @@ class ViewController: NSViewController {
         //GCController.stopWirelessControllerDiscovery()
         //NotificationCenter.default.removeObserver(self, name: .GCControllerDidConnect, object: nil)
         
-        if Int(sender.numeroJuegos!)! > 0 {
+        if let num = Int(sender.numeroJuegos ?? "0"), num > 0 {
             //NotificationCenter.default.removeObserver(self)
             backStop()
             if backIsPlaying == true {
@@ -527,17 +526,51 @@ func copiarBase(){
     
     print("COPIANDO BASE")
     let home = Bundle.main.bundlePath
-    //let Xemu = "cp -r " + APPpathStr +  "/BaseMac/Shared/Xemu  /Users/Shared/Xemu"
-    let baseXemu =  "cp -r " + home +  "/Contents/Resources/Base/Shared/Xemu /Users/Shared/Xemu"
-    let baseRetro = "cp -r " + home +  "/Contents/Resources/Base/Documents/Retroarch  ~/Documents"
-    let baseAppSupport = "cp -r " + home +  "/Contents/Resources/Base/ApplicationSupport/ ~/'Library/Application Support'"
-    
-    Commands.Bash.system("\(baseXemu)")
-    Commands.Bash.system("\(baseRetro)")
-    Commands.Bash.system("\(baseAppSupport)")
-    let baseCitra = "cp -r " + home +  "/Contents/Resources/Base/.config/citra-emu ~/.config/citra-emu"
-    //Commands.Bash.system("\(baseCitra)")
-    
+    let fm = FileManager.default
+    let userHome = fm.homeDirectoryForCurrentUser.path
+    // Rutas del bundle entrecomilladas por si el path contiene espacios.
+    // Se mantiene `cp -r` porque conserva la semántica de *merge* que necesita la Base
+    // (sobre todo al fusionar en ~/Library/Application Support, que ya existe).
+    let baseXemu       = "cp -r \"\(home)/Contents/Resources/Base/Shared/Xemu\" /Users/Shared/Xemu"
+    let baseRetro      = "cp -r \"\(home)/Contents/Resources/Base/Documents/Retroarch\" ~/Documents"
+    let baseAppSupport = "cp -r \"\(home)/Contents/Resources/Base/ApplicationSupport/\" ~/'Library/Application Support'"
+
+    // Reparación incremental: copiamos SOLO el bloque que falte (no todo-o-nada).
+    if !fm.fileExists(atPath: "/Users/Shared/Xemu") {
+        Commands.Bash.system("\(baseXemu)")
+    }
+    if !fm.fileExists(atPath: "\(userHome)/Documents/Retroarch") {
+        Commands.Bash.system("\(baseRetro)")
+    }
+    if !fm.fileExists(atPath: "\(userHome)/Library/Application Support/RetroArch") {
+        Commands.Bash.system("\(baseAppSupport)")
+    }
+
+    // Verificación post-copia: si falta algún fichero/dir clave, la Base quedó incompleta.
+    let comprobaciones = [
+        "/Users/Shared/Xemu/xbox_hdd.qcow2",
+        "\(userHome)/Documents/Retroarch",
+        "\(userHome)/Library/Application Support/RetroArch/config/retroarch.cfg"
+    ]
+    for ruta in comprobaciones where !fm.fileExists(atPath: ruta) {
+        print("⚠️ copiarBase: la Base quedó incompleta, falta → \(ruta)")
+    }
+}
+
+/// Lanza el comando de un emulador y, al volver, cierra la Terminal que ese emulador
+/// haya abierto — pero SOLO si no estaba ya abierta antes (para no cerrar la del usuario).
+/// `Commands.Bash.system` bloquea hasta que el juego se cierra, así que al terminar
+/// esta función el juego ya ha salido y podemos limpiar su Terminal.
+func lanzarJuegoYcerrarTerminal(_ comando: String) {
+    let terminalYaAbierta = NSWorkspace.shared.runningApplications.contains {
+        $0.bundleIdentifier == "com.apple.Terminal"
+    }
+    Commands.Bash.system("\(comando)")
+    guard !terminalYaAbierta else { return }
+    for app in NSWorkspace.shared.runningApplications
+    where app.bundleIdentifier == "com.apple.Terminal" {
+        app.terminate()
+    }
 }
 
 func buscaVideo (juego: String, ruta: String) ->String {
@@ -690,5 +723,20 @@ struct PartidaNetplay {
 extension String {
     func numberOfOccurrencesOf(string: String) ->Int {
         return self.components(separatedBy: string).count - 1
+    }
+}
+
+extension NSWindow {
+    /// Coloca la ventana ocupando el área visible de la pantalla: todo menos la barra
+    /// de menú superior (y el Dock). Actualiza las globales de tamaño que usa la UI.
+    /// Sustituye al antiguo setFrame(screen.frame) que se metía bajo la barra de menú.
+    func maximizarAreaVisible() {
+        guard let pantalla = self.screen ?? NSScreen.main else { return }
+        let areaVisible = pantalla.visibleFrame
+        ancho = areaVisible.size.width
+        alto = areaVisible.size.height
+        anchura = Float(areaVisible.size.width)
+        altura = Float(areaVisible.size.height)
+        setFrame(areaVisible, display: true)
     }
 }
