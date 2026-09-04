@@ -398,8 +398,30 @@ bloques existentes. Un arreglo de comando en el cfg del bundle **no llega** a qu
 sistema. Por eso estos tres se han parcheado también a mano en `~/Documents/RetroMac/es_systems_mac.cfg`.
 Pendiente decidir si conviene un mecanismo de actualización de comandos que respete el core elegido.
 
-**Sin probar todavía**: lanzar un juego real con cada uno. En el disco del usuario no hay carpetas
-`ps2`, `ps3`, `gamecube`, `wii`, `3ds` ni `xbox` con ROMs accesibles en el momento del repaso.
+**H7 · Verificación ejecutando los binarios reales** (carpeta `Build/Products/Debug` de Xcode)
+
+Prueba A/B con los flags viejos y los nuevos, sobre los emuladores instalados de verdad:
+
+| Prueba | Resultado |
+|---|---|
+| PCSX2 **viejo** `ROM --nogui --fullscreen` | `exit=142` — **colgado 20 s** sin salida: el diálogo modal *"Unknown parameter"* esperando un clic. Y `Commands.Bash.system` bloquea hasta que se cierre. |
+| PCSX2 **nuevo** `-nogui -fullscreen -- ROM` | `exit=0`, salida limpia (con `-testconfig`). ✅ |
+| RPCS3 **viejo** `ROM -fullscreen --no-gui` | `exit=1` → `RPCS3: Unknown options: f, u, l, l, s, c, r, e, e, n.` — Qt leyendo `-fullscreen` como opciones cortas agrupadas, tal cual se predijo. |
+| RPCS3 **nuevo** `--no-gui --fullscreen ROM` | Entra en el emulador (imprime build, "Emulation is stopped"). ✅ |
+| Dolphin **nuevo** `-b --exec=ROM` | Aceptado. Control: `--flaginventado` → `Dolphin: error: no such option` inmediato, así que la prueba discrimina. ✅ |
+| xemu `-dvd_path ROM -full-screen` | Arranca y construye bien los parámetros de QEMU. ✅ |
+
+`xemu.toml` de la Base validado clave por clave contra `config_spec.yml` del repo de xemu:
+las 9 claves existen y los 3 enums (`sys.mem_limit='128'`, `display.ui.aspect_ratio='16x9'`,
+`net.backend='nat'`) están dentro de los valores permitidos.
+
+Simulados además los 7 comandos finales (`rutaApp` + `<command>`, `%CORE%`→`rutaApp`, `%ROM%`
+entrecomillada) para 3ds, gamecube, ps2, ps3, wii, xbox y n3ds: **los 7 resuelven a un binario que
+existe** y el entrecomillado aguanta rutas con espacios.
+
+**Lo único sin probar**: arrancar un juego de verdad. No hay ROMs de `ps2`, `ps3`, `gamecube`, `wii`,
+`3ds` ni `xbox` — ni en el disco externo ni en `Build/Products/Debug/roms`, que solo tiene
+`mame/shinobi.zip` y `neogeo/mslug.zip` (ambos de RetroArch).
 
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).
