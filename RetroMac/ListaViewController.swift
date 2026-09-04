@@ -422,7 +422,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             }
         }
         
-        if comandojuego.contains("azahar") {
+        if comandojuego.contains("citra-qt") {
             let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
             if mifilaconfig1 != nil {
                 citraConfig[mifilaconfig1!] = "fullscreen=true"

@@ -166,7 +166,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
             }
         }
         
-        if micomando.contains("azahar") {
+        if micomando.contains("citra-qt") {
             let mifilaconfig1 = citraConfig.firstIndex(where: {$0.contains("fullscreen=")})
             if mifilaconfig1 != nil {
                 citraConfig[mifilaconfig1!] = "fullscreen=true"

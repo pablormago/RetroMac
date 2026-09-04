@@ -475,6 +475,40 @@ de 3DS— son limitaciones legales de cada emulador, no bugs de RetroMac: son fi
 que cada usuario debe aportar. Pendiente de decidir: ¿merece la pena que la app detecte su ausencia
 y muestre un aviso en vez de dejar que el emulador se quede esperando en silencio?
 
+### H9) Citra vuelve a como estaba — decisión del usuario, no un bug
+
+En la fase A/B/C se migró Citra (descontinuado) a Azahar. Pablo ha pedido revertir ESA parte
+en concreto: *"En 3DS antes con citra... hacia que funcionara"* — y con razón: Azahar quitó a
+propósito el soporte de ROMs **encriptadas** (`.3ds`/`.cci` sin descifrar) como defensa legal,
+igual que le pasó a Yuzu — es literalmente el mecanismo por el que demandaron a Citra. Verificado
+sin descifrar nada, solo leyendo la cabecera NCSD (byte `NoCrypto` en 0x18F): `Shovel Knight.3ds`
+y `Pullblox.3ds`, las dos ROMs 3DS del usuario, están **cifradas**. Con Azahar no arrancarían nunca,
+sea cual sea el arreglo de código — es un rechazo deliberado del formato, no un fallo.
+
+Revertido tal cual estaba antes de `af26279`, decisión del usuario:
+- `downloadEmulators()`: Citra vuelve a descargarse del enlace personal de Dropbox
+  (`dl.dropboxusercontent.com/…/citra.zip`, verificado vivo y con `citra-qt.app` sin carpeta
+  wrapper), no desde GitHub Releases de Azahar (cuyo sucesor real dejó de servir lo que el
+  usuario necesita).
+- Carpeta `Emuladores_Mac/Citra`, binario `citra-qt.app/Contents/MacOS/citra-qt`.
+- `readCitraConfig()`/`writeCitraConfig()`: vuelven a `~/.config/citra-emu/qt-config.ini`
+  (antes: `~/Library/Application Support/Azahar/…`), con el mecanismo original de copiar la
+  plantilla de la Base si aún no existe — pero manteniendo la lectura segura (`String(contentsOf:)`
+  + `try?`) en vez del `fopen`/`getline`/`preconditionFailure` original, que sí era un bug de
+  verdad ya corregido en una fase anterior y no tiene que ver con la elección de emulador.
+- Restaurado `Base/.config/citra-emu/qt-config.ini` y `telemetry_id` (los había borrado yo en
+  H4 por parecerme dead weight con rutas de Linux; el usuario decide mantenerlos tal cual).
+- Los 6 sitios que miraban `comandojuego.contains("azahar")` (5 pantallas de lanzamiento +
+  NetPlay) vuelven a `contains("citra-qt")`.
+- `es_systems_mac.cfg` (bundle y `~/Documents`): `3ds` y `n3ds` vuelven a
+  `/Emuladores_Mac/Citra/citra-qt.app/Contents/MacOS/citra-qt %ROM%`.
+
+**Verificado con el binario real** descargado del enlace: `citra-qt` (Mach-O x86_64, sin arm64 —
+esta build de 2022 es solo Intel) arranca `Shovel Knight.3ds` (cifrada) sin problema. Su propio
+log (`~/.local/share/citra-emu/log/citra_log.txt`) muestra el DSP de audio inicializado y frames
+renderizados durante más de 30 s, sin ningún error de "Error 8" ni de encriptación — confirma
+exactamente lo que decía el usuario: con Citra y su config, esta ROM sí funcionaba.
+
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).
 - [x] Ventana a `visibleFrame` (bajo la barra de menú).

@@ -1195,17 +1195,22 @@ func shadersList () {
 func readCitraConfig () {
     citraConfig = []
     let home = FileManager.default.homeDirectoryForCurrentUser
-    let fileUrl = home.appendingPathComponent("Library/Application Support/Azahar/config/qt-config.ini")
-    // Si Azahar aún no ha creado su qt-config.ini (nunca se ha lanzado), lo dejamos vacío:
-    // no copiamos config de Citra y writeCitraConfig no escribirá nada (evita clobber).
+    let fileUrl = home.appendingPathComponent(".config/citra-emu/qt-config.ini")
+    let fileManager = FileManager.default
+    if !fileManager.fileExists(atPath: fileUrl.path) {
+        // Primer arranque: Citra aún no ha creado su qt-config.ini. Se copia la
+        // plantilla que trae la Base y se reintenta la lectura.
+        let home2 = Bundle.main.bundlePath
+        let baseCitra = "mkdir -p ~/.config && cp -r \"" + home2 + "/Contents/Resources/Base/.config/citra-emu/\" ~/.config/citra-emu/"
+        Commands.Bash.system("\(baseCitra)")
+    }
+    // Lectura segura (antes: fopen/getline + preconditionFailure, crasheaba si el
+    // fichero no se podía abrir).
     guard let contenido = try? String(contentsOf: fileUrl, encoding: .utf8) else { return }
-    // Sin el "\n" de getline: writeCitraConfig ya añade el salto (antes se duplicaban).
     citraConfig = contenido.components(separatedBy: .newlines)
 }
 
 func writeCitraConfig(){
-    // Si no leímos config (Azahar aún no la creó), NO escribimos: evita dejar un
-    // qt-config.ini vacío que pisaría el de Azahar.
     guard !citraConfig.isEmpty else { return }
     var mytext = String()
     mytext = ""
@@ -1213,7 +1218,7 @@ func writeCitraConfig(){
         mytext = mytext + line + "\n"
     }
     let home = FileManager.default.homeDirectoryForCurrentUser
-    let fileUrl = home.appendingPathComponent("Library/Application Support/Azahar/config/qt-config.ini")
+    let fileUrl = home.appendingPathComponent(".config/citra-emu/qt-config.ini")
     try? mytext.write(to: fileUrl, atomically: false, encoding: .utf8)
 }
 
@@ -1451,7 +1456,7 @@ func downloadEmulators() {
         DispatchQueue.main.sync {
             etiqueta.stringValue = "Comprobando emuladores y cores…"
         }
-        var comando = "cd \(rutaApp) && mkdir -p Emuladores_Mac && cd \(rutaApp)/Emuladores_Mac && mkdir -p Descargas && mkdir -p Retroarch && mkdir -p Azahar && mkdir -p cores && mkdir -p Dolphin && mkdir -p Pcsx2 && mkdir -p RPCS3 && mkdir -p Xemu"
+        var comando = "cd \(rutaApp) && mkdir -p Emuladores_Mac && cd \(rutaApp)/Emuladores_Mac && mkdir -p Descargas && mkdir -p Retroarch && mkdir -p Citra && mkdir -p cores && mkdir -p Dolphin && mkdir -p Pcsx2 && mkdir -p RPCS3 && mkdir -p Xemu"
         Commands.Bash.system("\(comando)")
         let sufijo = "_libretro.dylib.zip"
         let coresDir = "\(rutaApp)/Emuladores_Mac/cores"
@@ -1541,11 +1546,13 @@ func downloadEmulators() {
         instalarEmulador(carpeta: "Dolphin", nombre: "Dolphin", app: "Dolphin.app", formato: .dmg) {
             dolphinUltimoDmg()
         }
-        instalarEmulador(carpeta: "Azahar", nombre: "Azahar (3DS)", app: "Azahar.app", formato: .zip) {
-            githubUltimoAsset(repo: "azahar-emu/azahar", contiene: "macos-universal")
+        // Citra (descontinuado oficialmente, repo de citra-emu retirado de GitHub tras el
+        // acuerdo legal con Nintendo): se mantiene la descarga desde el enlace personal
+        // — decisión del usuario, no de esta app — en vez de un sucesor (Azahar) que
+        // dejó de soportar ROMs encriptadas.
+        instalarEmulador(carpeta: "Citra", nombre: "Citra (3DS)", app: "citra-qt.app", formato: .zip) {
+            "https://dl.dropboxusercontent.com/s/idh4xs33q7lirgd/citra.zip"
         }
-        // (cfg del 3DS, fullscreen y config ya migrados a Azahar: Azahar.app/azahar +
-        //  ~/Library/Application Support/Azahar/config/qt-config.ini + contains("azahar")).
 
         //MARK: Bezels desde el bundle (sin Dropbox), solo si aún no están.
         if !FileManager.default.fileExists(atPath: "\(rutaApp)/decorations") {
@@ -1563,7 +1570,7 @@ func downloadEmulators() {
         // para no re-descargar de cero en el próximo intento.
         // Se comprueba la .app EXACTA que lanza el cfg (una PCSX2-v2.8.1.app no vale).
         let emus = [("Retroarch", "RetroArch.app"), ("Xemu", "xemu.app"), ("Pcsx2", "PCSX2.app"),
-                    ("RPCS3", "RPCS3.app"), ("Dolphin", "Dolphin.app"), ("Azahar", "Azahar.app")]
+                    ("RPCS3", "RPCS3.app"), ("Dolphin", "Dolphin.app"), ("Citra", "citra-qt.app")]
         let todoInstalado = emus.allSatisfy {
             FileManager.default.fileExists(atPath: "\(rutaApp)/Emuladores_Mac/\($0.0)/\($0.1)")
         }
