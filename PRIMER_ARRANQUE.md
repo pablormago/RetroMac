@@ -221,14 +221,52 @@ Severidad: 🔴 crítico · 🟠 importante · 🟡 limpieza.
 - [x] 🔴 **Ruta hardcodeada de otro usuario** en `noGameOverlay` ([funciones.swift:1066](RetroMac/funciones.swift:1066)) — **HECHO**: ahora relativa a `~/Documents/RetroMac/shaders/`.
 
 ### D) Estabilización (config y datos — bloque background de [SplashController.swift:227](RetroMac/SplashController.swift:227))
-- [ ] 🔴 **`readRetroArchConfig` crashea** ([funciones.swift:908](RetroMac/funciones.swift:908)) — `preconditionFailure` si falta el cfg ([920](RetroMac/funciones.swift:920)/[926](RetroMac/funciones.swift:926)) y `myparams[1]` con líneas sin `=` ([960](RetroMac/funciones.swift:960)). Lectura tolerante, sin crashear.
-- [ ] 🔴 **`mamelista` crashea** ([funciones.swift:261](RetroMac/funciones.swift:261)) — `try!` si falta `mamelist.txt` y `misvalores[1]` con líneas sin coma.
-- [ ] 🟡 **`readCitraConfig` recursión infinita** ([funciones.swift:1215](RetroMac/funciones.swift:1215)) — si la copia de la Base falla, se llama a sí misma sin fin. Guardar el reintento.
-- [ ] 🟡 **Datos estáticos en código** — `llenaSistemasIds` ([funciones.swift:13](RetroMac/funciones.swift:13)) y `NetPlayCores` ([funciones.swift:190](RetroMac/funciones.swift:190)) → ficheros de datos.
-- [ ] 🟠 **Trabajo síncrono y sin feedback** — separar instalar/actualizar/cargar en `SplashController`; carga incremental con progreso real y estados de error con reintento (hoy o crashea o se cuelga en el Splash).
+- [x] 🔴 **`readRetroArchConfig` crashea** — **HECHO**: reescrito con lectura segura (`String(contentsOf:)`) y **parseo tolerante** (salta vacías/comentarios/líneas sin `=`; el valor conserva los `=` posteriores). Sin `preconditionFailure`.
+- [x] 🔴 **`mamelista` crashea** — **HECHO**: lectura con `try?` (UTF-8 con fallback isoLatin1) y se saltan líneas sin coma en vez de romper por índice.
+- [x] 🟡 **`readCitraConfig` recursión infinita** — **HECHO** (en la migración a Azahar): sin recursión ni copia de config; además ya no duplica saltos de línea.
+- [x] 🔴 **Todos los `preconditionFailure`, `try!` y lectores C** — **HECHO**: 0 `preconditionFailure`, 0 `fopen/getline`, 0 `try!` en toda la app (escrituras a `try?`). La versión de `RetroMac.txt` también se lee de forma segura.
+- [x] 🔴 **12 `FileManager.enumerator(atPath:)!`** — **HECHO**: ahora opcionales con `enumerator?.nextObject()`; si la carpeta no existe/no se puede leer, el bucle no itera en vez de crashear (p.ej. sistema del cfg cuya carpeta de ROMs ya no está). `shadersList` reescrito sin `folder!`.
+- [x] 🟠 **Sin feedback de error** — **HECHO (lo esencial)**: si tras cargar no hay ningún sistema, se muestra un aviso explicando que no se pudo leer el cfg (antes: app vacía y silencio). *(Diferido: reestructurar Splash en instalar/actualizar/cargar con progreso fino — alto riesgo, poco valor añadido ahora.)*
+- [ ] 🟡 **Datos estáticos en código** — `llenaSistemasIds` / `NetPlayCores` → ficheros de datos. **RECOMENDACIÓN: no hacerlo.** Los datos casi no cambian, y moverlos al bundle añade una dependencia de recurso y un modo de fallo nuevo (fichero ausente → sin ids) a cambio de nada funcional.
 
 ### E) Seguridad
-- [ ] 🟠 **`NSAllowsArbitraryLoads=true`** (Info.plist) — quitarlo cuando todas las descargas sean HTTPS.
+- [x] 🟠 **`NSAllowsArbitraryLoads=true`** — **HECHO**: quitado el permiso general. Todas las descargas ya son HTTPS; la única excepción acotada es `lobby.libretro.com` (NetPlay), que **no soporta HTTPS** (comprobado: https da timeout, http responde 200), vía `NSExceptionDomains`.
+
+### F) Vuelta a fondo de rendimiento y honestidad de la UI (tras pruebas reales)
+Síntomas reportados: *"pone Comprobando cores mientras descarga"*, *"en los siguientes arranques la
+comprobación es eterna"*, *"descarga cores que ya tenía"*. Diagnóstico con datos: **96 cores
+instalados vs 105 que pide el cfg** → esos **9 que no existen en el buildbot se reintentaban en CADA
+arranque**, lentos por `--retry 3 --retry-delay 2`, con la etiqueta congelada.
+
+- [x] **Cores: separar COMPROBAR de DESCARGAR** — fase 1 calcula qué falta (instantánea); fase 2 solo
+  se ejecuta si falta algo, con progreso real `n/total — nombre-del-core`.
+- [x] **CAUSA RAÍZ de los "cores que fallan" — era un bug de extracción, no cores malos.**
+  `coresDelCfg()` sacaba nombres del atributo `core="…"`, que es la **etiqueta del selector**, no un
+  nombre de fichero (p. ej. `core="vice_x64sc accurate"`, con espacio). Y la regex `[A-Za-z0-9_]+`
+  **no admitía guiones**, así que partía `mesen-s_libretro.dylib` y se quedaba con `s`.
+  **Corregido**: los nombres salen SOLO de los `…_libretro.dylib` de los `<command>` (los ficheros
+  reales), admitiendo guiones. Cores requeridos: 105 fantasma → **96 reales**.
+- [x] **Nada de blacklists silenciosos** — se descartó ocultar los cores que fallan (tapaba el bug de
+  arriba). Ahora, si un core del cfg no se puede descargar, **se avisa al usuario** al terminar la
+  carga con la lista exacta y el motivo (`coresNoDescargados`), para que decida.
+- [x] **Corregidos 6 nombres erróneos del cfg** (verificados uno a uno contra el buildbot), en el cfg
+  del bundle y en el de `~/Documents`: `mednafen_supergraf`→`mednafen_supergrafx`,
+  `fbalpha2012_core`→`fbalpha2012`, `mesen_svn`→`mesen`, `vbam_next`→`vba_next`,
+  `duckstation`→`swanstation` (renombrado por libretro). Y **eliminado el sistema `freej2me`
+  ("Java Games")** entero: su único core no tiene build para macOS. 95 → 94 sistemas, XML válido.
+- [x] **curl más rápido** — `-s --connect-timeout 10 --retry 1` en vez de `--retry 3 --retry-delay 2`
+  (un 404 no es reintentable, solo hacía perder segundos por core).
+- [x] **Etiquetas honestas en todo el arranque** — "Buscando X…" mientras se resuelve la URL (red) y
+  "Descargando X…" mientras baja; y pasos que antes iban mudos ahora informan: lista MAME, datos de
+  sistemas, config de RetroArch, shaders, preferencias, "Buscando juegos…". El Splash ya no arranca
+  mintiendo con "Cargando Sistemas".
+- [x] **Lista de MAME perezosa** — `mamelist.txt` (1,3 MB / **30.444 líneas**) se parseaba en CADA
+  arranque y **solo la usan los scrapers**. Ahora se carga bajo demanda (`asegurarTitulosMame()`).
+- [x] **Caché de listados de carpeta** (`listadoCacheado`) — las 7 funciones `busca*` (imagen, vídeo,
+  manual, box, marquee, fanart, tittleshot) hacían **una enumeración recursiva completa de la carpeta
+  del sistema por cada una y por cada juego nuevo** (7 escaneos por juego). Ahora se enumera **una vez
+  por carpeta** y se reutiliza; el caché se vacía al empezar cada sistema.
+- [x] Limpieza: eliminadas 7 declaraciones `let fileManager` que quedaban sin uso.
 
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).

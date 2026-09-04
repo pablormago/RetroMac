@@ -78,6 +78,9 @@ var rawJuegosXml = [[String]]()
 var nivelActual = Int()
 var testJuegosXml = [[String]]()
 var arrayCoresRetroArch = [String]()
+/// Cores referenciados por el cfg que NO se pudieron descargar. Se muestran al usuario
+/// al terminar la carga (no se ocultan: suelen ser nombres mal escritos en el cfg).
+var coresNoDescargados = [String]()
 var nombreEscrapeado = String()
 var openEmu = Bool()
 
@@ -588,12 +591,10 @@ func buscaVideo (juego: String, ruta: String) ->String {
     else {
         
     }
-    let fileManager = FileManager.default
     if ruta != "" && ruta != nil && buscarLocal == true {
-        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         //print("RUTA: \(ruta)")
-        //Comprobamos Video
-        while let element = enumerator.nextObject() as? String {
+        //Comprobamos Video (listado cacheado: una sola enumeración por carpeta)
+        for element in listadoCacheado(ruta) {
             if (element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")) ) && element.hasSuffix(".mp4") {
                 tieneVideo = true
                 //print("EL ROMPATH ES: \(rompath)")

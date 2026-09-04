@@ -991,6 +991,7 @@ extension OptionsViewController {
                 juegoMame = result1
                 print("JUEGO /: \(juegoMame)")
             }
+            asegurarTitulosMame()   // carga perezosa de la lista MAME
             for juego in titulosMame {
                 print("Tengo: \(juego[0])")
                 if juego[0] == juegoMame {

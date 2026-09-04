@@ -28,8 +28,16 @@
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<!-- Sin permiso general: todas las descargas ya son HTTPS. La única excepción
+		     es el lobby de NetPlay de libretro, que NO soporta HTTPS (https da timeout). -->
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>lobby.libretro.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2021 pmg. All rights reserved.</string>

@@ -262,28 +262,48 @@ func mamelista() -> Any{
     //let ruta = "/users/pablojimenez/Documents/mamelist.txt"
     let ruta = Bundle.main.bundlePath + "/Contents/Resources/mamelist.txt"
     var miArray = [[String]]()
-    let content = try! String (contentsOfFile: ruta)
-    let lines = content.split(separator: "\n")
-    for line in lines {
-        //print(line)
-        var valor1 = String()
-        var valor2 = String()
-        let misvalores = line.split(separator: ",")
-        
-        valor1 = String(misvalores[0])
-        valor2 = String(misvalores[1])
-        
-        var group = [valor1 , valor2]
-        //print(group)
-        miArray.append(group)
-        //print(miArray[0])
-        //print("\(line)")
+    // Lectura tolerante: si falta el fichero o no es UTF-8, devolvemos vacío en vez de crashear.
+    guard let content = (try? String(contentsOfFile: ruta, encoding: .utf8))
+        ?? (try? String(contentsOfFile: ruta, encoding: .isoLatin1)) else {
+        print("⚠️ mamelista: no se pudo leer mamelist.txt")
+        return miArray
     }
-    
+    for line in content.split(separator: "\n") {
+        let misvalores = line.split(separator: ",")
+        // Saltamos líneas malformadas (sin coma) en vez de romper por índice.
+        guard misvalores.count >= 2 else { continue }
+        miArray.append([String(misvalores[0]), String(misvalores[1])])
+    }
     return miArray
-    
 }
 
+
+// MARK: - Caché de listados de carpeta
+// Las funciones busca* (imagen, vídeo, manual, box, marquee…) enumeraban RECURSIVAMENTE
+// la carpeta del sistema una vez POR CADA una y por cada juego nuevo: 7 escaneos completos
+// por juego. Con este caché se enumera la carpeta UNA vez y se reutiliza.
+var cacheListados = [String: [String]]()
+
+func listadoCacheado(_ ruta: String) -> [String] {
+    if let cacheado = cacheListados[ruta] { return cacheado }
+    var lista = [String]()
+    if let e = FileManager.default.enumerator(atPath: ruta) {
+        while let el = e.nextObject() as? String { lista.append(el) }
+    }
+    cacheListados[ruta] = lista
+    return lista
+}
+
+/// Se vacía al empezar a cargar cada sistema, para no servir listados obsoletos.
+func limpiarCacheListados() { cacheListados.removeAll() }
+
+/// Carga la lista de MAME (1,3 MB / 30k líneas) solo la primera vez que hace falta.
+/// La usan únicamente los scrapers, así que no se parsea en cada arranque.
+func asegurarTitulosMame() {
+    if titulosMame.isEmpty {
+        titulosMame = (mamelista() as? [[String]]) ?? []
+    }
+}
 
 func cuentajuegos(arraySistema: [[String]]) -> [[String]]{
     var juegosPorSistema = [[String]]()
@@ -331,6 +351,9 @@ func cuentajuegos(arraySistema: [[String]]) -> [[String]]{
 }
 
 func juegosGamelistCarga(sistema: [String]) -> [Juego] {
+    // Caché de listados fresco para este sistema: las busca* enumerarán su carpeta
+    // UNA sola vez en vez de una por cada juego nuevo y por cada tipo de media.
+    limpiarCacheListados()
     arrayVideos = []
     var juegosnuevos = 0
     var mirompath = String(sistema[5])
@@ -403,8 +426,8 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
         
         
         let fileManager = FileManager.default
-        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: rutaApp3 as String)!
-        while let element = enumerator.nextObject() as? String {
+        let enumerator = fileManager.enumerator(atPath: rutaApp3 as String)
+        while let element = enumerator?.nextObject() as? String {
             if element.hasSuffix(extensiones) { // checks the extension
                 
                 let rutacompleta = rutaApp3 + "/" + element
@@ -531,8 +554,8 @@ func crearGameListInicioCarga (ruta: String){
     for extensiones in extensionesTemp {
         
         let fileManager = FileManager.default
-        let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
-        while let element = enumerator.nextObject() as? String {
+        let enumerator = fileManager.enumerator(atPath: ruta as String)
+        while let element = enumerator?.nextObject() as? String {
             if element.hasSuffix(extensiones) { // checks the extension
                 counter += 1
                 let gameNode = XMLElement(name: "game")
@@ -657,10 +680,8 @@ func escribeSistemas () {
 func buscaImage (juego: String, ruta: String) -> String {
     var tieneSnap = false
     var miFoto = ""
-    let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
     if ruta != "" && ruta != nil && buscarLocal == true {
-        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
             let index2 = name.range(of: "/", options: .backwards)?.lowerBound
@@ -671,7 +692,7 @@ func buscaImage (juego: String, ruta: String) -> String {
         else {
             
         }
-        while let element = enumerator2.nextObject() as? String {
+        for element in listadoCacheado(ruta) {
             
             if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
                 if (element.hasSuffix(".png") || element.hasSuffix(".jpg") || element.hasSuffix(".jpeg") ) && !element.contains("marquee") && !element.contains("box") && !element.contains("fanart") && !element.contains("tittleshot"){
@@ -697,10 +718,8 @@ func buscaImage (juego: String, ruta: String) -> String {
 func buscaManual (juego: String, ruta: String) -> String {
     var tieneSnap = false
     var miManual = ""
-    let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
     if ruta != "" && ruta != nil && buscarLocal == true {
-        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
             let index2 = name.range(of: "/", options: .backwards)?.lowerBound
@@ -711,7 +730,7 @@ func buscaManual (juego: String, ruta: String) -> String {
         else {
             
         }
-        while let element = enumerator2.nextObject() as? String {
+        for element in listadoCacheado(ruta) {
             
             if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
                 if element.hasSuffix(".pdf"){
@@ -737,10 +756,8 @@ func buscaManual (juego: String, ruta: String) -> String {
 func buscaTittleShot (juego: String, ruta: String) -> String {
     var tieneSnap = false
     var miTittleShot = ""
-    let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
     if ruta != "" && ruta != nil && buscarLocal == true {
-        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
             let index2 = name.range(of: "/", options: .backwards)?.lowerBound
@@ -751,7 +768,7 @@ func buscaTittleShot (juego: String, ruta: String) -> String {
         else {
             
         }
-        while let element = enumerator2.nextObject() as? String {
+        for element in listadoCacheado(ruta) {
             
             if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
                 if element.hasSuffix("_tittleshot.png"){
@@ -777,10 +794,8 @@ func buscaTittleShot (juego: String, ruta: String) -> String {
 func buscaFanArt (juego: String, ruta: String) -> String {
     var tieneSnap = false
     var miFanArt = ""
-    let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
     if ruta != "" && ruta != nil && buscarLocal == true {
-        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
             let index2 = name.range(of: "/", options: .backwards)?.lowerBound
@@ -791,7 +806,7 @@ func buscaFanArt (juego: String, ruta: String) -> String {
         else {
             
         }
-        while let element = enumerator2.nextObject() as? String {
+        for element in listadoCacheado(ruta) {
             
             if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
                 if element.hasSuffix("_fanart.png"){
@@ -817,10 +832,8 @@ func buscaFanArt (juego: String, ruta: String) -> String {
 func buscaMarquee (juego: String, ruta: String) -> String {
     var tieneSnap = false
     var miMarquee = ""
-    let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
     if ruta != "" && ruta != nil && buscarLocal == true {
-        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
             let index2 = name.range(of: "/", options: .backwards)?.lowerBound
@@ -831,7 +844,7 @@ func buscaMarquee (juego: String, ruta: String) -> String {
         else {
             
         }
-        while let element = enumerator2.nextObject() as? String {
+        for element in listadoCacheado(ruta) {
             
             if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
                 if element.hasSuffix("marquee.png"){
@@ -856,11 +869,9 @@ func buscaMarquee (juego: String, ruta: String) -> String {
 func buscaBox (juego: String, ruta: String) -> String {
     var tieneSnap = false
     var miBox = ""
-    let fileManager = FileManager.default
     //print("MI ROMPATH: \(ruta)")
     
     if ruta != "" && ruta != nil && buscarLocal == true {
-        let enumerator2: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: ruta as String)!
         var name = (juego as NSString).deletingPathExtension
         if name.contains("/") {
             let index2 = name.range(of: "/", options: .backwards)?.lowerBound
@@ -871,7 +882,7 @@ func buscaBox (juego: String, ruta: String) -> String {
         else {
             
         }
-        while let element = enumerator2.nextObject() as? String {
+        for element in listadoCacheado(ruta) {
             
             if element.contains(name) || element.contains(name.replacingOccurrences(of: " ", with: "")){
                 if element.hasSuffix("_box.png"){
@@ -906,71 +917,33 @@ func rutaARelativa (ruta: String) -> String {
 }
 
 func readRetroArchConfig () {
-    let applicationSupportFolderURL = try! (FileManager.default.urls(for: .applicationSupportDirectory,
-                                                                        in: .userDomainMask)).first
-    let retroarchfolder = applicationSupportFolderURL?.appendingPathComponent("RetroArch/config/retroarch.cfg")
-    
-    let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
-    
-    // add a filename
-    let fileUrl = home?.appendingPathComponent("RetroArch/config/retroarch.cfg")
-    
-    
-    // make sure the file exists
-    guard FileManager.default.fileExists(atPath: (fileUrl?.path)!) else {
-        preconditionFailure("file expected at \(fileUrl?.absoluteString) is missing")
+    retroArchConfig = []
+    // Lectura segura: si falta o no se puede leer, avisamos y seguimos (antes crasheaba
+    // con preconditionFailure justo en el arranque).
+    guard let soporte = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+        print("⚠️ readRetroArchConfig: sin Application Support")
+        return
     }
-    
-    // open the file for reading
-    // note: user should be prompted the first time to allow reading from this location
-    guard let filePointer:UnsafeMutablePointer<FILE> = fopen(fileUrl?.path,"r") else {
-        preconditionFailure("Could not open file at \(fileUrl?.absoluteString)")
+    let fileUrl = soporte.appendingPathComponent("RetroArch/config/retroarch.cfg")
+    guard let contenido = try? String(contentsOf: fileUrl, encoding: .utf8) else {
+        print("⚠️ readRetroArchConfig: no se pudo leer \(fileUrl.path)")
+        return
     }
-    
-    // a pointer to a null-terminated, UTF-8 encoded sequence of bytes
-    var lineByteArrayPointer: UnsafeMutablePointer<CChar>? = nil
-    
-    // see the official Swift documentation for more information on the `defer` statement
-    // https://docs.swift.org/swift-book/ReferenceManual/Statements.html#grammar_defer-statement
-    defer {
-        // remember to close the file when done
-        fclose(filePointer)
-        
-        // The buffer should be freed by even if getline() failed.
-        lineByteArrayPointer?.deallocate()
+
+    for linea in contenido.components(separatedBy: .newlines) {
+        // Parseo tolerante: saltamos vacías, comentarios y cualquier línea sin "="
+        // (antes `myparams[1]` reventaba con esas líneas).
+        guard let sep = linea.firstIndex(of: "=") else { continue }
+        let clave = linea[linea.startIndex..<sep]
+            .trimmingCharacters(in: .whitespaces)
+            .replacingOccurrences(of: "\"", with: "")
+        // El valor conserva cualquier "=" posterior (rutas, etc.).
+        let valor = linea[linea.index(after: sep)...]
+            .trimmingCharacters(in: .whitespaces)
+            .replacingOccurrences(of: "\"", with: "")
+        if clave.isEmpty || clave.hasPrefix("#") { continue }
+        retroArchConfig.append([clave, valor])
     }
-    
-    // the smallest multiple of 16 that will fit the byte array for this line
-    var lineCap: Int = 0
-    
-    // initial iteration
-    var bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
-    
-    
-    while (bytesRead > 0) {
-        
-        // note: this translates the sequence of bytes to a string using UTF-8 interpretation
-        let lineAsString = String.init(cString:lineByteArrayPointer!)
-        
-        // do whatever you need to do with this single line of text
-        // for debugging, can print it
-        //print(lineAsString)
-        let myparams = lineAsString.split(separator: "=")
-        var myparam1 = String((myparams[0]).replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\"", with: "")).dropLast()
-        let myparam2 = String((myparams[1]).replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\"", with: "")).dropFirst()
-        var p1 = String()
-        var p2 = String()
-        p1 = String(myparam1)
-        p2 = String(myparam2)
-        let arrayLine = [p1 , p2]
-        //print("Parametro: \(p1) - Valor: \(p2)")
-        retroArchConfig.append(arrayLine)
-        
-        // updates number of bytes read, for the next iteration
-        bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
-    }
-    
-    //print(retroArchConfig)
 }
 
 func writeRetroArchConfig () {
@@ -983,9 +956,9 @@ func writeRetroArchConfig () {
         mytext = mytext + line[0] + " = \"" + line[1] + "\"\n"
         
     }
-    let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
+    let home = (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
     let fileUrl = home?.appendingPathComponent("RetroArch/config/retroarch.cfg")
-    try! mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
+    try? mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
     
     
 }
@@ -996,9 +969,9 @@ func gameShader(shader: String) {
     mytext = mytext + "shaders = \"1\"" + "\n"
     mytext = mytext + "shader0 = \"\(shader)\""
     print(mytext)
-    let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
+    let home = (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
     let fileUrl = home?.appendingPathComponent("RetroArch/config/global.glslp")
-    try! mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
+    try? mytext.write(to: fileUrl!, atomically: false, encoding: .utf8)
     
     
 }
@@ -1012,9 +985,9 @@ func gameOverlay(game: String) {
     let gamename = solonombre
     let miruta = rutaApp + "/decorations/"
     let fileManager = FileManager.default
-    let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: miruta as String)!
+    let enumerator = fileManager.enumerator(atPath: miruta as String)
     var rutaoverlay = String()
-    while let element = enumerator.nextObject() as? String {
+    while let element = enumerator?.nextObject() as? String {
         if element.contains(gamename + ".png") {
             rutaoverlay = miruta + element
             break
@@ -1027,8 +1000,8 @@ func gameOverlay(game: String) {
             let sistemaABuscar = allTheGames[filaConsola!].sistema
             let miruta = rutaApp + "/decorations/"
             let fileManager = FileManager.default
-            let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: miruta as String)!
-            while let element = enumerator.nextObject() as? String {
+            let enumerator = fileManager.enumerator(atPath: miruta as String)
+            while let element = enumerator?.nextObject() as? String {
                 if element.contains(sistemaABuscar + ".png") {
                     rutaoverlay = miruta + element
                     break
@@ -1050,7 +1023,7 @@ func gameOverlay(game: String) {
     let pathComponent = url2.appendingPathComponent("RetroMac/custom_overlay.cfg")
     //let filePath = pathComponent?.path
     
-    try! myOverlayGame.write(to: pathComponent!, atomically: false, encoding: .utf8)
+    try? myOverlayGame.write(to: pathComponent!, atomically: false, encoding: .utf8)
     
     
 }
@@ -1074,7 +1047,7 @@ func noGameOverlay() {
     let url2 = NSURL(fileURLWithPath: path2)
     let pathComponent = url2.appendingPathComponent("RetroMac/custom_overlay.cfg")
     //let filePath = pathComponent?.path
-    try! myOverlayGame.write(to: pathComponent!, atomically: false, encoding: .utf8)
+    try? myOverlayGame.write(to: pathComponent!, atomically: false, encoding: .utf8)
 }
 
 func cargaPartidasNetplay () {
@@ -1196,18 +1169,16 @@ buscaloop: for partida in netplayPlays {
 
 func shadersList () {
     
-    let home = try! (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first
-    let folder = home?.appendingPathComponent("RetroArch/shaders/")
-    let fileManager = FileManager.default
-    guard let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: folder!.path as String) else {
-        return
-    }
-    while let element = enumerator.nextObject() as? String {
+    arrayShaders = []
+    // Sin force-unwraps: si no hay carpeta de shaders, salimos sin lista (no crasheamos).
+    guard let home = (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)).first else { return }
+    let folder = home.appendingPathComponent("RetroArch/shaders/")
+    guard let enumShaders = FileManager.default.enumerator(atPath: folder.path) else { return }
+    while let element = enumShaders.nextObject() as? String {
         if element.hasSuffix(".glsl") {
-            let ruta = "\(folder!.path)/\(element)"
-            let nombre = ruta.replacingOccurrences(of: folder!.path, with: "").replacingOccurrences(of: "/shaders_glsl", with: "")
-            let migrupo = [ruta, nombre]
-            arrayShaders.append(migrupo)
+            let ruta = "\(folder.path)/\(element)"
+            let nombre = ruta.replacingOccurrences(of: folder.path, with: "").replacingOccurrences(of: "/shaders_glsl", with: "")
+            arrayShaders.append([ruta, nombre])
         }
     }
     arrayShaders.sort(by: {($0[1] ) < ($1[1]) })
@@ -1216,53 +1187,14 @@ func shadersList () {
 
 
 func readCitraConfig () {
+    citraConfig = []
     let home = FileManager.default.homeDirectoryForCurrentUser
     let fileUrl = home.appendingPathComponent("Library/Application Support/Azahar/config/qt-config.ini")
-    let fileManager = FileManager.default
-    if fileManager.fileExists(atPath: fileUrl.path) {
-        // make sure the file exists
-        guard FileManager.default.fileExists(atPath: (fileUrl.path)) else {
-            preconditionFailure("file expected at \(fileUrl.absoluteString) is missing")
-        }
-        
-        // open the file for reading
-        // note: user should be prompted the first time to allow reading from this location
-        guard let filePointer:UnsafeMutablePointer<FILE> = fopen(fileUrl.path,"r") else {
-            preconditionFailure("Could not open file at \(fileUrl.absoluteString)")
-        }
-        
-        // a pointer to a null-terminated, UTF-8 encoded sequence of bytes
-        var lineByteArrayPointer: UnsafeMutablePointer<CChar>? = nil
-        
-        // see the official Swift documentation for more information on the `defer` statement
-        // https://docs.swift.org/swift-book/ReferenceManual/Statements.html#grammar_defer-statement
-        defer {
-            // remember to close the file when done
-            fclose(filePointer)
-            
-            // The buffer should be freed by even if getline() failed.
-            lineByteArrayPointer?.deallocate()
-        }
-        
-        // the smallest multiple of 16 that will fit the byte array for this line
-        var lineCap: Int = 0
-        
-        // initial iteration
-        var bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
-        
-        
-        while (bytesRead > 0) {
-            
-            // note: this translates the sequence of bytes to a string using UTF-8 interpretation
-            let lineAsString = String.init(cString:lineByteArrayPointer!)
-            citraConfig.append(lineAsString)
-            bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
-        }
-    } else {
-        // Azahar aún no ha creado su qt-config.ini (nunca se ha lanzado). No copiamos
-        // ninguna config de Citra (evita bucle y clobber); Azahar la crea en su 1er arranque.
-        citraConfig = []
-    }
+    // Si Azahar aún no ha creado su qt-config.ini (nunca se ha lanzado), lo dejamos vacío:
+    // no copiamos config de Citra y writeCitraConfig no escribirá nada (evita clobber).
+    guard let contenido = try? String(contentsOf: fileUrl, encoding: .utf8) else { return }
+    // Sin el "\n" de getline: writeCitraConfig ya añade el salto (antes se duplicaban).
+    citraConfig = contenido.components(separatedBy: .newlines)
 }
 
 func writeCitraConfig(){
@@ -1299,16 +1231,16 @@ func coresDelCfg() -> [String] {
 
     var cores = Set<String>()
     let rango = NSRange(contenido.startIndex..., in: contenido)
-    func recoger(_ patron: String) {
-        guard let re = try? NSRegularExpression(pattern: patron) else { return }
-        re.enumerateMatches(in: contenido, range: rango) { m, _, _ in
-            if let m = m, let r = Range(m.range(at: 1), in: contenido) {
-                cores.insert(String(contenido[r]))
-            }
+    // Los nombres REALES de core son los ficheros `..._libretro.dylib` de los <command>.
+    // NO se usa el atributo core="..." porque es la ETIQUETA del selector, no un nombre de
+    // fichero: puede llevar espacios (core="vice_x64sc accurate") o no coincidir.
+    // El charset incluye guion: hay cores con guion (mesen-s, vitaquake2-rogue).
+    guard let re = try? NSRegularExpression(pattern: "([A-Za-z0-9_-]+)_libretro\\.dylib") else { return [] }
+    re.enumerateMatches(in: contenido, range: rango) { m, _, _ in
+        if let m = m, let r = Range(m.range(at: 1), in: contenido) {
+            cores.insert(String(contenido[r]))
         }
     }
-    recoger("core=\"([^\"]+)\"")              // <emu core="...">
-    recoger("([A-Za-z0-9_]+)_libretro\\.dylib") // ..._libretro.dylib de <command>
     return Array(cores).sorted()
 }
 
@@ -1444,50 +1376,82 @@ func downloadEmulators() {
         arrayCoresRetroArch = coresDelCfg()
         if arrayCoresRetroArch.isEmpty { arrayCoresRetroArch = ["81","2048","a5200","arduous","atari800","bk","blastem","bluemsx","bsnes2014_accuracy","bsnes2014_balanced","bsnes2014_performance","bsnes_cplusplus98","bsnes_hd_beta","bsnes","bsnes_mercury_accuracy","bsnes_mercury_balanced","bsnes_mercury_performance","cannonball","cap32","cdi2015","chailove","craft","crocods","daphne","desmume2015","desmume","dinothawr","dolphin","dosbox_core","dosbox_pure","dosbox_svn","duckstation","easyrpg","ecwolf","fbalpha2012_cps1","fbalpha2012_cps2","fbalpha2012_cps3","fbalpha2012","fbalpha2012_neogeo","fbneo","fceumm","ffmpeg","fixgb","flycast","fmsx","freechaf","freeintv","frodo","fuse","gambatte","gearboy","gearcoleco","gearsystem","genesis_plus_gx","genesis_plus_gx_wide","gme","gong","gpsp","gw","handy","hatari","higan_sfc","ishiiruka","jaxe","jumpnbump","lowresnx","lutro","mame2000","mame2003","mame2003_plus","mame2010","mame","mednafen_gba","mednafen_lynx","mednafen_ngp","mednafen_pce_fast","mednafen_pce","mednafen_pcfx","mednafen_psx_hw","mednafen_psx","mednafen_saturn","mednafen_snes","mednafen_supergrafx","mednafen_vb","mednafen_wswan","melonds","mesen-s","mesen","mgba","minivmac","mrboom","mu","nekop2","neocd","nestopia","np2kai","nxengine","o2em","oberon","openlara","opera","parallel_n64","pcsx_rearmed","picodrive","play","pocketcdg","pokemini","potator","ppsspp","prboom","prosystem","puae","px68k","quasi88","quicknes","race","reminiscence","remotejoy","retro8","same_cdi","sameboy","sameduck","scummvm","smsplus","snes9x2002","snes9x2005","snes9x2005_plus","snes9x2010","snes9x","squirreljme","stella2014","stella","superbroswar","swanstation","test","tgbdual","theodore","thepowdertoy","tic80","tyrquake","uzem","vaporspec","vba_next","vbam","vecx","vemulator","vice_x64","vice_x64sc","vice_x128","vice_xcbm2","vice_xcbm5x0","vice_xpet","vice_xplus4","vice_xscpu64","vice_xvic","virtualjaguar","vitaquake2-rogue","vitaquake2-xatrix","vitaquake2-zaero","vitaquake2","wasm4","x1","xrick","yabause"] }
         
-        // RetroArch: STABLE universal, solo si falta (auto-reparación).
+        // ─── RetroArch (STABLE universal), solo si falta ─────────────────────────
         if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Retroarch") {
+            DispatchQueue.main.sync { etiqueta.stringValue = "Buscando RetroArch…" }
             let versionRA = retroArchStableVersion()
             descargarYExtraer(url: "https://buildbot.libretro.com/stable/\(versionRA)/apple/osx/universal/RetroArch_Metal.dmg",
                               formato: .dmg, destino: "\(rutaApp)/Emuladores_Mac/Retroarch",
-                              etiquetaTexto: "Descargando RetroArch \(versionRA)")
+                              etiquetaTexto: "Descargando RetroArch \(versionRA)…")
         }
 
-        // Cores: solo los que falten, con reintentos (bajar+extraer por core).
+        // ─── Cores ───────────────────────────────────────────────────────────────
+        // FASE 1 · COMPROBAR (rápida y silenciosa): qué falta realmente.
         let archCore = (arquitectura == "X86") ? "x86_64" : "arm64"
         DispatchQueue.main.sync { etiqueta.stringValue = "Comprobando cores…" }
-        for micore in arrayCoresRetroArch {
-            if FileManager.default.fileExists(atPath: "\(coresDir)/\(micore)_libretro.dylib") { continue }
-            comando = "cd \(rutaApp)/Emuladores_Mac/Descargas && curl -L -f --retry 3 --retry-delay 2 -O https://buildbot.libretro.com/nightly/apple/osx/\(archCore)/latest/\(micore)\(sufijo)"
-            Commands.Bash.system("\(comando)")
-            comando = "unzip -o \(rutaApp)/Emuladores_Mac/Descargas/\(micore)_libretro.dylib.zip -d \(coresDir)"
-            Commands.Bash.system("\(comando)")
+        let coresQueFaltan = arrayCoresRetroArch.filter { core in
+            !FileManager.default.fileExists(atPath: "\(coresDir)/\(core)_libretro.dylib")
         }
-        
-        //MARK: Emuladores desde fuentes OFICIALES (GitHub Releases API + Dolphin)
-        DispatchQueue.main.sync {
-            etiqueta.stringValue = "Descargando Emuladores"
+
+        // FASE 2 · DESCARGAR: solo si falta algo, con progreso real por core.
+        if !coresQueFaltan.isEmpty {
+            // ¿Responde el buildbot? Si no hay red no marcamos nada como "no disponible"
+            // (si no, un corte de red dejaría cores baneados para siempre).
+            DispatchQueue.main.sync { etiqueta.stringValue = "Conectando con el servidor de cores…" }
+            let hayRed = httpGETsync("https://buildbot.libretro.com/nightly/apple/osx/\(archCore)/latest/") != nil
+            if hayRed {
+                let descargasDir = "\(rutaApp)/Emuladores_Mac/Descargas"
+                let total = coresQueFaltan.count
+                for (i, micore) in coresQueFaltan.enumerated() {
+                    DispatchQueue.main.sync {
+                        etiqueta.stringValue = "Descargando cores… \(i + 1)/\(total) — \(micore)"
+                    }
+                    comando = "cd \"\(descargasDir)\" && curl -L -f -s --connect-timeout 10 --retry 1 -O https://buildbot.libretro.com/nightly/apple/osx/\(archCore)/latest/\(micore)\(sufijo)"
+                    Commands.Bash.system("\(comando)")
+                    comando = "unzip -o -q \"\(descargasDir)/\(micore)\(sufijo)\" -d \"\(coresDir)\" 2>/dev/null"
+                    Commands.Bash.system("\(comando)")
+                    // Si sigue sin estar, ese core del cfg no existe en el buildbot.
+                    // NO lo ocultamos: se acumula para avisar al usuario al terminar.
+                    if !FileManager.default.fileExists(atPath: "\(coresDir)/\(micore)_libretro.dylib") {
+                        coresNoDescargados.append(micore)
+                        print("⚠️ core del cfg no disponible en el buildbot (\(archCore)): \(micore)")
+                    }
+                }
+            } else {
+                print("⚠️ Sin conexión con el buildbot: se omite la descarga de cores este arranque")
+            }
         }
-        // Emuladores oficiales: cada uno SOLO si falta (auto-reparación).
-        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Xemu"),
-           let u = githubUltimoAsset(repo: "xemu-project/xemu", contiene: "macos-universal.zip") {
-            descargarYExtraer(url: u, formato: .zip, destino: "\(rutaApp)/Emuladores_Mac/Xemu", etiquetaTexto: "Descargando xemu")
+
+        // ─── Emuladores oficiales (solo los que falten) ──────────────────────────
+        // Etiqueta honesta en cada paso: "Buscando…" mientras se resuelve la URL
+        // (llamada de red) y "Descargando…" mientras baja de verdad.
+        func instalarEmulador(carpeta: String, nombre: String, formato: FormatoDescarga,
+                              resolver: () -> String?) {
+            let destino = "\(rutaApp)/Emuladores_Mac/\(carpeta)"
+            guard !carpetaTieneApp(destino) else { return }
+            DispatchQueue.main.sync { etiqueta.stringValue = "Buscando \(nombre)…" }
+            guard let u = resolver() else {
+                print("⚠️ No se pudo resolver la descarga de \(nombre)")
+                return
+            }
+            descargarYExtraer(url: u, formato: formato, destino: destino,
+                              etiquetaTexto: "Descargando \(nombre)…")
         }
-        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Pcsx2"),
-           let u = githubUltimoAsset(repo: "PCSX2/pcsx2", contiene: "macos-Qt.tar.xz") {
-            descargarYExtraer(url: u, formato: .tarxz, destino: "\(rutaApp)/Emuladores_Mac/Pcsx2", etiquetaTexto: "Descargando PCSX2")
+
+        instalarEmulador(carpeta: "Xemu", nombre: "xemu", formato: .zip) {
+            githubUltimoAsset(repo: "xemu-project/xemu", contiene: "macos-universal.zip")
         }
-        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/RPCS3"),
-           let u = githubUltimoAsset(repo: "RPCS3/rpcs3-binaries-mac", contiene: "_macos.7z") {
-            descargarYExtraer(url: u, formato: .sevenz, destino: "\(rutaApp)/Emuladores_Mac/RPCS3", etiquetaTexto: "Descargando RPCS3")
+        instalarEmulador(carpeta: "Pcsx2", nombre: "PCSX2", formato: .tarxz) {
+            githubUltimoAsset(repo: "PCSX2/pcsx2", contiene: "macos-Qt.tar.xz")
         }
-        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Dolphin"),
-           let u = dolphinUltimoDmg() {
-            descargarYExtraer(url: u, formato: .dmg, destino: "\(rutaApp)/Emuladores_Mac/Dolphin", etiquetaTexto: "Descargando Dolphin")
+        instalarEmulador(carpeta: "RPCS3", nombre: "RPCS3", formato: .sevenz) {
+            githubUltimoAsset(repo: "RPCS3/rpcs3-binaries-mac", contiene: "_macos.7z")
         }
-        // Azahar (sucesor de Citra, 3DS) — universal .zip → Emuladores_Mac/Azahar/
-        if !carpetaTieneApp("\(rutaApp)/Emuladores_Mac/Azahar"),
-           let u = githubUltimoAsset(repo: "azahar-emu/azahar", contiene: "macos-universal") {
-            descargarYExtraer(url: u, formato: .zip, destino: "\(rutaApp)/Emuladores_Mac/Azahar", etiquetaTexto: "Descargando Azahar (3DS)")
+        instalarEmulador(carpeta: "Dolphin", nombre: "Dolphin", formato: .dmg) {
+            dolphinUltimoDmg()
+        }
+        instalarEmulador(carpeta: "Azahar", nombre: "Azahar (3DS)", formato: .zip) {
+            githubUltimoAsset(repo: "azahar-emu/azahar", contiene: "macos-universal")
         }
         // (cfg del 3DS, fullscreen y config ya migrados a Azahar: Azahar.app/azahar +
         //  ~/Library/Application Support/Azahar/config/qt-config.ini + contains("azahar")).

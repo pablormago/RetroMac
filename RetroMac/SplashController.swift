@@ -29,7 +29,7 @@ class SplashController: NSViewController {
         }else {
             esBoB = false
         }
-        taskLabel.stringValue = "Cargando Sistemas"
+        taskLabel.stringValue = "Iniciando…"
         // Do view setup here.
     }
     
@@ -126,43 +126,12 @@ class SplashController: NSViewController {
             if fileManager.fileExists(atPath: filePath) {
                 existeRetro = true
                 print("ESTÁ")
-                guard FileManager.default.fileExists(atPath: (filePath)) else {
-                    preconditionFailure("file expected at \(filePath) is missing")
-                }
-                
-                // open the file for reading
-                // note: user should be prompted the first time to allow reading from this location
-                guard let filePointer:UnsafeMutablePointer<FILE> = fopen(filePath,"r") else {
-                    preconditionFailure("Could not open file at \(filePath)")
-                }
-                
-                // a pointer to a null-terminated, UTF-8 encoded sequence of bytes
-                var lineByteArrayPointer: UnsafeMutablePointer<CChar>? = nil
-                
-                // see the official Swift documentation for more information on the `defer` statement
-                // https://docs.swift.org/swift-book/ReferenceManual/Statements.html#grammar_defer-statement
-                defer {
-                    // remember to close the file when done
-                    fclose(filePointer)
-                    
-                    // The buffer should be freed by even if getline() failed.
-                    lineByteArrayPointer?.deallocate()
-                }
-                
-                // the smallest multiple of 16 that will fit the byte array for this line
-                var lineCap: Int = 0
-                
-                // initial iteration
-                var bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
-                
-                
-                while (bytesRead > 0) {
-                    
-                    // note: this translates the sequence of bytes to a string using UTF-8 interpretation
-                    let lineAsString = String.init(cString:lineByteArrayPointer!)
-                    retroversion = lineAsString
-                    break
-                }
+                // Lectura segura de la versión (antes crasheaba con preconditionFailure
+                // si el fichero no se podía abrir). Si no se puede leer, queda "" y se
+                // trata como cambio de versión.
+                retroversion = (try? String(contentsOfFile: filePath, encoding: .utf8))?
+                    .components(separatedBy: .newlines).first?
+                    .trimmingCharacters(in: .whitespaces) ?? ""
                 if retroversion == version {
                     existeRetro = true
                     
@@ -220,30 +189,62 @@ class SplashController: NSViewController {
         
         
         DispatchQueue.background(background: {
+            // Cada paso dice lo que está haciendo de verdad (antes había tramos largos
+            // con la etiqueta congelada en el mensaje anterior).
             downloadEmulators()
-            titulosMame = mamelista() as! [[String]]
+
+            // La lista de MAME (1,3 MB) ya NO se carga aquí: solo la usan los scrapers,
+            // así que se carga de forma perezosa (asegurarTitulosMame) la primera vez
+            // que se necesita. Esto quita ~30.000 líneas de parseo en cada arranque.
+            DispatchQueue.main.sync { etiqueta.stringValue = "Preparando datos de sistemas…" }
             llenaSistemasIds()
+
+            DispatchQueue.main.sync { etiqueta.stringValue = "Leyendo configuración de RetroArch…" }
             readRetroArchConfig ()
             readCitraConfig ()
+
+            DispatchQueue.main.sync { etiqueta.stringValue = "Leyendo shaders…" }
             shadersList ()
+
             // - MARK: cargar array de juegos-cores, juegos-shaders y systems-shaders, etc
-            
+            DispatchQueue.main.sync { etiqueta.stringValue = "Cargando preferencias…" }
             let defaults = UserDefaults.standard
             arrayGamesCores = (defaults.array(forKey: "juegosCores") as? [[String]]) ?? []
             arrayGamesShaders = (defaults.array(forKey: "juegosShaders")as? [[String]]) ?? []
             arraySystemsShaders = (defaults.array(forKey: "systemsShaders")as? [[String]]) ?? []
             arrayGamesBezels = (defaults.array(forKey: "juegosBezels")as? [[String]]) ?? []
             arraySystemsBezels = (defaults.array(forKey: "systemsBezels")as? [[String]]) ?? []
+
+            DispatchQueue.main.sync { etiqueta.stringValue = "Buscando juegos…" }
             self.cuentaJuegosEnSistemas()
         }, completion:{
-            
-            
-                if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
-                    
-                    self.view.window?.contentViewController = controller
-                }
-           
-            
+            // Feedback de error: si no se cargó ningún sistema, avisamos en vez de dejar
+            // la app vacía sin explicación (antes fallaba en silencio).
+            if allTheSystems.isEmpty {
+                let alerta = NSAlert()
+                alerta.messageText = "No se pudo cargar la configuración de sistemas"
+                alerta.informativeText = "No se ha leído ningún sistema de:\n~/Documents/RetroMac/es_systems_mac.cfg\n\nRevisa que el fichero existe y no está vacío. La app se abrirá sin sistemas."
+                alerta.alertStyle = .warning
+                alerta.addButton(withTitle: "Continuar")
+                alerta.runModal()
+            }
+
+            // Si algún core del cfg no se pudo descargar, se dice claramente (no se oculta):
+            // casi siempre es un nombre mal escrito o renombrado en el cfg.
+            if !coresNoDescargados.isEmpty {
+                let aviso = NSAlert()
+                aviso.messageText = "Algunos cores del cfg no se pudieron descargar"
+                aviso.informativeText = "No están disponibles en el buildbot de libretro:\n\n"
+                    + coresNoDescargados.sorted().joined(separator: ", ")
+                    + "\n\nRevisa el nombre en es_systems_mac.cfg (suelen ser nombres antiguos o mal escritos)."
+                aviso.alertStyle = .informational
+                aviso.addButton(withTitle: "Continuar")
+                aviso.runModal()
+            }
+
+            if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {
+                self.view.window?.contentViewController = controller
+            }
         })
         
         
@@ -341,8 +342,8 @@ class SplashController: NSViewController {
                         for extensiones in extensionescuenta {
                             
                             let fileManager = FileManager.default
-                            let enumerator: FileManager.DirectoryEnumerator = fileManager.enumerator(atPath: miruta as String)!
-                            while let element = enumerator.nextObject() as? String {
+                            let enumerator = fileManager.enumerator(atPath: miruta as String)
+                            while let element = enumerator?.nextObject() as? String {
                                 if element.hasSuffix(extensiones) { // checks the extension
                                     //print(element)
                                     encuentra = true
