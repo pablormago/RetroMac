@@ -327,6 +327,80 @@ extraerlo el binario resulta ser **`Mach-O 64-bit executable arm64`** — y este
 `.app`**, sino un binario suelto con `Frameworks/`, así que `carpetaTieneApp()` lo daría siempre por
 no instalado y `downloadEmulators()` lo re-descargaría en cada arranque. Se queda solo el core libretro.
 
+### H) Emuladores que NO son RetroArch — config y línea de comandos
+
+Repaso de los 5 emuladores standalone del cfg (Dolphin, Azahar, xemu, PCSX2, RPCS3).
+Punto de partida: RetroArch va al 100 %, xemu y Azahar "han perdido la config", el resto sin probar.
+
+**H1 · xemu no lee la config del bundle: el formato está muerto** 🔴 — **ARREGLADO**
+La Base enviaba `ApplicationSupport/xemu/xemu/xemu.ini`. xemu abandonó el INI: desde 0.7.90 lee
+**solo `xemu.toml`**. La propia ejecución lo dice: `config path: …/xemu/xemu/xemu.toml`. Y no es
+solo el formato — cambió cada clave y cada sección:
+
+| `xemu.ini` (bundle) | Valor | Equivalente actual | |
+|---|---|---|---|
+| `[system] flash_path` | Complex_4627.bin | `[sys.files] flashrom_path` | renombrada |
+| `[system] bootrom_path` | mcpx_1.0.bin | `[sys.files] bootrom_path` | otra sección |
+| `[system] hdd_path` | xbox_hdd.qcow2 | `[sys.files] hdd_path` | otra sección |
+| `[system] memory` | **128** | `[sys] mem_limit = '128'` | por eso arrancaba con `-m 64` |
+| `[system] shortanim` | false | `[general] skip_boot_anim` | |
+| `[system] hard_fpu` | true | `[perf] hard_fpu` | |
+| `[display] scale` | `scale_ws169` | `[display.ui] aspect_ratio` | **ese valor ya no existe** |
+| `[display] ui_scale` / `render_scale` | 1 | `[display.ui] scale` / `[display.quality] surface_scale` | |
+| `[input] controller_1_guid` | keyboard | `[input.bindings] port1` | |
+| `[network] enabled` / `backend` | true / **`user`** | `[net] enable` / `[net] backend` | **`user` ahora es `nat`** |
+| `[network] local_addr` / `remote_addr` | | `[net.udp] bind_addr` / `remote_addr` | |
+| `[misc] check_for_update` | | `[general.updates] check` | |
+
+Sustituido por un `xemu.toml` escrito contra el esquema oficial (`config_spec.yml` del repo de xemu),
+con solo los valores que difieren del default. `eeprom_path` se deja sin poner a propósito: el default
+es `<base>/eeprom.bin`, justo donde la Base deja su `eeprom.bin`, y fijarlo obligaría a escribir
+`/Users/<usuario>/…`, que no es portable.
+
+**H2 · `copiarBase()` no reparaba nada salvo RetroArch** 🔴 — **ARREGLADO**
+Los tres bloques colgaban de un único guard: `if !existe ~/Library/Application Support/RetroArch`.
+Con RetroArch ya instalado, el bloque entero se saltaba y **xemu y PCSX2 no recibían ni recuperaban
+jamás su config**. Ahora hay un guard por bloque, cada uno mirando un fichero real
+(`xbox_hdd.qcow2`, `retroarch.cfg`, `xemu.toml`, `PCSX2/inis`).
+
+**H3 · `cp -r origen destino` anidaba en vez de fusionar** 🟠 — **ARREGLADO**
+Con el destino ya existente, BSD `cp -r` mete la carpeta DENTRO. Resultado real en el disco del
+usuario: `/Users/Shared/Xemu/Xemu/` con las tres BIOS duplicadas. Ahora se usa `cp -r origen/. destino/`
+(helper `fusionar`) y se borró el duplicado.
+
+**H4 · La config de Azahar del bundle nunca ha existido para la app** 🟠 — **ARREGLADO**
+El bundle traía `Base/.config/citra-emu/qt-config.ini` y `copiarBase()` **no copia `.config`** —
+solo `Shared/Xemu`, `Documents/Retroarch` y `ApplicationSupport/`. Aunque la copiara: era config de
+**Citra** (sin las claves de Azahar), con rutas de **Linux** (`~/.local/share/citra-emu/nand/`) y con
+una ruta muerta personal dentro (`~/Downloads/…/Mundo R`). Borrada del bundle. Azahar se genera su
+`qt-config.ini` correcto solo, y `readCitraConfig`/`writeCitraConfig` ya apuntan ahí y no escriben si
+aún no existe.
+
+**H5 · PCSX2 se instalaba con un nombre que el cfg no puede lanzar** 🔴 — **ARREGLADO**
+En el disco estaba `Pcsx2/PCSX2-v2.8.1.app`, pero el cfg lanza `Pcsx2/PCSX2.app/…`. **PS2 no podía
+arrancar nunca**, y `carpetaTieneApp()` la daba por instalada, así que ni se reintentaba — y el nombre
+cambia con cada versión. Nuevo `normalizarNombreApp(destino:esperado:)`: tras extraer, renombra la
+`.app` al nombre exacto del cfg. `instalarEmulador` ahora recibe ese nombre y comprueba **esa** `.app`,
+no "hay alguna `.app`"; la limpieza final de `Descargas` también.
+
+**H6 · Argumentos de línea de comandos verificados contra el código fuente de cada emulador**
+
+| Emulador | Comando anterior | Veredicto |
+|---|---|---|
+| **xemu** | `-dvd_path %ROM% -full-screen` | ✅ correcto — `-full-screen` es opción estándar de QEMU (`qemu-options.hx:2477`), `-dvd_path` es de xemu |
+| **Azahar** | `azahar %ROM%` | ✅ correcto |
+| **Dolphin** | `--exec=%ROM%` | ⚠️ funcionaba pero dejaba la GUI abierta → **añadido `-b`** (batch: sin interfaz y sale al terminar el juego, que es lo que espera `lanzarJuegoYcerrarTerminal`) |
+| **PCSX2** | `%ROM% --nogui --fullscreen` | ❌ **roto**: `CHECK_ARG` es igualdad exacta y cualquier `-x` desconocido lanza un diálogo *"Unknown parameter"* y aborta → **`-nogui -fullscreen -- %ROM%`** (uso documentado: `[parámetros] [--] [fichero]`) |
+| **RPCS3** | `%ROM% -fullscreen --no-gui` | ❌ **roto**: usa `QCommandLineParser`, las opciones largas llevan doble guion; `-fullscreen` se lee como opciones cortas agrupadas → **`--no-gui --fullscreen %ROM%`** |
+
+**Limitación conocida**: `fusionarSistemasNuevos()` solo AÑADE sistemas que faltan; no actualiza los
+bloques existentes. Un arreglo de comando en el cfg del bundle **no llega** a quien ya tiene ese
+sistema. Por eso estos tres se han parcheado también a mano en `~/Documents/RetroMac/es_systems_mac.cfg`.
+Pendiente decidir si conviene un mecanismo de actualización de comandos que respete el core elegido.
+
+**Sin probar todavía**: lanzar un juego real con cada uno. En el disco del usuario no hay carpetas
+`ps2`, `ps3`, `gamecube`, `wii`, `3ds` ni `xbox` con ROMs accesibles en el momento del repaso.
+
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).
 - [x] Ventana a `visibleFrame` (bajo la barra de menú).

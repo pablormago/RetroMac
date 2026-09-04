@@ -1420,6 +1420,26 @@ func carpetaTieneApp(_ ruta: String) -> Bool {
     return (try? FileManager.default.contentsOfDirectory(atPath: ruta))?.contains { $0.hasSuffix(".app") } ?? false
 }
 
+/// Renombra la `.app` extraída al nombre EXACTO que espera el cfg.
+///
+/// Algunas releases traen el nombre con la versión dentro: PCSX2 se instalaba como
+/// `PCSX2-v2.8.1.app` mientras el cfg lanza `Pcsx2/PCSX2.app/Contents/MacOS/PCSX2`,
+/// así que el sistema PS2 no podía arrancar NUNCA — y `carpetaTieneApp` la daba por
+/// instalada, con lo que ni se reintentaba. Además el nombre cambia en cada versión.
+func normalizarNombreApp(destino: String, esperado: String) {
+    let fm = FileManager.default
+    let apps = ((try? fm.contentsOfDirectory(atPath: destino)) ?? [])
+        .filter { $0.hasSuffix(".app") && !$0.hasPrefix(".") }
+    guard !apps.contains(esperado), let actual = apps.first else { return }
+    try? fm.removeItem(atPath: "\(destino)/\(esperado)")
+    do {
+        try fm.moveItem(atPath: "\(destino)/\(actual)", toPath: "\(destino)/\(esperado)")
+        print("↻ \(actual) → \(esperado)")
+    } catch {
+        print("⚠️ no se pudo renombrar \(actual) a \(esperado): \(error)")
+    }
+}
+
 func downloadEmulators() {
     let arquitectura: String = CPUType()
     var rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
@@ -1489,10 +1509,16 @@ func downloadEmulators() {
         // ─── Emuladores oficiales (solo los que falten) ──────────────────────────
         // Etiqueta honesta en cada paso: "Buscando…" mientras se resuelve la URL
         // (llamada de red) y "Descargando…" mientras baja de verdad.
-        func instalarEmulador(carpeta: String, nombre: String, formato: FormatoDescarga,
-                              resolver: () -> String?) {
+        func instalarEmulador(carpeta: String, nombre: String, app: String,
+                              formato: FormatoDescarga, resolver: () -> String?) {
             let destino = "\(rutaApp)/Emuladores_Mac/\(carpeta)"
-            guard !carpetaTieneApp(destino) else { return }
+            // Se comprueba la .app CONCRETA que lanza el cfg, no "hay alguna .app":
+            // una PCSX2-v2.8.1.app contaba como instalada y no arrancaba nunca.
+            if FileManager.default.fileExists(atPath: "\(destino)/\(app)") { return }
+            if carpetaTieneApp(destino) {
+                normalizarNombreApp(destino: destino, esperado: app)
+                if FileManager.default.fileExists(atPath: "\(destino)/\(app)") { return }
+            }
             DispatchQueue.main.sync { etiqueta.stringValue = "Buscando \(nombre)…" }
             guard let u = resolver() else {
                 print("⚠️ No se pudo resolver la descarga de \(nombre)")
@@ -1500,21 +1526,22 @@ func downloadEmulators() {
             }
             descargarYExtraer(url: u, formato: formato, destino: destino,
                               etiquetaTexto: "Descargando \(nombre)…")
+            normalizarNombreApp(destino: destino, esperado: app)
         }
 
-        instalarEmulador(carpeta: "Xemu", nombre: "xemu", formato: .zip) {
+        instalarEmulador(carpeta: "Xemu", nombre: "xemu", app: "xemu.app", formato: .zip) {
             githubUltimoAsset(repo: "xemu-project/xemu", contiene: "macos-universal.zip")
         }
-        instalarEmulador(carpeta: "Pcsx2", nombre: "PCSX2", formato: .tarxz) {
+        instalarEmulador(carpeta: "Pcsx2", nombre: "PCSX2", app: "PCSX2.app", formato: .tarxz) {
             githubUltimoAsset(repo: "PCSX2/pcsx2", contiene: "macos-Qt.tar.xz")
         }
-        instalarEmulador(carpeta: "RPCS3", nombre: "RPCS3", formato: .sevenz) {
+        instalarEmulador(carpeta: "RPCS3", nombre: "RPCS3", app: "RPCS3.app", formato: .sevenz) {
             githubUltimoAsset(repo: "RPCS3/rpcs3-binaries-mac", contiene: "_macos.7z")
         }
-        instalarEmulador(carpeta: "Dolphin", nombre: "Dolphin", formato: .dmg) {
+        instalarEmulador(carpeta: "Dolphin", nombre: "Dolphin", app: "Dolphin.app", formato: .dmg) {
             dolphinUltimoDmg()
         }
-        instalarEmulador(carpeta: "Azahar", nombre: "Azahar (3DS)", formato: .zip) {
+        instalarEmulador(carpeta: "Azahar", nombre: "Azahar (3DS)", app: "Azahar.app", formato: .zip) {
             githubUltimoAsset(repo: "azahar-emu/azahar", contiene: "macos-universal")
         }
         // (cfg del 3DS, fullscreen y config ya migrados a Azahar: Azahar.app/azahar +
@@ -1534,8 +1561,12 @@ func downloadEmulators() {
         // Limpieza: si todos los emuladores quedaron instalados, borramos Descargas
         // (zips/dmg/7z ya extraídos, ~cientos de MB). Si falta alguno, la conservamos
         // para no re-descargar de cero en el próximo intento.
-        let emus = ["Retroarch", "Xemu", "Pcsx2", "RPCS3", "Dolphin", "Azahar"]
-        let todoInstalado = emus.allSatisfy { carpetaTieneApp("\(rutaApp)/Emuladores_Mac/\($0)") }
+        // Se comprueba la .app EXACTA que lanza el cfg (una PCSX2-v2.8.1.app no vale).
+        let emus = [("Retroarch", "RetroArch.app"), ("Xemu", "xemu.app"), ("Pcsx2", "PCSX2.app"),
+                    ("RPCS3", "RPCS3.app"), ("Dolphin", "Dolphin.app"), ("Azahar", "Azahar.app")]
+        let todoInstalado = emus.allSatisfy {
+            FileManager.default.fileExists(atPath: "\(rutaApp)/Emuladores_Mac/\($0.0)/\($0.1)")
+        }
         if todoInstalado {
             try? FileManager.default.removeItem(atPath: "\(rutaApp)/Emuladores_Mac/Descargas")
         }

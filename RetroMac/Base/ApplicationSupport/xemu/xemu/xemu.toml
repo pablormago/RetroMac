@@ -1,0 +1,32 @@
+# Config base de xemu para RetroMac.
+# xemu abandono xemu.ini: desde 0.7.90 lee SOLO xemu.toml (esquema en
+# config_spec.yml del repo de xemu). Solo se fijan los valores que difieren
+# del default; xemu reescribe este fichero al salir.
+
+[general]
+show_welcome = false
+
+[general.updates]
+check = false
+
+[sys]
+# El .ini viejo pedia 128 MB (consolas de desarrollo / homebrew). Sin esto
+# xemu arranca con -m 64.
+mem_limit = '128'
+
+[sys.files]
+bootrom_path = '/Users/Shared/Xemu/mcpx_1.0.bin'
+flashrom_path = '/Users/Shared/Xemu/Complex_4627.bin'
+hdd_path = '/Users/Shared/Xemu/xbox_hdd.qcow2'
+# eeprom_path se deja vacio a proposito: el default de xemu es
+# <base>/eeprom.bin, que es justo donde la Base deja su eeprom.bin.
+# Ponerlo a mano obligaria a escribir /Users/<usuario>/... y no seria portable.
+
+[display.ui]
+# Equivalente actual del viejo scale = scale_ws169.
+aspect_ratio = '16x9'
+
+[net]
+enable = true
+# El backend 'user' del .ini viejo se llama ahora 'nat'.
+backend = 'nat'

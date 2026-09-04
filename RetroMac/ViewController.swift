@@ -533,29 +533,46 @@ func copiarBase(){
     let home = Bundle.main.bundlePath
     let fm = FileManager.default
     let userHome = fm.homeDirectoryForCurrentUser.path
-    // Rutas del bundle entrecomilladas por si el path contiene espacios.
-    // Se mantiene `cp -r` porque conserva la semántica de *merge* que necesita la Base
-    // (sobre todo al fusionar en ~/Library/Application Support, que ya existe).
-    let baseXemu       = "cp -r \"\(home)/Contents/Resources/Base/Shared/Xemu\" /Users/Shared/Xemu"
-    let baseRetro      = "cp -r \"\(home)/Contents/Resources/Base/Documents/Retroarch\" ~/Documents"
-    let baseAppSupport = "cp -r \"\(home)/Contents/Resources/Base/ApplicationSupport/\" ~/'Library/Application Support'"
+    let base = "\(home)/Contents/Resources/Base"
+    let appSupport = "\(userHome)/Library/Application Support"
 
-    // Reparación incremental: copiamos SOLO el bloque que falte (no todo-o-nada).
-    if !fm.fileExists(atPath: "/Users/Shared/Xemu") {
-        Commands.Bash.system("\(baseXemu)")
+    /// Copia el CONTENIDO de `origen` dentro de `destino` (semantica de merge).
+    /// El `/.` es importante: `cp -r origen destino` con el destino ya existente
+    /// mete la carpeta DENTRO en vez de fusionar — asi apareció el duplicado
+    /// /Users/Shared/Xemu/Xemu con las tres BIOS repetidas.
+    func fusionar(_ origen: String, _ destino: String) {
+        Commands.Bash.system("mkdir -p \"\(destino)\" && cp -r \"\(origen)/.\" \"\(destino)/\"")
+    }
+
+    // Reparación incremental POR BLOQUE. Antes los tres iban tras un unico guard
+    // (¿existe ~/Library/Application Support/RetroArch?), asi que en cuanto
+    // RetroArch estaba, xemu y PCSX2 no recibian ni recuperaban nunca su config.
+    if !fm.fileExists(atPath: "/Users/Shared/Xemu/xbox_hdd.qcow2") {
+        fusionar("\(base)/Shared/Xemu", "/Users/Shared/Xemu")
     }
     if !fm.fileExists(atPath: "\(userHome)/Documents/Retroarch") {
-        Commands.Bash.system("\(baseRetro)")
+        fusionar("\(base)/Documents/Retroarch", "\(userHome)/Documents/Retroarch")
     }
-    if !fm.fileExists(atPath: "\(userHome)/Library/Application Support/RetroArch") {
-        Commands.Bash.system("\(baseAppSupport)")
+    if !fm.fileExists(atPath: "\(appSupport)/RetroArch/config/retroarch.cfg") {
+        fusionar("\(base)/ApplicationSupport/RetroArch", "\(appSupport)/RetroArch")
     }
+    // xemu lee SOLO xemu.toml (xemu.ini es un formato muerto desde 0.7.90).
+    if !fm.fileExists(atPath: "\(appSupport)/xemu/xemu/xemu.toml") {
+        fusionar("\(base)/ApplicationSupport/xemu", "\(appSupport)/xemu")
+    }
+    if !fm.fileExists(atPath: "\(appSupport)/PCSX2/inis") {
+        fusionar("\(base)/ApplicationSupport/PCSX2", "\(appSupport)/PCSX2")
+    }
+    // Azahar NO lleva config en la Base a proposito: se la genera el solo en
+    // ~/Library/Application Support/Azahar/config/qt-config.ini la primera vez
+    // que arranca. La que habia en el bundle era de Citra, con rutas de Linux.
 
     // Verificación post-copia: si falta algún fichero/dir clave, la Base quedó incompleta.
     let comprobaciones = [
         "/Users/Shared/Xemu/xbox_hdd.qcow2",
         "\(userHome)/Documents/Retroarch",
-        "\(userHome)/Library/Application Support/RetroArch/config/retroarch.cfg"
+        "\(appSupport)/RetroArch/config/retroarch.cfg",
+        "\(appSupport)/xemu/xemu/xemu.toml"
     ]
     for ruta in comprobaciones where !fm.fileExists(atPath: ruta) {
         print("⚠️ copiarBase: la Base quedó incompleta, falta → \(ruta)")
