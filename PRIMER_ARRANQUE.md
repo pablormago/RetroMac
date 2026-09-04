@@ -509,6 +509,35 @@ log (`~/.local/share/citra-emu/log/citra_log.txt`) muestra el DSP de audio inici
 renderizados durante más de 30 s, sin ningún error de "Error 8" ni de encriptación — confirma
 exactamente lo que decía el usuario: con Citra y su config, esta ROM sí funcionaba.
 
+### H11) xemu no abre la ROM de Xbox de la BoB — formato, no bug
+
+Diagnóstico pedido explícitamente: mirar el formato de la ROM antes de tocar nada.
+
+`roms/xbox/Smashing Drive/` **no contiene ningún disco de Xbox**, contiene un disco ya
+**extraído/desempaquetado**: `default.xbe` (el ejecutable, suelto) + `diskimg/` con los assets
+del juego como ficheros `.wad` sueltos (`common.wad`, `roms.wad`, `system.wad`…). No hay ningún
+`.iso`/`.xiso` en ningún sitio de la carpeta.
+
+Según la **documentación oficial de xemu** (xemu.app/docs/disc-images): *"xemu requires game discs
+to be in the form of xiso images"* — exige estrictamente una imagen XISO empaquetada para
+`-dvd_path`; no admite ni un `.xbe` suelto ni una carpeta con los ficheros ya extraídos.
+
+Esto explica el síntoma exacto: el escáner del cfg coge `default.xbe` (única entrada que coincide
+con `<extension>.xbe .iso</extension>`), xemu lo monta como si fuera el CD-ROM y arranca el
+ejecutable (por eso había CPU alta y una ventana real en la prueba de H8), pero en cuanto el juego
+intenta leer un asset del "disco" (los `.wad` de `diskimg/`) no hay ningún sistema de ficheros ahí
+— solo los bytes crudos del `.xbe`.
+
+**No es un bug de RetroMac ni de xemu**: la carpeta extraída es el resultado de haber pasado la
+ROM original por `extract-xiso -x` (o equivalente) sin el paso final de reempaquetado
+(`extract-xiso -c` / `xdvdfs-cli`) en una única imagen `.iso`.
+
+**Decisión del usuario**: por ahora no se toca — ni reempaquetado automático en la app ni cambios
+de código. Queda documentado como limitación conocida por si se retoma más adelante. Si se retoma,
+las dos vías evaluadas fueron: (a) detectar carpetas sin `.iso`/`.xiso` y reempaquetar automático
+la primera vez con `xdvdfs-cli` (open source), cacheando el resultado; (b) exigir que las ROMs de
+Xbox en la BoB del usuario vengan ya empaquetadas.
+
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).
 - [x] Ventana a `visibleFrame` (bajo la barra de menú).
