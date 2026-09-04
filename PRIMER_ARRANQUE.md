@@ -423,6 +423,58 @@ existe** y el entrecomillado aguanta rutas con espacios.
 `3ds` ni `xbox` — ni en el disco externo ni en `Build/Products/Debug/roms`, que solo tiene
 `mame/shinobi.zip` y `neogeo/mslug.zip` (ambos de RetroArch).
 
+### H8) Prueba con ROMs reales del disco del usuario — resultado por emulador
+
+Con el disco `/Volumes/Pablo/BoB/Bobwin` montado, lanzados los comandos EXACTOS que construye
+el cfg contra una ROM real de cada sistema no-RetroArch.
+
+**Dolphin (GameCube/Wii) — bug real encontrado y corregido** 🔴
+`-b --exec=%ROM%` (el flag ya arreglado en H6) carga el título pero la CPU se queda muerta al
+2-3 % y no aparece ninguna ventana: **el backend de vídeo por defecto de Dolphin en esta máquina
+(Metal) se cuelga silenciosamente**, sin error en el log. Prueba objetiva —`TimePlayed.ini`, que
+Dolphin solo incrementa mientras emula de verdad—: con Metal quedó en 0. Forzando **Vulkan**
+(`-v Vulkan`), CPU al 37-46 % y el contador saltó de **28 ms a 30 035 ms** tras 30 s de ejecución
+real (y un título nuevo de Wii registrado en la segunda prueba). **Comando final**:
+`-b -v Vulkan --exec=%ROM%`, aplicado a `gamecube` y `wii` en ambos cfg.
+
+**PCSX2 — confirma el fix de H6** ✅
+Con `-nogui -fullscreen -- %ROM%` ya no se cuelga (antes: diálogo modal *"Unknown parameter"*
+bloqueando `Commands.Bash.system` para siempre). Arranca, carga el motor de entrada, y se detiene
+de forma **limpia y esperada**: `bios` está vacío en `~/Library/Application Support/PCSX2/bios/`.
+No hay ninguna BIOS de PS2 instalada — **no la puede bundlear la app**, es firmware de Sony con
+copyright; el usuario tiene que volcarla de su propia consola. RetroMac no puede hacer nada aquí
+salvo, quizás, detectar la carencia y avisar en vez de dejar que el emulador se quede esperando.
+
+**RPCS3 — confirma el fix de H6, y de paso se detectó un fallo de MI prueba manual** ✅
+Con `--no-gui --fullscreen %ROM%` ya no hay `Unknown options: f,u,l,l,s,c,r,e,e,n` (antes, H7).
+Al probar con la ruta del disco físico (`PS3_DISC.SFB`) dio *"Invalid file or folder"* — pero es
+porque para PS3 el "rom" es la **carpeta** `NombreDelJuego.ps3` entera (extensión de carpeta,
+convención RetroBat/Batocera), no un fichero suelto dentro; con la ruta de carpeta correcta el
+error de ruta desaparece y solo queda `Missing Firmware` — igual que PCSX2: firmware de Sony
+(`PS3UPDAT.PUP`), no se puede bundlear, el propio RPCS3 tiene un instalador de firmware integrado
+que el usuario debe correr una vez.
+
+**Azahar — comando correcto, bloqueado por falta de archivos de sistema** ✅ (comando) / 🟡 (dato)
+`azahar %ROM%` carga bien la config Vulkan y arranca el boot, pero el log da
+`Core::Load: Failed to determine system mode (Error 8)!`. Es el equivalente de una BIOS para 3DS:
+archivos de sistema (NAND/CFG) que Azahar necesita volcar de una consola real o generar desde su
+propio menú de "System Settings" — no viene con la ROM ni se puede bundlear (son de Nintendo).
+
+**xemu — funciona** ✅ (verificado con evidencia indirecta, ver nota)
+Con la ROM real de Xbox (`Smashing Drive/default.xbe`) CPU al 152 % sostenido y una ventana real
+en pantalla (640×508, confirmado por `CGWindowListCopyWindowInfo`, no solo por CPU). El log
+construye bien los parámetros de QEMU con el BIOS/bootrom/HDD de la Base. No se pudo hacer captura
+de pantalla del contenido (el terminal de este entorno no tiene permiso de Screen Recording), pero
+la ventana real + la CPU sostenida son evidencia suficiente de ejecución genuina (a diferencia de
+Dolphin+Metal, que también "parecía vivo" con CPU baja y sin avanzar nada).
+
+**Conclusión**: los 6 flags de línea de comandos (H6) están verificados y correctos contra binarios
+reales. El único bug de código nuevo encontrado en esta ronda fue **Dolphin necesitando forzar
+Vulkan** (ya corregido). Los bloqueos restantes —BIOS de PS2, firmware de PS3, archivos de sistema
+de 3DS— son limitaciones legales de cada emulador, no bugs de RetroMac: son ficheros con copyright
+que cada usuario debe aportar. Pendiente de decidir: ¿merece la pena que la app detecte su ausencia
+y muestre un aviso en vez de dejar que el emulador se quede esperando en silencio?
+
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).
 - [x] Ventana a `visibleFrame` (bajo la barra de menú).
