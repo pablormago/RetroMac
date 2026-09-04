@@ -63,6 +63,7 @@
 		27E7A3052768E9BB0087C67A /* themes in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A3042768E9BA0087C67A /* themes */; };
 		27E7A30727691F740087C67A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A30627691F740087C67A /* Base */; };
 		2F23693E30493F6F00965E2E /* decorations in Resources */ = {isa = PBXBuildFile; fileRef = 2F23693D30493F6F00965E2E /* decorations */; };
+		789F3849D1FC7C0E7DD5E797 /* Citra in Resources */ = {isa = PBXBuildFile; fileRef = EC17D6EF56D3D59440EFB234 /* Citra */; };
 		27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E7A3082769C39E0087C67A /* gameListParser.swift */; };
 		27E7A30B276B57810087C67A /* NoVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A30A276B54240087C67A /* NoVideo.mp4 */; };
 		2F23529130493DE300965E2E /* 7zz in Resources */ = {isa = PBXBuildFile; fileRef = 2F23529030493DE300965E2E /* 7zz */; };
@@ -127,6 +128,7 @@
 		27E7A3042768E9BA0087C67A /* themes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = themes; sourceTree = "<group>"; };
 		27E7A30627691F740087C67A /* Base */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base; sourceTree = "<group>"; };
 		2F23693D30493F6F00965E2E /* decorations */ = {isa = PBXFileReference; lastKnownFileType = folder; path = decorations; sourceTree = "<group>"; };
+		EC17D6EF56D3D59440EFB234 /* Citra */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Citra; sourceTree = "<group>"; };
 		27E7A3082769C39E0087C67A /* gameListParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gameListParser.swift; sourceTree = "<group>"; };
 		27E7A30A276B54240087C67A /* NoVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = NoVideo.mp4; sourceTree = "<group>"; };
 		27E7A30C276BB42D0087C67A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -222,6 +224,7 @@
 				278980192757DCBE00414985 /* RetroMac */,
 				2F23529030493DE300965E2E /* 7zz */,
 				2F23693D30493F6F00965E2E /* decorations */,
+				EC17D6EF56D3D59440EFB234 /* Citra */,
 			);
 			sourceTree = "<group>";
 		};
@@ -379,6 +382,7 @@
 				2F23529130493DE300965E2E /* 7zz in Resources */,
 				27E7A30727691F740087C67A /* Base in Resources */,
 				2F23693E30493F6F00965E2E /* decorations in Resources */,
+				789F3849D1FC7C0E7DD5E797 /* Citra in Resources */,
 				272A6EA8278F5EFE005B0930 /* retro.jpeg in Resources */,
 				279FBD56277350C900CD5586 /* down.png in Resources */,
 				2789801F2757DCC000414985 /* Assets.xcassets in Resources */,

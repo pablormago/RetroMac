@@ -1547,11 +1547,19 @@ func downloadEmulators() {
             dolphinUltimoDmg()
         }
         // Citra (descontinuado oficialmente, repo de citra-emu retirado de GitHub tras el
-        // acuerdo legal con Nintendo): se mantiene la descarga desde el enlace personal
-        // — decisión del usuario, no de esta app — en vez de un sucesor (Azahar) que
-        // dejó de soportar ROMs encriptadas.
-        instalarEmulador(carpeta: "Citra", nombre: "Citra (3DS)", app: "citra-qt.app", formato: .zip) {
-            "https://dl.dropboxusercontent.com/s/idh4xs33q7lirgd/citra.zip"
+        // acuerdo legal con Nintendo): bundleado DENTRO del .app — decisión del usuario, no
+        // de esta app — en vez de descargar un sucesor (Azahar) que dejó de soportar ROMs
+        // encriptadas, o depender de un enlace personal externo. `Citra/citra-qt.app` es
+        // folder reference en el pbxproj, igual que `decorations` y `Base`.
+        let destinoCitra = "\(rutaApp)/Emuladores_Mac/Citra"
+        if !FileManager.default.fileExists(atPath: "\(destinoCitra)/citra-qt.app") {
+            let citraBundle = Bundle.main.bundlePath + "/Contents/Resources/Citra/citra-qt.app"
+            if FileManager.default.fileExists(atPath: citraBundle) {
+                DispatchQueue.main.sync { etiqueta.stringValue = "Instalando Citra…" }
+                Commands.Bash.system("mkdir -p \"\(destinoCitra)\" && cp -R \"\(citraBundle)\" \"\(destinoCitra)/\"")
+            } else {
+                print("⚠️ No hay Citra en el bundle (Contents/Resources/Citra); 3DS no funcionará.")
+            }
         }
 
         //MARK: Bezels desde el bundle (sin Dropbox), solo si aún no están.

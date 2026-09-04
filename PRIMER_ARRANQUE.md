@@ -538,6 +538,27 @@ las dos vías evaluadas fueron: (a) detectar carpetas sin `.iso`/`.xiso` y reemp
 la primera vez con `xdvdfs-cli` (open source), cacheando el resultado; (b) exigir que las ROMs de
 Xbox en la BoB del usuario vengan ya empaquetadas.
 
+### H12) RPCS3: nunca hubo nada en la Base, y Citra bundleado en el .app
+
+**1. ¿La Base copiaba algo para RPCS3?** Comprobado a fondo, incluido TODO el historial de git
+(`git log --all --diff-filter=AD`): **no**. No existe ni ha existido nunca una carpeta
+`Base/ApplicationSupport/RPCS3/`; `copiarBase()` no tiene ningún bloque para RPCS3. Lo único que
+le falta es el firmware oficial de Sony (`PS3UPDAT.PUP`), que no se puede bundlear por copyright
+— pero no es una regresión de esta sesión: nunca hubo nada que copiar.
+
+**2. Citra bundleado dentro del `.app`, ya no se descarga de ningún sitio**. `Citra/citra-qt.app`
+(97 MB, extraído del mismo enlace personal que ya se usaba, sin el instalador/`maintenancetool`
+que no hace falta — verificado con `otool -L` que el binario es autocontenido: todas sus
+dependencias son `@loader_path/../Frameworks/…` propios o frameworks del sistema) va como
+**folder reference** en el pbxproj, exactamente igual que `Base` y `decorations`.
+`downloadEmulators()` ya no baja nada por red para 3DS: si falta, copia
+`Contents/Resources/Citra/citra-qt.app` con `cp -R`. Cero dependencia del enlace personal de
+Dropbox a partir de ahora (se mantiene solo como referencia histórica en el mensaje del commit).
+
+Verificado con el `.app` copiado tal cual quedará en el bundle: arranca `Shovel Knight.3ds`
+(cifrada) igual que con el zip descargado — Program ID cargado, region code aplicado, igual de
+bien que antes.
+
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).
 - [x] Ventana a `visibleFrame` (bajo la barra de menú).
