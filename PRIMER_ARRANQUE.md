@@ -288,9 +288,26 @@ Investigación de los **11 directorios de ROMs sin sistema** en `/Volumes/Pablo/
 - [x] 🟡 **IDs de ScreenScraper** para los nuevos en `llenaSistemasIds()`: `model2` = **54**,
   `model3` = **55** (confirmados en las URLs `plateforme=` de screenscraper.fr). Sin ellos el
   scraper enviaría `systemeid` vacío.
-- [ ] 🟡 **Faltan los logos** `model2.png` / `model3.png` en `RetroMac/themes/default/logos/`.
-  No los invento: la instalación de BoB del usuario los tiene en su tema de RetroBat — copiarlos
-  cuando el disco externo esté montado.
+- [x] 🟡 **Logos** — **HECHO**, y de paso repasado el set entero: había **20 de 106 sistemas sin
+  logo**, no solo model2/model3. Ahora quedan **104/106**.
+  - **5 traídos del tema `Carbon BOB`** de la instalación de RetroBat: `model2`, `model3`, `cdi`,
+    `fbn` (de `fbneo.svg`) y `atarijaguarcd` (PNG directo).
+  - **13 eran fallos de nombre, no logos ausentes**: el app busca el PNG por `<name>`, pero el
+    nombre bueno está en `<theme>` (`dos`→pc, `jaguar`→atarijaguar, `lynx`→atarilynx,
+    `o2em`→odyssey2, `wswanc`→wonderswancolor, `tic-80`→tic80, `n3ds`→3ds, `sfc`→snes,
+    `sc-3000`/`sg-1000`→sg1000, `amiga600`→amiga, `atarixe`→atari800, `chailove`→love).
+    Duplicados con el nombre del sistema. **De estos, 5 sí tenían ROMs en el disco del usuario**
+    (`dos` 272, `o2em` 190, `lynx` 91, `wswanc` 83, `jaguar` 29): salían sin logo por esto.
+  - **Conversión SVG→PNG**: el tema guarda 255 logos en SVG. `sips` (ImageIO) rasteriza algunos
+    mal —`model3` salía recortado— así que se usa el renderizador de QuickLook (WebKit), que sí
+    los dibuja bien pero aplana sobre blanco. Se renderiza **dos veces, sobre blanco y sobre
+    negro**, y se recupera el alfa exacto (`a = 1 − (Cblanco − Cnegro)`, `color = Cnegro / a`),
+    incluido el antialias; luego se recorta el relleno. Script en el scratchpad (`svg2png.py` +
+    `pngcrop.py`, PNG en Python puro: esta máquina no tiene PIL ni ImageMagick).
+  - **Quedan 2 sin logo**: `karaoke` y `supervision`. No existen en el tema de BOB ni en el set
+    del app, y **ninguno tiene ROMs** (0 ficheros), así que no llegan al carrusel. No los invento.
+  - `themes` es una *folder reference* en el pbxproj, así que los PNG nuevos entran al bundle
+    solos, sin tocar el proyecto.
 
 **Descartados, con el motivo:**
 | Sistema | Veredicto |
