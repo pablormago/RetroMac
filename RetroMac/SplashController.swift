@@ -167,8 +167,16 @@ class SplashController: NSViewController {
         } else {
             print("FILE PATH NOT AVAILABLE")
         }
-        
-        
+
+        // Sistemas nuevos del bundle que el usuario aún no tiene en su cfg (model2, model3…).
+        // Debe ir ANTES de downloadEmulators(), porque coresDelCfg() lee el cfg del usuario
+        // y así se bajan también los cores que traen los sistemas recién añadidos.
+        let sistemasAnadidos = fusionarSistemasNuevos()
+        if !sistemasAnadidos.isEmpty {
+            taskLabel.stringValue = "Añadiendo sistemas nuevos: " + sistemasAnadidos.joined(separator: ", ")
+            print("✅ sistemas añadidos al cfg del usuario: \(sistemasAnadidos.joined(separator: ", "))")
+        }
+
         let Xemu = "/Users/Shared/Xemu"
         let myGroup = DispatchGroup()
         myGroup.enter()

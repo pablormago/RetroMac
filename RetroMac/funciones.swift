@@ -74,6 +74,10 @@ func llenaSistemasIds() {
     let mastersystem = ["mastersystem", "2"]
     let megadrive = ["megadrive", "1"]
     let naomi = ["naomi", "56"]
+    // IDs de ScreenScraper: Model 2 = 54, Model 3 = 55 (van seguidos de atomiswave 53
+    // y naomi 56). Sin esta entrada el scraper mandaría systemeid vacío.
+    let model2 = ["model2", "54"]
+    let model3 = ["model3", "55"]
     let sc3000 = ["sc-3000", "109"]
     let sg1000 = ["sg-1000", "109"]
     let saturn = ["saturn", "22"]
@@ -159,6 +163,8 @@ func llenaSistemasIds() {
     systemsIds.append(megadrive)
     systemsIds.append(mastersystem)
     systemsIds.append(naomi)
+    systemsIds.append(model2)
+    systemsIds.append(model3)
     systemsIds.append(sc3000)
     systemsIds.append(sg1000)
     systemsIds.append(saturn)
@@ -1218,6 +1224,64 @@ func writeCitraConfig(){
 func cfgEsValido(_ path: String) -> Bool {
     guard let s = try? String(contentsOfFile: path, encoding: .utf8), !s.isEmpty else { return false }
     return s.contains("<system>")
+}
+
+/// Devuelve los bloques `<system>…</system>` completos de un cfg, en orden.
+func bloquesDeSistema(_ texto: String) -> [String] {
+    var out = [String]()
+    var resto = texto[...]
+    while let ini = resto.range(of: "<system>"),
+          let fin = resto.range(of: "</system>", options: [], range: ini.upperBound..<resto.endIndex) {
+        out.append(String(resto[ini.lowerBound..<fin.upperBound]))
+        resto = resto[fin.upperBound...]
+    }
+    return out
+}
+
+/// Nombre corto (`<name>`) de un bloque de sistema.
+func nombreDeSistema(_ bloque: String) -> String? {
+    guard let a = bloque.range(of: "<name>"),
+          let b = bloque.range(of: "</name>", options: [], range: a.upperBound..<bloque.endIndex)
+    else { return nil }
+    return String(bloque[a.upperBound..<b.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
+}
+
+/// Añade al cfg del usuario los `<system>` que están en el cfg del bundle pero no en el suyo.
+///
+/// Hacía falta porque el cfg de ~/Documents solo se recopia cuando falta o está corrupto
+/// (para no pisar el core que el usuario ha elegido por sistema, que escribe `escribeSistemas`).
+/// Consecuencia: un sistema nuevo de una versión posterior —model2, model3— no llegaba NUNCA
+/// a quien ya tenía un cfg válido. La fusión es a nivel de texto: solo inserta bloques que
+/// faltan, sin tocar ni una línea de los que ya están. Devuelve los nombres añadidos.
+@discardableResult
+func fusionarSistemasNuevos() -> [String] {
+    let docs = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+    let rutaUsuario = docs + "/RetroMac/es_systems_mac.cfg"
+    guard let rutaBundle = Bundle.main.path(forResource: "es_systems_mac", ofType: "cfg"),
+          let delBundle = try? String(contentsOfFile: rutaBundle, encoding: .utf8),
+          var delUsuario = try? String(contentsOfFile: rutaUsuario, encoding: .utf8),
+          delUsuario.contains("<system>"),
+          let cierre = delUsuario.range(of: "</systemList>", options: .backwards)
+    else { return [] }
+
+    var nombresAnadidos = [String]()
+    var bloquesNuevos = ""
+    for bloque in bloquesDeSistema(delBundle) {
+        guard let nombre = nombreDeSistema(bloque) else { continue }
+        if delUsuario.contains("<name>\(nombre)</name>") { continue }
+        bloquesNuevos += "    " + bloque + "\n"
+        nombresAnadidos.append(nombre)
+    }
+    guard !nombresAnadidos.isEmpty else { return [] }
+
+    delUsuario.replaceSubrange(cierre, with: bloquesNuevos + "</systemList>")
+    do {
+        try delUsuario.write(toFile: rutaUsuario, atomically: true, encoding: .utf8)
+    } catch {
+        print("⚠️ no se pudieron fusionar los sistemas nuevos: \(error)")
+        return []
+    }
+    return nombresAnadidos
 }
 
 func coresDelCfg() -> [String] {

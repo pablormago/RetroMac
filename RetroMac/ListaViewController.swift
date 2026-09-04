@@ -316,11 +316,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         if filaConsola != nil {
             let sistemaABuscar = allTheGames[filaConsola!].sistema
             let home = Bundle.main.bundlePath
-            let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + sistemaABuscar + ".png")!
             logoSistema.imageScaling = .scaleProportionallyDown
             let path =  home +  "/Contents/Resources/themes/default/logos/" + sistemaABuscar + ".png"
-            let fileDoesExist = FileManager.default.fileExists(atPath: path)
-            if fileDoesExist {
+            // Sin logo (model2/model3, etc.) se muestra el nombre del sistema. El
+            // force-unwrap anterior crasheaba antes de llegar a este fallback.
+            if FileManager.default.fileExists(atPath: path),
+               let imagen2 = NSImage(byReferencingFile: path) {
                 logoSistema.isHidden = false
                 sistemaLabel.isHidden = true
                 logoSistema.image = imagen2

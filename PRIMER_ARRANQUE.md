@@ -200,7 +200,8 @@ Severidad: 🔴 crítico · 🟠 importante · 🟡 limpieza.
 ### A) cfg de sistemas
 - [x] 🟠 **Bug `createDirectory(... .absoluteString)`** ([SplashController.swift:72](RetroMac/SplashController.swift:72)) — **HECHO**: `URL(string:)`+`.absoluteString` → `FileManager.urls(...)` + `.path`.
 - [x] 🟡 **Copia manual del código fuente sobrante** en `~/Documents/RetroMac/RetroMac/` — **BORRADA**.
-- [x] 🟡 **Validar/versionar el cfg sin perder ediciones** — **HECHO**: nuevo `cfgEsValido()` (parsea `<system>`); el arranque recopia solo si el cfg falta/no es válido; y en cambio de versión ya **NO** se pisa el cfg del usuario (conserva sus selecciones de core que escribe `escribeSistemas`), solo se recopia si es inválido. *(Merge fino de sistemas nuevos del bundle: no se hace — se prioriza no perder datos del usuario.)*
+- [x] 🟡 **Validar/versionar el cfg sin perder ediciones** — **HECHO**: nuevo `cfgEsValido()` (parsea `<system>`); el arranque recopia solo si el cfg falta/no es válido; y en cambio de versión ya **NO** se pisa el cfg del usuario (conserva sus selecciones de core que escribe `escribeSistemas`), solo se recopia si es inválido.
+- [x] 🔴 **Merge de sistemas nuevos del bundle** — **HECHO** (`fusionarSistemasNuevos()`, [funciones.swift:1249](RetroMac/funciones.swift:1249)). Antes se descartó por miedo a pisar datos del usuario; el efecto secundario era grave: **un sistema nuevo de una versión posterior no llegaba NUNCA** a quien ya tuviera un cfg válido (model2/model3 habrían sido invisibles). La fusión es a nivel de **texto**: recorre los `<system>` del bundle e inserta solo los cuyo `<name>` no está en el cfg del usuario, antes de `</systemList>`. No toca ni una línea de los bloques existentes, así que las selecciones de core de `escribeSistemas` se conservan intactas. Se llama en [SplashController.swift:171](RetroMac/SplashController.swift:171), **antes de `downloadEmulators()`**, porque `coresDelCfg()` lee el cfg del usuario y así se bajan también los cores de los sistemas recién añadidos.
 
 ### B) Base (generación — `copiarBase`, [ViewController.swift:526](RetroMac/ViewController.swift:526))
 - [x] 🟠 **`cp -r` sin control** — **HECHO (parcial)**: se mantiene `cp -r` (conserva el *merge* que necesita `~/Library/Application Support`), pero ahora con rutas **entrecomilladas** (bug si el path tiene espacios) y **verificación post-copia** de ficheros clave con aviso. (Reescritura completa a `FileManager` descartada: riesgo de romper el merge sin poder testear.)
@@ -267,6 +268,47 @@ arranque**, lentos por `--retry 3 --retry-delay 2`, con la etiqueta congelada.
   del sistema por cada una y por cada juego nuevo** (7 escaneos por juego). Ahora se enumera **una vez
   por carpeta** y se reutiliza; el caché se vacía al empezar cada sistema.
 - [x] Limpieza: eliminadas 7 declaraciones `let fileManager` que quedaban sin uso.
+
+### G) Sistemas que no se podían cargar — alternativas para macOS
+
+Investigación de los **11 directorios de ROMs sin sistema** en `/Volumes/Pablo/BoB/Bobwin/roms`
+(verificado contra el buildbot de libretro —225 cores x86_64 / 215 arm64— y la API de GitHub, 04-09-2026).
+
+**Añadidos (decisión del usuario: model2 y model3):**
+- [x] 🟠 **`model3`** → core `supermodel_libretro` (x86_64 1,27 MB · arm64 1,22 MB). Verificado:
+  el `.dylib` de x86_64 es Mach-O x86_64 real. `coresDelCfg()` lo detecta solo y lo descarga.
+- [x] 🟠 **`model2`** → core `mame_libretro` (driver `segam2`). Coste de descarga **cero**: ese core
+  ya estaba en el cfg por el sistema `mame`. ⚠️ **Reserva**: los 19 `.zip` de la BoB son romsets del
+  *Model 2 Emulator* (Nebula), no de MAME; puede que no arranquen sin romsets en formato MAME.
+- [x] 🔴 **Crash al añadir cualquier sistema sin logo** ([ViewController.swift:299](RetroMac/ViewController.swift:299)
+  y [ListaViewController.swift:319](RetroMac/ListaViewController.swift:319)) — `NSImage(byReferencingFile:)!`
+  con force-unwrap explotaba **antes** del `if fileDoesExist` que venía justo debajo. Ya había
+  **18 sistemas del cfg sin logo** (`cdi`, `dos`, `lynx`, `sfc`, `tic-80`…): era un crash latente.
+  Ahora es `fileExists` + `if let`, y sin logo el botón se queda con el título.
+- [x] 🟡 **IDs de ScreenScraper** para los nuevos en `llenaSistemasIds()`: `model2` = **54**,
+  `model3` = **55** (confirmados en las URLs `plateforme=` de screenscraper.fr). Sin ellos el
+  scraper enviaría `systemeid` vacío.
+- [ ] 🟡 **Faltan los logos** `model2.png` / `model3.png` en `RetroMac/themes/default/logos/`.
+  No los invento: la instalación de BoB del usuario los tiene en su tema de RetroBat — copiarlos
+  cuando el disco externo esté montado.
+
+**Descartados, con el motivo:**
+| Sistema | Veredicto |
+|---|---|
+| `wiiu` | Core `cemu_libretro` existe (9,9 MB, ambas arch) pero el propio Cemu declara macOS *"purely experimental"* (MoltenVK + Rosetta). El standalone oficial `cemu-2.6-macos-12-x64.dmg` es **x64**. |
+| `ports` | Cores `2048`/`craft`/`gong` disponibles, pero los ficheros son `.libretro` (texto con el nombre del core, sin contenido) → exige código nuevo en el lanzador: leer el `.libretro` y arrancar RetroArch con `-L core` y **sin ROM**. |
+| `switch` | Ryubing (fork de Ryujinx) sí tiene builds macOS, pero **la distribución salió de GitHub** a su GitLab propio: `Ryubing/Ryujinx` y `Ryubing/Stable-Releases` → *Not Found*, `git.ryujinx.app/api/v4` → 404. No automatizable. |
+| `openbor` | [DCurrent/openbor](https://github.com/DCurrent/openbor) v7533 publica Android/Linux/Windows, **ningún asset macOS**. El port `sasus470/OpenBor_on_mac` no trae binarios en sus releases (hay que compilar). No hay core `openbor` en el buildbot. |
+| `triforce` | Dolphin fusionó Triforce en mainline en 2026 tras el fork de crediar, pero **solo Windows/Linux y Android; aún no en los builds macOS**. |
+| `xbox360` | Xenia es Windows + Direct3D 12 exclusivamente. |
+| `windows`, `PinballFX` | Ejecutables Windows lanzados por RetroBat → requerirían Wine/CrossOver. Fuera del alcance. |
+
+**Standalone Supermodel: descartado por incompatible con esta máquina.** [trzy/Supermodel](https://github.com/trzy/Supermodel)
+publica un `…-macos.tar.gz` actualizado (v0.3a-20260726, 6,5 MB) y sería trivial de integrar, pero al
+extraerlo el binario resulta ser **`Mach-O 64-bit executable arm64`** — y este Mac es un
+**Intel Core i5-5257U (x86_64)**. Ninguna release tiene un asset macOS x86_64. Además **no es un
+`.app`**, sino un binario suelto con `Frameworks/`, así que `carpetaTieneApp()` lo daría siempre por
+no instalado y `downloadEmulators()` lo re-descargaría en cada arranque. Se queda solo el core libretro.
 
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).

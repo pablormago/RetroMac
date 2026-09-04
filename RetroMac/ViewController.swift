@@ -296,11 +296,13 @@ class ViewController: NSViewController {
             button.tag = counter+1
             button.title = consola.sistema
             let home = Bundle.main.bundlePath
-            let imagen2 = NSImage(byReferencingFile: home +  "/Contents/Resources/themes/default/logos/" + consola.sistema + ".png")!
             button.imageScaling = .scaleProportionallyDown
+            // Sistemas sin logo en el tema (p.ej. model2/model3) no tienen .png: antes
+            // el force-unwrap de NSImage(byReferencingFile:) crasheaba aqui. Ahora el
+            // boton se queda solo con el titulo.
             let path =  home +  "/Contents/Resources/themes/default/logos/" + consola.sistema + ".png"
-            let fileDoesExist = FileManager.default.fileExists(atPath: path)
-            if fileDoesExist {
+            if FileManager.default.fileExists(atPath: path),
+               let imagen2 = NSImage(byReferencingFile: path) {
                 button.image = imagen2
             }
             button.Sistema = consola.sistema
