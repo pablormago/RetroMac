@@ -563,9 +563,19 @@ func copiarBase(){
     if !fm.fileExists(atPath: "\(appSupport)/PCSX2/inis") {
         fusionar("\(base)/ApplicationSupport/PCSX2", "\(appSupport)/PCSX2")
     }
-    // Azahar NO lleva config en la Base a proposito: se la genera el solo en
-    // ~/Library/Application Support/Azahar/config/qt-config.ini la primera vez
-    // que arranca. La que habia en el bundle era de Citra, con rutas de Linux.
+    // El PCSX2.ini de la Base deja `Bios = bios` (carpeta propia de PCSX2, vacía). Se
+    // rellena copiando la BIOS de PS2 que YA viaja en la Base para RetroArch (mismo
+    // fichero, sin duplicarlo en el repo): así el usuario no tiene que volcarla dos
+    // veces. Legalidad: es la BIOS que el propio proyecto decidió incluir para el core
+    // libretro de PCSX2; aquí solo se reutiliza el fichero ya presente en su disco.
+    let bibliotecaBiosPS2 = "\(userHome)/Documents/Retroarch/system/SCPH-70004_BIOS_V12_PAL_200.BIN"
+    let biosPCSX2 = "\(appSupport)/PCSX2/bios/SCPH-70004_BIOS_V12_PAL_200.BIN"
+    if !fm.fileExists(atPath: biosPCSX2), fm.fileExists(atPath: bibliotecaBiosPS2) {
+        try? fm.createDirectory(atPath: "\(appSupport)/PCSX2/bios", withIntermediateDirectories: true)
+        try? fm.copyItem(atPath: bibliotecaBiosPS2, toPath: biosPCSX2)
+    }
+    // La config de Citra (.config/citra-emu) NO se fusiona aqui: la copia
+    // readCitraConfig() bajo demanda, la primera vez que se necesita.
 
     // Verificación post-copia: si falta algún fichero/dir clave, la Base quedó incompleta.
     let comprobaciones = [
