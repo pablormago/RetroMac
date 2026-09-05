@@ -296,14 +296,17 @@ class ViewController: NSViewController {
             button.tag = counter+1
             button.title = consola.sistema
             let home = Bundle.main.bundlePath
-            button.imageScaling = .scaleProportionallyDown
+            // El lienzo ya deja cada logo con su margen/tamaño fijo (ver
+            // logoEnLienzoFijo), así que aquí no hace falta que NSButton reescale más.
+            button.imageScaling = .scaleNone
             // Sistemas sin logo en el tema (p.ej. model2/model3) no tienen .png: antes
             // el force-unwrap de NSImage(byReferencingFile:) crasheaba aqui. Ahora el
             // boton se queda solo con el titulo.
             let path =  home +  "/Contents/Resources/themes/default/logos/" + consola.sistema + ".png"
             if FileManager.default.fileExists(atPath: path),
                let imagen2 = NSImage(byReferencingFile: path) {
-                button.image = imagen2
+                button.image = logoEnLienzoFijo(imagen: imagen2, lienzo: NSSize(width: 560, height: 178),
+                                                margenLados: 40, altoMaximo: 110)
             }
             button.Sistema = consola.sistema
             button.Comando = consola.command
@@ -573,6 +576,33 @@ func copiarBase(){
     if !fm.fileExists(atPath: biosPCSX2), fm.fileExists(atPath: bibliotecaBiosPS2) {
         try? fm.createDirectory(atPath: "\(appSupport)/PCSX2/bios", withIntermediateDirectories: true)
         try? fm.copyItem(atPath: bibliotecaBiosPS2, toPath: biosPCSX2)
+    }
+    // BIOS de Philips CD-i para el core same_cdi (fork de MAME): busca
+    // system/same_cdi/bios/cdimono1.zip exacto, no vale con dejarlo suelto en system/
+    // (verificado con el core real: solo funciona en esa ruta). Igual que con la de
+    // PCSX2: si el usuario ya tenía ~/Documents/Retroarch de antes de este arreglo,
+    // el bloque de arriba no se repite y este fichero nuevo nunca llegaría solo.
+    let cdiBios = "\(userHome)/Documents/Retroarch/system/same_cdi/bios/cdimono1.zip"
+    if !fm.fileExists(atPath: cdiBios) {
+        let origenCdi = "\(base)/Documents/Retroarch/system/same_cdi/bios/cdimono1.zip"
+        if fm.fileExists(atPath: origenCdi) {
+            try? fm.createDirectory(atPath: "\(userHome)/Documents/Retroarch/system/same_cdi/bios",
+                                    withIntermediateDirectories: true)
+            try? fm.copyItem(atPath: origenCdi, toPath: cdiBios)
+        }
+    }
+    // BIOS compartida de Neo Geo para el core MAME (`neogeo.zip`). Se guarda aquí como
+    // copia "maestra" de origen — MAME no la busca en system/, la necesita junto a la
+    // romset de cada juego, así que asegurarBiosMameSiHaceFalta() (funciones.swift) la
+    // copia desde aquí a la carpeta de cada juego en el momento de lanzarlo.
+    let neogeoBios = "\(userHome)/Documents/Retroarch/system/neogeo/neogeo.zip"
+    if !fm.fileExists(atPath: neogeoBios) {
+        let origenNeogeo = "\(base)/Documents/Retroarch/system/neogeo/neogeo.zip"
+        if fm.fileExists(atPath: origenNeogeo) {
+            try? fm.createDirectory(atPath: "\(userHome)/Documents/Retroarch/system/neogeo",
+                                    withIntermediateDirectories: true)
+            try? fm.copyItem(atPath: origenNeogeo, toPath: neogeoBios)
+        }
     }
     // La config de Citra (.config/citra-emu) NO se fusiona aqui: la copia
     // readCitraConfig() bajo demanda, la primera vez que se necesita.

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Cocoa
 import GameController
 import Commands
 
@@ -377,7 +378,8 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
         for game in parser2.games
         {
             var datosJuego3 = [String]()
-            let miJuego = siRutaRelativa2(ruta: String(game.path))
+            let miJuego = resolverRomDaphne(siRutaRelativa2(ruta: String(game.path)))
+            let miComando = resolverCoreMameSiHaceFalta(miSistema: miSistema, ruta: miJuego, comandoDefecto: miComando)
             let miNombre = String(game.name)
             let miDescripcion = String(game.desc)
             let miMapa = siRutaRelativa2(ruta:String(game.map))
@@ -427,6 +429,9 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
     }else{
         print("ERROR GARGANDO gamelist.xml en: \(String(describing: pathXMLinterno2))")
     }
+    if miSistema == "scummvm" {
+        generarMarkersScummvmFaltantes(rutaSistema: rutaApp3)
+    }
     print("Nuevos: ")
     for extensiones in extensionesSistema {
         
@@ -451,6 +456,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
                     juegosnuevos += 1
                     ///AÑADIR FUNCION PARA AÑADIR JUEGO AL XML
                     let name = (String(element) as NSString).deletingPathExtension
+                    let miComando = resolverCoreMameSiHaceFalta(miSistema: miSistema, ruta: rutacompleta, comandoDefecto: miComando)
                     var datosJuegoNoXml = [String]()
                     var datosDeMiJuego: Juego = Juego(path: rutacompleta, name: name, description: "", map: "", manual: buscaManual(juego: name, ruta: rutaApp3), news: "", tittleshot: buscaTittleShot(juego: name, ruta: rutaApp3), fanart: buscaFanArt(juego: name, ruta: rutaApp3), thumbnail: buscaImage(juego: name, ruta: rutaApp3), image: buscaImage(juego: name, ruta: rutaApp3), video: buscaVideo(juego: name, ruta: rutaApp3), marquee: buscaMarquee(juego: name, ruta: rutaApp3), releasedate: "", developer: "", publisher: "", genre: "", lang: "", players: "", rating: "", fav: "", comando: miComando, core: "", system: miSistema, box: buscaBox(juego: name, ruta: rutaApp3))
                     datosJuegoNoXml = [rutacompleta , name, "", "", buscaManual(juego: name, ruta: rutaApp3), "", buscaTittleShot(juego: name, ruta: rutaApp3), buscaFanArt(juego: name, ruta: rutaApp3), buscaImage(juego: name, ruta: rutaApp3), buscaImage(juego: name, ruta: rutaApp3), buscaVideo(juego: name, ruta: rutaApp3), buscaMarquee(juego: name, ruta: rutaApp3), "", "", "", "", "", "", "" , buscaBox(juego: name, ruta: rutaApp3)]
@@ -474,6 +480,247 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
     //allTheGames.append(miGrupo)
     //print(miGrupo)
     return losJuegos
+}
+
+/// El core `daphne` (RetroArch) no acepta la carpeta `<juego>.daphne` como ROM —
+/// esa es la convención de gamelist.xml de RetroBat (pensada para el Daphne de
+/// Windows, que sí la admite). El core libretro exige el `.zip` gemelo en la
+/// subcarpeta `roms/` del propio sistema (confirmado con el core real: sin esto
+/// da "filename doesn't seem to have a valid format. Ext: zip Fileext: daphne"),
+/// y localiza él solo la carpeta de vídeo/audio por el nombre base. Si el .zip no
+/// existe se deja la ruta tal cual, para no romper una instalación distinta.
+func resolverRomDaphne(_ ruta: String) -> String {
+    guard ruta.hasSuffix(".daphne") else { return ruta }
+    let carpetaSistema = (ruta as NSString).deletingLastPathComponent
+    let nombreBase = ((ruta as NSString).lastPathComponent as NSString).deletingPathExtension
+    let zip = "\(carpetaSistema)/roms/\(nombreBase).zip"
+    return FileManager.default.fileExists(atPath: zip) ? zip : ruta
+}
+
+/// El core `scummvm` (RetroArch) puede lanzarse de 3 formas: (1) por "target" leyendo
+/// scummvm.ini, (2) apuntando a un fichero de datos del juego, o (3) apuntando a la
+/// CARPETA del juego y dejando que autodetecte. Probado con el core real: la (1) falla
+/// ("Game data not found") porque el scummvm.ini de la BoB trae rutas relativas de
+/// Windows (`path=.\Monkey_Island_1\`) que no resuelven en Mac; la (3) funciona siempre,
+/// sin depender de ese ini ni de ningún metadato — así que sirve igual para un juego
+/// nuevo que el usuario añada después, sin tener que editar nada.
+///
+/// OJO: esta transformación NO se aplica al guardar/comparar el listado (juegosXml
+/// sigue guardando la ruta del propio marker), solo al construir el comando de
+/// lanzamiento — si se aplicara antes, el escaneo recursivo de "juegos nuevos" dejaría
+/// de reconocer el marker dentro de la carpeta ya vista y lo duplicaría en cada arranque.
+///
+/// Guardas: solo actúa sobre `.scummvm`/`.svm` sueltos (no sobre marcadores ya
+/// comprimidos tipo `sq2.scummvm.zip`, que el core trata distinto); y no toca un
+/// marker que esté en la raíz del sistema (junto al gamelist.xml, caso `0sistema.scummvm`),
+/// donde "la carpeta" sería todo `roms/scummvm` y no un juego concreto.
+/// El escaneo de "juegos nuevos" de abajo busca por EXTENSION (.scummvm .7z .zip...),
+/// así que una carpeta de juego que el usuario añada sin ningún .scummvm dentro nunca
+/// se detectaría sola. Antes de ese escaneo, se recorren las carpetas directas del
+/// sistema scummvm y a la que no tenga ya un .scummvm/.svm se le crea uno vacío con el
+/// nombre de la propia carpeta — el contenido no importa, el lanzamiento autodetecta
+/// (ver resolverRomScummvm). Así esa carpeta entra en el escaneo normal de nuevos.
+func generarMarkersScummvmFaltantes(rutaSistema: String) {
+    // Carpetas hermanas de media que EmulationStation/RetroBat dejan junto a los juegos
+    // (comprobado en la BoB: "marquees", "snaps"; se añaden aquí las demás habituales
+    // de esa misma convención por si algún sistema las trae). Sin esta lista se les
+    // crearía un .scummvm falso, porque no están vacías.
+    let carpetasMedia: Set<String> = ["marquees", "snaps", "images", "manuals", "videos",
+                                       "screenshots", "box", "fanart", "thumbs", "titleshots"]
+    let fm = FileManager.default
+    guard let carpetas = try? fm.contentsOfDirectory(atPath: rutaSistema) else { return }
+    for nombre in carpetas {
+        guard !carpetasMedia.contains(nombre.lowercased()) else { continue }
+        var esDirectorio: ObjCBool = false
+        let rutaCarpeta = rutaSistema + "/" + nombre
+        guard fm.fileExists(atPath: rutaCarpeta, isDirectory: &esDirectorio), esDirectorio.boolValue else { continue }
+        guard let contenido = try? fm.contentsOfDirectory(atPath: rutaCarpeta), !contenido.isEmpty else { continue }
+        let yaTieneMarker = contenido.contains {
+            let ext = ($0 as NSString).pathExtension.lowercased()
+            return ext == "scummvm" || ext == "svm"
+        }
+        if !yaTieneMarker {
+            fm.createFile(atPath: rutaCarpeta + "/\(nombre).scummvm", contents: nil)
+        }
+    }
+}
+
+func resolverRomScummvm(_ ruta: String) -> String {
+    let ext = (ruta as NSString).pathExtension.lowercased()
+    guard ext == "scummvm" || ext == "svm" else { return ruta }
+    let carpetaJuego = (ruta as NSString).deletingLastPathComponent
+    guard !FileManager.default.fileExists(atPath: carpetaJuego + "/gamelist.xml") else { return ruta }
+    return carpetaJuego
+}
+
+/// RetroArch (esta build oficial del buildbot) no sabe descomprimir `.7z` — confirmado
+/// con el core real: mismo core, misma ROM, `.7z` da "not a valid ROM image" y `.zip`
+/// funciona perfecto. Si el ROM a lanzar es un `.7z`, se descomprime una sola vez (con
+/// el `7zz` ya empaquetado para RPCS3) a un `.zip` en caché y se reutiliza en
+/// lanzamientos siguientes.
+///
+/// El caché vive en Application Support, replicando la ruta completa del `.7z`
+/// original — a propósito FUERA de cualquier carpeta `roms/`: si el `.zip` generado
+/// cayera dentro, el escaneo de "juegos nuevos" (que mira por extensión, y `.zip` está
+/// en la lista de casi todos los sistemas) lo detectaría como un juego duplicado, el
+/// mismo problema que ya se evitó con el marker de ScummVM. Replicar la ruta completa
+/// (no solo el nombre) evita que dos ROMs iguales de sistemas distintos colisionen.
+func resolverRomComprimida(_ ruta: String) -> String {
+    guard ruta.lowercased().hasSuffix(".7z") else { return ruta }
+    let fm = FileManager.default
+    guard fm.fileExists(atPath: ruta) else { return ruta }
+    let appSupport = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
+    let rutaSinRaiz = ruta.hasPrefix("/") ? String(ruta.dropFirst()) : ruta
+    let destinoZip = "\(appSupport)/RetroMac/cache_7z/\(rutaSinRaiz)"
+    let destinoZipSinExt = (destinoZip as NSString).deletingPathExtension
+    let destinoZipFinal = destinoZipSinExt + ".zip"
+    if fm.fileExists(atPath: destinoZipFinal) { return destinoZipFinal }
+    let carpetaDestino = (destinoZipFinal as NSString).deletingLastPathComponent
+    try? fm.createDirectory(atPath: carpetaDestino, withIntermediateDirectories: true)
+    let extraidoTmp = carpetaDestino + "/_tmp_extraccion_" + ((ruta as NSString).lastPathComponent as NSString).deletingPathExtension
+    let sevenZip = Bundle.main.bundlePath + "/Contents/Resources/7zz"
+    Commands.Bash.system("chmod +x \"\(sevenZip)\" 2>/dev/null; rm -rf \"\(extraidoTmp)\"; mkdir -p \"\(extraidoTmp)\"; \"\(sevenZip)\" x \"\(ruta)\" -o\"\(extraidoTmp)\" -y >/dev/null 2>&1 && (cd \"\(extraidoTmp)\" && zip -q -r \"\(destinoZipFinal)\" .); rm -rf \"\(extraidoTmp)\"")
+    return fm.fileExists(atPath: destinoZipFinal) ? destinoZipFinal : ruta
+}
+
+/// El core MAME (a diferencia de la mayoría de cores libretro) exige que las BIOS
+/// compartidas — como `neogeo.zip` para los juegos de Neo Geo — vivan en la MISMA
+/// carpeta que la romset del juego, no en `system/`. Confirmado con Windjammers real:
+/// en `system/neogeo.zip` MAME sigue sin encontrarla ("NOT FOUND"); en la carpeta del
+/// propio juego, funciona. Por eso esto tiene que aplicarse siempre que el core sea
+/// MAME, tanto si el juego venía en `.7z` (y se acaba de convertir a la carpeta de
+/// caché) como si ya estaba suelto en `.zip` en su carpeta original — un `resolverRomComprimida`
+/// a secas solo cubriría el primer caso.
+/// Debe llamarse con el CORE YA DEFINITIVO (después de una posible sustitución por
+/// core personalizado del juego), porque hasta ese punto no se sabe si de verdad es MAME.
+func asegurarBiosMameSiHaceFalta(_ ruta: String, comando: String) {
+    guard comando.contains("mame_libretro") else { return }
+    let fm = FileManager.default
+    let carpeta = (ruta as NSString).deletingLastPathComponent
+    let destino = carpeta + "/neogeo.zip"
+    guard !fm.fileExists(atPath: destino) else { return }
+    let docs = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+    let origen = "\(docs)/Retroarch/system/neogeo/neogeo.zip"
+    guard fm.fileExists(atPath: origen) else { return }
+    try? fm.copyItem(atPath: origen, toPath: destino)
+}
+
+/// Recorta una imagen al ratio de destino (aspect FILL: rellena todo el hueco
+/// recortando lo que sobre, en vez de dejar bandas como hace `imageScaling` de
+/// NSImageView, que solo tiene modos de aspect FIT). Se recorta desde el centro.
+/// Pensada para llamarse en background (ver `cargarImagenAsync`): decodificar y
+/// recortar son operaciones de CPU que no deben ir en el hilo principal.
+func imagenRecortadaAspectFill(ruta: String, ratioDestino: CGFloat) -> NSImage? {
+    guard let original = NSImage(contentsOfFile: ruta) else { return nil }
+    guard let cgImage = original.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return original }
+    let anchoOriginal = CGFloat(cgImage.width)
+    let altoOriginal = CGFloat(cgImage.height)
+    guard anchoOriginal > 0, altoOriginal > 0, ratioDestino > 0 else { return original }
+    let ratioOriginal = anchoOriginal / altoOriginal
+
+    var rectRecorte = CGRect(x: 0, y: 0, width: anchoOriginal, height: altoOriginal)
+    if ratioOriginal > ratioDestino {
+        // La original es más ancha que el hueco de destino: recortamos los lados.
+        let anchoDeseado = altoOriginal * ratioDestino
+        rectRecorte = CGRect(x: (anchoOriginal - anchoDeseado) / 2, y: 0, width: anchoDeseado, height: altoOriginal)
+    } else if ratioOriginal < ratioDestino {
+        // La original es más alta que el hueco de destino: recortamos arriba/abajo.
+        let altoDeseado = anchoOriginal / ratioDestino
+        rectRecorte = CGRect(x: 0, y: (altoOriginal - altoDeseado) / 2, width: anchoOriginal, height: altoDeseado)
+    }
+    guard let recortada = cgImage.cropping(to: rectRecorte) else { return original }
+    return NSImage(cgImage: recortada, size: NSSize(width: recortada.width, height: recortada.height))
+}
+
+/// Carga una imagen en background para no bloquear el hilo principal — evita el
+/// parpadeo/tirón al rellenar de golpe muchas celdas de una vez (grid, listas...).
+/// `contexto()` se vuelve a evaluar cuando termina la carga y se compara con el valor
+/// que tenía al empezar: si ha cambiado es que la celda ya se reutilizó para otro
+/// juego (NSCollectionView/NSTableView reciclan vistas) o que la selección cambió
+/// mientras cargaba, y se descarta el resultado para no pintar la imagen equivocada.
+/// Genérica sobre `T: Equatable` porque el "contexto" a comparar no siempre es la
+/// misma ruta (celdas de grid) — en un panel de detalle de selección única puede ser,
+/// por ejemplo, el número de fila seleccionada.
+func cargarImagenAsync<T: Equatable>(ruta: String, ratioAspectFill: CGFloat? = nil, contexto: @escaping () -> T, alTerminar: @escaping (NSImage?) -> Void) {
+    let valorEsperado = contexto()
+    DispatchQueue.global(qos: .userInitiated).async {
+        let imagen: NSImage?
+        if let ratio = ratioAspectFill {
+            imagen = imagenRecortadaAspectFill(ruta: ruta, ratioDestino: ratio)
+        } else {
+            imagen = NSImage(contentsOfFile: ruta)
+        }
+        DispatchQueue.main.async {
+            guard contexto() == valorEsperado else { return }
+            alTerminar(imagen)
+        }
+    }
+}
+
+/// Juegos de `roms/mame` cuya romset en la BoB no coincide con las revisiones que
+/// espera el core por defecto (mame2003_plus) — confirmado lanzando los 854 juegos
+/// del sistema uno a uno con el core real, no por heurística de CRC (los CRC
+/// discrepantes no predicen de forma fiable si el juego arranca: MAME tolera muchos
+/// ficheros no críticos con CRC distinto). Para estos, se usa el core moderno
+/// (mame_libretro) en su lugar. Lista cerrada a fecha de esta comprobación — un juego
+/// nuevo que se añada a roms/mame usará el core por defecto salvo que se compruebe
+/// y se añada aquí también.
+private let juegosMameConCoreModerno: Set<String> = [
+    "1941", "1942", "abcop", "actfancr", "airass", "airduel", "aligator", "altair", "androdun", "aof",
+    "aoh", "armedf", "ashura", "batrider", "batsugun", "bgaregga", "bionicc", "bjourney", "blazeon", "blazstar",
+    "bloodbro", "bublbob2", "captcomm", "captcommu", "contra", "cotton", "crimfght", "crsword", "crusherm", "ctribe",
+    "cupfinal", "cyberlip", "daioh", "dbreed", "dbz", "ddcrew", "ddragon3", "denjinmk", "desertbr", "djboy",
+    "dmnfrntpcb", "drgninja", "fatfury1", "fghthist", "flipshot", "forgottn", "funkyjet", "ga2", "gaialast", "gaiapols",
+    "gangwars", "gaunt2", "gauntlet", "gauntlet2p", "ghostb", "gloc", "goalx3", "gradius3", "growl", "gtmr2",
+    "ikari3", "jchan2", "jojoban", "karnov", "kinst", "kod", "kotm", "kotm2", "kov2", "kovsh",
+    "lastblad", "lastduel", "lbowling", "lgtnfght", "magdrop3", "maglord", "majtitle", "megablst", "metamrph", "mslug",
+    "mslug4", "mslug5", "mwalk", "nam1975", "nbbatman", "neobombe", "neodrift", "ninjamas", "opwolf", "ordyne",
+    "outzone", "pang3", "pbobblen", "pdrift", "pgoal", "phelios", "polepos", "preisle2", "pulstar", "puyo",
+    "raiden", "rambo3", "rastan", "rbff2", "redearth", "ridhero", "roboarmy", "rodland", "rohga", "rpatrol",
+    "rthunder", "rtype", "rungun", "samsho", "samsho4", "sdodgeb", "sengoku3", "sf2ce", "sfiii2", "sfiii3nr1",
+    "sfiiih", "shadfrce", "shadoww", "shdancer", "shinobi", "shocktro", "shogwarr", "simpsons2p2", "skykiddx", "slapshot",
+    "smgp", "snowboar", "socbrawl", "soccerss", "sonicwi2", "spacedx", "spinmast", "splatter", "ssideki4", "ssridersubc",
+    "strhoop", "strkfgtr", "svcsplus", "terraf", "tharrier", "thndrbld", "thndrx2", "thndzone", "thunderx", "tigeroad",
+    "tnzs", "toutrun", "turfmast", "turtship", "twinspri", "twinsqua", "twsoc96", "varth", "vball", "viewpoin",
+    "viostorm", "vmetal", "wakuwak7", "wcvol95", "whp", "willow", "wizdfireu", "wjammers", "wof", "wrally2",
+    "wwfsstar", "wwfwfest", "xmen", "zeroteam", "zerowing"
+]
+
+/// Aplica el override de arriba SOLO al construir el comando por defecto de cada fila
+/// al cargar el gamelist — nunca toca `arrayGamesCores`/UserDefaults, así que una
+/// elección de core manual que el usuario haga por su cuenta desde el menú contextual
+/// del juego sigue ganando siempre (esa comprobación es posterior, en el lanzamiento).
+func resolverCoreMameSiHaceFalta(miSistema: String, ruta: String, comandoDefecto: String) -> String {
+    guard miSistema == "mame" else { return comandoDefecto }
+    let nombre = ((ruta as NSString).lastPathComponent as NSString).deletingPathExtension
+    guard juegosMameConCoreModerno.contains(nombre) else { return comandoDefecto }
+    return comandoDefecto.replacingOccurrences(of: "mame2003_plus_libretro.dylib", with: "mame_libretro.dylib")
+}
+
+/// Los logos de sistema del menú horizontal tienen proporciones muy distintas entre
+/// sí (comprobado: desde 560x60 hasta 566x157) — dejar que NSButton los ajuste sin
+/// más a la caja fija del botón con `imageScaling` deja un aire lateral completamente
+/// distinto de un sistema a otro: el más ancho toca los bordes del botón, el más
+/// "cuadrado" queda pequeño y suelto en medio, sin margen consistente.
+///
+/// Esta función compone cada logo sobre un lienzo del tamaño EXACTO del botón, con un
+/// margen lateral MÍNIMO garantizado y una altura máxima común. Con proporciones tan
+/// distintas no hay forma de que el margen sea idéntico en todos sin recortar el logo
+/// (perdiendo parte del texto/marca) — así que se garantiza que nunca baja de
+/// `margenLados`, y la altura nunca supera `altoMaximo`, para que el tamaño visual
+/// sea consistente entre sistemas y ningún logo llegue a tocar el borde del botón.
+func logoEnLienzoFijo(imagen: NSImage, lienzo: NSSize, margenLados: CGFloat, altoMaximo: CGFloat) -> NSImage {
+    let anchoDisponible = lienzo.width - margenLados * 2
+    let escala = min(anchoDisponible / imagen.size.width, altoMaximo / imagen.size.height, 1.0)
+    let anchoFinal = imagen.size.width * escala
+    let altoFinal = imagen.size.height * escala
+    let origenX = (lienzo.width - anchoFinal) / 2
+    let origenY = (lienzo.height - altoFinal) / 2
+    return NSImage(size: lienzo, flipped: false) { _ in
+        imagen.draw(in: NSRect(x: origenX, y: origenY, width: anchoFinal, height: altoFinal),
+                    from: .zero, operation: .sourceOver, fraction: 1.0)
+        return true
+    }
 }
 
 func siRutaRelativa2(ruta: String) -> String {

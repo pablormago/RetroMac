@@ -2129,11 +2129,11 @@ extension OptionsViewController {
     @objc func lanzarNetPlay() {
         
         let mifila = columna
-        let mirom = "\"\(juegosXml[mifila][0])\""
+        let rutaResuelta = resolverRomComprimida(resolverRomScummvm(juegosXml[mifila][0]))
         let nombredelarchivo = juegosXml[mifila][0].replacingOccurrences(of: rutaApp , with: "")
         var comandojuego = juegosXml[mifila][20]
         if comandojuego.contains("RetroArch") {
-            
+
             gameShader(shader: "")
             noGameOverlay()
             let defaults = UserDefaults.standard
@@ -2145,7 +2145,7 @@ extension OptionsViewController {
                 gameShader(shader: miShader)
             }
             let marcos = defaults.integer(forKey: "Marcos")
-            
+
             if marcos == 1 {
                 if checkBezels(juego: juegosXml[columna][0]) == true {
                     gameOverlay(game: nombredelarchivo)
@@ -2155,8 +2155,10 @@ extension OptionsViewController {
             if fila != nil {
                 comandojuego = arrayGamesCores[fila!][1]
             }
+            asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
+            let mirom = "\"\(rutaResuelta)\""
             var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
-            
+
             var comando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "-L", with: "-H -L")
             if playingVideo == true {
                 SingletonState.shared.mySnapPlayer?.player?.pause()

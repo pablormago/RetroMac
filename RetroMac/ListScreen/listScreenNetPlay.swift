@@ -37,7 +37,7 @@ extension ListaViewController {
     @objc func lanzarNetPlay() {
         
         let mifila = juegosTableView.selectedRow
-        let mirom = "\"\(juegosXml[mifila][0])\""
+        let rutaResuelta = resolverRomComprimida(resolverRomScummvm(juegosXml[mifila][0]))
         let nombredelarchivo = juegosXml[mifila][0].replacingOccurrences(of: rutaApp , with: "")
         var comandojuego = juegosXml[mifila][20]
         if comandojuego.contains("RetroArch") {
@@ -46,8 +46,10 @@ extension ListaViewController {
             if fila != nil {
                 comandojuego = arrayGamesCores[fila!][1]
             }
+            asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
+            let mirom = "\"\(rutaResuelta)\""
             var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
-            
+
             var comando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "-L", with: "-H -L")
             if playingVideo == true {
                 SingletonState.shared.mySnapPlayer?.player?.pause()

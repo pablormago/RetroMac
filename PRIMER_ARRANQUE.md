@@ -559,6 +559,136 @@ Verificado con el `.app` copiado tal cual quedará en el bundle: arranca `Shovel
 (cifrada) igual que con el zip descargado — Program ID cargado, region code aplicado, igual de
 bien que antes.
 
+### H13) 7 sistemas fallando en instalación limpia — diagnóstico real, uno por uno
+
+Pedido explícito: probablemente faltan BIOS que están en la BoB. Comprobado sistema por sistema
+lanzando el core real con logs verbose, no adivinando por presencia de ficheros. **Solo 1 de los
+7 era eso.**
+
+**CDI (Philips CD-i) — SÍ era una BIOS que faltaba, arreglado** 🔴→✅
+Log exacto: `cdi200.rom NOT FOUND (tried in cdimono1)` + 2 ficheros de MCU de servo/slave.
+Probado en seco: NO vale ponerlo suelto en `system/`, ni en `system/cdimono1.zip`, ni en
+`system/same_cdi/cdimono1.zip` — el core `same_cdi` (fork de MAME) exige exactamente
+`system/same_cdi/bios/cdimono1.zip`, confirmado además contra la documentación oficial del
+proyecto. Añadido `Base/Documents/Retroarch/system/same_cdi/bios/cdimono1.zip` (640 KB, de la
+BoB) + guard específico en `copiarBase()` (igual que la BIOS de PCSX2: si el usuario ya tenía
+`~/Documents/Retroarch` de antes, este fichero nuevo no habría llegado nunca solo con el guard
+general). Verificado con el CHD real: sin el fichero, `NOT FOUND`; con él, CPU al 44-54 % sin
+ningún error.
+
+**Saturn (core `yabasanshiro`) — NO es BIOS, es un crash real del core en esta GPU** 🟡
+Crash report real (`~/Library/Logs/DiagnosticReports/RetroArch-*.ips`): `SIGABRT` dentro de
+`YglTMInit`/`YglInit` (inicialización de su gestor de texturas OpenGL propio), antes de llegar
+a intentar leer nada del disco. Incompatibilidad con la Intel Iris 6100 de esta Mac de pruebas
+(OpenGL 2.1/4.1 muy limitado). Ningún fichero en la Base lo arregla. Pendiente: mirar si hay un
+modo software/compatibilidad en las opciones del core, o probar en un Mac con GPU más moderna.
+
+**N64 (core `parallel_n64`) — NO es BIOS, RetroArch no descomprime `.7z`/`.zip`** 🟠
+Con el `.7z` real: `mupen64plus: open_rom(): not a valid ROM image`. Extraído a mano a `.z64`
+suelto: funciona perfecto (CPU 12,7 %, sin BIOS de ningún tipo — N64 nunca la necesitó). Confirmado
+con `strings` sobre el binario de RetroArch: no hay símbolos de 7z ni de zip — este build
+(RetroArch stable del buildbot) no trae soporte de archivos comprimidos. Como el cfg acepta
+`.7z`/`.zip` para N64 (y para Naomi, ver abajo), cualquier ROM que solo exista comprimida
+falla. Pendiente de decidir cómo resolverlo (ver opciones abajo).
+
+**Naomi (core `flycast`) — NO es BIOS, es un crash conocido del propio flycast** 🟡
+`SIGSEGV` en `core/linux/common.cpp` justo al fijar `SET_SYSTEM_AV_INFO`, reproducido con 3 juegos
+distintos (`alienfnt`, `ggx`) y con el `.7z` crudo, re-empaquetado en `.zip`, y con `naomi.zip`
+(que SÍ está en la Base) puesto al lado — siempre el mismo crash, incluso pre-poblando las opciones
+del core. Es un bug **documentado públicamente**: github.com/libretro/flycast issue #429 — el mismo
+contenido arranca bien desde el menú de RetroArch pero crashea al lanzarlo directo por terminal
+(`-L core rom`), que es EXACTAMENTE el mecanismo que usa el `<command>` del cfg. Dreamcast (mismo
+core, contenido en `.chd`) funciona perfecto — el bug es específico de la ruta de carga de
+contenido arcade (Naomi) vía CLI. Ningún fichero en la Base lo arregla.
+
+**Model 2 (core `mame`) — NO es BIOS, son romsets de otro emulador (ya documentado en G)** 🟡
+Confirma lo que ya se sabía: `epr-19379c.15 NOT FOUND (tried in doa)` seguido de
+`epr-18022.ic2 NOT FOUND (tried in segabill doa)`. El romset de la BoB trae `epr-19379b.15` — una
+**revisión B**, y MAME exige la **revisión C** — además de una BIOS compartida (`segabill`) que no
+existe en NINGÚN sitio de la instalación BoB (confirmado buscando en toda la BoB). Los `.zip` de
+`roms/model2` están pensados para el `m2emulator` de Windows (bundleado aparte en
+`emulators/m2emulator/`), no para MAME. No hay fichero que añadir: son romsets incompatibles.
+
+**ScummVM — probado, funciona** ✅
+`Loom` (`loom-fm.scummvm`, el marker file correcto dentro de `Loom/`) arranca sin errores, CPU
+16,8 % estable, ventana real. No se ha reproducido ningún fallo.
+
+**Daphne (core `daphne`) — NO es BIOS, es una ruta de ROM mal resuelta** 🟠
+Error exacto: `filename doesn't seem to have a valid format. Ext: zip Fileext: daphne`. El core
+exige que `%ROM%` sea el `.zip` de `roms/daphne/roms/<juego>.zip` (confirmado que existe:
+`roms/daphne/roms/lair.zip`), y descubre la carpeta de vídeo/audio `<juego>.daphne` él solo por
+el nombre base — pero el cfg actual pasa directamente la carpeta `daphne/lair.daphne/` (que es la
+convención del propio `gamelist.xml` de RetroBat, pensada para el Daphne de Windows, que sí acepta
+ese formato). Arreglo real: en el momento de construir el comando para el sistema `daphne`, si
+`%ROM%` termina en `.daphne`, sustituirlo por `roms/<mismo nombre>.zip` antes de lanzar. Afecta a
+la resolución del ROM, código compartido por los 5-6 sitios de lanzamiento — no lo he tocado
+todavía, pendiente de decisión.
+
+**Resumen**: de 7 sistemas, **1 arreglado de verdad** (CDI), **1 confirmado que ya funcionaba**
+(ScummVM), **2 son bugs conocidos de los propios cores/GPU sin arreglo posible desde RetroMac**
+(Saturn, Naomi), **1 son ROMs incompatibles del usuario** (Model 2), y **2 son arreglables con
+código pero necesitan una decisión** (N64/archivos comprimidos, Daphne/resolución de ruta).
+
+### H14) Vuelta completa: ScummVM de verdad, Saturn, .7z general, BIOS de Neo Geo y Grid
+
+**ScummVM — el arreglo de H13 no bastaba para juegos nuevos.** El fichero `.scummvm` es un
+*target* que solo significa algo si existe en `scummvm.ini` (78 entradas de la BoB, con rutas de
+Windows) — un juego añadido después nunca estaría ahí. Encontrado en la documentación embebida del
+propio core (`strings` sobre `scummvm_libretro.dylib`): acepta la ruta a la **carpeta** del juego
+y autodetecta el motor solo, sin tocar el ini. Verificado con Monkey Island real: el marker falla
+("Game data not found"), la carpeta funciona. Implementado `resolverRomScummvm` — transforma la
+ruta SOLO al lanzar (no al listar, para no duplicar juegos en el escaneo de "nuevos") — y
+`generarMarkersScummvmFaltantes`, que crea un `.scummvm` vacío en cualquier carpeta de juego que
+no tenga uno, para que añadir un juego futuro sea simplemente soltar la carpeta.
+
+**Saturn — cambiado el core.** `yabasanshiro` crasheaba de verdad (`SIGABRT` en su propio
+inicializador OpenGL, incompatible con la GPU de este Mac). Cambiado a `mednafen_saturn`:
+probado con NiGHTS real, CPU 113 %, sin errores.
+
+**N64 y RetroArch en general — no sabe descomprimir `.7z`, solo `.zip`.** Confirmado con
+`strings`: el binario trae "LZMA not compiled in" — la build oficial de macOS (Xcode/xcodebuild,
+`pkg/apple/`) no compila el soporte de 7z, a diferencia de Windows. `resolverRomComprimida`
+descomprime una vez con el `7zz` ya empaquetado (el de RPCS3) a un `.zip` en caché — **fuera** de
+cualquier carpeta `roms/` a propósito, para que el escaneo de "nuevos" no lo confunda con un juego
+duplicado (mismo riesgo que ScummVM). Enganchado en los 7 puntos de lanzamiento reales del
+proyecto (no solo Lista/NetPlay).
+
+**MAME y Neo Geo — dos bugs distintos, uno con solución general y otro sin ella.**
+1. La BIOS compartida de Neo Geo (`neogeo.zip`, la trajo el usuario) tiene que vivir **junto a la
+   romset del juego**, no en `system/` — confirmado con Windjammers real. `asegurarBiosMameSiHaceFalta`
+   la copia ahí cuando el core es `mame_libretro`, tanto si el juego viene de `.7z` (carpeta de
+   caché) como si ya estaba en `.zip` suelto (su carpeta original).
+2. El core por defecto de todo el sistema `mame` (`mame2003_plus`, igual que en la BoB) no es
+   compatible con parte de los romsets: comparados los CRC de los 854 juegos de `roms/mame` contra
+   el datfile de MAME 2003-Plus que trae la propia BoB, y **lanzados los 322 candidatos uno a uno**
+   con el core real (el CRC discrepante no predice de forma fiable si falla: MAME tolera muchos
+   ficheros no críticos). Resultado: **175 juegos fallan de verdad**. `resolverCoreMameSiHaceFalta`
+   usa el core moderno (`mame_libretro`) solo para esos 175, con lista cerrada — el resto de la
+   colección se queda en `mame2003_plus`, tal como pidió el usuario tras revertir un primer intento
+   de cambiar el core por defecto a todo el sistema. No toca `arrayGamesCores`/UserDefaults: una
+   elección de core manual del usuario por juego sigue ganando siempre.
+
+**Grid — miniaturas rotas tras la reconstrucción del `.xib` (sección H12).** Tres bugs
+independientes, todos encontrados con evidencia real (nib compilado con `ibtool` + un mini-programa
+Swift que reproduce `NSNib.instantiate`, ya que no hay permiso de Grabación de Pantalla en esta Mac
+de pruebas):
+1. Las conexiones (`imageView`, `gameLabel`, `view`) estaban en el `File's Owner` — un placeholder
+   que `NSCollectionView.makeItem` nunca instancia. Movidas a un objeto de nivel superior real
+   (`<viewController customClass="PhotoItem">`).
+2. Sin altura fija en el `imageView`, `NSImageView` usa el tamaño intrínseco (nativo en píxeles)
+   de cada imagen para su propio layout — confirmado en tiempo de ejecución (640×430 vs 208×139
+   con imágenes distintas dando frames distintos). Añadida altura fija + prioridades de
+   compresión/hugging al mínimo, para que las restricciones geométricas ganen siempre.
+3. Carga de imagen síncrona en el hilo principal en el bucle de celdas del grid → parpadeo al
+   entrar. `cargarImagenAsync` (genérico, con resguardo contra celdas recicladas) + recorte a
+   aspect-fill (`imagenRecortadaAspectFill`) para que la miniatura llene el hueco sin bandas.
+   Aplicado también a las cargas de detalle en Lista y MainScreen, por consistencia.
+
+**Logos del menú horizontal de sistemas.** Proporciones nativas muy distintas (560×60 a 566×157)
+hacían que `imageScaling` dejara un aire lateral distinto por sistema. `logoEnLienzoFijo` compone
+cada logo sobre un lienzo del tamaño exacto del botón, con margen lateral mínimo garantizado (40pt)
+y altura máxima común (110pt) — verificado generando las composiciones reales con líneas guía.
+
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).
 - [x] Ventana a `visibleFrame` (bajo la barra de menú).

@@ -82,16 +82,17 @@ extension ListaViewController {
         }
         
         if miBox != "" {
-            let imagenURL2 = URL(fileURLWithPath: miBox)
-            var imagen2 = NSImage(contentsOf: imagenURL2)
+            let filaAlPedir = juegosTableView.selectedRow
             screenshotImage.isHidden = false
-            if imagen2 != nil {
-                screenshotImage.image = imagen2
-            } else {
-                screenshotImage.isHidden = true
-                let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
-                let imagen2  = NSImage(contentsOf: pathLogo!)
-                screenshotImage.image = imagen2
+            cargarImagenAsync(ruta: miBox, contexto: { self.juegosTableView.selectedRow }) { [weak self] imagen2 in
+                guard let self = self, filaAlPedir == self.juegosTableView.selectedRow else { return }
+                if let imagen2 = imagen2 {
+                    self.screenshotImage.image = imagen2
+                } else {
+                    self.screenshotImage.isHidden = true
+                    let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+                    self.screenshotImage.image = NSImage(contentsOf: pathLogo!)
+                }
             }
         }else {
             let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
@@ -101,17 +102,17 @@ extension ListaViewController {
         }
         
         if  miMarquee != "" {
-            
-            let imagenURL2 = URL(fileURLWithPath: miMarquee)
-            var imagen2 = NSImage(contentsOf: imagenURL2)
-            if imagen2 != nil {
-                logoImage.isHidden = false
-                logoImage.image = imagen2
-            }else{
-                let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
-                imagen2  = NSImage(contentsOf: pathLogo!)
-                logoImage.image = imagen2
-                logoImage.isHidden = true
+            let filaAlPedir = juegosTableView.selectedRow
+            cargarImagenAsync(ruta: miMarquee, contexto: { self.juegosTableView.selectedRow }) { [weak self] imagen2 in
+                guard let self = self, filaAlPedir == self.juegosTableView.selectedRow else { return }
+                if let imagen2 = imagen2 {
+                    self.logoImage.isHidden = false
+                    self.logoImage.image = imagen2
+                } else {
+                    let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")
+                    self.logoImage.image = NSImage(contentsOf: pathLogo!)
+                    self.logoImage.isHidden = true
+                }
             }
         }else {
             let pathLogo = Bundle.main.url(forResource: "logo", withExtension: "jpeg")

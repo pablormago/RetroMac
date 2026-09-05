@@ -123,6 +123,10 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
         let numero = (self.NetPlayTable.selectedRow)
         var micomando = netplayPlays[numero].comando!
         let mirom = "\"\(String(describing: netplayPlays[numero].gamePath!))\""
+        let rutaResueltaNetplay = resolverRomComprimida(resolverRomScummvm(String(describing: netplayPlays[numero].gamePath!)))
+        // micomando ya es el definitivo aquí (no hay override por core personalizado en netplay).
+        asegurarBiosMameSiHaceFalta(rutaResueltaNetplay, comando: micomando)
+        let miRomLanzamiento = "\"\(rutaResueltaNetplay)\""
         let miJuego = netplayPlays[numero].gamePath!
         var miIp = String()
         var miPuerto = String()
@@ -181,7 +185,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
         
         if miRelay == true {
             let parametros = "-C \"\(miIp)|\(miPuerto)|\(miSesion)\" -L"
-            micomando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "%CORE%", with: rutaRetroMac).replacingOccurrences(of: "-L", with: parametros)
+            micomando = micomando.replacingOccurrences(of: "%ROM%", with: miRomLanzamiento).replacingOccurrences(of: "%CORE%", with: rutaRetroMac).replacingOccurrences(of: "-L", with: parametros)
             var launchCommand = rutaRetroMac + micomando
             print("COMANDO: \(launchCommand)")
             lanzarJuegoYcerrarTerminal(launchCommand)
@@ -189,7 +193,7 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
         }
         if miRelay == false {
             let parametros = "-C \(miIp)|\(miPuerto) -L"
-            micomando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "%CORE%", with: rutaRetroMac).replacingOccurrences(of: "-L", with: parametros)
+            micomando = micomando.replacingOccurrences(of: "%ROM%", with: miRomLanzamiento).replacingOccurrences(of: "%CORE%", with: rutaRetroMac).replacingOccurrences(of: "-L", with: parametros)
             var launchCommand = rutaRetroMac + micomando
             print("COMANDO: \(launchCommand)")
             lanzarJuegoYcerrarTerminal(launchCommand)

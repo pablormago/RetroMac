@@ -24,6 +24,13 @@ class PhotoItem: NSCollectionViewItem {
     // MARK: Doble clic
     var doubleClickActionHandler: (() -> Void)?
 
+    // MARK: Carga de imagen en background
+    // Ruta de la imagen que le corresponde a este item AHORA MISMO. NSCollectionView
+    // recicla items al hacer scroll — si la carga async de un item reciclado termina
+    // tarde, esto permite comprobar que sigue siendo para el mismo juego antes de
+    // pintarla (ver cargarImagenAsync en funciones.swift).
+    var rutaImagenActual: String = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,9 +65,17 @@ class PhotoItem: NSCollectionViewItem {
     override var isSelected: Bool {
         didSet {
             view.layer?.borderWidth = isSelected ? 4.0 : 0.0
-            view.layer?.borderColor = NSColor.white.cgColor
+            view.layer?.borderColor = NSColor.systemBlue.cgColor
             view.layer?.cornerRadius = 6.0
         }
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        // Se limpia YA (no se espera a la nueva carga async) para no enseñar la
+        // miniatura del juego anterior mientras llega la del nuevo.
+        imageView?.image = nil
+        rutaImagenActual = ""
     }
 
     override func mouseDown(with event: NSEvent) {

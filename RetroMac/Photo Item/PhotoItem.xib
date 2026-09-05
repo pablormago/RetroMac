@@ -4,20 +4,36 @@
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11134"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="PhotoItem" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <!-- El objeto de nivel superior de tipo PhotoItem: NSCollectionView.makeItem NO usa
+             File's Owner (es un placeholder que nunca se instancia salvo que alguien pase su
+             propio owner al cargar el nib, cosa que makeItem no hace) — busca en su lugar un
+             objeto de nivel superior de la clase registrada. Las conexiones tienen que ir aquí,
+             no en File's Owner: si van en File's Owner, nunca se conectan y las miniaturas/labels
+             se quedan sin imagen ni texto aunque el nib cargue sin error. -->
+        <viewController id="PI0-to-Pit" customClass="PhotoItem" customModule="RetroMac" customModuleProvider="target" sceneMemberID="viewController">
             <connections>
                 <outlet property="gameLabel" destination="lbl1" id="conn-lbl"/>
                 <outlet property="imageView" destination="img1" id="conn-img"/>
                 <outlet property="view" destination="view1" id="conn-view"/>
             </connections>
-        </customObject>
-        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        </viewController>
         <customView id="view1">
             <rect key="frame" x="0.0" y="0.0" width="415" height="327"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="img1">
+                <!-- Prioridades de hugging/compresión al mínimo (1): sin esto,
+                     NSImageView usa el tamaño NATIVO en píxeles de cada imagen como su
+                     tamaño intrínseco (confirmado en tiempo de ejecución: 640x430 con
+                     una imagen, 208x139 con otra) y esa resistencia a comprimirse
+                     (750 por omisión) le gana el pulso a las restricciones de
+                     leading/trailing cuando la imagen es más ancha que el hueco —
+                     por eso cada miniatura salía con un ancho distinto y el nombre
+                     se desplazaba. Con prioridad 1 estas restricciones geométricas
+                     siempre ganan, sea cual sea la imagen. -->
+                <imageView horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="img1">
                     <rect key="frame" x="20" y="56" width="375" height="251"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="imgcell1"/>
                 </imageView>
@@ -33,6 +49,14 @@
                 <constraint firstItem="img1" firstAttribute="top" secondItem="view1" secondAttribute="top" constant="20" id="c1"/>
                 <constraint firstItem="img1" firstAttribute="leading" secondItem="view1" secondAttribute="leading" constant="20" id="c2"/>
                 <constraint firstItem="view1" firstAttribute="trailing" secondItem="img1" secondAttribute="trailing" constant="20" id="c3"/>
+                <!-- Sin esta altura fija, NSImageView usa el tamaño intrínseco de CADA
+                     imagen (su resolución nativa) para decidir su propia altura — por
+                     eso cada miniatura salía de un tamaño y la etiqueta del nombre
+                     (colgada del borde inferior de la imagen) subía o bajaba según la
+                     imagen. 251 es el mismo alto que ya se usa como ratio de recorte
+                     en GridScreen.swift (375/251) — si se cambia aquí, cambiar también
+                     ese ratio. -->
+                <constraint firstItem="img1" firstAttribute="height" relation="equal" constant="251" id="c8"/>
                 <constraint firstItem="lbl1" firstAttribute="top" secondItem="img1" secondAttribute="bottom" constant="12" id="c4"/>
                 <constraint firstItem="lbl1" firstAttribute="leading" secondItem="view1" secondAttribute="leading" constant="20" id="c5"/>
                 <constraint firstItem="view1" firstAttribute="trailing" secondItem="lbl1" secondAttribute="trailing" constant="20" id="c6"/>

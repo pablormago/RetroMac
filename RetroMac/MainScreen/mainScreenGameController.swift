@@ -462,7 +462,7 @@ extension ViewController {
     public func launchGame(){
         let numero = (SingletonState.shared.mytable?.selectedRow)
         let nombredelarchivo = SingletonState.shared.myJuegosXml![numero!][0].replacingOccurrences(of: rutaApp , with: "")
-        let romXml = "\"\(SingletonState.shared.myJuegosXml![numero!][0])\""
+        let rutaResuelta = resolverRomComprimida(resolverRomScummvm(SingletonState.shared.myJuegosXml![numero!][0]))
         let rompathabuscar = SingletonState.shared.myJuegosXml![numero!][0]
         var comandojuego = SingletonState.shared.myJuegosXml![numero!][20]
         
@@ -504,7 +504,10 @@ extension ViewController {
         if fila != nil {
             comandojuego = arrayGamesCores[fila!][1]
         }
-        
+
+        asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
+        let romXml = "\"\(rutaResuelta)\""
+
         let micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
         //print(micomando.replacingOccurrences(of: "%ROM%", with: romXml))
         var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
@@ -699,7 +702,7 @@ extension ViewController {
             bajarNivel()
         } else if juegosXml[columna][22] != "Carpeta" && juegosXml[columna][22] != "Volver" {
             let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
-            let romXml = "\"\(juegosXml[numero][0])\""
+            let rutaResuelta = resolverRomComprimida(resolverRomScummvm(juegosXml[numero][0]))
             let rompathabuscar = juegosXml[numero][0]
             var comandojuego = juegosXml[numero][20]
             myPlayer.player?.pause()
@@ -744,7 +747,10 @@ extension ViewController {
             } else {
                 print("CORE DEFAULT")
             }
-            
+
+            asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
+            let romXml = "\"\(rutaResuelta)\""
+
             var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
             var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
             print(comando)
@@ -816,9 +822,11 @@ extension ViewController {
         }
         let miBox = juegosXml[columna][23]
         if miBox != "" {
-            let imagenURL = URL(fileURLWithPath: miBox)
-            var imagen = NSImage(contentsOf: imagenURL)
-            myBox3DButton.image = imagen
+            let filaAlPedir = columna
+            cargarImagenAsync(ruta: miBox, contexto: { columna }) { imagen in
+                guard filaAlPedir == columna, let imagen = imagen else { return }
+                myBox3DButton.image = imagen
+            }
             myBox3DButton.isHidden = false
         } else {
             myBox3DButton.isHidden = true

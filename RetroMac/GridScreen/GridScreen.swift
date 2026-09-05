@@ -230,9 +230,11 @@ class GridScreen: NSViewController {
         }
         let miBox = juegosXml[columna][23]
         if miBox != "" {
-            let imagenURL = URL(fileURLWithPath: miBox)
-            var imagen = NSImage(contentsOf: imagenURL)
-            box3DBtn.image = imagen
+            let filaAlPedir = columna
+            cargarImagenAsync(ruta: miBox, contexto: { columna }) { [weak self] imagen in
+                guard let self = self, filaAlPedir == columna, let imagen = imagen else { return }
+                self.box3DBtn.image = imagen
+            }
             box3DBtn.isHidden = false
         } else {
             box3DBtn.isHidden = true
@@ -280,7 +282,15 @@ class GridScreen: NSViewController {
         flowLayout.minimumInteritemSpacing = 0.0
         flowLayout.minimumLineSpacing = 0.0
         flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
-        //collectionView.collectionViewLayout = flowLayout
+        // El itemSize tiene que coincidir con lo que devuelve sizeForItemAt DESDE EL
+        // PRINCIPIO: el storyboard trae su propio flowLayout con un itemSize de 50x50
+        // (un valor puesto ahí sin más), y si el collectionView llega a dibujar una
+        // sola pasada con ese layout antes de que el delegate lo corrija, se ve un
+        // salto de 50x50 a 415x327 al entrar en el Grid. Al fijarlo aquí también, y
+        // sustituir el layout entero antes de que la vista sea visible, esa pasada con
+        // el tamaño equivocado no llega a producirse.
+        flowLayout.itemSize = NSSize(width: 415.0, height: 327)
+        collectionView.collectionViewLayout = flowLayout
     }
     
     func arrayJuegos (){
@@ -317,11 +327,18 @@ extension GridScreen: NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         
         guard let item = collectionView.makeItem(withIdentifier: photoItemIdentifier, for: indexPath) as? PhotoItem else { return NSCollectionViewItem() }
-        
+
         let miVideo = juegosXml[indexPath.item][10]
-        let imagenURL = URL(fileURLWithPath: juegosXml[indexPath.item][9])
-        let imagen2 = NSImage(contentsOf: imagenURL)
-        item.imageView?.image = imagen2
+        let rutaImagen = juegosXml[indexPath.item][9]
+        // Carga en background: al entrar en el Grid, NSCollectionView pide todas las
+        // celdas visibles de golpe — leer y decodificar cada imagen de disco en el hilo
+        // principal ahí era lo que provocaba el parpadeo/tirón. El ratio 375/251 es el
+        // hueco real del imageView en PhotoItem.xib; se recorta a ese ratio (aspect
+        // fill) para que la miniatura llene el hueco entero sin bandas ni deformarse.
+        item.rutaImagenActual = rutaImagen
+        cargarImagenAsync(ruta: rutaImagen, ratioAspectFill: 375.0 / 251.0, contexto: { item.rutaImagenActual }) { imagen in
+            item.imageView?.image = imagen
+        }
         item.playerItem?.isHidden = true
         let videoURL = URL(fileURLWithPath: miVideo)
         let player = AVPlayer(url: videoURL)
@@ -378,9 +395,11 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
         }
         let miBox = juegosXml[indexPath.item][23]
         if miBox != "" {
-            let imagenURL = URL(fileURLWithPath: miBox)
-            let imagen = NSImage(contentsOf: imagenURL)
-            box3DBtn.image = imagen
+            let filaAlPedir = columna
+            cargarImagenAsync(ruta: miBox, contexto: { columna }) { [weak self] imagen in
+                guard let self = self, filaAlPedir == columna, let imagen = imagen else { return }
+                self.box3DBtn.image = imagen
+            }
             box3DBtn.isHidden = false
         } else {
             box3DBtn.isHidden = true
@@ -443,7 +462,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
             bajarNivel()
         } else if juegosXml[columna][22] != "Carpeta" && juegosXml[columna][22] != "Volver" {
             let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
-            let romXml = "\"\(juegosXml[numero][0])\""
+            let rutaResuelta = resolverRomComprimida(resolverRomScummvm(juegosXml[numero][0]))
             let rompathabuscar = juegosXml[numero][0]
             var comandojuego = juegosXml[numero][20]
             myPlayer.player?.pause()
@@ -488,7 +507,10 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
             } else {
                 print("CORE DEFAULT")
             }
-            
+
+            asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
+            let romXml = "\"\(rutaResuelta)\""
+
             var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
             var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
             print(comando)

@@ -25,7 +25,16 @@ var myOptionBtn = NSButton()
 
 
 class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
-    
+
+    // Contador que se incrementa en cada llamada a imageSelected (ver
+    // listScreenFunctions.swift). tableViewSelectionDidChange llama dos veces seguidas
+    // por cada fila (primero un logo de relleno, luego la captura real) — comparar
+    // solo por fila no bastaría, porque ambas llamadas son de la MISMA fila y la que
+    // tarde más en resolver (a menudo el logo, que es un recurso pequeño del bundle)
+    // podría pisar a la otra. Con un contador que sube en cada llamada, solo se pinta
+    // el resultado de la ÚLTIMA llamada hecha, sea cual sea el orden en que terminen.
+    var tokenImagenSeleccionada: Int = 0
+
     //override var acceptsFirstResponder: Bool { return true }
     //override func becomeFirstResponder() -> Bool { return true }
     //override func resignFirstResponder() -> Bool { return true }
@@ -397,7 +406,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         //SingletonState.shared.myBackPlayer?.player?.pause()
         let numero = (self.juegosTableView.selectedRow)
         let nombredelarchivo = juegosXml[numero][0].replacingOccurrences(of: rutaApp , with: "")
-        let romXml = "\"\(juegosXml[numero][0])\""
+        let rutaResuelta = resolverRomComprimida(resolverRomScummvm(juegosXml[numero][0]))
         let rompathabuscar = juegosXml[numero][0]
         var comandojuego = juegosXml[numero][20]
         
@@ -439,7 +448,12 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         if fila != nil {
             comandojuego = arrayGamesCores[fila!][1]
         }
-        
+
+        // Con el core ya definitivo (tras el posible override de arriba): si es MAME,
+        // asegura la BIOS compartida de Neo Geo junto a la romset antes de lanzar.
+        asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
+        let romXml = "\"\(rutaResuelta)\""
+
         var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
         //print(micomando.replacingOccurrences(of: "%ROM%", with: romXml))
         var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)

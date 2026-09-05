@@ -247,11 +247,11 @@ extension ListaViewController {
     
     
     func imageSelected(path: URL) {
-        if path != nil  {
-            let imagen = NSImage(contentsOf: path)
-            if imagen != nil {
-                snapShot.image = imagen
-            }
+        tokenImagenSeleccionada += 1
+        let miToken = tokenImagenSeleccionada
+        cargarImagenAsync(ruta: path.path, contexto: { self.tokenImagenSeleccionada }) { [weak self] imagen in
+            guard let self = self, let imagen = imagen, miToken == self.tokenImagenSeleccionada else { return }
+            self.snapShot.image = imagen
         }
     }
     
