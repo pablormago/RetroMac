@@ -1,0 +1,17 @@
+{
+  "name": "SDL2",
+  "version": "2.32.10",
+  "summary": "SDL2 (Simple DirectMedia Layer) — solo para el subsistema de mandos (joystick/gamecontroller).",
+  "homepage": "https://www.libsdl.org",
+  "license": {
+    "type": "zlib"
+  },
+  "authors": "Sam Lantinga y colaboradores",
+  "source": {
+    "http": "https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.dmg"
+  },
+  "platforms": {
+    "osx": "10.13"
+  },
+  "vendored_frameworks": "SDL2.framework"
+}

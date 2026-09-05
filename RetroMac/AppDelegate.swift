@@ -18,6 +18,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Mandos vía SDL2, como añadido al GameController nativo (ver
+        // SDLControllerManager.swift). Se arranca aquí y no en el viewDidLoad de
+        // ViewController porque allí dependía de un contador (`cuentaCargaGame == 1`)
+        // que no siempre se cumple — aquí es un único punto garantizado al arrancar.
+        SDLControllerManager.shared.iniciar()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

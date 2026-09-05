@@ -7,6 +7,10 @@ target 'RetroMac' do
 
   # Pods for RetroMac
 pod 'Commands',        '~> 0.6.0'
+# SDL2 solo para leer mandos que GameController.framework no reconoce (ver
+# SDLControllerManager.swift) — framework binario oficial vendorizado en Vendor/,
+# no viene de ningún spec repo remoto.
+pod 'SDL2', :path => 'Vendor'
 workspace 'RetroMac'
 
 end

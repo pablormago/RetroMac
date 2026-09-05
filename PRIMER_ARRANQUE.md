@@ -689,6 +689,42 @@ hacían que `imageScaling` dejara un aire lateral distinto por sistema. `logoEnL
 cada logo sobre un lienzo del tamaño exacto del botón, con margen lateral mínimo garantizado (40pt)
 y altura máxima común (110pt) — verificado generando las composiciones reales con líneas guía.
 
+### H15) SDL2 como añadido a GameController (mandos que Apple no certifica)
+
+Petición: que funcionen mandos genéricos/antiguos/clones, no solo los MFi que reconoce
+`GameController.framework`. **Añadido**, no sustituido — un mando de Apple y otro solo-SDL2
+pueden estar conectados a la vez sin pisarse.
+
+**Integración**: SDL2 2.32.10 oficial (universal x86_64+arm64), vendorizado en `Vendor/SDL2.framework`
++ pod local (`pod 'SDL2', :path => 'Vendor'`) — es la primera dependencia nueva del proyecto vía
+CocoaPods desde `Commands`. La versión de CocoaPods del sistema (Ruby 2.6, gem 1.16.2) no entendía
+el formato del `.pbxproj` actual (`objectVersion 70`, de una versión de Xcode más reciente) — resuelto
+instalando un CocoaPods moderno (1.17.0) sobre el Ruby de Homebrew (3.1.1), sin tocar el Ruby del
+sistema. Las cabeceras de SDL2 (`begin_code.h`/`close_code.h`) no son compatibles con el sistema de
+módulos de Clang (probado: un `module.modulemap` propio da "Nested inclusion of begin_code.h") — va
+por bridging header (`RetroMac-Bridging-Header.h`, inclusión textual clásica) en vez de `import SDL2`.
+
+**Evitar mandos duplicados** (uno por GameController y el mismo otra vez por SDL2): usa
+`GCController.supportsHIDDevice(_:)` (API pública de Apple, macOS 11+) — es la misma técnica que usa
+el propio SDL2 en su otro backend (confirmado leyendo su código fuente real,
+`src/joystick/apple/SDL_mfijoystick.m`, función `IOS_SupportedHIDDevice`). Como SDL2 no expone su
+`IOHIDDeviceRef` interno por API pública, la comprobación se hace por VendorID+ProductID (enumerados
+aparte con `IOHIDManager`, API pública) en vez de por dispositivo exacto — limitación conocida: dos
+mandos físicos idénticos conectados a la vez podrían confundirse entre sí.
+
+**Arquitectura**: refactorizados los manejadores de `GCExtendedGamepad` en `mainScreenGameController.swift`
+para extraer cada acción a una función con nombre (`dpadArriba()`, `botonA()`, etc.) — antes la lógica
+vivía solo dentro de los closures de GameController. `SDLControllerManager` (nuevo) inicializa SDL2
+solo con los subsistemas de joystick/gamecontroller (sin vídeo/audio/bucle propio), y un timer a 60Hz
+detecta flancos de pulsación y llama a esas MISMAS funciones — así la navegación no se duplica entre
+las dos vías de entrada.
+
+**Verificado sin mando físico disponible**: `SDL_Init`/`SDL_NumJoysticks`/`SDL_Quit` reales desde Swift
+contra el framework; `GCController.supportsHIDDevice` contra los 8 dispositivos HID reales de este Mac
+(teclado/trackpad/bluetooth — todos correctamente `false`, ninguno es mando); `SDLControllerManager.swift`
+completo tipado contra SDL2+GameController+IOKit reales, con una clase `ViewController` de imitación.
+Pendiente de una prueba con mando físico real (no hay ninguno en esta máquina de pruebas).
+
 ### ✅ Ya arreglado (fases previas)
 - [x] cfg vacío → re-copia si falta o está vacío ([SplashController.swift:89](RetroMac/SplashController.swift:89)).
 - [x] Ventana a `visibleFrame` (bajo la barra de menú).

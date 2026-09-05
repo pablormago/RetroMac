@@ -1,2 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-RetroMac/Pods-RetroMac-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Commands/Commands.framework
+${PODS_ROOT}/../Vendor/SDL2.framework

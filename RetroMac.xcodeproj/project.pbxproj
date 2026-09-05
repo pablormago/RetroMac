@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		79F9763B304DE45169BF8A27 /* SDLControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D9245DCD1602BB9C02DFB8 /* SDLControllerManager.swift */; };
 		270485E52785FA7A00375232 /* funciones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270485E42785FA7A00375232 /* funciones.swift */; };
 		2706121A27CFCFB60016B1EB /* listScreenScrapers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706121927CFCFB60016B1EB /* listScreenScrapers.swift */; };
 		2706121C27CFD0780016B1EB /* listaScreenMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706121B27CFD0780016B1EB /* listaScreenMenu.swift */; };
@@ -62,11 +63,13 @@
 		27E7A3032768B4B90087C67A /* logo.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A3022768B4B90087C67A /* logo.jpeg */; };
 		27E7A3052768E9BB0087C67A /* themes in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A3042768E9BA0087C67A /* themes */; };
 		27E7A30727691F740087C67A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A30627691F740087C67A /* Base */; };
-		2F23693E30493F6F00965E2E /* decorations in Resources */ = {isa = PBXBuildFile; fileRef = 2F23693D30493F6F00965E2E /* decorations */; };
-		789F3849D1FC7C0E7DD5E797 /* Citra in Resources */ = {isa = PBXBuildFile; fileRef = EC17D6EF56D3D59440EFB234 /* Citra */; };
 		27E7A3092769C39E0087C67A /* gameListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E7A3082769C39E0087C67A /* gameListParser.swift */; };
 		27E7A30B276B57810087C67A /* NoVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 27E7A30A276B54240087C67A /* NoVideo.mp4 */; };
+		915DF1C36EDC6BA6CB5252B6 /* gamecontrollerdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = E03DA5E1FA833E6C8C4AE470 /* gamecontrollerdb.txt */; };
 		2F23529130493DE300965E2E /* 7zz in Resources */ = {isa = PBXBuildFile; fileRef = 2F23529030493DE300965E2E /* 7zz */; };
+		2F23693E30493F6F00965E2E /* decorations in Resources */ = {isa = PBXBuildFile; fileRef = 2F23693D30493F6F00965E2E /* decorations */; };
+		789F3849D1FC7C0E7DD5E797 /* Citra in Resources */ = {isa = PBXBuildFile; fileRef = EC17D6EF56D3D59440EFB234 /* Citra */; };
+		C251AB8EB01D87962C373F8A /* Pods_RetroMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A06C8F42032EFC803940BDB /* Pods_RetroMac.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,19 +128,22 @@
 		27E6675F275A29B300B50AD6 /* parserSystems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parserSystems.swift; sourceTree = "<group>"; };
 		27E7A2FE2768B40C0087C67A /* es_systems_mac.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = es_systems_mac.cfg; sourceTree = "<group>"; };
 		27E7A3022768B4B90087C67A /* logo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpeg; sourceTree = "<group>"; };
+		C9D9245DCD1602BB9C02DFB8 /* SDLControllerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDLControllerManager.swift; sourceTree = "<group>"; };
+		C4053C9C431E312F6C21FA9B /* RetroMac-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RetroMac-Bridging-Header.h"; sourceTree = "<group>"; };
 		27E7A3042768E9BA0087C67A /* themes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = themes; sourceTree = "<group>"; };
 		27E7A30627691F740087C67A /* Base */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base; sourceTree = "<group>"; };
-		2F23693D30493F6F00965E2E /* decorations */ = {isa = PBXFileReference; lastKnownFileType = folder; path = decorations; sourceTree = "<group>"; };
-		EC17D6EF56D3D59440EFB234 /* Citra */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Citra; sourceTree = "<group>"; };
 		27E7A3082769C39E0087C67A /* gameListParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gameListParser.swift; sourceTree = "<group>"; };
 		27E7A30A276B54240087C67A /* NoVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = NoVideo.mp4; sourceTree = "<group>"; };
+		E03DA5E1FA833E6C8C4AE470 /* gamecontrollerdb.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = gamecontrollerdb.txt; sourceTree = "<group>"; };
 		27E7A30C276BB42D0087C67A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		27E7A30E276BB44D0087C67A /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		2F23529030493DE300965E2E /* 7zz */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = 7zz; sourceTree = "<group>"; };
+		2F23693D30493F6F00965E2E /* decorations */ = {isa = PBXFileReference; lastKnownFileType = folder; path = decorations; sourceTree = "<group>"; };
 		3664690054A650E22D9452DE /* Pods-RetroMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetroMac.debug.xcconfig"; path = "Target Support Files/Pods-RetroMac/Pods-RetroMac.debug.xcconfig"; sourceTree = "<group>"; };
 		38605995764ED1091BD68F2B /* Pods-RetroMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RetroMac.release.xcconfig"; path = "Target Support Files/Pods-RetroMac/Pods-RetroMac.release.xcconfig"; sourceTree = "<group>"; };
+		7A06C8F42032EFC803940BDB /* Pods_RetroMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RetroMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC17D6EF56D3D59440EFB234 /* Citra */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Citra; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
 
 /* Begin PBXFrameworksBuildPhase section */
 		278980142757DCBE00414985 /* Frameworks */ = {
@@ -147,6 +153,7 @@
 				2718B9E227E4A2B3000B5DF7 /* AVFoundation.framework in Frameworks */,
 				2718B9E427E4A2B4000B5DF7 /* AVKit.framework in Frameworks */,
 				2718B9E627E4A2B6000B5DF7 /* GameController.framework in Frameworks */,
+				C251AB8EB01D87962C373F8A /* Pods_RetroMac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +166,7 @@
 				2718B9E027E4A2A9000B5DF7 /* GameController.framework */,
 				27E7A30E276BB44D0087C67A /* AVKit.framework */,
 				27E7A30C276BB42D0087C67A /* AVFoundation.framework */,
+				7A06C8F42032EFC803940BDB /* Pods_RetroMac.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -249,6 +257,7 @@
 				2719BEEA279487F700929EE2 /* favorite.png */,
 				273FF8B727EE0F270051EF7F /* Filtros.swift */,
 				270485E42785FA7A00375232 /* funciones.swift */,
+				E03DA5E1FA833E6C8C4AE470 /* gamecontrollerdb.txt */,
 				27E7A3082769C39E0087C67A /* gameListParser.swift */,
 				2707C92A27E3ACDB00E96A46 /* GridScreen */,
 				279FBD7827739DAC00CD5586 /* icons.icns */,
@@ -272,6 +281,8 @@
 				278980242757DCC000414985 /* RetroMac.entitlements */,
 				2784A21727E22FA000F1272B /* RetroMacRelease.entitlements */,
 				274FEB152773321C007CE357 /* ScrollingTextView.swift */,
+				C9D9245DCD1602BB9C02DFB8 /* SDLControllerManager.swift */,
+				C4053C9C431E312F6C21FA9B /* RetroMac-Bridging-Header.h */,
 				27665B9C27B5A7F100262025 /* singleton.swift */,
 				272A6EA4278F4416005B0930 /* SplashController.swift */,
 				27B58952277EF3F6006DBAB9 /* SwiftyJSON.swift */,
@@ -375,6 +386,7 @@
 			files = (
 				279FBD58277350C900CD5586 /* right.png in Resources */,
 				27E7A30B276B57810087C67A /* NoVideo.mp4 in Resources */,
+				915DF1C36EDC6BA6CB5252B6 /* gamecontrollerdb.txt in Resources */,
 				279FBD71277375AA00CD5586 /* sp_bar.png in Resources */,
 				27E7A3052768E9BB0087C67A /* themes in Resources */,
 				278A629A278364F80051BA13 /* pdf.png in Resources */,
@@ -435,13 +447,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RetroMac/Pods-RetroMac-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RetroMac/Pods-RetroMac-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -455,6 +463,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79F9763B304DE45169BF8A27 /* SDLControllerManager.swift in Sources */,
 				2718B9DF27E3ED73000B5DF7 /* PhotoInfo.swift in Sources */,
 				2710342627C75DF100615B86 /* NetPlayListController.swift in Sources */,
 				273FF8B827EE0F270051EF7F /* Filtros.swift in Sources */,
@@ -643,6 +652,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.pablormago.RetroMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "RetroMac/RetroMac-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -667,6 +677,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.pablormago.RetroMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = retromac;
+				SWIFT_OBJC_BRIDGING_HEADER = "RetroMac/RetroMac-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
