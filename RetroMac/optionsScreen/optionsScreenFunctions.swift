@@ -2157,7 +2157,7 @@ extension OptionsViewController {
             }
             asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
             let mirom = "\"\(rutaResuelta)\""
-            var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+            var micomando = rutaDatos() + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaDatos())
 
             var comando = micomando.replacingOccurrences(of: "%ROM%", with: mirom).replacingOccurrences(of: "-L", with: "-H -L")
             if playingVideo == true {

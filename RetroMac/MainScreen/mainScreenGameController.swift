@@ -281,6 +281,9 @@ extension ViewController {
 
     func gatilloDerecho() {
         print("Mando - Gatillo derecho")
+        // Era el único botón del mando que no hacía nada: lo usamos para la
+        // leyenda de controles (ver LeyendaControles.swift).
+        LeyendaControles.alternar()
     }
 
     public func configureDPadButtons(_ gamepad : GCExtendedGamepad) {
@@ -494,7 +497,7 @@ extension ViewController {
         asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
         let romXml = "\"\(rutaResuelta)\""
 
-        let micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+        let micomando = rutaDatos() + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaDatos())
         //print(micomando.replacingOccurrences(of: "%ROM%", with: romXml))
         var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
         if playingVideo == true {
@@ -737,7 +740,7 @@ extension ViewController {
             asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
             let romXml = "\"\(rutaResuelta)\""
 
-            var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+            var micomando = rutaDatos() + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaDatos())
             var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
             print(comando)
             self.desactivaBotones()

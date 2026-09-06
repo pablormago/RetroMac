@@ -511,7 +511,7 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
             asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
             let romXml = "\"\(rutaResuelta)\""
 
-            var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+            var micomando = rutaDatos() + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaDatos())
             var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
             print(comando)
             lanzarJuegoYcerrarTerminal(comando)
@@ -621,7 +621,18 @@ extension GridScreen: NSCollectionViewDelegateFlowLayout {
             return
         }
         keyIsDown = true
-        
+
+        // Leyenda de controles: H la abre y la cierra, y con ella abierta
+        // cualquier tecla la cierra (ver LeyendaControles.swift).
+        if myEvent.keyCode == 4 {
+            LeyendaControles.alternar()
+            return
+        }
+        if LeyendaControles.estaVisible {
+            LeyendaControles.ocultar()
+            return
+        }
+
         if myEvent.keyCode == 51 && ventana == "Grid" && ventanaModal == "Ninguna" {
             
             if let controller = self.storyboard?.instantiateController(withIdentifier: "HomeView") as? ViewController {

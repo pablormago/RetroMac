@@ -131,7 +131,8 @@ class NetPlayListController: NSViewController, NSTableViewDataSource, NSTableVie
         var miIp = String()
         var miPuerto = String()
         var miRelay = Bool ()
-        let rutaRetroMac = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+        // rutaDatos(): los emuladores pueden no estar junto al .app (ver funciones.swift).
+        let rutaRetroMac = rutaDatos()
         
         if netplayPlays[numero].mitm_Port != "" {
             miPuerto = netplayPlays[numero].mitm_Port ?? ""

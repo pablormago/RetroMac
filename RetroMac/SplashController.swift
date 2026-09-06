@@ -177,6 +177,15 @@ class SplashController: NSViewController {
             print("✅ sistemas añadidos al cfg del usuario: \(sistemasAnadidos.joined(separator: ", "))")
         }
 
+        // Primer arranque sin ROMs a la vista: se pregunta dónde están (o se crea la
+        // estructura). Va aquí porque el cfg ya está garantizado — crearEstructuraDeRoms
+        // lee de él los <path> de cada sistema — y aún no se ha cargado nada pesado.
+        // Si ya hay carpeta configurada o un `roms/` junto al .app, no molesta.
+        preguntarPorCarpetaDeRomsSiHaceFalta()
+        // Y dónde van los ~3 GB de emuladores (solo si no hay una BoB al lado, que ya
+        // los trae). Va después: primero los juegos, que es lo que le importa al usuario.
+        avisarDeCarpetaDeEmuladoresSiHaceFalta()
+
         let Xemu = "/Users/Shared/Xemu"
         let myGroup = DispatchGroup()
         myGroup.enter()
@@ -303,8 +312,9 @@ class SplashController: NSViewController {
                 let micomando = book.comando
                 let minombre = book.fullname
                 let miplataforma = book.platform
-                let rutaApp2 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
-                let miruta = rutaApp2 + book.path /// Es lo mismo que ROMPATH
+                // rutaRoms(): la carpeta de ROMs puede estar fuera de donde vive el
+                // .app (ver funciones.swift). Por defecto son la misma carpeta.
+                let miruta = rutaRoms() + book.path /// Es lo mismo que ROMPATH
                 ///
                 ///DATOS DEL STRUCT SISTEMA:
                 //                struct Sistema {

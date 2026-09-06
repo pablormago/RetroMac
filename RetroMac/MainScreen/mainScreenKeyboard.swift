@@ -15,7 +15,37 @@ import AVFoundation
 var cuentaclicks = 0
 
 extension ViewController {
-    
+
+    // OJO antes de tocar nada aquí: que el keyDown de abajo esté comentado NO
+    // significa que esta pantalla ignore el teclado. Los cursores, INTRO, F1 y F5
+    // funcionan a través de los keyEquivalent de los botones del storyboard
+    // (enterSystem:, menosMenu:, masMenu:, openSettings:, openNetplay:), que AppKit
+    // resuelve por performKeyEquivalent antes de llegar a ningún keyDown.
+    //
+    // Por eso esta versión SOLO se queda con la H de la leyenda y con la tecla que
+    // la cierra si está abierta, y todo lo demás se lo pasa a super.
+    override func keyDown(with event: NSEvent) {
+        if keyIsDown == true {
+            return
+        }
+        keyIsDown = true
+
+        if event.keyCode == 4 {
+            LeyendaControles.alternar()
+            return
+        }
+        if LeyendaControles.estaVisible {
+            LeyendaControles.ocultar()
+            return
+        }
+        super.keyDown(with: event)
+    }
+
+    override func keyUp(with event: NSEvent) {
+        keyIsDown = false
+        super.keyUp(with: event)
+    }
+
 //    override func keyDown(with event: NSEvent) {
 //        if keyIsDown == true {
 //            return

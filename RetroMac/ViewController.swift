@@ -99,7 +99,6 @@ class ViewController: NSViewController {
     @IBOutlet weak var tog1: NSSwitch!
     @IBOutlet weak var onOff: NSTextField!
     @IBOutlet weak var settingsButton: NSButton!
-    @IBOutlet weak var gridBtn: NSButton!
     
     
     @IBAction func enterSystem(_ sender: Any) {
@@ -456,13 +455,16 @@ class ViewController: NSViewController {
             
             sistemaActual = sender.Fullname!
             nombresistemaactual = sender.Sistema!
-            rompath = rutaApp + sender.RomsPath!
+            // rutaRoms() en vez de rutaApp: la carpeta de ROMs puede estar fuera de
+            // donde vive la app (ver funciones.swift). Por defecto son la misma.
+            rompath = rutaRoms() + sender.RomsPath!
             print("ROMPATH: \(rompath)")
             rutaTransformada = rompath
             print("RUTA TRANSFORMADA: \(rutaTransformada)")
             systemextensions = sender.Extensiones!.components(separatedBy: " ")
-            comandoaejecutar = rutaApp
-            comandoaejecutar = comandoaejecutar + sender.Comando!.replacingOccurrences(of: "%CORE%", with: rutaApp)
+            // rutaDatos(): los emuladores pueden no estar junto al .app (ver funciones.swift).
+            comandoaejecutar = rutaDatos()
+            comandoaejecutar = comandoaejecutar + sender.Comando!.replacingOccurrences(of: "%CORE%", with: rutaDatos())
             botonactual = sender.tag
             abiertaLista = true
             cuentaPrincipio += 1

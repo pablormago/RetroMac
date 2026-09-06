@@ -316,7 +316,8 @@ func cuentajuegos(arraySistema: [[String]]) -> [[String]]{
     var juegosPorSistema = [[String]]()
     for sistema in arraySistema {
         var juegosenTotal = 0
-        var rutaApp1 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "") + "/roms/\(sistema[0])"
+        // rutaRoms(): la carpeta de ROMs puede vivir fuera del .app (ver más abajo).
+        var rutaApp1 = rutaRoms() + "/roms/\(sistema[0])"
         
         //var juegosnuevos = 0
         let pathXMLinterno2 = NSURL(string:  "file://" + rutaApp1 + "/gamelist.xml")
@@ -366,7 +367,7 @@ func juegosGamelistCarga(sistema: [String]) -> [Juego] {
     var mirompath = String(sistema[5])
     var miSistema = String(sistema[0])
     var miComando = String(sistema[3])
-    var rutaApp3 = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "") + mirompath
+    var rutaApp3 = rutaRoms() + mirompath
     rutaTransformada = rutaApp3
     let extensionesSistema = sistema[2].components(separatedBy: " ")
     var losJuegos: [Juego] = []
@@ -695,6 +696,209 @@ func resolverCoreMameSiHaceFalta(miSistema: String, ruta: String, comandoDefecto
     let nombre = ((ruta as NSString).lastPathComponent as NSString).deletingPathExtension
     guard juegosMameConCoreModerno.contains(nombre) else { return comandoDefecto }
     return comandoDefecto.replacingOccurrences(of: "mame2003_plus_libretro.dylib", with: "mame_libretro.dylib")
+}
+
+// MARK: - Carpeta de ROMs (desacople de la BoB)
+
+/// Clave en UserDefaults con la carpeta de ROMs elegida por el usuario.
+let claveCarpetaRoms = "carpetaRoms"
+
+/// La carpeta que CONTIENE al .app. Aquí viven las cosas que gestiona la propia
+/// aplicación (`Emuladores_Mac/`, `decorations/`), que siempre van con ella.
+func rutaDeLaApp() -> String {
+    Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+}
+
+/// Raíz bajo la que cuelgan las carpetas de ROMs (`/roms/snes`, etc., tal y como
+/// vienen en el `<path>` de cada sistema en es_systems_mac.cfg).
+///
+/// Antes esto era SIEMPRE la carpeta del .app, lo que obligaba a que RetroMac viviera
+/// físicamente dentro de la BoB. Ahora se puede elegir: si el usuario ha guardado una
+/// carpeta, se usa esa; si no, se mantiene el comportamiento de siempre (la carpeta
+/// del .app), así una instalación existente sigue funcionando sin tocar nada.
+func rutaRoms() -> String {
+    if let guardada = UserDefaults.standard.string(forKey: claveCarpetaRoms),
+       !guardada.isEmpty,
+       FileManager.default.fileExists(atPath: guardada) {
+        return guardada
+    }
+    return rutaDeLaApp()
+}
+
+/// Clave en UserDefaults con la carpeta de datos de la app elegida por el usuario.
+let claveCarpetaDatos = "carpetaDatos"
+
+/// Raíz de lo que gestiona la PROPIA aplicación: `Emuladores_Mac/` (unos 2,9 GB de
+/// emuladores y cores que descarga sola) y `decorations/` (bezels).
+///
+/// Va aparte de las ROMs a propósito: son cosas con ciclos de vida distintos. Las ROMs
+/// son del usuario y puede moverlas o llevárselas a otro disco; los emuladores los
+/// gestiona la app y los vuelve a descargar si faltan. Si estuvieran mezclados,
+/// desenchufar el disco de los juegos dejaría a la app sin emuladores — no es "no hay
+/// juegos", es que no puede lanzar nada.
+///
+/// Orden de resolución:
+///  1. Lo que el usuario haya elegido explícitamente (manda siempre).
+///  2. Si hay una BoB (o ya un `Emuladores_Mac/`) junto al .app, esa — así una
+///     instalación existente sigue igual y no se re-descargan 3 GB.
+///  3. Application Support, que es donde macOS espera estos datos y siempre es
+///     escribible (si el .app está en /Applications, escribir a su lado necesitaría
+///     permisos de administrador).
+func rutaDatos() -> String {
+    let fm = FileManager.default
+    if let guardada = UserDefaults.standard.string(forKey: claveCarpetaDatos),
+       !guardada.isEmpty, fm.fileExists(atPath: guardada) {
+        return guardada
+    }
+    let juntoAlApp = rutaDeLaApp()
+    if fm.fileExists(atPath: juntoAlApp + "/Emuladores_Mac") || fm.fileExists(atPath: juntoAlApp + "/BOBwin.exe") {
+        return juntoAlApp
+    }
+    let soporte = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0] + "/RetroMac"
+    try? fm.createDirectory(atPath: soporte, withIntermediateDirectories: true)
+    return soporte
+}
+
+/// ¿Hay una carpeta `roms` utilizable en la raíz actual? Sirve para decidir si hay que
+/// preguntar al usuario en el primer arranque.
+func hayCarpetaDeRoms() -> Bool {
+    FileManager.default.fileExists(atPath: rutaRoms() + "/roms")
+}
+
+/// Crea la estructura de carpetas de ROMs (una por sistema) dentro de `raiz`, leyendo
+/// los `<path>` del es_systems_mac.cfg — así el usuario ve exactamente dónde va cada
+/// sistema. Devuelve cuántas se crearon.
+@discardableResult
+func crearEstructuraDeRoms(en raiz: String) -> Int {
+    let fm = FileManager.default
+    let docs = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+    let rutaCfg = docs + "/RetroMac/es_systems_mac.cfg"
+    guard let cfg = try? String(contentsOfFile: rutaCfg, encoding: .utf8) else {
+        print("crearEstructuraDeRoms: no puedo leer \(rutaCfg)")
+        return 0
+    }
+    var creadas = 0
+    // <path>/roms/snes</path> -> /roms/snes
+    for match in cfg.components(separatedBy: "<path>").dropFirst() {
+        guard let fin = match.range(of: "</path>") else { continue }
+        let relativa = String(match[match.startIndex..<fin.lowerBound])
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        guard relativa.hasPrefix("/") else { continue }
+        let destino = raiz + relativa
+        if !fm.fileExists(atPath: destino) {
+            try? fm.createDirectory(atPath: destino, withIntermediateDirectories: true)
+            if fm.fileExists(atPath: destino) { creadas += 1 }
+        }
+    }
+    print("crearEstructuraDeRoms: \(creadas) carpetas creadas en \(raiz)")
+    return creadas
+}
+
+/// Primer arranque sin ROMs a la vista: pregunta al usuario dónde están, o le crea la
+/// estructura. Solo se muestra si NO hay carpeta guardada y NO hay un `roms/` junto al
+/// .app — es decir, nunca molesta a quien ya tiene su BoB montada como siempre.
+/// Devuelve true si a partir de ahora hay una carpeta de ROMs utilizable.
+@discardableResult
+func preguntarPorCarpetaDeRomsSiHaceFalta() -> Bool {
+    let yaConfigurada = UserDefaults.standard.string(forKey: claveCarpetaRoms)?.isEmpty == false
+    if yaConfigurada || hayCarpetaDeRoms() { return true }
+
+    let alerta = NSAlert()
+    alerta.messageText = "¿Dónde están tus juegos?"
+    alerta.informativeText = """
+        RetroMac no ha encontrado una carpeta «roms» junto a la aplicación.
+
+        Puedes indicarle dónde tienes tus ROMs (por ejemplo, una BoB que esté en otro \
+        disco), o crear una estructura de carpetas nueva para ir metiéndolas.
+        """
+    alerta.addButton(withTitle: "Elegir carpeta…")
+    alerta.addButton(withTitle: "Crear estructura nueva…")
+    alerta.addButton(withTitle: "Ahora no")
+
+    switch alerta.runModal() {
+    case .alertFirstButtonReturn:
+        guard let elegida = pedirCarpetaAlUsuario(titulo: "Elige la carpeta que contiene tu carpeta «roms»") else { return false }
+        UserDefaults.standard.set(elegida, forKey: claveCarpetaRoms)
+        print("Carpeta de ROMs elegida: \(elegida)")
+        return true
+
+    case .alertSecondButtonReturn:
+        guard let destino = pedirCarpetaAlUsuario(titulo: "Elige dónde crear la estructura de carpetas") else { return false }
+        let creadas = crearEstructuraDeRoms(en: destino)
+        UserDefaults.standard.set(destino, forKey: claveCarpetaRoms)
+        let aviso = NSAlert()
+        aviso.messageText = "Estructura creada"
+        aviso.informativeText = "Se han creado \(creadas) carpetas de sistema en:\n\(destino)/roms\n\nMete ahí tus ROMs y vuelve a abrir RetroMac."
+        aviso.runModal()
+        return true
+
+    default:
+        return false
+    }
+}
+
+/// Tras elegir la carpeta de juegos en el primer arranque, avisa de dónde van a ir los
+/// emuladores (unos 3 GB que la app descarga sola) y deja cambiarlo. Solo se muestra si
+/// van a acabar en Application Support — si hay una BoB junto al .app no hay nada que
+/// decidir, ya están ahí.
+func avisarDeCarpetaDeEmuladoresSiHaceFalta() {
+    let fm = FileManager.default
+    let juntoAlApp = rutaDeLaApp()
+    let hayBoB = fm.fileExists(atPath: juntoAlApp + "/Emuladores_Mac") || fm.fileExists(atPath: juntoAlApp + "/BOBwin.exe")
+    let yaElegida = UserDefaults.standard.string(forKey: claveCarpetaDatos)?.isEmpty == false
+    if hayBoB || yaElegida { return }
+
+    let alerta = NSAlert()
+    alerta.messageText = "¿Dónde guardo los emuladores?"
+    alerta.informativeText = """
+        RetroMac descarga por su cuenta los emuladores y cores (unos 3 GB). Por omisión \
+        los pondrá en:
+
+        \(rutaDatos())
+
+        Puedes elegir otra carpeta si prefieres no ocupar el disco de arranque.
+        """
+    alerta.addButton(withTitle: "Dejarlo ahí")
+    alerta.addButton(withTitle: "Elegir otra carpeta…")
+    guard alerta.runModal() == .alertSecondButtonReturn else { return }
+    elegirCarpetaDeDatos()
+}
+
+/// Pide una carpeta para los datos de la app (emuladores + bezels) y la guarda.
+/// Avisa si parece estar en un disco extraíble: si se desenchufa, la app se queda sin
+/// emuladores y no puede lanzar nada.
+@discardableResult
+func elegirCarpetaDeDatos() -> Bool {
+    guard let elegida = pedirCarpetaAlUsuario(titulo: "Elige dónde guardar los emuladores de RetroMac") else { return false }
+    if elegida.hasPrefix("/Volumes/") {
+        let aviso = NSAlert()
+        aviso.messageText = "Ojo: disco externo"
+        aviso.informativeText = """
+            Has elegido una carpeta en \(elegida).
+
+            Si ese disco no está conectado, RetroMac no podrá lanzar ningún juego \
+            (los emuladores estarían ahí). ¿Seguro?
+            """
+        aviso.addButton(withTitle: "Sí, usar esa carpeta")
+        aviso.addButton(withTitle: "Cancelar")
+        guard aviso.runModal() == .alertFirstButtonReturn else { return false }
+    }
+    UserDefaults.standard.set(elegida, forKey: claveCarpetaDatos)
+    print("Carpeta de datos elegida: \(elegida)")
+    return true
+}
+
+/// Selector de carpeta estándar de macOS.
+func pedirCarpetaAlUsuario(titulo: String) -> String? {
+    let panel = NSOpenPanel()
+    panel.title = titulo
+    panel.message = titulo
+    panel.canChooseFiles = false
+    panel.canChooseDirectories = true
+    panel.allowsMultipleSelection = false
+    panel.canCreateDirectories = true
+    guard panel.runModal() == .OK, let url = panel.url else { return nil }
+    return url.path
 }
 
 /// Los logos de sistema del menú horizontal tienen proporciones muy distintas entre
@@ -1236,7 +1440,7 @@ func gameOverlay(game: String) {
     let result1 = String(substring2.dropFirst())
     let solonombre =  (result1 as NSString).deletingPathExtension
     let gamename = solonombre
-    let miruta = rutaApp + "/decorations/"
+    let miruta = rutaDatos() + "/decorations/"
     let fileManager = FileManager.default
     let enumerator = fileManager.enumerator(atPath: miruta as String)
     var rutaoverlay = String()
@@ -1251,7 +1455,7 @@ func gameOverlay(game: String) {
         let filaConsola = allTheGames.firstIndex(where: {$0.fullname == sistemaActual})
         if filaConsola != nil {
             let sistemaABuscar = allTheGames[filaConsola!].sistema
-            let miruta = rutaApp + "/decorations/"
+            let miruta = rutaDatos() + "/decorations/"
             let fileManager = FileManager.default
             let enumerator = fileManager.enumerator(atPath: miruta as String)
             while let element = enumerator?.nextObject() as? String {
@@ -1641,7 +1845,8 @@ func aplanarSiAnidado(_ destino: String) {
 /// .7z usa el binario `7zz` empaquetado en Contents/Resources (macOS no trae 7z).
 func descargarYExtraer(url: String, formato: FormatoDescarga, destino: String, etiquetaTexto: String) {
     DispatchQueue.main.sync { etiqueta.stringValue = etiquetaTexto }
-    let rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+    // rutaDatos(): Emuladores_Mac puede no estar junto al .app (ver rutaDatos()).
+    let rutaApp = rutaDatos()
     let descargas = "\(rutaApp)/Emuladores_Mac/Descargas"
     let fichero = (url as NSString).lastPathComponent
     let archivo = "\(descargas)/\(fichero)"
@@ -1694,7 +1899,9 @@ func normalizarNombreApp(destino: String, esperado: String) {
 
 func downloadEmulators() {
     let arquitectura: String = CPUType()
-    var rutaApp = Bundle.main.bundlePath.replacingOccurrences(of: "/RetroMac.app", with: "")
+    // rutaDatos(): los ~3 GB de emuladores no tienen por qué vivir junto al .app —
+    // si está en /Applications, escribir ahí necesitaría permisos de administrador.
+    var rutaApp = rutaDatos()
     var isDir:ObjCBool = true
     var theProjectPath = "\(rutaApp)/Emuladores_Mac/"
         // Auto-reparación: ya NO es todo-o-nada. Creamos las carpetas y luego bajamos SOLO

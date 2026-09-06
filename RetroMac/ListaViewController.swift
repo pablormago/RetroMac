@@ -454,7 +454,7 @@ class ListaViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         asegurarBiosMameSiHaceFalta(rutaResuelta, comando: comandojuego)
         let romXml = "\"\(rutaResuelta)\""
 
-        var micomando = rutaApp + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaApp)
+        var micomando = rutaDatos() + comandojuego.replacingOccurrences(of: "%CORE%", with: rutaDatos())
         //print(micomando.replacingOccurrences(of: "%ROM%", with: romXml))
         var comando = micomando.replacingOccurrences(of: "%ROM%", with: romXml)
         if playingVideo == true {

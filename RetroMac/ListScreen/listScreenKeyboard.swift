@@ -20,11 +20,18 @@ extension ListaViewController {
             return
         }
         keyIsDown = true
-        
-        
-        
-        
-        
+
+        // Leyenda de controles: H la abre y la cierra, y con ella abierta Esc
+        // también la cierra en vez de salir de la lista (ver LeyendaControles.swift).
+        if event.keyCode == 4 {
+            LeyendaControles.alternar()
+            return
+        }
+        if LeyendaControles.estaVisible {
+            LeyendaControles.ocultar()
+            return
+        }
+
         if event.keyCode == 36   && ventana == "Lista" {
             if cuentaClicks > 0 {
                 onItemClicked()
